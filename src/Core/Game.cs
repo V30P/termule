@@ -20,7 +20,7 @@ public static class Game
         {
             root.Update();
 
-            Thread.Sleep((int) (1000 * (1f / targetFPS)));
+            Thread.Sleep((int)(1000 * (1f / targetFPS)));
         }
     }
 }

@@ -2,7 +2,7 @@ namespace Termule;
 
 using Termule.Internals;
 
-public abstract class Component : EngineObject
+public abstract class Behavior : EngineObject
 {
 
 }
