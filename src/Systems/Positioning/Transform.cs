@@ -2,6 +2,10 @@ namespace Termule;
 
 public class Transform : Behavior
 {
+    [RelativeComponent(Relation.Ancestor)]
+    readonly Transform parent;
+    readonly List<Transform> children = [];
+
     public Vector pos
     {
         get => _pos;
@@ -20,14 +24,4 @@ public class Transform : Behavior
     Vector _pos;
 
     public Vector localPos { get => pos - parent.pos; set => pos = parent.pos + value; }
-
-    Transform parent;
-    readonly List<Transform> children = [];
-
-    public override void OnMove()
-    {
-        parent?.children.Remove(this);
-        parent = gameObject.FindInAncestors<Transform>();
-        parent?.children.Add(this);
-    }
 }

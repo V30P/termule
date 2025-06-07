@@ -31,6 +31,8 @@ public static class Game
 
             deltaTime = frameTimer.ElapsedMilliseconds / 1000f;
             frameTimer.Restart();
+
+            Thread.Sleep(1);
         }
     }
 }

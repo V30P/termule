@@ -15,7 +15,7 @@ public static class RenderSystem
     public static Frame GetFrame()
     {
         Frame frame = new Frame();
-        foreach (Renderer renderer in renderers)
+        foreach (Renderer renderer in new List<Renderer>(renderers))
         {
             renderer.RenderTo(frame);
         }
@@ -24,7 +24,7 @@ public static class RenderSystem
     }
 
     internal static void Render(Frame frame)
-    { 
+    {
         string renderedFrame = "\u001b[0;0H"; //Go to (0, 0)
         for (int y = 0; y < sizeY; y++)
         {

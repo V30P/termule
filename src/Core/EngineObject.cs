@@ -34,7 +34,7 @@ public abstract class EngineObject
             _gameObject = newParent;
             gameObject?.AddComponent(this); //Parent will only be null when the root is being spawned
 
-            OnMove();
+            Moved?.Invoke();
         }
     }
     string _path;
@@ -43,6 +43,10 @@ public abstract class EngineObject
     string _name;
     public GameObject gameObject { get => _gameObject; set => path = $"{(value != null ? $"{value.path}/" : null)}{name}"; }
     GameObject _gameObject;
+
+    public event Action Moved; 
+    public event Action Updated;
+    public event Action Destroyed;
 
     bool isDestroyed = false;
 
@@ -66,7 +70,7 @@ public abstract class EngineObject
 
     internal void Update()
     {
-        OnUpdate();
+        Updated?.Invoke(); 
     }
 
     public void Destroy()
@@ -78,13 +82,6 @@ public abstract class EngineObject
 
         isDestroyed = true;
         gameObject.RemoveComponent(this);
-
-        OnDestroy();
+        Destroyed?.Invoke();
     }
-
-    public virtual void OnMove() { }
-
-    public virtual void OnUpdate() { }
-
-    public virtual void OnDestroy() { }
 }

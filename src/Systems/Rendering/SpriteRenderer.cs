@@ -2,18 +2,13 @@ namespace Termule.Rendering;
 
 public class SpriteRenderer : Renderer
 {
-    Transform transform;
+    [RelativeComponent(Relation.Sibling)]
+    readonly Transform transform;
 
     public Color[,] sprite;
-
-    public override void OnMove()
-    {
-        transform = gameObject.GetComponent<Transform>();
-    }
-
     internal override void RenderTo(Frame frame)
     {
-        if (sprite != null)
+        if (sprite != null && transform != null)
         {
             //The position of the sprite's upper left corner, relative to the viewport's upper left bound
             Vector cornerPos = transform.pos + new Vector(-sprite.GetLength(0), sprite.GetLength(1)) / 2f - frame.upperLeftBound;
