@@ -3,7 +3,7 @@ namespace Termule.Rendering;
 public class SpriteRenderer : Renderer
 {
     [RelativeComponent(Relation.Sibling)]
-    readonly Transform transform;
+    readonly Transform transform = null;
 
     public Color[,] sprite;
     internal override void RenderTo(Frame frame)

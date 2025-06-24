@@ -1,11 +1,11 @@
-namespace Termule.Internals;
+namespace Termule;
 
-internal class AncestorComponentTracker<T> : ComponentTracker<T> where T : EngineObject
+internal class AncestorComponentTracker<T> : ComponentTracker<T> where T : Component
 {
     List<GameObject> additionTargetGameObjects = [];
     GameObject removalTargetGameObject;
 
-    public AncestorComponentTracker(EngineObject attachee, string fieldName) : base(attachee, fieldName)
+    public AncestorComponentTracker(Component attachee, string fieldName) : base(attachee, fieldName)
     {
         ChangeGameObject();
         attachee.Moved += ChangeGameObject;
@@ -54,7 +54,7 @@ internal class AncestorComponentTracker<T> : ComponentTracker<T> where T : Engin
         }
     }
 
-    void InspectAncestorAddition(EngineObject addedComponent)
+    void InspectAncestorAddition(Component addedComponent)
     {
         if (addedComponent is T found)
         {
@@ -63,7 +63,7 @@ internal class AncestorComponentTracker<T> : ComponentTracker<T> where T : Engin
         }
     }
 
-    void InspectAncestorRemoval(EngineObject removedComponent)
+    void InspectAncestorRemoval(Component removedComponent)
     {
         if (removedComponent == component)
         {

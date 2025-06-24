@@ -1,8 +1,6 @@
 namespace Termule;
 
-using Termule.Internals;
-
-public abstract partial class Behavior : EngineObject
+public abstract partial class Behavior : Component
 {
     public Behavior()
     {

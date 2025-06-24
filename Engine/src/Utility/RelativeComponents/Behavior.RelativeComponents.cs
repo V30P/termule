@@ -1,7 +1,6 @@
-namespace Termule;
-
-using Termule.Internals;
 using System.Reflection;
+
+namespace Termule;
 
 public partial class Behavior
 {

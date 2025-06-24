@@ -1,12 +1,12 @@
-namespace Termule.Internals;
-
 using System.Reflection;
 
-internal abstract class ComponentTracker<T> where T : EngineObject
+namespace Termule;
+
+internal abstract class ComponentTracker<T> where T : Component
 {
     const BindingFlags fieldFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 
-    protected readonly EngineObject attached;
+    protected readonly Component attached;
     protected readonly FieldInfo field;
 
     protected T component
@@ -21,7 +21,7 @@ internal abstract class ComponentTracker<T> where T : EngineObject
     }
     T _component;
 
-    protected ComponentTracker(EngineObject attachee, string fieldName)
+    protected ComponentTracker(Component attachee, string fieldName)
     {
         attached = attachee;
         field = attached.GetType().GetField(fieldName, fieldFlags);

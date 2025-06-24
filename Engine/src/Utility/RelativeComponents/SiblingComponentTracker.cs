@@ -1,10 +1,10 @@
-namespace Termule.Internals;
+namespace Termule;
 
-internal class SiblingComponentTracker<T> : ComponentTracker<T> where T : EngineObject
+internal class SiblingComponentTracker<T> : ComponentTracker<T> where T : Component
 {
     GameObject targetGameObject;
 
-    public SiblingComponentTracker(EngineObject attachee, string fieldName) : base(attachee, fieldName)
+    public SiblingComponentTracker(Component attachee, string fieldName) : base(attachee, fieldName)
     {
         ChangeGameObject();
         attachee.Moved += ChangeGameObject;
@@ -36,7 +36,7 @@ internal class SiblingComponentTracker<T> : ComponentTracker<T> where T : Engine
         }
     }
 
-    void InspectSiblingAddition(EngineObject addedComponent)
+    void InspectSiblingAddition(Component addedComponent)
     {
         if (addedComponent is T found)
         {
@@ -47,7 +47,7 @@ internal class SiblingComponentTracker<T> : ComponentTracker<T> where T : Engine
         }
     }
 
-    void InspectSiblingRemoval(EngineObject removedComponent)
+    void InspectSiblingRemoval(Component removedComponent)
     {
         if (removedComponent == component)
         {

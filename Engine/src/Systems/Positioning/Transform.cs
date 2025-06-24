@@ -3,7 +3,7 @@ namespace Termule;
 public class Transform : Behavior
 {
     [RelativeComponent(Relation.Ancestor)]
-    readonly Transform parent;
+    readonly Transform parent = null;
     readonly List<Transform> children = [];
 
     public Vector pos
