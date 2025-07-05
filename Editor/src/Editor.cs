@@ -19,9 +19,16 @@ static class Editor
         {
             Console.WriteLine("The current directory is not in a Termule project");
             return;
-        }   
+        }
 
-        ICommandExecutor.GetExecutor(args[0])?.ValidateAndExecute(args[1..], null);
+        //Recombine the input so the factory can parse it properly
+        string input = null;
+        foreach (string arg in args)
+        {
+            input += arg + " ";
+        }
+
+        Factory.Make<CommandExecutor>(input)?.StartExecute(null);
     }
 
     static bool TryResolveProject()

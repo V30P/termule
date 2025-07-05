@@ -1,17 +1,17 @@
-using System.Threading.Tasks;
-
 namespace Termule.Editor;
 
-internal class Pen : ICommandExecutor
+internal class PenExecutor : CommandExecutor
 {
-    internal Game game;
-
-    public static CommandInfo commandInfo => new CommandInfo
+    internal override CommandExecutorInfo info => new CommandExecutorInfo
     {
+        name = "pen",
         avaliableOutsidePen = true
     };
 
-    public void Execute(string[] _, Pen __)
+    internal Game game;
+    internal readonly Dictionary<string, Window> windows = [];
+
+    protected override void Execute()
     {
         game = new Game(Editor.projectAssemblyPath);
 
@@ -19,22 +19,26 @@ internal class Pen : ICommandExecutor
         {
             while (true)
             {
-                game.cancellationToken.ThrowIfCancellationRequested();
                 RunCommandPrompt(game.cancellationToken);
             }
         }
         catch (OperationCanceledException) { }
+
+        //Clean up
+        foreach (Window window in windows.Values)
+        {
+            window.Close();
+        }
     }
 
     void RunCommandPrompt(CancellationToken ct)
     {
+        game.cancellationToken.ThrowIfCancellationRequested();
         Console.Write($"\n{Editor.projectName} (PEN)>");
 
         string input = Console.ReadLine();
-        string[] cleanedInput = input.TrimStart().TrimEnd().Split(' ');
 
         ct.ThrowIfCancellationRequested();
-        ICommandExecutor commandExecutor = ICommandExecutor.GetExecutor(cleanedInput[0]);
-        commandExecutor?.ValidateAndExecute(cleanedInput[1..], this);
+        Factory.Make<CommandExecutor>(input)?.StartExecute(this);
     }
 }

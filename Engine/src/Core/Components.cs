@@ -71,20 +71,14 @@ public abstract class Component
     }
 
     //Static spawn methods
-    public static T Spawn<T>(Game game, string gameObjectPath, string name) where T : Component, new()
-    => Spawn<T>(game, gameObjectPath != null ? $"{gameObjectPath}/{name}" : name);
-    public static T Spawn<T>(Game game, GameObject gameObject, string name) where T : Component, new()
-    => Spawn<T>(game, gameObject != null ? $"{gameObject.path}/{name}" : name);
-    public static T Spawn<T>(Game game, GameObject gameObject) where T : Component, new()
-    => Spawn<T>(game, gameObject != null ? $"{gameObject.path}/{typeof(T).Name}" : typeof(T).Name);
+    public static T Spawn<T>(GameObject gameObject, string name) where T : Component, new()
+    => Spawn<T>(gameObject.game, gameObject != null ? $"{gameObject.path}/{name}" : name);
+    public static T Spawn<T>(GameObject gameObject) where T : Component, new()
+    => Spawn<T>(gameObject.game, gameObject != null ? $"{gameObject.path}/{typeof(T).Name}" : typeof(T).Name);
 
     //Instance spawn methods
     protected T Spawn<T>(string gameObjectPath, string name) where T : Component, new()
-    => Spawn<T>(game, gameObjectPath != null ? $"{gameObjectPath}/{name}" : name);
-    protected T Spawn<T>(GameObject gameObject, string name) where T : Component, new()
-    => Spawn<T>(game, gameObject != null ? $"{gameObject.path}/{name}" : name);
-    protected T Spawn<T>(GameObject gameObject) where T : Component, new()
-    => Spawn<T>(game, gameObject != null ? $"{gameObject.path}/{typeof(T).Name}" : typeof(T).Name);
+    => Spawn<T>(gameObject.game, gameObjectPath != null ? $"{gameObjectPath}/{name}" : name);
 
     internal void Update()
     {

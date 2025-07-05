@@ -42,15 +42,12 @@ public sealed class GameObject : Component
     internal void AddComponent(Component component)
     {
         components.Add(component.name, component);
-
         ComponentAdded?.Invoke(component);
     }
 
     internal void RemoveComponent(Component component)
     {
-        Dictionary<Component, string> componentToName = components.ToDictionary(x => x.Value, x => x.Key);
-        components.Remove(componentToName[component]);
-
+        components.Remove(component.name);
         ComponentRemoved?.Invoke(component);
     }
 

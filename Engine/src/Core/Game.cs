@@ -1,7 +1,6 @@
-using System.Diagnostics;
-using System.IO.Pipes;
 using Termule.Rendering;
 using System.Reflection;
+using System.Diagnostics;
 
 namespace Termule;
 
@@ -10,9 +9,10 @@ public class Game
     const BindingFlags entryMethodFlags = BindingFlags.Static | BindingFlags.NonPublic;
 
     readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-    public CancellationToken cancellationToken;
+    public readonly CancellationToken cancellationToken;
 
-    internal readonly StreamWriter windowWriter;
+    public readonly Logger logger;
+    internal readonly Window window;
     internal readonly RenderSystem renderSystem;
     internal readonly GameObject root;
 
@@ -22,29 +22,12 @@ public class Game
     {
         cancellationTokenSource = new CancellationTokenSource();
         cancellationToken = cancellationTokenSource.Token;
+        
+        logger = new Logger();
 
-        //Set up the window
-        AnonymousPipeServerStream toWindowStream = new AnonymousPipeServerStream(PipeDirection.Out, HandleInheritability.Inheritable);
-        windowWriter = new StreamWriter(toWindowStream)
-        {
-            AutoFlush = true
-        };
-
-        Process windowProcess = new Process()
-        {
-            StartInfo = new ProcessStartInfo()
-            {
-                FileName = "C:/Users/NHenn/Projects/Termule/Window/bin/Debug/net9.0/TermuleWindow.exe",
-                Arguments = $"{Environment.ProcessId} {toWindowStream.GetClientHandleAsString()}"
-            },
-            EnableRaisingEvents = true
-        };
-        windowProcess.Start();
-
-        AppDomain.CurrentDomain.ProcessExit += (object _, EventArgs _) => Stop();
-        windowProcess.Exited += (_, _) => Stop();
-
-        //Create the renderSysten
+        //Set up rendering to a window
+        window = new Window(Window.ReadMode.NewlineTerminated);
+        window.Closed += Stop;
         renderSystem = new RenderSystem();
 
         //Create the root GameObject and start the game loop
@@ -70,17 +53,17 @@ public class Game
 
                 //Render to the window
                 Frame frame = renderSystem.GetFrame();
-                await windowWriter.WriteLineAsync(frame.ToString().AsMemory(), cancellationToken);
+                await window.writer.WriteLineAsync(frame.ToString().AsMemory(), cancellationToken);
 
-                //Update frame time measurement
-                deltaTime = frameStopWatch.ElapsedMilliseconds / 1000f;
+                //Record deltaTime
+                deltaTime = (float) frameStopWatch.Elapsed.TotalSeconds;
                 frameStopWatch.Restart();
             }
         }
         catch (OperationCanceledException) { }
 
         //Clean up
-        windowWriter.Dispose();
+        window.Close();
     }
 
     public void Stop() => cancellationTokenSource.Cancel();

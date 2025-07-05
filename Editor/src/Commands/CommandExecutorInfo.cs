@@ -1,8 +1,7 @@
 namespace Termule.Editor;
 
-internal class CommandInfo
+internal class CommandExecutorInfo : ProducibleInfo
 {
-    internal string name; //No need to set this, it is found via reflection
     internal bool avaliableOutsidePen;
     internal bool avaliableInsidePen;
 }

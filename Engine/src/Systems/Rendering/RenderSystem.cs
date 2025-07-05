@@ -1,6 +1,6 @@
 namespace Termule.Rendering;
 
-internal class RenderSystem()
+internal class RenderSystem
 {
     internal readonly int sizeX = Console.WindowWidth, sizeY = Console.WindowHeight;
     internal readonly List<Renderer> renderers = [];

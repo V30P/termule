@@ -1,13 +1,14 @@
 namespace Termule.Editor;
 
-internal class Build : ICommandExecutor
+internal class BuildExecutor : CommandExecutor
 {
-    public static CommandInfo commandInfo => new CommandInfo
+    internal override CommandExecutorInfo info => new CommandExecutorInfo
     {
-        avaliableOutsidePen = true,
+        name = "build",
+        avaliableOutsidePen = true
     };
 
-    public void Execute(string[] _, Pen __)
+    protected override void Execute()
     {
         Console.WriteLine
         (
