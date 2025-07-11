@@ -1,4 +1,9 @@
-*/bin/
-*/obj/
-Testing
-notes.txt
+#Ignore the unavoidable obj folders from NuGet
+/*/obj
+
+#Ignore testing implementation, but keep the project
+Testing/**
+!Testing/TermuleTesting.csproj
+
+$Local
+.vscode

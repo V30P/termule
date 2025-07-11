@@ -5,6 +5,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="SharpHook" Version="6.2.0" />
+    <ProjectReference Include="../Engine/Termule.csproj"></ProjectReference>
   </ItemGroup>
 </Project>

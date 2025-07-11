@@ -6,6 +6,6 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Engine\Termule.csproj"></ProjectReference>
+    <ProjectReference Include="../Engine/Termule.csproj"/>
   </ItemGroup>
 </Project>

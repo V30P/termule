@@ -5,10 +5,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="../Engine/Termule.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Build" Version="17.14.8" ExcludeAssets="runtime" />
-    <PackageReference Include="Microsoft.Build.Locator" Version="1.9.1" />
+    <ProjectReference Include="../Engine/Termule.csproj"/>
+    <PackageReference Include="Microsoft.Build" Version="17.14.8" ExcludeAssets="runtime"/>
+    <PackageReference Include="Microsoft.Build.Locator" Version="1.9.1"/>
   </ItemGroup>
 </Project>
