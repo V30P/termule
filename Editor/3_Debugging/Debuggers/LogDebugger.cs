@@ -13,7 +13,7 @@ internal class LogDebugger : Debugger
 
     internal override void Start()
     {
-        logDistributor = game.logger.GetDistributor();
+        logDistributor = game.Get<Logger>().GetDistributor();
         Task.Run(DebugLogs);
     }
 
@@ -25,7 +25,7 @@ internal class LogDebugger : Debugger
             {
                 output.Write(logDistributor.Take());
             }
-            catch (InvalidOperationException) //Occurs if the logDistributor IsAddingCompleted
+            catch (InvalidOperationException) // Occurs if the logDistributor IsAddingCompleted
             {
                 return;
             }   

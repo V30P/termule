@@ -12,21 +12,21 @@ internal class TreeExecutor : CommandExecutor
 
     protected override void Execute()
     {
-        string tree = GenerateBranch(pen.game.root, 0);
+        string tree = GenerateBranch(pen.game, 0);
         Console.WriteLine(tree);
     }
 
-    static string GenerateBranch(GameObject gameObject, int depth)
+    static string GenerateBranch(IComposite composite, int depth)
     {
-        string branch = gameObject.name;
-        string indent = GetIndent(depth + 1);     
+        string branch = (composite as Component)?.name;
+        string indent = GetIndent(depth);     
         
-        foreach (Component component in gameObject.components.Values)
+        foreach (Component component in composite)
         {
             branch += "\n" + indent;
-            if (component is GameObject childGameObject)
+            if (component is IComposite containedComposite)
             {
-                branch += GenerateBranch(childGameObject, depth + 1);
+                branch += GenerateBranch(containedComposite, depth + 1);
             }
             else
             {

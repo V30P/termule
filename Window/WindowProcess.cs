@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.IO.Pipes;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 using Termule;
@@ -22,27 +23,27 @@ static partial class WindowProcess
         { Window.ReadMode.NewlineTerminated, () => inReader.ReadLine() }
     };
 
-    /*  
+    /* 
+    FORMAT: 
     args[0]: engine process PID
     args[1]: input pipe handle
     args[2]: readMode
     */
     static void Main(string[] args)
     {
-        //Allocate a new console in case the process creating the window already has one
+        // Allocate a new console in case the process creating the window already has one
         FreeConsole();
         AllocConsole();
         Console.CursorVisible = false;
 
-        //Close this window if the engine process exits
         Process engineProcess = Process.GetProcessById(int.Parse(args[0]));
         engineProcess.EnableRaisingEvents = true;
         engineProcess.Exited += (_, _) => Environment.Exit(0);
 
+        // Print from the pipe
         AnonymousPipeClientStream inStream = new AnonymousPipeClientStream(PipeDirection.In, args[1]);
         inReader = new StreamReader(inStream);
 
-        //Read from the input pipe and write to the console until the process exits
         Func<string> readFunc = readFuncs[Window.GetReadMode(args[2])];
         while (true)
         {

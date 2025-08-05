@@ -2,9 +2,27 @@ namespace Termule;
 
 public class Transform : Component
 {
-    [RelativeComponent(Relation.Ancestor)]
-    readonly Transform parent = null;
+    Transform parent;
     readonly List<Transform> children = [];
+
+    public Transform()
+    {
+        Spawned += OnSpawned;
+    }
+
+    void OnSpawned()
+    {
+        parent = (composite as GameObject).composite?.Get<Transform>();
+
+        foreach (Component component in composite)
+        {
+            if (component is GameObject componentGameObject
+                && componentGameObject.Get<Transform>() is Transform childTransform)
+            {
+                children.Add(childTransform);
+            }
+        }
+    }
 
     public Vector pos
     {

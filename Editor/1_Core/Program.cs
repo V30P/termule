@@ -13,15 +13,15 @@ static class Editor
     {
         MSBuildLocator.RegisterDefaults();
 
-        //Calls to MSBuild must not be in the same method as calls to the MSBuildLocator
-        //See: https://learn.microsoft.com/en-us/visualstudio/msbuild/find-and-use-msbuild-versions?view=vs-2022
+        // Calls to MSBuild must not be in the same method as calls to the MSBuildLocator
+        // See: https://learn.microsoft.com/en-us/visualstudio/msbuild/find-and-use-msbuild-versions?view=vs-2022
         if (!TryResolveProject())
         {
             Console.WriteLine("The current directory is not in a Termule project");
             return;
         }
 
-        //Recombine the input so the factory can parse it properly
+        // Recombine the input so the factory can parse it properly
         string input = null;
         foreach (string arg in args)
         {

@@ -8,11 +8,11 @@ public class Window : IDisposable
 {
     public enum ReadMode
     {
-        Standard, //The window displays every character as soon as it is read
-        NewlineTerminated //The window will wait until it hits a newline to display (skipping the newline)
+        Standard, // The window displays every character as soon as it is read
+        NewlineTerminated // The window will wait until it hits a '\0' to display 
     }
 
-    static readonly string exePath = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/TermuleWindow.exe";
+    static readonly string exePath = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}\\TermuleWindow.exe";
 
     readonly Process process;
     public readonly StreamWriter writer;
@@ -33,7 +33,7 @@ public class Window : IDisposable
             StartInfo = new ProcessStartInfo()
             {
                 FileName = exePath,
-                Arguments = $"{Environment.ProcessId} {toWindowStream.GetClientHandleAsString()} {readMode}", //See WindowProcess.cs
+                Arguments = $"{Environment.ProcessId} {toWindowStream.GetClientHandleAsString()} {readMode}", // See WindowProcess.cs
             },
             EnableRaisingEvents = true
         };
@@ -69,7 +69,7 @@ public class Window : IDisposable
 
     public void Dispose()
     {
-        //The writer might still be in use, so keep trying to close it until it actually closes
+        // The writer might still be in use, so keep trying to close it until it actually closes
         bool writerClosed = false;
         while (!writerClosed)
         {

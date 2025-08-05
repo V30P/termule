@@ -24,7 +24,7 @@ internal class PenExecutor : CommandExecutor
         }
         catch (OperationCanceledException) { }
 
-        //Clean up
+        // Clean up
         foreach (Window window in windows.Values)
         {
             window.Close();

@@ -3,7 +3,7 @@ namespace Termule;
 
 
 
-public class Logger
+public class Logger : Component
 {
     readonly List<BlockingCollection<string>> distributors = [];
 
@@ -15,13 +15,13 @@ public class Logger
         return distributor;
     }
 
-    public void Log(string message)
+    public void Log(object message)
     {
         for (int i = distributors.Count - 1; i >= 0; i--)
         {
             if (!distributors[i].IsAddingCompleted)
             {
-                distributors[i].Add(message + '\n');
+                distributors[i].Add(message.ToString() + '\n');
             }
             else
             {
@@ -29,7 +29,4 @@ public class Logger
             }
         }
     }
-
-    public void Log(object message) => Log(message.ToString());
-    public void Log(Component source, object message) => Log($"{(source != null ? $"{source.path}: " : "")}{message}");
 }

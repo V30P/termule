@@ -11,32 +11,35 @@ internal class FrameDebugger : Debugger, IDisposable
 
     float period;
 
-    Stopwatch frameStopWatch;
+    FrameMeasurer frameMeasurer;
     Timer debugTimer;
 
     int framesSinceLastDebug;
-    int maxFrameTimeMili;
+    float maxFrameTime;
 
     internal override void Start()
     {
         period = float.Parse(args[0]);
         int periodMili = (int) (period * 1000);
 
-        frameStopWatch = new Stopwatch();
-        game.root.Updated += MeasureFrame;
+        frameMeasurer = game.Get<FrameMeasurer>();
+        if (frameMeasurer == null)
+        {
+            frameMeasurer = new FrameMeasurer();
+            game.Add(frameMeasurer);
+        }
+        frameMeasurer.FrameMeasured += RecordFrame;
 
         debugTimer = new Timer(DebugFrames, null, periodMili, periodMili);
     }
 
-    void MeasureFrame()
+    void RecordFrame(float deltaTime)
     {
         framesSinceLastDebug++;
-        if (frameStopWatch.ElapsedMilliseconds > maxFrameTimeMili)
+        if (deltaTime > maxFrameTime)
         {
-            maxFrameTimeMili = (int) frameStopWatch.ElapsedMilliseconds;
+            maxFrameTime = deltaTime;
         }
-
-        frameStopWatch.Restart();
     }
 
     void DebugFrames(object _)
@@ -46,13 +49,27 @@ internal class FrameDebugger : Debugger, IDisposable
             "-----------------------\n" +
             $"Ran {framesSinceLastDebug} frames in {period} s\n" +
             $"FPS: {(int) (framesSinceLastDebug / period)}\n" +
-            $"AVG: {(int) (period / framesSinceLastDebug * 1000)} ms Max: {maxFrameTimeMili} ms\n" +
+            $"AVG: {(int) (period / framesSinceLastDebug * 1000)} ms Max: {(int) (maxFrameTime * 1000)} ms\n" +
             "-----------------------\n"
         );
 
-        framesSinceLastDebug = maxFrameTimeMili = 0;
+        maxFrameTime = framesSinceLastDebug = 0;
     }
 
     internal override void Stop() => Dispose();
-    public void Dispose() => debugTimer.Dispose();
+    public void Dispose()
+    {
+        frameMeasurer.Destroy();
+        debugTimer.Dispose();
+    }
+
+    class FrameMeasurer : Component
+    {
+        internal event Action<float> FrameMeasured;
+
+        internal FrameMeasurer()
+        {
+            Ticked += () => FrameMeasured?.Invoke(game.deltaTime);
+        }
+    }
 }

@@ -1,19 +1,17 @@
-using Termule.Rendering;
 using System.Reflection;
 using System.Diagnostics;
+using Termule.Rendering;
 
 namespace Termule;
 
-public class Game
+public sealed class Game : IComposite
 {
+    public Game game => this;
+    public Dictionary<string, Component> components => _components;
+    readonly Dictionary<string, Component> _components = [];
+
     readonly CancellationTokenSource cancellationTokenSource;
     public readonly CancellationToken cancellationToken;
-
-    public readonly GameObject root;
-
-    public readonly Logger logger = new Logger();
-    internal readonly Window window = new Window(Window.ReadMode.NewlineTerminated);
-    internal readonly RenderSystem renderSystem = new RenderSystem();
 
     public float deltaTime { get; private set; }
 
@@ -22,11 +20,11 @@ public class Game
         cancellationTokenSource = new CancellationTokenSource();
         cancellationToken = cancellationTokenSource.Token;
 
-        root = Component.Spawn<GameObject>(this, "Root");
-        GameLoop();
+        this.Add(new Logger());
+        this.Add(new RenderSystem());
 
-        //Try to find and execute the entry point in the game assembly
-        //Entry point format: Start(Game)
+        // Try to execute a found entry point (if any) in the game assembly
+        // FORMAT: public static void Start(Game)
         foreach (Type type in Assembly.LoadFrom(assemblyLocation).GetTypes())
         {
             if (type.GetMethod("Start", BindingFlags.Public | BindingFlags.Static) is MethodInfo startMethod)
@@ -39,34 +37,30 @@ public class Game
                 }
             }
         }
+
+        Task.Run(GameLoop);
     }
 
-    async void GameLoop()
+    void GameLoop()
     {
         Stopwatch frameStopWatch = new Stopwatch();
         CancellationToken cancellationToken = cancellationTokenSource.Token;
 
-        try
+        while (!cancellationToken.IsCancellationRequested)
         {
-            while (true)
+            foreach (Component component in this.ToArray())
             {
-                cancellationToken.ThrowIfCancellationRequested();
-                //Update GameObjects
-                root.Update();
-
-                //Render to the window
-                Frame frame = renderSystem.GetFrame();
-                await window.writer.WriteLineAsync(frame.ToString().AsMemory(), cancellationToken);
-
-                //Record deltaTime
-                deltaTime = (float) frameStopWatch.Elapsed.TotalSeconds;
-                frameStopWatch.Restart();
+                component.Tick();
             }
-        }
-        catch (OperationCanceledException) { }
 
-        //Clean up
-        window.Close();
+            deltaTime = (float) frameStopWatch.Elapsed.TotalSeconds;
+            frameStopWatch.Restart();
+        }
+
+        foreach (Component component in this)
+        {
+            component.Destroy();
+        }
     }
 
     public void Stop() => cancellationTokenSource.Cancel();

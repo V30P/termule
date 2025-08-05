@@ -1,86 +1,39 @@
 namespace Termule;
 
-public sealed class GameObject : Component
+public class GameObject : Component, IComposite
 {
-    public readonly Dictionary<string, Component> components = [];
-    public Component this[string name] => components[name];
+    Game IComposite.game => game;
+    public Dictionary<string, Component> components => _components;
+    readonly Dictionary<string, Component> _components = [];
 
-    public event Action<Component> ComponentAdded;
-    public event Action<Component> ComponentRemoved;
-
-    public GameObject()
+    public GameObject(string name) : base(name)
     {
-        Moved += MoveComponents;
-        Updated += UpdateComponents;
+        Spawned += SpawnComponents;
+        Ticked += UpdateComponents;
         Destroyed += DestroyComponents;
     }
 
-    void MoveComponents()
+    void SpawnComponents()
     {
-        foreach (Component component in new Dictionary<string, Component>(components).Values)
+        foreach (Component component in this.ToArray())
         {
-            component.path = $"{path}/{component.name}";
+            component.Spawn(game);
         }
     }
 
     void UpdateComponents()
     {
-        foreach (Component component in new List<Component>(components.Values))
+        foreach (Component component in this.ToArray())
         {
-            component.Update();
+            component.Tick();
         }
     }
 
     void DestroyComponents()
     {
-        foreach (Component component in new List<Component>(components.Values))
+        foreach (Component component in this.ToArray())
         {
             component.Destroy();
         }
-    }
-
-    internal void AddComponent(Component component)
-    {
-        components.Add(component.name, component);
-        ComponentAdded?.Invoke(component);
-    }
-
-    internal void RemoveComponent(Component component)
-    {
-        components.Remove(component.name);
-        ComponentRemoved?.Invoke(component);
-    }
-
-    public T GetComponent<T>() where T : Component
-    {
-        foreach (Component child in components.Values)
-        {
-            if (child is T found)
-            {
-                return found;
-            }
-        }
-
-        return null;
-    }
-
-    //Finds the closest component of type T in the components of ancestors
-    public T FindInAncestors<T>() where T : Component
-    {
-        GameObject ancestor = gameObject;
-        while (ancestor != null)
-        {
-            foreach (Component component in ancestor.components.Values)
-            {
-                if (component is T found)
-                {
-                    return found;
-                }
-            }
-
-            ancestor = ancestor.gameObject;
-        }
-
-        return null;
     }
 }
