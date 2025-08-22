@@ -1,9 +1,11 @@
 <Project>
   <PropertyGroup>
-    <!-- Output build data to a common folder, subdividng obj by the name of each project's folder -->
-    <OutputPath>../$Local/Build/bin/</OutputPath> 
+    <!-- Output build data to a common folder, subdividng by the name of each project's folder -->
     <ProjectFolderName>$([System.IO.Path]::GetFileName($(MSBuildProjectDirectory)))</ProjectFolderName> 
-    <IntermediateOutputPath>../$Local/Build/obj/$(ProjectFolderName)/</IntermediateOutputPath>
+    
+    <OutputPath>../../bin/$(ProjectFolderName)/</OutputPath> 
+    <IntermediateOutputPath>../../obj/$(ProjectFolderName)/</IntermediateOutputPath>
+    <MSBuildProjectExtensionsPath>$(IntermediateOutputPath)</MSBuildProjectExtensionsPath>
 
     <!-- Get rid of the subfolders dotnet puts build data into -->
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>

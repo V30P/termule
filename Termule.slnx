@@ -1,6 +1,5 @@
 <Solution>
-  <Project Path="Engine/Termule.csproj"/>
-  <Project Path="Window/TermuleWindow.csproj"/>
-  <Project Path="Editor/TermuleEditor.csproj"/>
-  <Project Path="Testing/TermuleTesting.csproj"/>
+  <Project Path="Projects/Library/Termule.csproj"/>
+  <Project Path="Projects/Bootstrapper/TermuleBootstrapper.csproj"/>
+  <Project Path="Projects/Saddlebag/Saddlebag.csproj"/>
 </Solution>
