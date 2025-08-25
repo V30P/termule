@@ -1,0 +1,80 @@
+using SharpHook.Data;
+
+namespace Termule.Input;
+
+internal static class KeyToButtonConversion
+{
+    static readonly Dictionary<KeyCode, Button> KeyCodeToButton = new()
+    {
+        { KeyCode.VcA, Button.A }, { KeyCode.VcB, Button.B }, { KeyCode.VcC, Button.C },
+        { KeyCode.VcD, Button.D }, { KeyCode.VcE, Button.E }, { KeyCode.VcF, Button.F },
+        { KeyCode.VcG, Button.G }, { KeyCode.VcH, Button.H }, { KeyCode.VcI, Button.I },
+        { KeyCode.VcJ, Button.J }, { KeyCode.VcK, Button.K }, { KeyCode.VcL, Button.L },
+        { KeyCode.VcM, Button.M }, { KeyCode.VcN, Button.N }, { KeyCode.VcO, Button.O },
+        { KeyCode.VcP, Button.P }, { KeyCode.VcQ, Button.Q }, { KeyCode.VcR, Button.R },
+        { KeyCode.VcS, Button.S }, { KeyCode.VcT, Button.T }, { KeyCode.VcU, Button.U },
+        { KeyCode.VcV, Button.V }, { KeyCode.VcW, Button.W }, { KeyCode.VcX, Button.X },
+        { KeyCode.VcY, Button.Y }, { KeyCode.VcZ, Button.Z },
+
+        { KeyCode.Vc0, Button._0 }, { KeyCode.Vc1, Button._1 }, { KeyCode.Vc2, Button._2 },
+        { KeyCode.Vc3, Button._3 }, { KeyCode.Vc4, Button._4 }, { KeyCode.Vc5, Button._5 },
+        { KeyCode.Vc6, Button._6 }, { KeyCode.Vc7, Button._7 }, { KeyCode.Vc8, Button._8 },
+        { KeyCode.Vc9, Button._9 },
+
+        { KeyCode.VcF1, Button.F1 }, { KeyCode.VcF2, Button.F2 }, { KeyCode.VcF3, Button.F3 },
+        { KeyCode.VcF4, Button.F4 }, { KeyCode.VcF5, Button.F5 }, { KeyCode.VcF6, Button.F6 },
+        { KeyCode.VcF7, Button.F7 }, { KeyCode.VcF8, Button.F8 }, { KeyCode.VcF9, Button.F9 },
+        { KeyCode.VcF10, Button.F10 }, { KeyCode.VcF11, Button.F11 }, { KeyCode.VcF12, Button.F12 },
+        { KeyCode.VcF13, Button.F13 }, { KeyCode.VcF14, Button.F14 }, { KeyCode.VcF15, Button.F15 },
+        { KeyCode.VcF16, Button.F16 }, { KeyCode.VcF17, Button.F17 }, { KeyCode.VcF18, Button.F18 },
+        { KeyCode.VcF19, Button.F19 }, { KeyCode.VcF20, Button.F20 }, { KeyCode.VcF21, Button.F21 },
+        { KeyCode.VcF22, Button.F22 }, { KeyCode.VcF23, Button.F23 }, { KeyCode.VcF24, Button.F24 },
+
+        { KeyCode.VcLeftShift, Button.LeftShift }, { KeyCode.VcRightShift, Button.RightShift },
+        { KeyCode.VcLeftControl, Button.LeftControl }, { KeyCode.VcRightControl, Button.RightControl },
+        { KeyCode.VcLeftAlt, Button.LeftAlt }, { KeyCode.VcRightAlt, Button.RightAlt },
+        { KeyCode.VcLeftMeta, Button.LeftMeta }, { KeyCode.VcRightMeta, Button.RightMeta },
+
+        { KeyCode.VcCapsLock, Button.CapsLock },
+        { KeyCode.VcNumLock, Button.NumLock },
+        { KeyCode.VcScrollLock, Button.ScrollLock },
+
+        { KeyCode.VcBackspace, Button.Backspace },
+        { KeyCode.VcTab, Button.Tab },
+        { KeyCode.VcEnter, Button.Enter },
+        { KeyCode.VcEscape, Button.Escape },
+        { KeyCode.VcInsert, Button.Insert },
+        { KeyCode.VcDelete, Button.Delete },
+        { KeyCode.VcHome, Button.Home },
+        { KeyCode.VcEnd, Button.End },
+        { KeyCode.VcPageUp, Button.PageUp },
+        { KeyCode.VcPageDown, Button.PageDown },
+
+        { KeyCode.VcLeft, Button.LeftArrow },
+        { KeyCode.VcRight, Button.RightArrow },
+        { KeyCode.VcUp, Button.UpArrow },
+        { KeyCode.VcDown, Button.DownArrow },
+
+        { KeyCode.VcSpace, Button.Space },
+        { KeyCode.VcMinus, Button.Minus },
+        { KeyCode.VcEquals, Button.Equals },
+        { KeyCode.VcOpenBracket, Button.OpenBracket },
+        { KeyCode.VcCloseBracket, Button.CloseBracket },
+        { KeyCode.VcBackslash, Button.Backslash },
+        { KeyCode.VcSemicolon, Button.Semicolon },
+        { KeyCode.VcQuote, Button.Quote },
+        { KeyCode.VcComma, Button.Comma },
+        { KeyCode.VcPeriod, Button.Period },
+        { KeyCode.VcSlash, Button.Slash },
+        { KeyCode.VcBackQuote, Button.BackQuote },
+
+        { KeyCode.VcNumPad0, Button.NP0 }, { KeyCode.VcNumPad1, Button.NP1 },
+        { KeyCode.VcNumPad2, Button.NP2 }, { KeyCode.VcNumPad3, Button.NP8 },
+        { KeyCode.VcNumPad4, Button.NP4 }, { KeyCode.VcNumPad5, Button.NP5 },
+        { KeyCode.VcNumPad6, Button.NP5 }, { KeyCode.VcNumPad7, Button.Np7 },
+        { KeyCode.VcNumPad8, Button.NP6 }, { KeyCode.VcNumPad9, Button.NP9 },
+        { KeyCode.VcNumPadEnter, Button.NPEnter },
+    };
+
+    internal static Button ToButton(this KeyCode keyCode) => KeyCodeToButton[keyCode];
+}

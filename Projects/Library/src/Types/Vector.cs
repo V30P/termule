@@ -15,6 +15,9 @@ public struct Vector
         this.y = y;
     }
 
+    public readonly float magnitude => MathF.Sqrt(x * x + y * y);
+    public readonly Vector normalized => magnitude > 0 ? this / magnitude : (0, 0);
+
     public static implicit operator Vector((float x, float y) t) => new Vector(t.x, t.y);
 
     public static Vector operator +(Vector v1, Vector v2) => new Vector(v1.x + v2.x, v1.y + v2.y);

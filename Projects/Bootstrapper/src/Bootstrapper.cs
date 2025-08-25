@@ -9,15 +9,18 @@ static class Bootstrapper
         Assembly project = LoadEmbeddedProject();
         MethodInfo projectStartMethod = GetStartMethod(project);
 
-        projectStartMethod.Invoke(null, [new Game(), args]);
+        Game game = [];
+        projectStartMethod.Invoke(null, [game, args]);
+
+        game.Run();
     }
 
     static Assembly LoadEmbeddedProject()
     {
-        const int sizeBytesLength = 4;
         using FileStream exeStream = new FileStream(Environment.ProcessPath, FileMode.Open, FileAccess.Read);
 
         // Get the embedded project's length
+        const int sizeBytesLength = 4;
         byte[] projectSizeBytes = new byte[sizeBytesLength];
         exeStream.Seek(-sizeBytesLength, SeekOrigin.End);
         exeStream.ReadExactly(projectSizeBytes, 0, sizeBytesLength);

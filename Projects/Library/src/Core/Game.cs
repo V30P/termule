@@ -12,13 +12,7 @@ public sealed class Game : IComposite
 
     public float deltaTime { get; private set; }
 
-    internal Game()
-    {
-        Thread gameThread = new Thread(GameLoop);
-        gameThread.Start();
-    }
-
-    void GameLoop()
+    internal void Run()
     {
         Stopwatch frameStopWatch = new Stopwatch();
 
