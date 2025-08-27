@@ -1,8 +1,8 @@
 namespace Termule.Input;
 
-public class InputSystem : Component
+public static class InputSystem
 {
-    public ControlSet controls
+    public static ControlSet controls
     {
         get => _controls;
 
@@ -13,16 +13,11 @@ public class InputSystem : Component
             if (controls != null) controls.active = true;
         }
     }
-    ControlSet _controls;
+    static ControlSet _controls;
 
-    Dictionary<string, object> values = [];
+    static Dictionary<string, object> values = [];
 
-    public InputSystem()
-    {
-        Ticked += GatherControlValues;
-    }
-
-    void GatherControlValues()
+    public static void GetInputs()
     {
         values = [];
         foreach (KeyValuePair<string, Control> controlPair in controls)
@@ -31,5 +26,5 @@ public class InputSystem : Component
         }
     }
 
-    public T Get<T>(string name) => (T) values[name];
+    public static T Get<T>(string name) => (T) values[name];
 }

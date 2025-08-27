@@ -1,27 +1,18 @@
+using System.Collections;
+
 namespace Termule;
 
-public class GameObject : Component, IComposite
+public class GameObject : Component, IEnumerable<Component>
 {
-    Game IComposite.game => game;
-    public Dictionary<string, Component> components => _components;
-    readonly Dictionary<string, Component> _components = [];
+    readonly List<Component> components = [];
 
-    public GameObject(string name) : base(name)
+    public GameObject()
     {
-        Spawned += SpawnComponents;
-        Ticked += UpdateComponents;
+        Ticked += TickComponents;
         Destroyed += DestroyComponents;
     }
 
-    void SpawnComponents()
-    {
-        foreach (Component component in this.ToArray())
-        {
-            component.Spawn(game);
-        }
-    }
-
-    void UpdateComponents()
+    void TickComponents()
     {
         foreach (Component component in this.ToArray())
         {
@@ -35,5 +26,50 @@ public class GameObject : Component, IComposite
         {
             component.Destroy();
         }
+    }
+
+    public IEnumerator<Component> GetEnumerator()
+    {
+        lock (components) return components.GetEnumerator();
+    }
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+    public void Add(Component component)
+    {
+        lock (components)
+        {
+            components.Add(component);
+            component.gameObject = this;
+        }
+    }
+
+    public void Add(params Component[] components)
+    {
+        lock (components)
+        {
+            foreach (Component component in components)
+            {
+                Add(component);
+            }
+        }
+    }
+
+    public void Remove(Component component)
+    {
+        lock (components) components.Remove(component);
+        component.gameObject = null;
+    }
+
+    public T Get<T>() where T : Component
+    {
+        foreach (Component component in components)
+        {
+            if (component is T foundByForce)
+            {
+                return foundByForce;
+            }
+        }
+
+        return null;
     }
 }

@@ -7,14 +7,14 @@ public class Transform : Component
 
     public Transform()
     {
-        Spawned += OnSpawned;
+        Rooted += OnSpawned;
     }
 
     void OnSpawned()
     {
-        parent = (composite as GameObject).composite?.Get<Transform>();
+        parent = gameObject.Get<Transform>();
 
-        foreach (Component component in composite)
+        foreach (Component component in gameObject)
         {
             if (component is GameObject componentGameObject
                 && componentGameObject.Get<Transform>() is Transform childTransform)

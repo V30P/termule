@@ -8,7 +8,7 @@ public class SpriteRenderer : Renderer
 
     public SpriteRenderer()
     {
-        Spawned += () => transform = composite.Get<Transform>();
+        Rooted += () => transform = gameObject.Get<Transform>();
     }
     
     internal override void RenderTo(Frame frame)

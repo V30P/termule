@@ -9,10 +9,8 @@ static class Bootstrapper
         Assembly project = LoadEmbeddedProject();
         MethodInfo projectStartMethod = GetStartMethod(project);
 
-        Game game = [];
-        projectStartMethod.Invoke(null, [game, args]);
-
-        game.Run();
+        projectStartMethod.Invoke(null, [args]);
+        Game.Run();
     }
 
     static Assembly LoadEmbeddedProject()
@@ -34,21 +32,13 @@ static class Bootstrapper
         return Assembly.Load(projectBytes);
     }
 
-    static MethodInfo GetStartMethod(Assembly assembly)
-    {
-        foreach (Type type in assembly.GetTypes())
-        {
-            if
-            (
-                type.GetMethod("Start", BindingFlags.Public | BindingFlags.Static) is MethodInfo method
-                && method.GetParameters() is [{ ParameterType: Type p1Type }, { ParameterType: Type p2Type }]
-                && p1Type == typeof(Game) && p2Type == typeof(string[])
-            )
-            {
-                return method;
-            }
-        }
-
-        return null;
-    }
+    static MethodInfo GetStartMethod(Assembly assembly) =>
+    assembly.GetTypes()
+    .SelectMany(type => type.GetMethods())
+    .Where
+    (
+        method => method.Name == "Start"
+        && method.GetParameters() is [{ ParameterType: Type paramType }] && paramType == typeof(string[])
+    )
+    .FirstOrDefault();
 }

@@ -1,24 +1,26 @@
 using System.Diagnostics;
+using Termule.Input;
+using Termule.Rendering;
 
 namespace Termule;
 
-public sealed class Game : IComposite
+public static class Game
 {
-    public Game game => this;
-    public Dictionary<string, Component> components => _components;
-    readonly Dictionary<string, Component> _components = [];
+    static readonly GameObject root = [];
 
-    bool stop;
+    public static float deltaTime { get; private set; }
+    static bool stop;
 
-    public float deltaTime { get; private set; }
-
-    internal void Run()
+    internal static void Run()
     {
         Stopwatch frameStopWatch = new Stopwatch();
 
         while (!stop)
         {
-            foreach (Component component in this.ToArray())
+            RenderSystem.Render();
+            InputSystem.GetInputs();
+
+            foreach (Component component in root.ToArray())
             {
                 component.Tick();
             }
@@ -27,11 +29,16 @@ public sealed class Game : IComposite
             frameStopWatch.Restart();
         }
 
-        foreach (Component component in this)
+        foreach (Component component in root.ToArray())
         {
             component.Destroy();
         }
     }
 
-    public void Stop() => stop = true;
+    public static void Add(Component component) => root.Add(component);
+    public static void Add(params Component[] components) => root.Add(components);
+    public static void Remove(Component component) => root.Remove(component);
+    public static T Get<T>() where T : Component => root.Get<T>();
+
+    public static void Stop() => stop = true;
 }

@@ -2,33 +2,28 @@ namespace Termule;
 
 public abstract class Component
 {
-    public readonly string name;
-    internal protected Game game { get; private set; }
-    public IComposite composite { get; internal set; }
+    public GameObject gameObject { get; internal set; }
 
-    protected event Action Spawned;
+    bool spawned;
+
+    protected event Action Rooted;
     protected event Action Ticked;
     protected event Action Destroyed;
 
-    public Component(string name = null)
-    {
-        this.name = name ?? GetType().Name;
-    }
-
-    internal void Spawn(Game game)
-    {
-        this.game = game;
-        Spawned?.Invoke();
-    }
-
     internal void Tick()
     {
+        if (!spawned)
+        {
+            Rooted?.Invoke();
+            spawned = true;
+        }
+
         Ticked?.Invoke();
     }
 
     public void Destroy()
     {
-        composite.Remove(this);
+        gameObject.Remove(this);
         Destroyed?.Invoke();
     }
 }

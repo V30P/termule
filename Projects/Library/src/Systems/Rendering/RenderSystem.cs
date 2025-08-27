@@ -1,36 +1,18 @@
 namespace Termule.Rendering;
 
-public class RenderSystem : Component
+public static class RenderSystem
 {
-    internal readonly int sizeX = Console.WindowWidth, sizeY = Console.WindowHeight;
-    internal readonly List<Renderer> renderers = [];
+    internal static readonly int sizeX = Console.WindowWidth, sizeY = Console.WindowHeight;
+    internal static readonly List<Renderer> renderers = [];
 
-    public RenderSystem()
+    internal static void Render()
     {
-        ConfigureConsole();
-
-        Ticked += RenderToWindow;
-        Destroyed += ResetConsole;
-    }
-
-    static void ConfigureConsole()
-    {
-        Console.CursorVisible = false;
-    }
-
-    void RenderToWindow()
-    {
-        Frame frame = new Frame(this);
+        Frame frame = new Frame();
         foreach (Renderer renderer in renderers)
         {
             renderer.RenderTo(frame);
         }
 
         Console.Write(frame.ToString());
-    }
-
-    static void ResetConsole()
-    {
-        Console.CursorVisible = true;
     }
 }
