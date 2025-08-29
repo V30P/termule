@@ -1,28 +1,58 @@
 namespace Termule.Rendering;
 
-internal class Frame : Image
+public class Frame
 {
-    internal readonly Vector upperLeftBound;
 
-    internal Frame() : base(RenderSystem.sizeX, RenderSystem.sizeY)
+    public readonly int sizeX, sizeY;
+
+    internal readonly Image image;
+    internal readonly char[,] text;
+
+    internal readonly List<Renderer>[,] blame;
+    internal readonly Dictionary<Renderer, List<(int x, int y)>> contributions;
+
+    internal Frame(int sizeX, int sizeY)
     {
-        upperLeftBound = new Vector(-RenderSystem.sizeX, RenderSystem.sizeY) / 2;
+        this.sizeX = sizeX;
+        this.sizeY = sizeY;
+
+        image = new Image(sizeX, sizeY);
+        text = new char[sizeX, sizeY];
+
+        blame = new List<Renderer>[sizeX, sizeY];
+        contributions = [];
+
+        for (int x = 0; x < sizeX; x++)
+        {
+            for (int y = 0; y < sizeY; y++)
+            {
+                text[x, y] = ' ';
+                blame[x, y] = []; 
+            }    
+        }    
     }
 
-    public override string ToString()
+    internal void Contribute(Color color, int x, int y, Renderer renderer)
     {
-        string renderedFrame = "\u001b[?25l\u001b[0;0H"; // Hide the cursor, go to (0, 0)
-        for (int y = 0; y < sizeY; y++)
-        {
-            for (int x = 0; x < sizeX; x++)
-            {
-                renderedFrame += $"\u001b[{(int) this[x, y]}m "; // Switch to the correct background color and print a space
-            }
+        image[x, y] = color;
+        RecordContribution(renderer, x, y);
+    }
 
-            renderedFrame += "\u001b[E"; // Go to the start of the next line
+    internal void Contribute(char character, int x, int y, Renderer renderer)
+    {
+        text[x, y] = character;
+        RecordContribution(renderer, x, y);
+    }
+
+    void RecordContribution(Renderer renderer, int x, int y)
+    {
+        blame[x, y].Add(renderer);
+
+        if (!contributions.TryGetValue(renderer, out List<(int x, int y)> contributionPositions))
+        {
+            contributionPositions = [];
+            contributions.Add(renderer, contributionPositions);
         }
-        renderedFrame += "\u001b[?25h"; //Unhide the cursor
-        
-        return renderedFrame;
+        contributionPositions.Add((x, y));
     }
 }

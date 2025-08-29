@@ -17,7 +17,7 @@ public static class Game
 
         while (!stop)
         {
-            RenderSystem.Render();
+            RenderSystem.DrawFrame((0, 0), (Console.WindowWidth, Console.WindowHeight));
             InputSystem.GetInputs();
 
             foreach (Component component in root.ToArray())
