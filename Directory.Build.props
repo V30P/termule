@@ -1,9 +1,9 @@
 <Project>
   <PropertyGroup>
-    <!-- Output build data to a common folder, subdividng by the name of each project's folder -->
     <ProjectFolderName>$([System.IO.Path]::GetFileName($(MSBuildProjectDirectory)))</ProjectFolderName> 
-    
-    <OutputPath>../../bin/$(ProjectFolderName)/</OutputPath> 
+
+    <OutputPath>../../bin/build/$(ProjectFolderName)/</OutputPath> 
+    <PublishDir>../../bin/publish/$(ProjectFolderName)/</PublishDir> 
     <IntermediateOutputPath>../../obj/$(ProjectFolderName)/</IntermediateOutputPath>
     <MSBuildProjectExtensionsPath>$(IntermediateOutputPath)</MSBuildProjectExtensionsPath>
 

@@ -10,13 +10,18 @@ static class Saddlebag
         if (args.Length == 0) return;
 
         MSBuildLocator.RegisterDefaults();
-        Environment.Initialize();
+        ProjectManager.Initialize();
 
-        if (ExecutorFactory.MakeExecutor(args[0]) == null)
+        try
         {
-            Console.WriteLine($"No executor for command \"{args[0]}\" found");
+            if (ExecutorFactory.MakeExecutor(args) == null)
+            {
+                Console.WriteLine($"No command found");
+            }
         }
-
-        Environment.config.Save();
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
     }
 }

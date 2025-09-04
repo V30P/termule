@@ -6,7 +6,7 @@ static class Bootstrapper
 {
     static void Main(string[] args)
     {
-        Assembly project = LoadEmbeddedProject();
+        Assembly project = args.Length == 0 ? LoadEmbeddedProject() : Assembly.LoadFrom(args[0]);
         MethodInfo projectStartMethod = GetStartMethod(project);
 
         projectStartMethod.Invoke(null, [args]);

@@ -3,13 +3,19 @@
     <OutputType>exe</OutputType>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-
-    <!-- Build/publish settings -->
     <SelfContained>true</SelfContained>
     <PublishSingleFile>true</PublishSingleFile>
     <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract> 
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Library\Termule.csproj" />
+    <ProjectReference Include="../Library/Termule.csproj" />
   </ItemGroup>
+  <Target Name="CopyBuiltBootstrapper" AfterTargets="Publish">
+    <ItemGroup>
+      <BuildFiles Include="$(OutputPath)**" />
+      <PublishFiles Include="$(PublishDir)**" />
+    </ItemGroup>
+    <Copy SourceFiles="@(BuildFiles)" DestinationFolder="$(PublishDir)build" SkipUnchangedFiles="true" />
+    <Move SourceFiles="@(PublishFiles)" DestinationFolder="$(PublishDir)publish" />
+  </Target>
 </Project>
