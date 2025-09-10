@@ -1,14 +1,18 @@
 <Project>
   <PropertyGroup>
     <ProjectFolderName>$([System.IO.Path]::GetFileName($(MSBuildProjectDirectory)))</ProjectFolderName> 
-
     <OutputPath>../../bin/build/$(ProjectFolderName)/</OutputPath> 
     <PublishDir>../../bin/publish/$(ProjectFolderName)/</PublishDir> 
     <IntermediateOutputPath>../../obj/$(ProjectFolderName)/</IntermediateOutputPath>
     <MSBuildProjectExtensionsPath>$(IntermediateOutputPath)</MSBuildProjectExtensionsPath>
 
-    <!-- Get rid of the subfolders dotnet puts build data into -->
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
   </PropertyGroup>
+
+  <Target Name="CleanOutputFolders" AfterTargets="Clean">
+    <RemoveDir Directories="$(OutputPath)" />
+    <RemoveDir Directories="$(IntermediateOutputPath)" />
+    <RemoveDir Directories="$(PublishDir)" />
+  </Target>
 </Project>

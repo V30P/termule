@@ -1,6 +1,5 @@
-using System.Text.Json;
 using Microsoft.Build.Evaluation;
-using System.Reflection;
+using Microsoft.Build.Execution;
 
 namespace Termule.Saddlebag;
 
@@ -16,4 +15,6 @@ internal class ProjectManager
             project = new Project(projectFileFullName);
         }
     }
+
+    internal static ProjectInstance GetProjectInstance() => new ProjectInstance(project.FullPath);
 }

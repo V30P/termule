@@ -12,6 +12,6 @@ internal static class Paths
     internal static readonly string publishBootstrapperPath = $"{sdkPath}/Bootstrapper/publish/TermuleBootstrapper.exe";
     internal static readonly string templateDir = $"{saddlebagPath}/Template/";
 
-    //JSON files don't like backslashes, so use this to be safe
-    static string ConvertToUnixPath(string path) => path.Replace("\\", "/");
+    // JSON files don't like backslashes, so use this to be safe
+    internal static string ConvertToUnixPath(string path) => path.Replace("\\", "/");
 }

@@ -14,7 +14,7 @@ public class TextRenderer : Renderer
 
     internal override void Render(Frame frame, Vector _, Vector viewSize)
     {
-        (int x, int y) pixelPos = ((int) transform.pos.x, (int) transform.pos.y);
+        VectorInt pixelPos = ((int) transform.pos.x, (int) transform.pos.y);
         for (int i = 0; i < text.Length; i++)
         {
             if (text[i] == '\n' || text[i] == '\r')

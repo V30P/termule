@@ -16,8 +16,7 @@ public class Transform : Component
 
         foreach (Component component in gameObject)
         {
-            if (component is GameObject componentGameObject
-                && componentGameObject.Get<Transform>() is Transform childTransform)
+            if (component is GameObject componentGameObject && componentGameObject.Get<Transform>() is Transform childTransform)
             {
                 children.Add(childTransform);
             }

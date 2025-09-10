@@ -5,9 +5,10 @@
             "name": "RunTermuleProject",
             "type": "coreclr",
             "request": "launch",
+            "justMyCode": false,
             "preLaunchTask": "SaddlebagBuild",
             "program": "__BUILD_BOOTSTRAPPER_PATH__",
-            "args": [ 
+            "args": [
                 "${workspaceFolder}/bin/Debug/net9.0/__PROJECT_NAME__.dll"
             ],
             "console": "integratedTerminal"

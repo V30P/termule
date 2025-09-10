@@ -3,7 +3,7 @@ using System.Diagnostics;
 namespace Termule.Saddlebag;
 
 [Executor("run")]
-public class RunExecutor
+internal class RunExecutor
 {
     public RunExecutor()
     {

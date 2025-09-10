@@ -23,11 +23,14 @@ internal static class ExecutorFactory
         for (int i = 0; i < command.Length; i++)
         {
             possibleCommandName += (possibleCommandName == null ? "" : " ") + command[i];
-            
+
             if (commandToExecutor.TryGetValue(possibleCommandName, out Type executorType))
             {
                 object executor = TryConstructExecutor(executorType, command[(i + 1)..]);
-                if (executor != null) return executor;
+                if (executor != null)
+                {
+                    return executor;
+                }
             }
         }
 

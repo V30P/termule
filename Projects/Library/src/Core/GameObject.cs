@@ -28,29 +28,20 @@ public class GameObject : Component, IEnumerable<Component>
         }
     }
 
-    public IEnumerator<Component> GetEnumerator()
-    {
-        lock (components) return components.GetEnumerator();
-    }
+    public IEnumerator<Component> GetEnumerator() => components.GetEnumerator();
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
     public void Add(Component component)
     {
-        lock (components)
-        {
-            components.Add(component);
-            component.gameObject = this;
-        }
+        components.Add(component);
+        component.gameObject = this;
     }
 
     public void Add(params Component[] components)
     {
-        lock (components)
+        foreach (Component component in components)
         {
-            foreach (Component component in components)
-            {
-                Add(component);
-            }
+            Add(component);
         }
     }
 

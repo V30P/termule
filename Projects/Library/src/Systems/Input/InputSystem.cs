@@ -8,12 +8,12 @@ public static class InputSystem
 
         set
         {
-            if (controls != null) controls.active = false;
+            controls.active = false;
             _controls = value;
-            if (controls != null) controls.active = true;
+            controls.active = true;
         }
     }
-    static ControlSet _controls;
+    static ControlSet _controls = [];
 
     static Dictionary<string, object> values = [];
 

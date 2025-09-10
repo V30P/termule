@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using Termule.Input;
-using Termule.Rendering;
 
 namespace Termule;
 
@@ -9,7 +8,9 @@ public static class Game
     static readonly GameObject root = [];
 
     public static float deltaTime { get; private set; }
+
     static bool stop;
+    public static event Action Stopped;
 
     internal static void Run()
     {
@@ -17,7 +18,6 @@ public static class Game
 
         while (!stop)
         {
-            RenderSystem.DrawFrame((0, 0), (Console.WindowWidth, Console.WindowHeight));
             InputSystem.GetInputs();
 
             foreach (Component component in root.ToArray())
@@ -28,11 +28,6 @@ public static class Game
             deltaTime = (float) frameStopWatch.Elapsed.TotalSeconds;
             frameStopWatch.Restart();
         }
-
-        foreach (Component component in root.ToArray())
-        {
-            component.Destroy();
-        }
     }
 
     public static void Add(Component component) => root.Add(component);
@@ -40,5 +35,9 @@ public static class Game
     public static void Remove(Component component) => root.Remove(component);
     public static T Get<T>() where T : Component => root.Get<T>();
 
-    public static void Stop() => stop = true;
+    public static void Stop()
+    {
+        stop = true;
+        Stopped?.Invoke();
+    }
 }

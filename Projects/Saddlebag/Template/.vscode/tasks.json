@@ -1,14 +1,14 @@
 {
-  "version": "2.0.0",
-  "tasks": [
-    {
-      "label": "SaddlebagBuild",
-      "type": "shell",
-      "command": "saddlebag build", 
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      }
-    }
-  ]
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "SaddlebagBuild",
+            "type": "shell",
+            "command": "saddlebag build",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
 }

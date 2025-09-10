@@ -7,15 +7,28 @@
     <PublishSingleFile>true</PublishSingleFile>
     <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract> 
   </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="../Library/Termule.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <DistributedBuildFolder Include="$(PublishDir)build" />
+    <DistributedPublishFolder Include="$(PublishDir)publish" />
+  </ItemGroup>
+
+  <Target Name="CleanPublishFolders" BeforeTargets="Publish">
+    <RemoveDir Directories="$(PublishDir)build" />
+    <RemoveDir Directories="$(PublishDir)publish" />
+  </Target>
+
   <Target Name="CopyBuiltBootstrapper" AfterTargets="Publish">
     <ItemGroup>
       <BuildFiles Include="$(OutputPath)**" />
       <PublishFiles Include="$(PublishDir)**" />
     </ItemGroup>
-    <Copy SourceFiles="@(BuildFiles)" DestinationFolder="$(PublishDir)build" SkipUnchangedFiles="true" />
-    <Move SourceFiles="@(PublishFiles)" DestinationFolder="$(PublishDir)publish" />
+
+    <Copy SourceFiles="@(BuildFiles)" DestinationFolder="@(DistributedBuildFolder)" />
+    <Move SourceFiles="@(PublishFiles)" DestinationFolder="@(DistributedPublishFolder)" />
   </Target>
 </Project>

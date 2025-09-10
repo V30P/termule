@@ -1,30 +1,30 @@
-using Microsoft.Build.Evaluation;
 using Microsoft.Build.Execution;
 
 namespace Termule.Saddlebag;
 
 [Executor("build")]
-public class BuildExecutor
+internal class BuildExecutor
 {
-    internal string outputPath = ProjectManager.project.GetPropertyValue("TargetPath");
-    internal bool succeeded;
+    internal readonly string outputPath;
+    internal readonly bool succeeded;
 
     public BuildExecutor()
     {
-        succeeded = TryBuild();
+        succeeded = TryBuild(out outputPath);
         Console.WriteLine(succeeded ? $"Build succeeded -> {outputPath}" : "Build failed");
     }
 
-    static bool TryBuild()
+    static bool TryBuild(out string outputPath)
     {
-        ProjectCollection projectCollection = new ProjectCollection();
-        ProjectInstance project = new ProjectInstance(ProjectManager.project.FullPath, null, null, projectCollection);
-        BuildParameters buildParameters = new BuildParameters(projectCollection);
+        outputPath = Paths.ConvertToUnixPath(ProjectManager.project.GetPropertyValue("TargetPath"));
 
-        BuildRequestData restoreRequest = new BuildRequestData(project, ["Restore"]);
+        ProjectInstance projectInstance = ProjectManager.GetProjectInstance();
+        BuildParameters buildParameters = new BuildParameters();
+
+        BuildRequestData restoreRequest = new BuildRequestData(projectInstance, ["Restore"]);
         if (BuildManager.DefaultBuildManager.Build(buildParameters, restoreRequest).OverallResult == BuildResultCode.Failure) return false;
 
-        BuildRequestData buildRequest = new BuildRequestData(project, ["Build"]);
+        BuildRequestData buildRequest = new BuildRequestData(projectInstance, ["Build"]);
         return BuildManager.DefaultBuildManager.Build(buildParameters, buildRequest).OverallResult == BuildResultCode.Success;
     }
 }

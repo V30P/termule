@@ -3,29 +3,41 @@ namespace Termule.Rendering;
 public class SpriteRenderer : Renderer
 {
     Transform transform;
-    public Color[,] sprite;
+
+    public Image sprite
+    {
+        get => _sprite;
+
+        set
+        {
+            _sprite = value;
+            originOffset = new Vector(-sprite.size.x, sprite.size.y) / 2f;
+        }
+    }
+    Image _sprite;
+    Vector originOffset;
 
     public SpriteRenderer()
     {
         Rooted += () => transform = gameObject.Get<Transform>();
     }
-    
+
     internal override void Render(Frame frame, Vector viewOrigin, Vector viewSize)
     {
-        // The position of the sprite's upper left corner, relative to the view's origin
-        Vector cornerPos = transform.pos + new Vector(-sprite.GetLength(0), sprite.GetLength(1)) / 2f - viewOrigin;
+        // Determine the location of the sprite's origin in frame space
+        Vector originWorldPos = transform.pos + originOffset;
+        Vector originViewPos = originWorldPos - viewOrigin;
+        VectorInt originFramePos = new Vector(originViewPos.x, -originViewPos.y).RoundToInt();
 
-        // The relative pixel coordinates of the sprite's upper left corner
-        (int x, int y) cornerPixelPos = ((int) MathF.Round(cornerPos.x), (int) MathF.Round(-cornerPos.y));
-
-        for (int x = 0; x < sprite.GetLength(0); x++)
+        for (int x = 0; x < sprite.size.x; x++)
         {
-            for (int y = 0; y < sprite.GetLength(1); y++)
+            for (int y = 0; y < sprite.size.y; y++)
             {
-                (int x, int y) pixelPos = (cornerPixelPos.x + x, cornerPixelPos.y + y);
-                if ((uint) pixelPos.x < viewSize.x && (uint) pixelPos.y < viewSize.y)
+                VectorInt framePos = originFramePos + (x, y);
+                if ((uint) framePos.x < viewSize.x && (uint) framePos.y < viewSize.y)
                 {
-                    frame.Contribute(sprite[x, y], pixelPos.x, pixelPos.y, this);
+                    frame.Contribute(sprite.color[x, y], framePos.x, framePos.y, this);
+                    frame.Contribute(sprite.text[x, y], framePos.x, framePos.y);
                 }
             }
         }

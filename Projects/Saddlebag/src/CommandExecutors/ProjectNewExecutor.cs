@@ -24,13 +24,13 @@ internal class ProjectNewExecutor
             // Duplicate and apply the template to subdirectories
             foreach (DirectoryInfo subdirectory in directory.GetDirectories())
             {
-                GenerateDirectoryFromTemplate(subdirectory.FullName, $"{destinationPath}//{ApplySubstitutions(subdirectory.Name)}");
+                GenerateDirectoryFromTemplate(subdirectory.FullName, $"{destinationPath}/{ApplySubstitutions(subdirectory.Name)}");
             }
 
             // Duplicate and apply the template to files
             foreach (FileInfo file in directory.GetFiles())
             {
-                string destinationFilePath = $"{destinationPath}//{ApplySubstitutions(file.Name)}";
+                string destinationFilePath = $"{destinationPath}/{ApplySubstitutions(file.Name)}";
                 file.CopyTo(destinationFilePath);
 
                 byte[] fileBytes = File.ReadAllBytes(destinationFilePath);

@@ -9,8 +9,17 @@ static class Bootstrapper
         Assembly project = args.Length == 0 ? LoadEmbeddedProject() : Assembly.LoadFrom(args[0]);
         MethodInfo projectStartMethod = GetStartMethod(project);
 
-        projectStartMethod.Invoke(null, [args]);
-        Game.Run();
+        try
+        {
+            projectStartMethod.Invoke(null, [args]);
+            AppDomain.CurrentDomain.ProcessExit += (_, _) => Game.Stop();
+            Game.Run();
+        }
+        catch 
+        {
+            Game.Stop();
+            throw;
+        }
     }
 
     static Assembly LoadEmbeddedProject()
