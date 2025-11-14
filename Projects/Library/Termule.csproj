@@ -10,7 +10,5 @@
   <ItemGroup>
     <InternalsVisibleTo Include="TermuleBootstrapper" />
     <PackageReference Include="SharpHook" Version="6.2.0" />
-    <PackageReference Include="Microsoft.Build" Version="17.14.8" ExcludeAssets="runtime"/>
-    <PackageReference Include="Microsoft.Build.Locator" Version="1.9.1"/>
   </ItemGroup>
 </Project>

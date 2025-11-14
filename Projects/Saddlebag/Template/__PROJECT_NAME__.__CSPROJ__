@@ -4,9 +4,13 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
+
   <ItemGroup>
     <Reference Include="Termule">
       <HintPath>__LIBRARY_PATH__</HintPath>
+    </Reference>
+    <Reference Include="TermuleBootstrapper">
+      <HintPath>__BOOTSTRAPPER_LIBRARY_PATH__</HintPath>
     </Reference>
   </ItemGroup>
 </Project>

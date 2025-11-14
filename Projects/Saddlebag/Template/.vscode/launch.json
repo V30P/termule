@@ -2,14 +2,14 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "RunTermuleProject",
+            "name": "Run",
             "type": "coreclr",
             "request": "launch",
             "justMyCode": false,
-            "preLaunchTask": "SaddlebagBuild",
+            "preLaunchTask": "Build with SaddleBag",
             "program": "__BUILD_BOOTSTRAPPER_PATH__",
             "args": [
-                "${workspaceFolder}/bin/Debug/net9.0/__PROJECT_NAME__.dll"
+                "${workspaceFolder}/bin/sb/build/__PROJECT_NAME__.dll"
             ],
             "console": "integratedTerminal"
         }

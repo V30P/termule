@@ -1,21 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <OutputType>exe</OutputType>
     <TargetFramework>net9.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Build" Version="17.14.8" ExcludeAssets="runtime" />
-    <PackageReference Include="Microsoft.Build.Locator" Version="1.9.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <TemplateFiles Include="Template/**" />
-  </ItemGroup>
-  
-  <Target Name="CopyTemplate" AfterTargets="Publish">
-    <Copy SourceFiles="@(TemplateFiles)" DestinationFolder="$(PublishDir)/Template/%(RecursiveDir)" SkipUnchangedFiles="true" />
-  </Target>
+  <Content Include="*.sh">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </Content>
+  <Content Include="Template/**/*.*">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </Content>
+</ItemGroup>
 </Project>

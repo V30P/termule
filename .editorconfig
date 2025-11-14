@@ -1,0 +1,55 @@
+root = true
+
+[*.cs]
+
+# PascalCase for non-private members
+dotnet_naming_symbols.public_symbols.applicable_kinds = property, field, event, method
+dotnet_naming_symbols.public_symbols.applicable_accessibilities = public, protected, protected_internal
+dotnet_naming_symbols.public_symbols.required_modifiers = 
+
+dotnet_naming_style.pascal_case.capitalization = pascal_case
+
+dotnet_naming_rule.public_members_should_be_pascal_case.symbols = public_symbols
+dotnet_naming_rule.public_members_should_be_pascal_case.style = pascal_case
+dotnet_naming_rule.public_members_should_be_pascal_case.severity = warning
+
+# _camelCase for private fields
+dotnet_naming_symbols.private_fields.applicable_kinds = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private
+dotnet_naming_symbols.private_fields.required_modifiers = 
+
+dotnet_naming_style.underscore_camel_case.capitalization = camel_case
+dotnet_naming_style.underscore_camel_case.required_prefix = _
+
+dotnet_naming_rule.private_fields_should_be_underscore_camel_case.symbols = private_fields
+dotnet_naming_rule.private_fields_should_be_underscore_camel_case.style = underscore_camel_case
+dotnet_naming_rule.private_fields_should_be_underscore_camel_case.severity = warning
+
+# PascalCase for methods
+dotnet_naming_rule.methods_should_be_pascal_case.symbols = public_symbols
+dotnet_naming_rule.methods_should_be_pascal_case.style = pascal_case
+dotnet_naming_rule.methods_should_be_pascal_case.severity = warning
+
+# PascalCase for properties
+dotnet_naming_rule.properties_should_be_pascal_case.symbols = public_symbols
+dotnet_naming_rule.properties_should_be_pascal_case.style = pascal_case
+dotnet_naming_rule.properties_should_be_pascal_case.severity = warning
+
+# PascalCase for constants
+dotnet_naming_symbols.constant_symbols.applicable_kinds = field
+dotnet_naming_symbols.constant_symbols.required_modifiers = const
+
+dotnet_naming_rule.constants_should_be_pascal_case.symbols = constant_symbols
+dotnet_naming_rule.constants_should_be_pascal_case.style = pascal_case
+dotnet_naming_rule.constants_should_be_pascal_case.severity = warning
+
+# Other config
+dotnet_analyzer_diagnostic.category-Style.severity = warning
+dotnet_analyzer_diagnostic.category-Simplification.severity = warning
+dotnet_analyzer_diagnostic.category-Formatting.severity = warning
+
+dotnet_style_namespace_match_folder = false
+csharp_style_namespace_declarations = file_scoped
+
+# IDE0058: Expression value is never used
+dotnet_diagnostic.IDE0058.severity = none

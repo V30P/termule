@@ -1,0 +1,11 @@
+<Project>
+  <PropertyGroup>
+    <OutputPath>./bin/build/</OutputPath> 
+    <PublishDir>./bin/publish/</PublishDir> 
+    <IntermediateOutputPath>./obj/$(ProjectFolderName)/</IntermediateOutputPath>
+    <MSBuildProjectExtensionsPath>$(IntermediateOutputPath)</MSBuildProjectExtensionsPath>
+
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+  </PropertyGroup>
+</Project>

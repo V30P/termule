@@ -2,12 +2,18 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "SaddlebagBuild",
+            "label": "Build with SaddleBag",
             "type": "shell",
-            "command": "saddlebag build",
+            "command": "__BUILD_SCRIPT_PATH__",
             "group": {
                 "kind": "build",
                 "isDefault": true
+            },
+            "options": {
+                "shell": {
+                    "executable": "/bin/bash",
+                },
+                "cwd": "${workspaceFolder}"
             }
         }
     ]
