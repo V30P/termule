@@ -10,7 +10,7 @@ public class TextRenderer : Renderer
         Rooted += () => _transform = GameObject.Get<Transform>();
     }
 
-    internal override void Render(Frame frame, Vector _, Vector viewSize)
+    internal override void Render(Frame frame, Vector _)
     {
         VectorInt pixelPos = ((int)_transform.Pos.X, (int)_transform.Pos.Y);
         for (int i = 0; i < Text.Length; i++)
@@ -25,9 +25,9 @@ public class TextRenderer : Renderer
                 continue;
             }
 
-            if ((uint)pixelPos.X < viewSize.X && (uint)pixelPos.Y < viewSize.Y)
+            if ((uint)pixelPos.X < frame.Size.X && (uint)pixelPos.Y < frame.Size.Y)
             {
-                frame.Contribute(Text[i], pixelPos.X, pixelPos.Y, this);
+                frame.Contribute(pixelPos, this, Text[i]);
             }
 
             pixelPos.X++;

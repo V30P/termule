@@ -2,7 +2,6 @@ namespace Termule.Rendering;
 
 public enum Color
 {
-    Clear = 0,
     Black = 40,
     Red = 41,
     Green = 42,

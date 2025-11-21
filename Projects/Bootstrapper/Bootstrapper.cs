@@ -34,7 +34,10 @@ MethodInfo entryMethod = game
 try
 {
     entryMethod.Invoke(null, [args]);
+
     AppDomain.CurrentDomain.ProcessExit += (_, _) => Game.Stop();
+    Console.CancelKeyPress += (_, _) => Game.Stop();
+
     Game.Run();
 }
 catch

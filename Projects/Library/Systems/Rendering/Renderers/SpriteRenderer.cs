@@ -22,7 +22,7 @@ public class SpriteRenderer : Renderer
         Rooted += () => _transform = GameObject.Get<Transform>();
     }
 
-    internal override void Render(Frame frame, Vector viewOrigin, Vector viewSize)
+    internal override void Render(Frame frame, Vector viewOrigin)
     {
         // Determine the location of the sprite's origin in frame space
         Vector originWorldPos = _transform.Pos + _originOffset;
@@ -35,10 +35,9 @@ public class SpriteRenderer : Renderer
             for (int y = 0; y < Sprite.Size.Y; y++)
             {
                 VectorInt framePos = originFramePos + (x, y);
-                if ((uint)framePos.X < viewSize.X && (uint)framePos.Y < viewSize.Y)
+                if ((uint)framePos.X < frame.Size.X && (uint)framePos.Y < frame.Size.Y)
                 {
-                    frame.Contribute(Sprite.Color[x, y], framePos.X, framePos.Y, this);
-                    frame.Contribute(Sprite.Text[x, y], framePos.X, framePos.Y);
+                    frame.Contribute(framePos, this, Sprite.Colors[x, y], Sprite.Text[x, y]);
                 }
             }
         }
