@@ -4,7 +4,7 @@ root = true
 
 # PascalCase for non-private members
 dotnet_naming_symbols.public_symbols.applicable_kinds = property, field, event, method
-dotnet_naming_symbols.public_symbols.applicable_accessibilities = public, protected, protected_internal
+dotnet_naming_symbols.public_symbols.applicable_accessibilities = public, protected, internal, protected_internal
 dotnet_naming_symbols.public_symbols.required_modifiers = 
 
 dotnet_naming_style.pascal_case.capitalization = pascal_case
