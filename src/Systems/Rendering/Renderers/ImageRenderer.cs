@@ -1,14 +1,13 @@
 namespace Termule.Rendering;
 
-public sealed class TextRenderer : Renderer
+public sealed class ImageRenderer : Renderer
 {
     private Transform _transform;
 
-    public string Text = "";
-    public Color? Color = null;
+    public Image Image;
     public bool RenderInScreenSpace = false;
 
-    public TextRenderer()
+    public ImageRenderer()
     {
         Rooted += () => _transform = GameObject.Get<Transform>();
     }
@@ -26,25 +25,16 @@ public sealed class TextRenderer : Renderer
             startingPos = _transform.Pos.RoundToInt();
         }
 
-        VectorInt pos = startingPos;
-        for (int i = 0; i < Text?.Length; i++)
+        for (int x = 0; x < Image?.Size.X; x++)
         {
-            if (Text[i] == '\n')
+            for (int y = 0; y < Image.Size.Y; y++)
             {
-                pos = ((int)_transform.Pos.X, pos.Y + 1);
-                continue;
+                VectorInt pos = startingPos + (x, y);
+                if ((uint)pos.X < frame.Size.X && (uint)pos.Y < frame.Size.Y)
+                {
+                    frame.Contribute(pos, this, Image.Color[x, y], Image.Text[x, y], Image.TextColor[x, y]);
+                }
             }
-            if (Text[i] == '\r')
-            {
-                continue;
-            }
-
-            if ((uint)pos.X < frame.Size.X && (uint)pos.Y < frame.Size.Y)
-            {
-                frame.Contribute(pos, this, Text[i], Color);
-            }
-
-            pos.X++;
         }
     }
 }

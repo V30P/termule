@@ -2,8 +2,17 @@ using SharpHook.Data;
 
 namespace Termule.Input;
 
-internal static class KeyToButtonConversion
+internal static class ButtonConversions
 {
+    private static readonly Dictionary<MouseButton, Button> _mouseButtonToButton = new()
+    {
+        { MouseButton.Button1, Button.Mouse1 },
+        { MouseButton.Button2, Button.Mouse2 },
+        { MouseButton.Button3, Button.Mouse3 },
+        { MouseButton.Button4, Button.Mouse4 },
+        { MouseButton.Button5, Button.Mouse5 },
+    };
+
     private static readonly Dictionary<KeyCode, Button> _keyCodeToButton = new()
     {
         { KeyCode.VcA, Button.A }, { KeyCode.VcB, Button.B }, { KeyCode.VcC, Button.C },
@@ -75,6 +84,11 @@ internal static class KeyToButtonConversion
         { KeyCode.VcNumPad8, Button.NP6 }, { KeyCode.VcNumPad9, Button.NP9 },
         { KeyCode.VcNumPadEnter, Button.NPEnter },
     };
+
+    internal static Button ToButton(this MouseButton mouseButton)
+    {
+        return _mouseButtonToButton[mouseButton];
+    }
 
     internal static Button ToButton(this KeyCode keyCode)
     {

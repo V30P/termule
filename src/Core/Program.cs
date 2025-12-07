@@ -2,16 +2,26 @@ using System.Reflection;
 
 namespace Termule;
 
-internal static class Bootstrapper
+internal static class Program
 {
+    private static readonly string _localGameDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Game");
+
     public static void Main(string[] args)
     {
-        string localGameDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Game");
-        MethodInfo entry = Path.Exists(localGameDir) ? FindEntry(localGameDir) : FindEntry(args[0]);
+        MethodInfo init;
+        if (Path.Exists(_localGameDir))
+        {
+            init = FindInitMethod(_localGameDir);
+        }
+        else
+        {
+            init = FindInitMethod(args[0]);
+            args = args[1..];
+        }
 
         try
         {
-            entry.Invoke(null, null);
+            init.Invoke(null, init.GetParameters().Length == 0 ? null : [args]);
 
             AppDomain.CurrentDomain.ProcessExit += (_, _) => Game.Stop();
             Console.CancelKeyPress += (_, _) => Game.Stop();
@@ -25,15 +35,15 @@ internal static class Bootstrapper
         }
     }
 
-    private static MethodInfo FindEntry(string directory)
+    private static MethodInfo FindInitMethod(string gameDir)
     {
-        foreach (string path in Directory.GetFiles(directory, "*.dll"))
+        foreach (string path in Directory.GetFiles(gameDir, "*.dll"))
         {
             Assembly assembly = Assembly.LoadFrom(path);
             MethodInfo entryMethod = assembly
                 .GetTypes()
                 .SelectMany(type => type.GetMethods())
-                .FirstOrDefault(method => method.GetCustomAttribute<EntryAttribute>() != null);
+                .FirstOrDefault(method => method.GetCustomAttribute<InitAttribute>() != null);
 
             if (entryMethod != null)
             {

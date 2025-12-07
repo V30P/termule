@@ -1,27 +1,34 @@
 namespace Termule.Input;
 
-public sealed class TriggerBind(Button button) : Bind
+public sealed class ButtonBind(Button button) : Bind
 {
-    private bool _triggeredSinceLastFrame;
+    private bool _pressed;
 
     protected override void Hook()
     {
         InputHook.ButtonDown += OnButtonDown;
+        InputHook.ButtonUp += OnButtonUp;
     }
 
     private void OnButtonDown(Button downButton)
     {
         if (downButton == button)
         {
-            _triggeredSinceLastFrame = true;
+            _pressed = true;
+        }
+    }
+
+    private void OnButtonUp(Button upBotton)
+    {
+        if (upBotton == button)
+        {
+            _pressed = false;
         }
     }
 
     internal override object GetValue()
     {
-        bool value = _triggeredSinceLastFrame;
-        _triggeredSinceLastFrame = false;
-        return value;
+        return _pressed;
     }
 
     protected override void Unhook()

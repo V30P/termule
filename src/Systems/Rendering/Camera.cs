@@ -4,7 +4,7 @@ public sealed class Camera : Component
 {
     private Transform _transform;
 
-    public Color BackgroundColor { get; set; }
+    public Color? BackgroundColor { get; set; }
     public VectorInt ViewSize = (0, 0);
     public bool Draw = true;
 

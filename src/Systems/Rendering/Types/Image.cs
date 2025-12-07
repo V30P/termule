@@ -4,25 +4,29 @@ public class Image
 {
     public readonly VectorInt Size;
 
-    public Content<Color?> Colors { get => _colors; set => _colors.Set(value); }
-    private readonly Content<Color?> _colors;
+    public Content<Color?> Color { get => _color; set => _color.Set(value); }
+    private readonly Content<Color?> _color;
     public Content<char?> Text { get => _text; set => _text.Set(value); }
     private readonly Content<char?> _text;
+    public Content<Color?> TextColor { get => _textColor; set => _textColor.Set(value); }
+    private readonly Content<Color?> _textColor;
 
     public Image(int x, int y)
     {
         Size = (x, y);
-        _colors = new(Size.X, Size.Y);
+        _color = new(Size.X, Size.Y);
         _text = new(Size.X, Size.Y);
+        _textColor = new(Size.X, Size.Y);
 
-        _colors.Changed += OnColorChanged;
+        _color.Changed += OnColorChanged;
         _text.Changed += OnTextChanged;
     }
 
     public Image(Image image) : this(image.Size.X, image.Size.Y)
     {
-        Colors = image.Colors;
+        Color = image.Color;
         Text = image.Text;
+        TextColor = image.TextColor;
     }
 
     // Make sure colors always have a character
@@ -36,7 +40,7 @@ public class Image
 
     private void OnTextChanged(VectorInt pos, char? character)
     {
-        if (character == null && Colors[pos.X, pos.Y] != null)
+        if (character == null && Color[pos.X, pos.Y] != null)
         {
             Text[pos.X, pos.Y] = ' ';
         }

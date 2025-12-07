@@ -2,10 +2,34 @@
 
 set -e
 
-# shellcheck source=env.sdk.sh
+# Parse args by separator 
+run_args=()
+build_args=()
+game_args=()
+
+mode="run" 
+for arg in "$@"; do
+    case "$arg" in
+        --build)
+            mode="build"
+            ;;
+        --game)
+            mode="game"
+            ;;
+        *)
+            case "$mode" in
+                run)   run_args+=("$arg") ;;
+                build) build_args+=("$arg") ;;
+                game)  game_args+=("$arg") ;;
+            esac
+            ;;
+    esac
+done
+
+# Get environmental variables
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/env.sdk.sh"
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/env.project.sh" "$1"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/env.project.sh" "${run_args[0]:-}"
 
 # Make a build and pass it to the engine executable
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/build.sh" "$@"
-"$EXECUTABLE" "$BUILD_DIR"
+"$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/build.sh" "${run_args[0]:-}" "${build_args[@]}"
+"$EXECUTABLE" "$BUILD_DIR" "${game_args[@]}"

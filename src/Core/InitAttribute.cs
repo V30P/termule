@@ -1,4 +1,4 @@
 namespace Termule;
 
 [AttributeUsage(AttributeTargets.Method)]
-public sealed class EntryAttribute : Attribute { }
+public sealed class InitAttribute : Attribute { }

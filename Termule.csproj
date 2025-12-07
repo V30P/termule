@@ -13,7 +13,6 @@
   <!-- Build and publish config -->
   <PropertyGroup>
     <IncludeSymbols>true</IncludeSymbols>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <DebugType>embedded</DebugType>
   </PropertyGroup>
 
