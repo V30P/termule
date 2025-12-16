@@ -1,12 +1,15 @@
+using System.Text;
+
 namespace Termule.Rendering;
 
 internal static class Display
 {
-    private static Frame _lastFrame = new((0, 0));
+    private static Content _currentContent;
     private static VectorInt _lastWindowSize;
 
     private static readonly Dictionary<Color?, int> _backgroundColorCodes = new()
     {
+        [Color.Default] = 49,
         [Color.Black] = 40,
         [Color.Red] = 41,
         [Color.Green] = 42,
@@ -27,6 +30,7 @@ internal static class Display
 
     private static readonly Dictionary<Color?, int> _foregroundColorCodes = new()
     {
+        [Color.Default] = 39,
         [Color.Black] = 30,
         [Color.Red] = 31,
         [Color.Green] = 32,
@@ -47,50 +51,49 @@ internal static class Display
 
     static Display()
     {
-        CleanOutput();
+        Console.Clear();
         Console.CursorVisible = false;
 
         Game.Stopped += () =>
         {
-            CleanOutput();
+            Console.Clear();
+            Console.ResetColor();
             Console.CursorVisible = true;
         };
     }
 
-    private static void CleanOutput()
-    {
-        Console.ResetColor();
-        Console.Clear();
-
-        _lastFrame = new Frame((0, 0));
-    }
-
-    internal static void Draw(Frame frame)
+    internal static void Draw(Content content)
     {
         VectorInt windowSize = (Console.WindowWidth, Console.WindowHeight);
         if (windowSize != _lastWindowSize)
         {
-            CleanOutput();
+            Console.Clear();
+            _currentContent = null;
         }
 
-        string output = null;
-        for (int x = 0; x < frame.Image.Size.X; x++)
+        StringBuilder output = new();
+        for (int x = 0; x < content.Size.X; x++)
         {
-            for (int y = 0; y < frame.Image.Size.Y; y++)
+            for (int y = 0; y < content.Size.Y; y++)
             {
-                if (!frame.EqualsAt(_lastFrame, (x, y)))
+                if (content.EqualsAt(_currentContent, (x, y)))
                 {
-                    output +=
-                    $"\u001b[{y + 1};{x + 1}H" + // Go to the position
-                    $"\u001b[{GetBackgroundColorCode(frame.Image.Color[x, y])}m" + // Apply the background color 
-                    $"\u001b[{GetForegroundColorCode(frame.Image.TextColor[x, y])}m" + // Apply the foreground color 
-                    (frame.Image.Text[x, y] ?? ' '); // Write the character 
+                    continue;
                 }
+
+                Cell cell = content.At(x, y);
+                output.Append
+                (
+                    $"\u001b[{y + 1};{x + 1}H" + // Go to the position
+                    $"\u001b[{GetBackgroundColorCode(cell.Color)}m" + // Apply the background color 
+                    $"\u001b[{GetForegroundColorCode(cell.CharColor)}m" + // Apply the foreground color 
+                    (cell.Char != default(char) ? cell.Char : ' ') // Write the character 
+                );
             }
         }
 
         Console.Write(output);
-        _lastFrame = frame;
+        _currentContent = content;
         _lastWindowSize = windowSize;
     }
 

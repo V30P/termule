@@ -2,6 +2,7 @@ namespace Termule.Rendering;
 
 public enum Color
 {
+    Default,
     Black,
     Red,
     Green,

@@ -20,7 +20,7 @@ public sealed class Transform : Component
             {
                 _children.Add(childTransform);
 
-                //Apply local position changes from before the child had a parent
+                //Apply local position changes from before the parent was determined
                 childTransform.Pos = Pos + childTransform.LocalPos;
             }
         }

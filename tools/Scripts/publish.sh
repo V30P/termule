@@ -2,8 +2,8 @@
 
 set -e
 
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/env.sdk.sh" 
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/env.project.sh" "$1"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/vars.sdk.sh" 
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/vars.project.sh" "$1"
 shift || true
 
 # Copy the engine to the publish directory

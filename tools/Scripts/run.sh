@@ -27,8 +27,8 @@ for arg in "$@"; do
 done
 
 # Get environmental variables
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/env.sdk.sh"
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/env.project.sh" "${run_args[0]:-}"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/vars.sdk.sh"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/vars.project.sh" "${run_args[0]:-}"
 
 # Make a build and pass it to the engine executable
 "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/build.sh" "${run_args[0]:-}" "${build_args[@]}"

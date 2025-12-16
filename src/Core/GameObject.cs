@@ -71,7 +71,6 @@ public class GameObject : Component, IEnumerable<Component>
 
     public T Get<T>() where T : Component
     {
-        // This can be optimized if need be
         foreach (Component component in _components)
         {
             if (component is T found)

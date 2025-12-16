@@ -4,7 +4,6 @@ public abstract class Component
 {
     public GameObject GameObject { get; internal set; }
 
-    // Set this to true when a Component (or its GameObject) are added to the Game
     internal bool IsRooted
     {
         private protected get => _isRooted;

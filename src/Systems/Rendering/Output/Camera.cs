@@ -4,7 +4,6 @@ public sealed class Camera : Component
 {
     private Transform _transform;
 
-    public Color? BackgroundColor { get; set; }
     public VectorInt ViewSize = (0, 0);
     public bool Draw = true;
 
@@ -19,9 +18,9 @@ public sealed class Camera : Component
     private void OnTicked()
     {
         Vector viewCenter = _transform != null ? _transform.Pos : (0, 0);
-        Vector viewOrigin = viewCenter + new Vector(-ViewSize.X / 2f, ViewSize.Y / 2f);
+        Vector viewOrigin = viewCenter + (new Vector(-ViewSize.X, ViewSize.Y) / 2f);
 
-        _lastFrame = RenderSystem.Render(viewOrigin, ViewSize, BackgroundColor);
+        _lastFrame = RenderSystem.Render(viewOrigin, ViewSize);
         if (Draw)
         {
             Display.Draw(_lastFrame);
@@ -31,13 +30,11 @@ public sealed class Camera : Component
     public Renderer[] GetOverlappers(Renderer renderer)
     {
         List<Renderer> overlappers = [];
-        if (_lastFrame.Contributions.TryGetValue(renderer, out List<VectorInt> contributions))
+        if (_lastFrame.Contributions.TryGetValue(renderer, out HashSet<VectorInt> contributions))
         {
-            foreach (VectorInt contributionPosition in contributions)
+            foreach (VectorInt pos in contributions)
             {
-                overlappers
-                .AddRange(_lastFrame.Blame[contributionPosition.X, contributionPosition.Y]
-                .Where(contributor => contributor != renderer));
+                overlappers.AddRange(_lastFrame.Contributors[pos.X, pos.Y].Where(contributor => contributor != renderer));
             }
         }
 

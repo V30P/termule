@@ -3,8 +3,7 @@
 
 set -e
 
-# Even though these are sometimes needed outside of projects,
-# it makes the most sense to have them live here
+# These are sometimes needed outside of a project
 MSBUILD_OUTPUT_PATH="bin/Termule/Debug"
 MSBUILD_PUBLISH_DIR="bin/Termule/Release/Game"
 

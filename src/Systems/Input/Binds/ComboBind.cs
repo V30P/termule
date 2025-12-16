@@ -1,6 +1,6 @@
 namespace Termule.Input;
 
-public class ComboBind(HashSet<Button> buttons) : Bind
+public sealed class ComboBind(HashSet<Button> buttons) : Bind
 {
     private readonly HashSet<Button> _heldButtons = [];
     private bool _triggeredSinceLastFrame;

@@ -2,8 +2,8 @@
 
 set -e
 
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/env.sdk.sh"
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/env.project.sh" || true # We need some MSBuild variables
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/vars.sdk.sh"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/vars.project.sh" || true # We need some MSBuild variables
 
 # Duplicate and rename the template 
 project="$(pwd)/$1"
@@ -11,7 +11,6 @@ cp -r "$TEMPLATE_DIR" "$project"
 
 # Apply substitutions in the copied template
 subs=(
-"__CSPROJ__:csproj"
 "__PROJECT_NAME__:$1"
 "__LIBRARY__:$LIBRARY"
 "__EXECUTABLE__:$EXECUTABLE"
