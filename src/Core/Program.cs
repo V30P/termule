@@ -4,20 +4,22 @@ namespace Termule;
 
 internal static class Program
 {
-    private static readonly string _localGameDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Game");
+    internal static string GameDir { get; private set; }
 
     public static void Main(string[] args)
     {
-        MethodInfo init;
-        if (Path.Exists(_localGameDir))
+        string localGameDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Game");
+        if (Path.Exists(localGameDir))
         {
-            init = FindInitMethod(_localGameDir);
+            GameDir = localGameDir;
         }
         else
         {
-            init = FindInitMethod(args[0]);
+            GameDir = args[0];
             args = args[1..];
         }
+
+        MethodInfo init = FindInitMethod(GameDir);
 
         try
         {

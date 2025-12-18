@@ -17,8 +17,7 @@ public sealed class Camera : Component
 
     private void OnTicked()
     {
-        Vector viewCenter = _transform != null ? _transform.Pos : (0, 0);
-        Vector viewOrigin = viewCenter + (new Vector(-ViewSize.X, ViewSize.Y) / 2f);
+        Vector viewOrigin = _transform.Pos + (new Vector(-ViewSize.X, ViewSize.Y) / 2f);
 
         _lastFrame = RenderSystem.Render(viewOrigin, ViewSize);
         if (Draw)

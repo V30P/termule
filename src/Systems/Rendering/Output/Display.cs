@@ -56,8 +56,8 @@ internal static class Display
 
         Game.Stopped += () =>
         {
-            Console.Clear();
             Console.ResetColor();
+            Console.Clear();
             Console.CursorVisible = true;
         };
     }
@@ -67,6 +67,7 @@ internal static class Display
         VectorInt windowSize = (Console.WindowWidth, Console.WindowHeight);
         if (windowSize != _lastWindowSize)
         {
+            Console.ResetColor();
             Console.Clear();
             _currentContent = null;
         }

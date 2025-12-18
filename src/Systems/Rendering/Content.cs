@@ -1,9 +1,17 @@
+using System.Text.Json.Serialization;
+using Termule.Resources;
+
 namespace Termule.Rendering;
 
-public class Content
+public class Content : IResource
 {
-    public VectorInt Size { get; private set; }
+    [JsonIgnore]
+    public VectorInt Size => (Cells.GetLength(0), Cells.GetLength(1));
+
+    [JsonInclude]
     protected Cell[,] Cells;
+
+    static string IResource.FileExtension => ".tmc";
 
     internal Cell At(int x, int y)
     {
@@ -17,16 +25,16 @@ public class Content
             && At(pos.X, pos.Y) == content.At(pos.X, pos.Y);
     }
 
-    internal Content() { }
-
     internal Content(int x, int y)
     {
         Resize(x, y);
     }
 
+    //? This has to be public for deserialization, is it worth working around this? Should content be instantiable outside of this?
+    public Content() : this(0, 0) { }
+
     protected void Resize(int x, int y)
     {
-        Size = (x, y);
         Cells = new Cell[x, y];
         for (x = 0; x < Size.X; x++)
         {
