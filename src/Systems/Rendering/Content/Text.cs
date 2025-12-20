@@ -32,7 +32,7 @@ public sealed class Text : Content
                 }
 
                 Cells[pos.X, pos.Y] = new() { Char = character };
-                pos.X++;
+                pos = pos with { X = pos.X + 1 };
             }
 
             _value = value;

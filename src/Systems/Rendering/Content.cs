@@ -20,17 +20,15 @@ public class Content : IResource
 
     internal bool EqualsAt(Content content, VectorInt pos)
     {
-        return (uint)pos.X < Size.X && (uint)pos.X < content?.Size.X
-            && (uint)pos.Y < Size.Y && (uint)pos.Y < content.Size.Y
-            && At(pos.X, pos.Y) == content.At(pos.X, pos.Y);
+        return At(pos.X, pos.Y) == content.At(pos.X, pos.Y);
     }
 
-    internal Content(int x, int y)
+    public Content(int x, int y)
     {
         Resize(x, y);
     }
 
-    //? This has to be public for deserialization, is it worth working around this? Should content be instantiable outside of this?
+    // Used for deserialization
     public Content() : this(0, 0) { }
 
     protected void Resize(int x, int y)

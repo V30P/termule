@@ -11,4 +11,11 @@
       <Private>false</Private>
     </Reference>
   </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="res\**\*">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
+    </ItemGroup>
 </Project>

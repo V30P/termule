@@ -7,7 +7,9 @@ public sealed class ContentRenderer<T> : Renderer where T : Content
     private Transform _transform;
 
     public T Content;
+
     public bool ScreenSpace = false;
+    public bool Centered = false;
 
     public ContentRenderer()
     {
@@ -32,6 +34,11 @@ public sealed class ContentRenderer<T> : Renderer where T : Content
             pos = _transform.Pos.RoundToInt();
         }
 
+        if (Centered)
+        {
+            pos -= (((Vector)Content.Size) / 2).RoundToInt();
+        }
+
         for (int x = 0; x < Content?.Size.X; x++)
         {
             for (int y = 0; y < Content.Size.Y; y++)
@@ -44,8 +51,6 @@ public sealed class ContentRenderer<T> : Renderer where T : Content
                     (
                         this,
                         cellPos,
-
-                        // Default values are considered transparent
                         cell.Color != Color.Default ? cell.Color : null,
                         cell.Char != default(char) ? cell.Char : null,
                         cell.CharColor != Color.Default ? cell.CharColor : null

@@ -4,8 +4,15 @@ public sealed class Camera : Component
 {
     private Transform _transform;
 
-    public VectorInt ViewSize = (0, 0);
+    public VectorInt ViewSize
+    {
+        get => MatchDisplaySize ? Display.Size : _viewSize;
+        set => _viewSize = value;
+    }
+    private VectorInt _viewSize = (0, 0);
+
     public bool Draw = true;
+    public bool MatchDisplaySize = false;
 
     private Frame _lastFrame;
 

@@ -2,10 +2,10 @@ using System.Text;
 
 namespace Termule.Rendering;
 
-internal static class Display
+public static class Display
 {
-    private static Content _currentContent;
-    private static VectorInt _lastWindowSize;
+    public static VectorInt Size { get; private set; }
+    private static Content _state;
 
     private static readonly Dictionary<Color?, int> _backgroundColorCodes = new()
     {
@@ -51,25 +51,28 @@ internal static class Display
 
     static Display()
     {
-        Console.Clear();
         Console.CursorVisible = false;
 
         Game.Stopped += () =>
         {
-            Console.ResetColor();
-            Console.Clear();
+            Clear();
             Console.CursorVisible = true;
         };
     }
 
     internal static void Draw(Content content)
     {
-        VectorInt windowSize = (Console.WindowWidth, Console.WindowHeight);
-        if (windowSize != _lastWindowSize)
+        if
+        (
+            Console.WindowTop != 0
+            || Console.BufferWidth != Console.WindowWidth || Console.BufferHeight != Console.WindowHeight
+            || content.Size != _state?.Size
+            || Console.WindowWidth != Size.X || Console.WindowHeight != Size.Y
+        )
         {
-            Console.ResetColor();
-            Console.Clear();
-            _currentContent = null;
+            Clear();
+            Size = (Console.WindowWidth, Console.WindowHeight);
+            _state = null;
         }
 
         StringBuilder output = new();
@@ -77,7 +80,7 @@ internal static class Display
         {
             for (int y = 0; y < content.Size.Y; y++)
             {
-                if (content.EqualsAt(_currentContent, (x, y)))
+                if (_state?.EqualsAt(content, (x, y)) == true)
                 {
                     continue;
                 }
@@ -94,8 +97,13 @@ internal static class Display
         }
 
         Console.Write(output);
-        _currentContent = content;
-        _lastWindowSize = windowSize;
+        _state = content;
+    }
+
+    private static void Clear()
+    {
+        Console.ResetColor();
+        Console.Clear();
     }
 
     private static int GetBackgroundColorCode(Color? color)
