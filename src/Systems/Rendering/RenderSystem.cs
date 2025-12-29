@@ -20,7 +20,7 @@ public static class RenderSystem
         internal Renderer()
         {
             Rooted += () => _renderers.Add(this);
-            Destroyed += () => _renderers.Add(this);
+            Destroyed += () => _renderers.Remove(this);
         }
 
         internal abstract void Render(Frame frame, Vector viewOrigin);

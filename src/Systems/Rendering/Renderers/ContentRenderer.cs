@@ -2,38 +2,21 @@ using System.Reflection;
 
 namespace Termule.Rendering;
 
-public sealed class ContentRenderer<T> : Renderer where T : Content
+public sealed class ContentRenderer<T> : TransformRenderer where T : Content
 {
-    private Transform _transform;
-
     public T Content;
-
-    public bool ScreenSpace = false;
-    public bool Centered = false;
+    public bool Centered;
 
     public ContentRenderer()
     {
-        Rooted += () => _transform = GameObject.Get<Transform>();
-
         if (typeof(T).GetConstructor(Type.EmptyTypes) is ConstructorInfo paramaterlessConstructor)
         {
             Content = (T)paramaterlessConstructor.Invoke([]);
         }
     }
 
-    internal override void Render(Frame frame, Vector viewOrigin)
+    private protected override void Render(Frame frame, VectorInt pos)
     {
-        VectorInt pos;
-        if (!ScreenSpace)
-        {
-            pos = (_transform.Pos - viewOrigin).RoundToInt(); // Get integer position relative to viewOrigin
-            pos = new VectorInt(pos.X, -pos.Y); // Flip y to account for the change from world to screen space
-        }
-        else
-        {
-            pos = _transform.Pos.RoundToInt();
-        }
-
         if (Centered)
         {
             pos -= (((Vector)Content.Size) / 2).RoundToInt();
