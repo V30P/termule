@@ -57,6 +57,6 @@ internal static class InputHook
 
     private static void OnKeyTyped(object sender, KeyboardHookEventArgs e)
     {
-        CharacterTyped.Invoke(e.Data.KeyChar);
+        CharacterTyped?.Invoke(e.Data.KeyChar);
     }
 }

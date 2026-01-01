@@ -2,7 +2,7 @@
 
 set -e
 
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/vars.project.sh" "$1"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/tm-vars.project.sh" "$1"
 shift || true
 
 dotnet build "$PROJECT_FILE" "$@" \

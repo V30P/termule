@@ -1,9 +1,13 @@
 #!/bin/bash
 
+get_relative_path() {
+    realpath -m --relative-to="$project" "$1"
+}
+
 set -e
 
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/vars.sdk.sh"
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/vars.project.sh" || true # We need some MSBuild variables
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/tm-vars.sdk.sh"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/tm-vars.project.sh" || true # We need some MSBuild variables
 
 # Duplicate and rename the template 
 project="$(pwd)/$1"
@@ -12,9 +16,10 @@ cp -r "$TEMPLATE_DIR" "$project"
 # Apply substitutions in the copied template
 subs=(
 "__PROJECT_NAME__:$1"
-"__LIBRARY__:$LIBRARY"
-"__EXECUTABLE__:$EXECUTABLE"
-"__BUILD_SCRIPT__:$SCRIPTS_DIR/build.sh"
+"__CSPROJ__:csproj"
+"__LIBRARY__:$(get_relative_path "$LIBRARY")"
+"__EXECUTABLE__:$(get_relative_path "$EXECUTABLE")"
+"__BUILD_SCRIPT__:$(get_relative_path "$SCRIPTS_DIR/tm-build.sh")"
 "__MSBUILD_OUTPUT_PATH__:$MSBUILD_OUTPUT_PATH"
 )
 

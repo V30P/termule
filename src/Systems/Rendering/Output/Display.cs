@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Termule.Rendering;
@@ -53,11 +55,31 @@ public static class Display
     {
         Console.CursorVisible = false;
 
-        Game.Stopped += () =>
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            Clear();
-            Console.CursorVisible = true;
-        };
+            // Configure the terminal driver to not echo
+            Process.Start("stty", "-echo -icanon min 1 time 0")?.WaitForExit();
+        }
+
+        Game.Stopped += Reset;
+    }
+
+    private static void Reset()
+    {
+        Clear();
+        Console.CursorVisible = true;
+
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            // Reset terminal driver configuration
+            Process.Start("stty", "sane")?.WaitForExit();
+        }
+    }
+
+    private static void Clear()
+    {
+        Console.ResetColor();
+        Console.Clear();
     }
 
     internal static void Draw(Content content)
@@ -98,12 +120,6 @@ public static class Display
 
         Console.Write(output);
         _state = content;
-    }
-
-    private static void Clear()
-    {
-        Console.ResetColor();
-        Console.Clear();
     }
 
     private static int GetBackgroundColorCode(Color? color)

@@ -7,23 +7,21 @@ public static class Program
     [Init]
     public static void Init()
     {
-        Content logo = Resources.Load<Content>("Logo");
-
         Game.Add
         (
             new GameObject()
             {
                 new Transform(),
-                new ContentRenderer<Content>()
-                {
-                    Content = logo,
-                    Centered = true
-                }
+                new Camera() { MatchDisplaySize = true }
             },
             new GameObject()
             {
                 new Transform(),
-                new Camera() { MatchDisplaySize = true }
+                new ContentRenderer<Content>()
+                {
+                    Content = Resources.Load<Content>("Logo"),
+                    Centered = true
+                }
             }
         );
     }
