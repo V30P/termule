@@ -17,11 +17,11 @@ public sealed class LineRenderer : TransformRenderer
         VectorInt lastPoint = framePoints.First();
         foreach (VectorInt point in framePoints.Skip(1))
         {
-            foreach (VectorInt cell in GetLineCells(lastPoint, point))
+            foreach (VectorInt pos in GetLinePositions(lastPoint, point))
             {
-                if ((uint)cell.X < frame.Size.X && (uint)cell.Y < frame.Size.Y)
+                if ((uint)pos.X < frame.Size.X && (uint)pos.Y < frame.Size.Y)
                 {
-                    frame.Contribute(this, cell, Color);
+                    frame.Contribute(this, pos, Color);
                 }
             }
 
@@ -29,10 +29,10 @@ public sealed class LineRenderer : TransformRenderer
         }
     }
 
-    public static List<VectorInt> GetLineCells(VectorInt p1, VectorInt p2)
+    private static List<VectorInt> GetLinePositions(VectorInt p1, VectorInt p2)
     {
-        float dx, dy;
-        NormalzieEndpoints();
+        int dx, dy;
+        NormalizeEndpoints();
 
         // Swap x and y to get rid of steep slopes
         bool needsSwapping = MathF.Abs(dy) > dx;
@@ -41,7 +41,7 @@ public sealed class LineRenderer : TransformRenderer
             p1 = new VectorInt(p1.Y, p1.X);
             p2 = new VectorInt(p2.Y, p2.X);
 
-            NormalzieEndpoints();
+            NormalizeEndpoints();
         }
 
         // Reflect over the x-axis to get rid of negative slopes
@@ -51,26 +51,26 @@ public sealed class LineRenderer : TransformRenderer
             p1 = p1 with { Y = -p1.Y };
             p2 = p2 with { Y = -p2.Y };
 
-            NormalzieEndpoints();
+            NormalizeEndpoints();
         }
 
-        List<VectorInt> cells = Bresenham(p1, p2);
+        List<VectorInt> positions = Bresenham(p1, p2);
 
         // Undo transforms
         if (needsReflection)
         {
-            cells = [.. cells.Select(p => new VectorInt(p.X, -p.Y))];
+            positions = [.. positions.Select(p => new VectorInt(p.X, -p.Y))];
         }
 
         if (needsSwapping)
         {
-            cells = [.. cells.Select(p => new VectorInt(p.Y, p.X))];
+            positions = [.. positions.Select(p => new VectorInt(p.Y, p.X))];
         }
 
-        return cells;
+        return positions;
 
         // Makes sure p1 is always left of p2
-        void NormalzieEndpoints()
+        void NormalizeEndpoints()
         {
             if (p2.X - p1.X < 0)
             {
@@ -82,25 +82,29 @@ public sealed class LineRenderer : TransformRenderer
         }
     }
 
+    // Generates pixel positions for the line between two points as long as p1.x < p2.x and 0 <= slope < 1
     private static List<VectorInt> Bresenham(VectorInt p1, VectorInt p2)
     {
-        float slope = ((float)p2.Y - p1.Y) / (p2.X - p1.X);
+        List<VectorInt> positions = [];
+        int dx = p2.X - p1.X;
+        int dy = p2.Y - p1.Y;
 
-        List<VectorInt> cells = [];
-        float error = 0;
+        int p = (2 * dy) - dx;
         int y = p1.Y;
         for (int x = p1.X; x <= p2.X; x++)
         {
-            cells.Add(new VectorInt(x, y));
-            error += slope;
-
-            if (error > 0.5f)
+            positions.Add((x, y));
+            if (p > 0)
             {
                 y++;
-                error -= 1f;
+                p += 2 * (dy - dx);
+            }
+            else
+            {
+                p += 2 * dy;
             }
         }
 
-        return cells;
+        return positions;
     }
 }
