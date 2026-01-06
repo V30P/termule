@@ -2,6 +2,7 @@ using System.Diagnostics;
 
 namespace Termule;
 
+// ? This could just be a singleton that inherits from GameObject
 public static class Game
 {
     private static readonly GameObject _root = [];
@@ -17,6 +18,7 @@ public static class Game
 
         while (!_stop)
         {
+            Rendering.Display.ParseStandardInput();
             Input.Controller.UpdateValues();
 
             foreach (Component component in _root.ToArray())

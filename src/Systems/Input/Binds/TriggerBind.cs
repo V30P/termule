@@ -4,12 +4,7 @@ public sealed class TriggerBind(Button button) : Bind
 {
     private bool _triggeredSinceLastFrame;
 
-    protected override void Hook()
-    {
-        InputHook.ButtonDown += OnButtonDown;
-    }
-
-    private void OnButtonDown(Button downButton)
+    protected override void OnButtonDown(Button downButton)
     {
         if (downButton == button)
         {
@@ -22,10 +17,5 @@ public sealed class TriggerBind(Button button) : Bind
         bool value = _triggeredSinceLastFrame;
         _triggeredSinceLastFrame = false;
         return value;
-    }
-
-    protected override void Unhook()
-    {
-        InputHook.ButtonDown -= OnButtonDown;
     }
 }

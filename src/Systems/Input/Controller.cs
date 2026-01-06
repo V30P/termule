@@ -20,9 +20,9 @@ public static class Controller
     public static void UpdateValues()
     {
         _values = [];
-        foreach (KeyValuePair<string, Bind> controlPair in Binds)
+        foreach (KeyValuePair<string, Bind> bindPair in Binds)
         {
-            _values.Add(controlPair.Key, controlPair.Value.GetValue());
+            _values.Add(bindPair.Key, bindPair.Value.GetValue());
         }
     }
 

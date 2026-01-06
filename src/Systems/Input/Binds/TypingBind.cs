@@ -4,12 +4,7 @@ public sealed class TypingBind() : Bind
 {
     private string _textSinceLastFrame = "";
 
-    protected override void Hook()
-    {
-        InputHook.CharacterTyped += OnCharacterTyped;
-    }
-
-    private void OnCharacterTyped(char character)
+    protected override void OnCharacterTyped(char character)
     {
         _textSinceLastFrame += character;
     }
@@ -19,10 +14,5 @@ public sealed class TypingBind() : Bind
         string value = _textSinceLastFrame;
         _textSinceLastFrame = "";
         return value;
-    }
-
-    protected override void Unhook()
-    {
-        InputHook.CharacterTyped -= OnCharacterTyped;
     }
 }

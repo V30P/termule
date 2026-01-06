@@ -1,62 +1,91 @@
 using SharpHook;
-using SharpHook.Data;
 
 namespace Termule.Input;
 
-internal static class InputHook
+public static class InputHook
 {
     private static readonly TaskPoolGlobalHook _sharpHook;
 
-    private static readonly HashSet<MouseButton> _pressedMouseButtons = [];
-    private static readonly HashSet<KeyCode> _pressedKeys = [];
+    private static readonly HashSet<Button> _pressedButtons = [];
 
-    internal static event Action<Button> ButtonDown;
-    internal static event Action<Button> ButtonUp;
-    internal static event Action<char> CharacterTyped;
+    private static event Action<Button> ButtonDown;
+    private static event Action<Button> ButtonUp;
+    private static event Action<char> CharacterTyped;
 
     static InputHook()
     {
         _sharpHook = new TaskPoolGlobalHook(runAsyncOnBackgroundThread: true);
 
-        _sharpHook.MousePressed += OnMousePressed;
-        _sharpHook.MouseReleased += OnMouseReleased;
+        _sharpHook.MousePressed += (_, e) => OnButtonPressed(e.Data.Button.ToButton());
+        _sharpHook.MouseReleased += (_, e) => OnButtonReleased(e.Data.Button.ToButton());
 
-        _sharpHook.KeyPressed += OnKeyPressed;
-        _sharpHook.KeyReleased += OnKeyReleased;
-        _sharpHook.KeyTyped += OnKeyTyped;
+        _sharpHook.KeyPressed += (_, e) => OnButtonPressed(e.Data.KeyCode.ToButton());
+        _sharpHook.KeyReleased += (_, e) => OnButtonReleased(e.Data.KeyCode.ToButton());
+        _sharpHook.KeyTyped += (_, e) => CharacterTyped?.Invoke(e.Data.KeyChar);
 
         _sharpHook.RunAsync();
     }
 
-    private static void OnKeyPressed(object _, KeyboardHookEventArgs e)
+    private static void OnButtonPressed(Button? button)
     {
-        if (_pressedKeys.Add(e.Data.KeyCode))
+        if (button is not Button pressedButton || !_pressedButtons.Add(pressedButton))
         {
-            ButtonDown?.Invoke(e.Data.KeyCode.ToButton());
+            return;
         }
+
+        ButtonDown?.Invoke(pressedButton);
     }
 
-    private static void OnKeyReleased(object _, KeyboardHookEventArgs e)
+    private static void OnButtonReleased(Button? button)
     {
-        _pressedKeys.Remove(e.Data.KeyCode);
-        ButtonUp?.Invoke(e.Data.KeyCode.ToButton());
-    }
-
-    private static void OnMousePressed(object _, MouseHookEventArgs e)
-    {
-        if (_pressedMouseButtons.Add(e.Data.Button))
+        if (button is not Button releasedButton || !_pressedButtons.Remove(releasedButton))
         {
-            ButtonDown?.Invoke(e.Data.Button.ToButton());
+            return;
         }
+
+        ButtonUp?.Invoke(releasedButton);
     }
 
-    private static void OnMouseReleased(object _, MouseHookEventArgs e)
+    public abstract class Bind
     {
-        _pressedMouseButtons.Remove(e.Data.Button);
-    }
+        internal bool Active
+        {
+            set
+            {
+                if (_active == value)
+                {
+                    return;
+                }
+                _active = value;
 
-    private static void OnKeyTyped(object sender, KeyboardHookEventArgs e)
-    {
-        CharacterTyped?.Invoke(e.Data.KeyChar);
+                if (_active)
+                {
+                    ButtonDown += OnButtonDown;
+                    ButtonUp += OnButtonUp;
+                    CharacterTyped += OnCharacterTyped;
+                }
+                else
+                {
+                    ButtonDown -= OnButtonDown;
+                    ButtonUp -= OnButtonUp;
+                    CharacterTyped -= OnCharacterTyped;
+                }
+            }
+        }
+
+        private bool _active;
+
+        internal Bind() { }
+
+        protected virtual void OnButtonDown(Button button) { }
+        protected virtual void OnButtonUp(Button button) { }
+        protected virtual void OnCharacterTyped(char character) { }
+
+        internal abstract object GetValue();
     }
+}
+
+public abstract class Bind : InputHook.Bind
+{
+    public Bind() { }
 }

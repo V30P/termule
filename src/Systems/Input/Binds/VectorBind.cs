@@ -14,19 +14,24 @@ public sealed class VectorBind(Button posY, Button negX, Button negY, Button pos
 
     private Vector _vector = new();
 
-    protected override void Hook()
+    protected override void OnButtonDown(Button button)
     {
-        InputHook.ButtonDown += (button) => OnButtonAction(button, true);
-        InputHook.ButtonUp += (button) => OnButtonAction(button, false);
+        OnButtonAction(button, true);
     }
 
-    private void OnButtonAction(Button button, bool keyDown)
+    protected override void OnButtonUp(Button button)
+    {
+        OnButtonAction(button, false);
+    }
+
+
+    private void OnButtonAction(Button button, bool isDown)
     {
         for (int i = 0; i < 4; i++)
         {
             if (_buttons[i] == button)
             {
-                _vector += keyDown ? _directionVectors[i] : -_directionVectors[i];
+                _vector += isDown ? _directionVectors[i] : -_directionVectors[i];
             }
         }
     }
@@ -34,11 +39,5 @@ public sealed class VectorBind(Button posY, Button negX, Button negY, Button pos
     internal override object GetValue()
     {
         return _vector;
-    }
-
-    protected override void Unhook()
-    {
-        InputHook.ButtonDown += (keyCode) => OnButtonAction(keyCode, true);
-        InputHook.ButtonUp += (keyCode) => OnButtonAction(keyCode, false);
     }
 }

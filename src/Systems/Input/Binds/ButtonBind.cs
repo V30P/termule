@@ -4,13 +4,7 @@ public sealed class ButtonBind(Button button) : Bind
 {
     private bool _pressed;
 
-    protected override void Hook()
-    {
-        InputHook.ButtonDown += OnButtonDown;
-        InputHook.ButtonUp += OnButtonUp;
-    }
-
-    private void OnButtonDown(Button downButton)
+    protected override void OnButtonDown(Button downButton)
     {
         if (downButton == button)
         {
@@ -18,7 +12,7 @@ public sealed class ButtonBind(Button button) : Bind
         }
     }
 
-    private void OnButtonUp(Button upBotton)
+    protected override void OnButtonUp(Button upBotton)
     {
         if (upBotton == button)
         {
@@ -29,10 +23,5 @@ public sealed class ButtonBind(Button button) : Bind
     internal override object GetValue()
     {
         return _pressed;
-    }
-
-    protected override void Unhook()
-    {
-        InputHook.ButtonDown -= OnButtonDown;
     }
 }

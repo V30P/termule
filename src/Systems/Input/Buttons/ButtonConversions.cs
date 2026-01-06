@@ -39,6 +39,7 @@ internal static class ButtonConversions
         { KeyCode.VcF19, Button.F19 }, { KeyCode.VcF20, Button.F20 }, { KeyCode.VcF21, Button.F21 },
         { KeyCode.VcF22, Button.F22 }, { KeyCode.VcF23, Button.F23 }, { KeyCode.VcF24, Button.F24 },
 
+
         { KeyCode.VcLeftShift, Button.LeftShift }, { KeyCode.VcRightShift, Button.RightShift },
         { KeyCode.VcLeftControl, Button.LeftControl }, { KeyCode.VcRightControl, Button.RightControl },
         { KeyCode.VcLeftAlt, Button.LeftAlt }, { KeyCode.VcRightAlt, Button.RightAlt },
@@ -59,6 +60,10 @@ internal static class ButtonConversions
         { KeyCode.VcPageUp, Button.PageUp },
         { KeyCode.VcPageDown, Button.PageDown },
 
+        { KeyCode.VcPrintScreen, Button.PrintScreen },
+        { KeyCode.VcPause, Button.Pause },
+        { KeyCode.VcContextMenu, Button.ContextMenu },
+
         { KeyCode.VcLeft, Button.LeftArrow },
         { KeyCode.VcRight, Button.RightArrow },
         { KeyCode.VcUp, Button.UpArrow },
@@ -78,20 +83,25 @@ internal static class ButtonConversions
         { KeyCode.VcBackQuote, Button.BackQuote },
 
         { KeyCode.VcNumPad0, Button.NP0 }, { KeyCode.VcNumPad1, Button.NP1 },
-        { KeyCode.VcNumPad2, Button.NP2 }, { KeyCode.VcNumPad3, Button.NP8 },
+        { KeyCode.VcNumPad2, Button.NP2 }, { KeyCode.VcNumPad3, Button.NP3 },
         { KeyCode.VcNumPad4, Button.NP4 }, { KeyCode.VcNumPad5, Button.NP5 },
-        { KeyCode.VcNumPad6, Button.NP5 }, { KeyCode.VcNumPad7, Button.Np7 },
-        { KeyCode.VcNumPad8, Button.NP6 }, { KeyCode.VcNumPad9, Button.NP9 },
+        { KeyCode.VcNumPad6, Button.NP6 }, { KeyCode.VcNumPad7, Button.NP7 },
+        { KeyCode.VcNumPad8, Button.NP8 }, { KeyCode.VcNumPad9, Button.NP9 },
         { KeyCode.VcNumPadEnter, Button.NPEnter },
+        { KeyCode.VcNumPadAdd, Button.NPAdd },
+        { KeyCode.VcNumPadSubtract, Button.NPSubtract },
+        { KeyCode.VcNumPadMultiply, Button.NPMultiply },
+        { KeyCode.VcNumPadDivide, Button.NPDivide },
+        { KeyCode.VcNumPadDecimal, Button.NPDecimal },
     };
 
-    internal static Button ToButton(this MouseButton mouseButton)
+    internal static Button? ToButton(this MouseButton mouseButton)
     {
-        return _mouseButtonToButton[mouseButton];
+        return _mouseButtonToButton.TryGetValue(mouseButton, out Button button) ? button : null;
     }
 
-    internal static Button ToButton(this KeyCode keyCode)
+    internal static Button? ToButton(this KeyCode keyCode)
     {
-        return _keyCodeToButton[keyCode];
+        return _keyCodeToButton.TryGetValue(keyCode, out Button button) ? button : null;
     }
 }
