@@ -1,4 +1,4 @@
-namespace Termule;
+namespace Termule.Types;
 
 public readonly record struct Vector(float X = 0, float Y = 0)
 {
@@ -53,5 +53,10 @@ public readonly record struct Vector(float X = 0, float Y = 0)
     public readonly VectorInt RoundToInt()
     {
         return new VectorInt((int)MathF.Round(X), (int)MathF.Round(Y));
+    }
+
+    public readonly VectorInt FloorToInt()
+    {
+        return new VectorInt((int)MathF.Floor(X), (int)MathF.Floor(Y));
     }
 }

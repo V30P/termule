@@ -1,29 +1,13 @@
-namespace Termule;
+namespace Termule.Core;
 
-public abstract class Component
+public abstract class Component : GameElement, IHostedComponent
 {
-    public GameObject GameObject { get; internal set; }
+    public GameObject GameObject { get; private set; }
+    GameObject IHostedComponent.GameObject { set => GameObject = value; }
 
-    internal bool IsRooted
-    {
-        private protected get => _isRooted;
-
-        set
-        {
-            if (value)
-            {
-                _isRooted = true;
-                Rooted?.Invoke();
-            }
-        }
-    }
-    private bool _isRooted;
-
-    protected event Action Rooted;
     protected event Action Ticked;
-    protected event Action Destroyed;
 
-    internal void Tick()
+    private void Tick()
     {
         Ticked?.Invoke();
     }
@@ -31,6 +15,17 @@ public abstract class Component
     public void Destroy()
     {
         GameObject.Remove(this);
-        Destroyed?.Invoke();
     }
+
+    void IHostedComponent.Tick()
+    {
+        Tick();
+    }
+}
+
+internal interface IHostedComponent
+{
+    GameObject GameObject { set; }
+
+    void Tick();
 }

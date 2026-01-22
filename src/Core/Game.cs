@@ -1,63 +1,84 @@
 using System.Diagnostics;
+namespace Termule.Core;
 
-namespace Termule;
-
-// ? This could just be a singleton that inherits from GameObject
-public static class Game
+public sealed class Game : IConfigurableGame
 {
-    private static readonly GameObject _root = [];
+    private readonly List<IHostedGameElement> _entities = [];
 
+    public readonly GameObject Root;
+    GameObject IConfigurableGame.Root => Root;
+
+    public readonly SystemManager Systems;
+    IConfigurableSystemManager IConfigurableGame.Systems => Systems;
+
+    private readonly Stopwatch _stopwatch = new();
     public static float DeltaTime { get; private set; }
 
-    private static bool _stop;
-    public static event Action Stopped;
+    private bool _stop = false;
 
-    internal static void Run()
+    public Game()
     {
-        Stopwatch frameStopWatch = new();
+        Root = [];
+        Register(Root);
 
-        while (!_stop)
+        Systems = new SystemManager();
+        Register(Systems);
+    }
+
+    public static IConfigurableGame Create()
+    {
+        return new Game();
+    }
+
+    void IConfigurableGame.Run()
+    {
+        IHostedSystemManager systems = Systems;
+        IHostedComponent root = Root;
+
+        systems.Start();
+        try
         {
-            Rendering.Display.ParseStandardInput();
-            Input.Controller.UpdateValues();
-
-            foreach (Component component in _root.ToArray())
+            while (!_stop)
             {
-                component.Tick();
+                DeltaTime = (float)_stopwatch.Elapsed.TotalSeconds;
+                _stopwatch.Restart();
+
+                systems.Update();
+                root.Tick();
             }
-
-            DeltaTime = (float)frameStopWatch.Elapsed.TotalSeconds;
-            frameStopWatch.Restart();
         }
-    }
-
-    public static void Add(Component component)
-    {
-        _root.Add(component);
-        component.IsRooted = true;
-    }
-
-    public static void Add(params Component[] components)
-    {
-        foreach (Component component in components)
+        finally
         {
-            Add(component);
+            systems.Stop();
         }
     }
 
-    public static void Remove(Component component)
-    {
-        _root.Remove(component);
-    }
-
-    public static T Get<T>() where T : Component
-    {
-        return _root.Get<T>();
-    }
-
-    public static void Stop()
+    public void Stop()
     {
         _stop = true;
-        Stopped?.Invoke();
     }
+
+    internal void Register(IHostedGameElement element)
+    {
+        element.Game = this;
+        _entities.Add(element);
+
+        element.InvokeRegistered();
+    }
+
+    internal void Unregister(IHostedGameElement element)
+    {
+        element.InvokeUnregistered();
+
+        element.Game = null;
+        _entities.Remove(element);
+    }
+}
+
+public interface IConfigurableGame
+{
+    GameObject Root { get; }
+    IConfigurableSystemManager Systems { get; }
+
+    void Run();
 }

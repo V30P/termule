@@ -1,4 +1,4 @@
-namespace Termule;
+namespace Termule.Types;
 
 public readonly record struct VectorInt(int X = 0, int Y = 0)
 {

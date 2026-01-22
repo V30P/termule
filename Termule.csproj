@@ -1,31 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net9.0</TargetFramework>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <SelfContained>true</SelfContained>
   </PropertyGroup>
   
   <ItemGroup>
     <PackageReference Include="SharpHook" Version="6.2.0" />
   </ItemGroup>
-  
-  <!-- Build and publish config -->
-  <PropertyGroup>
-    <IncludeSymbols>true</IncludeSymbols>
-    <DebugType>embedded</DebugType>
-  </PropertyGroup>
-
-  <Target Name="StructurePublish" AfterTargets="Publish">
-    <RemoveDir Directories="$(PublishDir)\bin;$(PublishDir)\tools" />
-
-    <ItemGroup>
-      <Engine Include="$(PublishDir)**/*.*" />
-      <Resources Include="$(ProjectDir)tools/**/*.*" />
-    </ItemGroup>
-
-    <Move SourceFiles="@(Engine)" DestinationFolder="$(PublishDir)bin" />
-    <Copy SourceFiles="@(Resources)" DestinationFolder="$(PublishDir)tools/%(RecursiveDir)" />
-  </Target>
 </Project>

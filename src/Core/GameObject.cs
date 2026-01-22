@@ -1,84 +1,129 @@
 using System.Collections;
 
-namespace Termule;
+namespace Termule.Core;
 
 public class GameObject : Component, IEnumerable<Component>
 {
     private readonly List<Component> _components = [];
+    private readonly Dictionary<Type, List<Component>> _typesToComponents = [];
 
     public GameObject()
     {
-        Rooted += RootComponents;
+        Registered += RegisterComponents;
         Ticked += TickComponents;
-        Destroyed += DestroyComponents;
+        Unregistered += UnregisterComponents;
     }
 
-    private void RootComponents()
+    private void RegisterComponents()
     {
         foreach (Component component in this.ToArray())
         {
-            component.IsRooted = true;
+            Game.Register(component);
         }
     }
 
-    private void TickComponents()
+    private protected void TickComponents()
     {
-        foreach (Component component in this.ToArray())
+        foreach (IHostedComponent component in this.ToArray())
         {
             component.Tick();
         }
     }
 
-    private void DestroyComponents()
+    private void UnregisterComponents()
     {
         foreach (Component component in this.ToArray())
         {
-            component.Destroy();
+            Game.Unregister(component);
         }
-    }
-
-    public IEnumerator<Component> GetEnumerator()
-    {
-        return _components.GetEnumerator();
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
     }
 
     public void Add(Component component)
     {
-        _components.Add(component);
-
-        component.GameObject = this;
-        component.IsRooted = IsRooted;
+        AddComponent(component);
+        Game?.Register(component);
     }
 
+    // Adds several components, then registers them simultaneously
+    // This is useful when components depend on eachother at registration
     public void Add(params Component[] components)
     {
         foreach (Component component in components)
         {
-            Add(component);
+            AddComponent(component);
+        }
+
+        foreach (Component component in components)
+        {
+            Game?.Register(component);
+        }
+    }
+
+    private void AddComponent(Component component)
+    {
+        IHostedComponent hostedComponent = component;
+        _components.Add(component);
+        hostedComponent.GameObject = this;
+
+        foreach (Type type in GetImplementedTypes(component))
+        {
+            if (!_typesToComponents.TryGetValue(type, out List<Component> componentList))
+            {
+                componentList = [];
+                _typesToComponents.Add(type, componentList);
+            }
+
+            componentList.Add(component);
         }
     }
 
     public void Remove(Component component)
     {
-        _components.Remove(component);
-        component.GameObject = null;
-    }
-
-    public T Get<T>() where T : Component
-    {
-        foreach (Component component in _components)
+        bool wasRemoved = _components.Remove(component);
+        if (wasRemoved)
         {
-            if (component is T found)
+            Game?.Unregister(component);
+            ((IHostedComponent)component).GameObject = null;
+
+            foreach (Type type in GetImplementedTypes(component))
             {
-                return found;
+                List<Component> componentList = _typesToComponents[type];
+                componentList.Remove(component);
             }
         }
+    }
 
-        return null;
+    private static List<Type> GetImplementedTypes(object o)
+    {
+        Type type = o.GetType();
+        List<Type> implementedTypes = [type, .. o.GetType().GetInterfaces()];
+
+        for (Type ancestor = type.BaseType; ancestor != null; ancestor = ancestor.BaseType)
+        {
+            implementedTypes.Add(ancestor);
+        }
+
+        return implementedTypes;
+    }
+
+    public IEnumerable<TComponent> GetAll<TComponent>() where TComponent : Component
+    {
+        return _typesToComponents.TryGetValue(typeof(TComponent), out List<Component> components) ?
+            components.Cast<TComponent>() : [];
+    }
+
+    public TComponent Get<TComponent>() where TComponent : Component
+    {
+        return GetAll<TComponent>()?.FirstOrDefault();
+    }
+
+    public IEnumerator<Component> GetEnumerator()
+    {
+        return _components.Cast<Component>().OrderBy(c => c is GameObject).GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
     }
 }
