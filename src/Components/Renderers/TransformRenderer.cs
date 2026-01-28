@@ -12,7 +12,7 @@ public abstract class TransformRenderer : Renderer
 
     internal TransformRenderer()
     {
-        Registered += () => _transform = GameObject.Get<Transform>();
+        Registered += () => _transform = GetRequiredComponent<Transform>();
     }
 
     internal sealed override void Render(Frame frame, Vector viewOrigin)

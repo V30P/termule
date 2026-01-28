@@ -1,4 +1,4 @@
-namespace Termule.Systems.Controller;
+namespace Termule.Systems.Controller.Keyboard;
 
 public enum Button
 {

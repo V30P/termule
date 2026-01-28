@@ -61,6 +61,12 @@ public class GameObject : Component, IEnumerable<Component>
 
     private void AddComponent(Component component)
     {
+        ArgumentNullException.ThrowIfNull(component);
+        if (component.GameObject != null)
+        {
+            throw new InvalidOperationException($"Component '{component.GetType().Name}' is already part of a GameObject");
+        }
+
         IHostedComponent hostedComponent = component;
         _components.Add(component);
         hostedComponent.GameObject = this;
@@ -79,6 +85,12 @@ public class GameObject : Component, IEnumerable<Component>
 
     public void Remove(Component component)
     {
+        ArgumentNullException.ThrowIfNull(component);
+        if (component.GameObject != this)
+        {
+            throw new InvalidOperationException($"Cannot remove Component '{component.GetType().Name}' since it is not part of this GameObject");
+        }
+
         bool wasRemoved = _components.Remove(component);
         if (wasRemoved)
         {

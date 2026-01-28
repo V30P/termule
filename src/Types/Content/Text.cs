@@ -8,18 +8,20 @@ public sealed class Text : Content
 
         set
         {
+            field = value;
             if (value == null)
             {
                 Resize(0, 0);
+                return;
             }
 
-            string[] lines = value.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+            string[] lines = field.Split('\n', StringSplitOptions.RemoveEmptyEntries);
             int width = lines.Length > 0 ? lines.Max(l => l.Length) : 0;
             int height = lines.Length;
 
             Resize(width, height);
             VectorInt pos = (0, 0);
-            foreach (char character in value)
+            foreach (char character in field)
             {
                 if (character == '\n')
                 {
@@ -34,8 +36,6 @@ public sealed class Text : Content
                 Cells[pos.X, pos.Y] = new() { Char = character };
                 pos = pos with { X = pos.X + 1 };
             }
-
-            field = value;
         }
     }
 

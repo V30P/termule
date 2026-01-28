@@ -11,8 +11,14 @@ public sealed class Camera : Component
 
     public VectorInt ViewSize
     {
-        get => MatchDisplaySize ? Game.Systems.Get<Display>().Size : field;
-        set;
+        get => MatchDisplaySize ? GetRequiredSystem<Display>().Size : field;
+        set
+        {
+            if (value.X < 0 || value.Y < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(ViewSize), ViewSize, "ViewSize dimensions cannot be negative");
+            }
+        }
     } = (0, 0);
 
     public bool Draw = true;
@@ -22,7 +28,7 @@ public sealed class Camera : Component
 
     public Camera()
     {
-        Registered += () => _transform = GameObject.Get<Transform>();
+        Registered += () => _transform = GetRequiredComponent<Transform>();
         Ticked += RenderView;
     }
 
@@ -33,7 +39,7 @@ public sealed class Camera : Component
         _lastFrame = Game.Systems.Get<RenderSystem>().Render(viewOrigin, ViewSize);
         if (Draw)
         {
-            Game.Systems.Get<Display>().Draw(_lastFrame);
+            GetRequiredSystem<Display>().Draw(_lastFrame);
         }
     }
 

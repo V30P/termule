@@ -17,6 +17,12 @@ internal sealed class Frame : Content
 
     internal void Contribute(Renderer renderer, VectorInt pos, Color? color = null, char? character = null, Color? characterColor = null)
     {
+        ArgumentNullException.ThrowIfNull(renderer);
+        if (pos.X < 0 || pos.X >= Size.X || pos.Y < 0 || pos.Y >= Size.Y)
+        {
+            throw new ArgumentOutOfRangeException(nameof(pos), pos, "Contribution must be within the bounds of the Frame");
+        }
+
         Cell cell = Cells[pos.X, pos.Y];
         bool madeChange = false;
 
@@ -49,11 +55,6 @@ internal sealed class Frame : Content
 
     private void Credit(Renderer renderer, VectorInt pos)
     {
-        if (renderer == null)
-        {
-            return;
-        }
-
         if (Contributors[pos.X, pos.Y] is not HashSet<Renderer> contributors)
         {
             Contributors[pos.X, pos.Y] = contributors = [];

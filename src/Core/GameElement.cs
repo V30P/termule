@@ -22,6 +22,12 @@ public abstract class GameElement : IHostedGameElement
     {
         Unregistered?.Invoke();
     }
+
+    protected TSystem GetRequiredSystem<TSystem>() where TSystem : System
+    {
+        return Systems.Get<TSystem>() is not TSystem system ?
+            throw new MissingSystemException<TSystem>(this) : system;
+    }
 }
 
 public interface IHostedGameElement

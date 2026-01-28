@@ -8,7 +8,7 @@ public sealed class Image : Content
         set => Cells[x, y] = value;
     }
 
-    public Image(int x, int y) : base(x, y) { }
+    public Image(int width, int height) : base(width, height) { }
 
     public Image(Content content) : base(content.Size.X, content.Size.Y)
     {

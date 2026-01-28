@@ -1,5 +1,5 @@
 using Termule.Systems.Controller.Keyboard;
-using Termule.Systems.Display;
+using Termule.Systems.Display.Terminal;
 using Termule.Systems.RenderSystem;
 using Termule.Systems.ResourceLoader;
 
@@ -72,8 +72,8 @@ public class SystemManager : GameElement, IHostedSystemManager, IConfigurableSys
         IConfigurableSystemManager self = this;
         self.Install(new KeyboardController());
         self.Install(new UnixDisplay());
-        self.Install(new BaseRenderSystem());
-        self.Install(new BaseResourceLoader());
+        self.Install(new RenderSystem());
+        self.Install(new ResourceLoader());
     }
 }
 

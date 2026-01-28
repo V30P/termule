@@ -2,7 +2,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Termule.Types;
 
-namespace Termule.Systems.Display;
+namespace Termule.Systems.Display.Terminal;
 
 public abstract partial class TerminalDisplay : Display
 {
@@ -50,6 +50,8 @@ public abstract partial class TerminalDisplay : Display
         [Color.BrightWhite] = 97
     };
 
+    internal TerminalDisplay() { }
+
     protected override void Start()
     {
         Console.CursorVisible = false;
@@ -79,6 +81,11 @@ public abstract partial class TerminalDisplay : Display
             );
         }
     }
+
+    internal abstract string CollectStandardInput();
+
+    [GeneratedRegex(@"\x1b\[<\d+;(\d+);(\d+)[Mm]")]
+    protected static partial Regex sgrRegex();
 
 
     protected override void Stop()
@@ -142,9 +149,4 @@ public abstract partial class TerminalDisplay : Display
     {
         return color != null ? _foregroundColorCodes[color] : 39;
     }
-
-    internal abstract string CollectStandardInput();
-
-    [GeneratedRegex(@"\x1b\[<\d+;(\d+);(\d+)[Mm]")]
-    protected static partial Regex sgrRegex();
 }

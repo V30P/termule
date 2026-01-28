@@ -3,11 +3,20 @@ using Termule.Types;
 
 namespace Termule.Systems.RenderSystem;
 
-public abstract class RenderSystem : Core.System
+public sealed class RenderSystem : Core.System
 {
-    protected readonly List<Renderer> Renderers = [];
+    private readonly List<Renderer> _renderers = [];
 
-    internal abstract Frame Render(Vector viewOrigin, VectorInt viewSize);
+    internal Frame Render(Vector viewOrigin, VectorInt viewSize)
+    {
+        Frame frame = new(viewSize.X, viewSize.Y);
+        foreach (Renderer renderer in _renderers)
+        {
+            renderer.Render(frame, viewOrigin);
+        }
+
+        return frame;
+    }
 
     public abstract class Renderer : Component
     {
@@ -19,12 +28,12 @@ public abstract class RenderSystem : Core.System
 
         private void Register()
         {
-            Game.Systems.Get<RenderSystem>().Renderers.Add(this);
+            GetRequiredSystem<RenderSystem>()._renderers.Add(this);
         }
 
         private void Unregister()
         {
-            Game.Systems.Get<RenderSystem>().Renderers.Remove(this);
+            GetRequiredSystem<RenderSystem>()._renderers.Remove(this);
         }
 
         internal abstract void Render(Frame frame, Vector viewOrigin);

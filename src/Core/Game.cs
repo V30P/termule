@@ -36,21 +36,28 @@ public sealed class Game : IConfigurableGame
         IHostedComponent root = Root;
 
         systems.Start();
+#if RELEASE
         try
         {
-            while (!_stop)
-            {
-                DeltaTime = (float)_stopwatch.Elapsed.TotalSeconds;
-                _stopwatch.Restart();
+#endif
 
-                systems.Update();
-                root.Tick();
-            }
+        while (!_stop)
+        {
+            DeltaTime = (float)_stopwatch.Elapsed.TotalSeconds;
+            _stopwatch.Restart();
+
+            systems.Update();
+            root.Tick();
+        }
+#if RELEASE
         }
         finally
         {
-            systems.Stop();
+#endif
+        systems.Stop();
+#if RELEASE
         }
+#endif
     }
 
     public void Stop()

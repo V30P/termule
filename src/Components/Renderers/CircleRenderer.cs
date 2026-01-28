@@ -5,7 +5,20 @@ namespace Termule.Components;
 
 public sealed class CircleRenderer : TransformRenderer
 {
-    public float Radius;
+    public float Radius
+    {
+        get;
+
+        set
+        {
+            if (value < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(Radius), value, "Radius cannot be negative");
+            }
+
+            field = value;
+        }
+    }
     public Color Color;
     public bool Filled;
     public bool DoubleWide;

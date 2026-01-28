@@ -21,6 +21,12 @@ public abstract class Component : GameElement, IHostedComponent
     {
         Tick();
     }
+
+    protected TComponent GetRequiredComponent<TComponent>() where TComponent : Component
+    {
+        return GameObject.Get<TComponent>() is not TComponent component ?
+            throw new MissingComponentException<TComponent>(this) : component;
+    }
 }
 
 internal interface IHostedComponent

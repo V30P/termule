@@ -48,7 +48,7 @@ internal class Array2DConverterFactory : JsonConverterFactory
 
             if (reader.TokenType != JsonTokenType.StartArray)
             {
-                throw new JsonException();
+                throw new JsonException($"Expected an array, but found a {reader.TokenType}");
             }
             reader.Read();
 
