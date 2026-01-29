@@ -12,7 +12,7 @@ public sealed class Game : IConfigurableGame
     IConfigurableSystemManager IConfigurableGame.Systems => Systems;
 
     private readonly Stopwatch _stopwatch = new();
-    public static float DeltaTime { get; private set; }
+    public float DeltaTime { get; private set; }
 
     private bool _stop = false;
 

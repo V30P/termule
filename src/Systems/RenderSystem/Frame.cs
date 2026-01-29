@@ -3,7 +3,7 @@ using Termule.Components;
 
 namespace Termule.Systems.RenderSystem;
 
-internal sealed class Frame : Content
+public sealed class Frame : Content
 {
     internal readonly HashSet<Renderer>[,] Contributors;
     internal readonly Dictionary<Renderer, HashSet<VectorInt>> Contributions = [];
@@ -15,7 +15,7 @@ internal sealed class Frame : Content
         Contributors = new HashSet<Renderer>[Size.X, Size.Y];
     }
 
-    internal void Contribute(Renderer renderer, VectorInt pos, Color? color = null, char? character = null, Color? characterColor = null)
+    public void Contribute(Renderer renderer, VectorInt pos, Color? color = null, char? character = null, Color? characterColor = null)
     {
         ArgumentNullException.ThrowIfNull(renderer);
         if (pos.X < 0 || pos.X >= Size.X || pos.Y < 0 || pos.Y >= Size.Y)
@@ -39,7 +39,7 @@ internal sealed class Frame : Content
         }
         if (character is char characterValue)
         {
-            ChangeCell(c => c with { Char = characterValue, CharColor = Color.Default });
+            ChangeCell(c => c with { Char = characterValue, CharColor = BasicColor.Default });
         }
         if (characterColor is Color characterColorValue)
         {

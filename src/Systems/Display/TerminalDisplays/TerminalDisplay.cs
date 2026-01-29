@@ -8,46 +8,46 @@ public abstract partial class TerminalDisplay : Display
 {
     private Content _state;
 
-    private static readonly Dictionary<Color?, int> _backgroundColorCodes = new()
+    private static readonly Dictionary<BasicColor, string> _backgroundColorCodes = new()
     {
-        [Color.Default] = 49,
-        [Color.Black] = 40,
-        [Color.Red] = 41,
-        [Color.Green] = 42,
-        [Color.Yellow] = 43,
-        [Color.Blue] = 44,
-        [Color.Magenta] = 45,
-        [Color.Cyan] = 46,
-        [Color.White] = 47,
-        [Color.BrightBlack] = 100,
-        [Color.BrightRed] = 101,
-        [Color.BrightGreen] = 102,
-        [Color.BrightYellow] = 103,
-        [Color.BrightBlue] = 104,
-        [Color.BrightMagenta] = 105,
-        [Color.BrightCyan] = 106,
-        [Color.BrightWhite] = 107
+        [BasicColor.Black] = "40",
+        [BasicColor.Red] = "41",
+        [BasicColor.Green] = "42",
+        [BasicColor.Yellow] = "43",
+        [BasicColor.Blue] = "44",
+        [BasicColor.Magenta] = "45",
+        [BasicColor.Cyan] = "46",
+        [BasicColor.White] = "47",
+        [BasicColor.Default] = "49",
+        [BasicColor.BrightBlack] = "100",
+        [BasicColor.BrightRed] = "101",
+        [BasicColor.BrightGreen] = "102",
+        [BasicColor.BrightYellow] = "103",
+        [BasicColor.BrightBlue] = "104",
+        [BasicColor.BrightMagenta] = "105",
+        [BasicColor.BrightCyan] = "106",
+        [BasicColor.BrightWhite] = "107"
     };
 
-    private static readonly Dictionary<Color?, int> _foregroundColorCodes = new()
+    private static readonly Dictionary<BasicColor, string> _foregroundColorCodes = new()
     {
-        [Color.Default] = 39,
-        [Color.Black] = 30,
-        [Color.Red] = 31,
-        [Color.Green] = 32,
-        [Color.Yellow] = 33,
-        [Color.Blue] = 34,
-        [Color.Magenta] = 35,
-        [Color.Cyan] = 36,
-        [Color.White] = 37,
-        [Color.BrightBlack] = 90,
-        [Color.BrightRed] = 91,
-        [Color.BrightGreen] = 92,
-        [Color.BrightYellow] = 93,
-        [Color.BrightBlue] = 94,
-        [Color.BrightMagenta] = 95,
-        [Color.BrightCyan] = 96,
-        [Color.BrightWhite] = 97
+        [BasicColor.Black] = "30",
+        [BasicColor.Red] = "31",
+        [BasicColor.Green] = "32",
+        [BasicColor.Yellow] = "33",
+        [BasicColor.Blue] = "34",
+        [BasicColor.Magenta] = "35",
+        [BasicColor.Cyan] = "36",
+        [BasicColor.White] = "37",
+        [BasicColor.Default] = "39",
+        [BasicColor.BrightBlack] = "90",
+        [BasicColor.BrightRed] = "91",
+        [BasicColor.BrightGreen] = "92",
+        [BasicColor.BrightYellow] = "93",
+        [BasicColor.BrightBlue] = "94",
+        [BasicColor.BrightMagenta] = "95",
+        [BasicColor.BrightCyan] = "96",
+        [BasicColor.BrightWhite] = "97"
     };
 
     internal TerminalDisplay() { }
@@ -140,13 +140,15 @@ public abstract partial class TerminalDisplay : Display
         _state = content;
     }
 
-    private static int GetBackgroundColorCode(Color? color)
+    private static string GetBackgroundColorCode(Color color)
     {
-        return color != null ? _backgroundColorCodes[color] : 49;
+        return color.Full is FullColor f ?
+            $"48;2;{f.R};{f.G};{f.B}" : _backgroundColorCodes[color.Basic];
     }
 
-    private static int GetForegroundColorCode(Color? color)
+    private static string GetForegroundColorCode(Color color)
     {
-        return color != null ? _foregroundColorCodes[color] : 39;
+        return color.Full is FullColor f ?
+            $"38;2;{f.R};{f.G};{f.B}" : _foregroundColorCodes[color.Basic];
     }
 }

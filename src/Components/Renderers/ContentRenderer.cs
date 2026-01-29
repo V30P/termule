@@ -33,9 +33,9 @@ public sealed class ContentRenderer<TContent> : TransformRenderer where TContent
                     (
                         this,
                         cellPos,
-                        cell.Color != Color.Default ? cell.Color : null,
+                        cell.Color != BasicColor.Default ? cell.Color : null,
                         cell.Char != default(char) ? cell.Char : null,
-                        cell.CharColor != Color.Default ? cell.CharColor : null
+                        cell.CharColor != BasicColor.Default ? cell.CharColor : null
                     );
                 }
             }

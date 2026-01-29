@@ -18,6 +18,8 @@ public sealed class Camera : Component
             {
                 throw new ArgumentOutOfRangeException(nameof(ViewSize), ViewSize, "ViewSize dimensions cannot be negative");
             }
+
+            field = value;
         }
     } = (0, 0);
 

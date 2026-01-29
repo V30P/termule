@@ -36,6 +36,6 @@ public sealed class RenderSystem : Core.System
             GetRequiredSystem<RenderSystem>()._renderers.Remove(this);
         }
 
-        internal abstract void Render(Frame frame, Vector viewOrigin);
+        protected internal abstract void Render(Frame frame, Vector viewOrigin);
     }
 }

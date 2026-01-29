@@ -15,7 +15,7 @@ public abstract class TransformRenderer : Renderer
         Registered += () => _transform = GetRequiredComponent<Transform>();
     }
 
-    internal sealed override void Render(Frame frame, Vector viewOrigin)
+    protected internal sealed override void Render(Frame frame, Vector viewOrigin)
     {
         Vector framespacePos;
         if (!ScreenSpace)
