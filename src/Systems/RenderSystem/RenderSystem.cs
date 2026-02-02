@@ -1,41 +1,37 @@
-using Termule.Core;
+using Termule.Components;
 using Termule.Types;
 
 namespace Termule.Systems.RenderSystem;
 
 public sealed class RenderSystem : Core.System
 {
-    private readonly List<Renderer> _renderers = [];
-
-    internal Frame Render(Vector viewOrigin, VectorInt viewSize)
+    public Layer[] Layers
     {
-        Frame frame = new(viewSize.X, viewSize.Y);
-        foreach (Renderer renderer in _renderers)
+        private get;
+
+        init
         {
-            renderer.Render(frame, viewOrigin);
+            if (value?.Length == 0)
+            {
+                throw new ArgumentException($"{nameof(Layers)} cannot be null or empty");
+            }
+
+            field = value;
+        }
+    } = [new SimpleLayer()];
+    public Layer DefaultLayer => Layers[0];
+
+    internal Frame Render(Vector viewOrigin, Content background)
+    {
+        Frame frame = new(background);
+        foreach (Layer layer in Layers)
+        {
+            foreach (Renderer renderer in layer)
+            {
+                renderer.Render(frame, viewOrigin);
+            }
         }
 
         return frame;
-    }
-
-    public abstract class Renderer : Component
-    {
-        internal Renderer()
-        {
-            Registered += Register;
-            Unregistered += Unregister;
-        }
-
-        private void Register()
-        {
-            GetRequiredSystem<RenderSystem>()._renderers.Add(this);
-        }
-
-        private void Unregister()
-        {
-            GetRequiredSystem<RenderSystem>()._renderers.Remove(this);
-        }
-
-        protected internal abstract void Render(Frame frame, Vector viewOrigin);
     }
 }

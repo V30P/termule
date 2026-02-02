@@ -13,7 +13,7 @@ public class Content : IResource
 
     static string IResource.FileExtension => ".tmc";
 
-    internal Cell At(int x, int y)
+    protected internal Cell At(int x, int y)
     {
         if (x < 0 || x >= Size.X)
         {
@@ -37,8 +37,18 @@ public class Content : IResource
         Resize(width, height);
     }
 
-    // Used for deserialization
-    public Content() : this(0, 0) { }
+    [JsonConstructor]
+#pragma warning disable IDE0051
+    private Content(Cell[,] cells)
+#pragma warning restore IDE0051
+    {
+        Cells = cells;
+    }
+
+    public Content(Content c)
+    {
+        Cells = (Cell[,])c.Cells.Clone();
+    }
 
     protected void Resize(int width, int height)
     {

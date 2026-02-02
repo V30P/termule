@@ -10,7 +10,7 @@ public sealed class Frame : Content
 
     public Cell this[int x, int y] => Cells[x, y];
 
-    internal Frame(int x, int y) : base(x, y)
+    internal Frame(Content background) : base(background)
     {
         Contributors = new HashSet<Renderer>[Size.X, Size.Y];
     }

@@ -2,7 +2,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Termule.Systems.Display.Terminal;
+namespace Termule.Systems.Display;
 
 public sealed partial class UnixDisplay : TerminalDisplay
 {

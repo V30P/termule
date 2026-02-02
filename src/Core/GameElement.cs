@@ -4,6 +4,7 @@ public abstract class GameElement : IHostedGameElement
 {
     protected Game Game { get; private set; }
     Game IHostedGameElement.Game { get => Game; set => Game = value; }
+    internal uint ElementID { get; private set; }
 
     protected event Action Registered;
     protected event Action Unregistered;
@@ -13,8 +14,9 @@ public abstract class GameElement : IHostedGameElement
 
     internal GameElement() { }
 
-    public void InvokeRegistered()
+    public void InvokeRegistered(uint elementID)
     {
+        ElementID = elementID;
         Registered?.Invoke();
     }
 
@@ -34,6 +36,6 @@ public interface IHostedGameElement
 {
     Game Game { get; set; }
 
-    void InvokeRegistered();
+    void InvokeRegistered(uint elementID);
     void InvokeUnregistered();
 }

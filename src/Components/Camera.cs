@@ -9,6 +9,9 @@ public sealed class Camera : Component
 {
     private Transform _transform;
 
+    public bool Draw = true;
+
+    public bool MatchDisplaySize = false;
     public VectorInt ViewSize
     {
         get => MatchDisplaySize ? GetRequiredSystem<Display>().Size : field;
@@ -19,12 +22,34 @@ public sealed class Camera : Component
                 throw new ArgumentOutOfRangeException(nameof(ViewSize), ViewSize, "ViewSize dimensions cannot be negative");
             }
 
+            MatchDisplaySize = false;
             field = value;
         }
     } = (0, 0);
 
-    public bool Draw = true;
-    public bool MatchDisplaySize = false;
+    public Color Background;
+    private Content _background
+    {
+        get
+        {
+            // Regenerate value if the ViewSize or Background have changed
+            if (ViewSize != field.Size || (field.Size != (0, 0) && field.At(0, 0).Color == Background))
+            {
+                Image newBaseContent = new(ViewSize.X, ViewSize.Y);
+                for (int x = 0; x < ViewSize.X; x++)
+                {
+                    for (int y = 0; y < ViewSize.Y; y++)
+                    {
+                        newBaseContent[x, y] = new Cell() { Color = Background };
+                    }
+                }
+
+                field = newBaseContent;
+            }
+
+            return field;
+        }
+    } = new(0, 0);
 
     private Frame _lastFrame;
 
@@ -38,7 +63,7 @@ public sealed class Camera : Component
     {
         Vector viewOrigin = _transform.Pos + (new Vector(-ViewSize.X, ViewSize.Y) / 2f);
 
-        _lastFrame = Game.Systems.Get<RenderSystem>().Render(viewOrigin, ViewSize);
+        _lastFrame = Game.Systems.Get<RenderSystem>().Render(viewOrigin, _background);
         if (Draw)
         {
             GetRequiredSystem<Display>().Draw(_lastFrame);

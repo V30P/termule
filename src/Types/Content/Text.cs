@@ -50,7 +50,7 @@ public sealed class Text : Content
         }
     }
 
-    public Text() { }
+    public Text() : base(0, 0) { }
 
     private void ApplyColor()
     {

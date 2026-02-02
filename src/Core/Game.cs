@@ -3,7 +3,7 @@ namespace Termule.Core;
 
 public sealed class Game : IConfigurableGame
 {
-    private readonly List<IHostedGameElement> _entities = [];
+    private readonly List<IHostedGameElement> _elements = [];
 
     public readonly GameObject Root;
     GameObject IConfigurableGame.Root => Root;
@@ -68,9 +68,10 @@ public sealed class Game : IConfigurableGame
     internal void Register(IHostedGameElement element)
     {
         element.Game = this;
-        _entities.Add(element);
+        uint id = (uint)_elements.Count;
 
-        element.InvokeRegistered();
+        _elements.Add(element);
+        element.InvokeRegistered(id);
     }
 
     internal void Unregister(IHostedGameElement element)
@@ -78,7 +79,7 @@ public sealed class Game : IConfigurableGame
         element.InvokeUnregistered();
 
         element.Game = null;
-        _entities.Remove(element);
+        _elements.Remove(element);
     }
 }
 

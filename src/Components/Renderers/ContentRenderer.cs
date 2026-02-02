@@ -9,13 +9,13 @@ public sealed class ContentRenderer<TContent> : TransformRenderer where TContent
     public TContent Content;
     public bool Centered;
 
-    protected override Vector Offset => Centered ? -(Vector)Content.Size / 2 : (0, 0);
+    protected override Vector Offset => Centered && Content != null ? -(Vector)Content.Size / 2 : (0, 0);
 
     public ContentRenderer()
     {
-        if (typeof(TContent).GetConstructor(Type.EmptyTypes) is ConstructorInfo paramaterlessConstructor)
+        if (typeof(TContent).GetConstructor(Type.EmptyTypes) is ConstructorInfo parameterlessConstructor)
         {
-            Content = (TContent)paramaterlessConstructor.Invoke([]);
+            Content = (TContent)parameterlessConstructor.Invoke([]);
         }
     }
 

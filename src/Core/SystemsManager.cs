@@ -1,5 +1,5 @@
 using Termule.Systems.Controller.Keyboard;
-using Termule.Systems.Display.Terminal;
+using Termule.Systems.Display;
 using Termule.Systems.RenderSystem;
 using Termule.Systems.ResourceLoader;
 

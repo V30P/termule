@@ -69,8 +69,8 @@ internal class Array2DConverterFactory : JsonConverterFactory
                 array.Add(subarray);
             }
 
-            // Convert to an actual array (or null)
-            T[,] value = array.Count != 0 ? new T[array.Count, array[0].Count] : null;
+            // Convert to an actual array
+            T[,] value = new T[array.Count, array[0]?.Count ?? 0];
             for (int x = 0; x < array.Count; x++)
             {
                 for (int y = 0; y < array[0].Count; y++)

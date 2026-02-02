@@ -2,7 +2,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Termule.Types;
 
-namespace Termule.Systems.Display.Terminal;
+namespace Termule.Systems.Display;
 
 public abstract partial class TerminalDisplay : Display
 {
