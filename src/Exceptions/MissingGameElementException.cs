@@ -1,28 +1,36 @@
 namespace Termule.Core;
 
-public abstract class MissingGameElementException<TMissing> : Exception where TMissing : GameElement
+public abstract class MissingGameElementException<TMissing> : Exception
+    where TMissing : GameElement
 {
-    public readonly GameElement Dependent;
-    public readonly Type MissingElementType = typeof(TMissing);
-
     private protected MissingGameElementException(GameElement dependent)
     {
-        Dependent = dependent;
+        this.Dependent = dependent;
     }
+
+    public GameElement Dependent { get; }
+
+    public Type MissingElementType { get; } = typeof(TMissing);
 }
 
-public class MissingComponentException<TMissing>
-    : MissingGameElementException<TMissing> where TMissing : Component
+public class MissingComponentException<TMissing> : MissingGameElementException<TMissing>
+    where TMissing : Component
 {
-    public override string Message => $"'{Dependent.GetType().Name}' is missing required component '{MissingElementType.Name}'";
+    internal MissingComponentException(GameElement dependent)
+        : base(dependent)
+    {
+    }
 
-    internal MissingComponentException(GameElement dependent) : base(dependent) { }
+    public override string Message => $"'{this.Dependent.GetType().Name}' is missing required component '{this.MissingElementType.Name}'";
 }
 
-public class MissingSystemException<TMissing>
-    : MissingGameElementException<TMissing> where TMissing : System
+public class MissingSystemException<TMissing> : MissingGameElementException<TMissing>
+    where TMissing : System
 {
-    public override string Message => $"'{Dependent.GetType().Name}' is missing required system '{MissingElementType.Name}'";
+    internal MissingSystemException(GameElement dependent)
+        : base(dependent)
+    {
+    }
 
-    internal MissingSystemException(GameElement dependent) : base(dependent) { }
+    public override string Message => $"'{this.Dependent.GetType().Name}' is missing required system '{this.MissingElementType.Name}'";
 }

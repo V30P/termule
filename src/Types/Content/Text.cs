@@ -2,6 +2,11 @@ namespace Termule.Types;
 
 public sealed class Text : Content
 {
+    public Text()
+    : base(0, 0)
+    {
+    }
+
     public string Value
     {
         get;
@@ -11,7 +16,7 @@ public sealed class Text : Content
             field = value;
             if (value == null)
             {
-                Resize(0, 0);
+                this.Resize(0, 0);
                 return;
             }
 
@@ -19,7 +24,7 @@ public sealed class Text : Content
             int width = lines.Length > 0 ? lines.Max(l => l.Length) : 0;
             int height = lines.Length;
 
-            Resize(width, height);
+            this.Resize(width, height);
             VectorInt pos = (0, 0);
             foreach (char character in field)
             {
@@ -28,13 +33,16 @@ public sealed class Text : Content
                     pos = (0, pos.Y + 1);
                     continue;
                 }
+
                 if (char.IsControl(character))
                 {
                     continue;
                 }
 
-                Cells[pos.X, pos.Y] = new() { Char = character };
+                this.Cells[pos.X, pos.Y] = new() { Char = character };
+#pragma warning disable SA1101 // Prefix local calls with this
                 pos = pos with { X = pos.X + 1 };
+#pragma warning restore SA1101 // Prefix local calls with this
             }
         }
     }
@@ -46,19 +54,19 @@ public sealed class Text : Content
         set
         {
             field = value;
-            ApplyColor();
+            this.ApplyColor();
         }
     }
 
-    public Text() : base(0, 0) { }
-
     private void ApplyColor()
     {
-        for (int x = 0; x < Size.X; x++)
+        for (int x = 0; x < this.Size.X; x++)
         {
-            for (int y = 0; y < Size.Y; y++)
+            for (int y = 0; y < this.Size.Y; y++)
             {
-                Cells[x, y] = Cells[x, y] with { CharColor = Color };
+#pragma warning disable SA1101 // Prefix local calls with this
+                this.Cells[x, y] = this.Cells[x, y] with { CharColor = this.Color };
+#pragma warning restore SA1101 // Prefix local calls with this
             }
         }
     }

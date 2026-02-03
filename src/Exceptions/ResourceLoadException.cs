@@ -2,13 +2,16 @@ namespace Termule.Systems.ResourceLoader;
 
 public class ResourceLoadException : Exception
 {
-    public readonly string FullPath;
-
     internal ResourceLoadException(string fullPath, Exception inner)
-        : base($"Could not load resource \"{Path.GetFileName(fullPath)}\"", inner)
+    : base($"Could not load resource \"{Path.GetFileName(fullPath)}\"", inner)
     {
-        FullPath = fullPath;
+        this.FullPath = fullPath;
     }
 
-    internal ResourceLoadException(string fullPath) : this(fullPath, null) { }
+    internal ResourceLoadException(string fullPath)
+        : this(fullPath, null)
+    {
+    }
+
+    public string FullPath { get; }
 }

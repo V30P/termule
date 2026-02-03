@@ -1,17 +1,23 @@
-using Termule.Systems.RenderSystem;
-using Termule.Types;
-
 namespace Termule.Components;
+
+using Systems.RenderSystem;
+using Types;
 
 public sealed class LineRenderer : TransformRenderer
 {
-    public IEnumerable<Vector> Points = [];
-    public Color Color;
+    public IEnumerable<Vector> Points { get; set; } = [];
+
+    public Color Color { get; set; }
 
     private protected override void Render(Frame frame, VectorInt framespacePos)
     {
-        IEnumerable<VectorInt> framePoints = Points
-            .Select(p => (framespacePos + new Vector(p.X, ScreenSpace ? p.Y : -p.Y)).FloorToInt());
+        if (!this.Points.Any())
+        {
+            return;
+        }
+
+        IEnumerable<VectorInt> framePoints = this.Points
+            .Select(p => (framespacePos + new Vector(p.X, this.ScreenSpace ? p.Y : -p.Y)).FloorToInt());
         VectorInt lastPoint = framePoints.First();
         foreach (VectorInt point in framePoints.Skip(1))
         {
@@ -19,7 +25,7 @@ public sealed class LineRenderer : TransformRenderer
             {
                 if ((uint)pos.X < frame.Size.X && (uint)pos.Y < frame.Size.Y)
                 {
-                    frame.Contribute(this, pos, Color);
+                    frame.Contribute(this, pos, this.Color);
                 }
             }
 

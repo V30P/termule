@@ -2,30 +2,32 @@ namespace Termule.Core;
 
 public abstract class Component : GameElement, IHostedComponent
 {
-    public GameObject GameObject { get; private set; }
-    GameObject IHostedComponent.GameObject { set => GameObject = value; }
-
     protected event Action Ticked;
 
-    private void Tick()
-    {
-        Ticked?.Invoke();
-    }
+    public GameObject GameObject { get; private set; }
+
+    GameObject IHostedComponent.GameObject { set => this.GameObject = value; }
 
     public void Destroy()
     {
-        GameObject.Remove(this);
+        this.GameObject.Remove(this);
     }
 
     void IHostedComponent.Tick()
     {
-        Tick();
+        this.Tick();
     }
 
-    protected TComponent GetRequiredComponent<TComponent>() where TComponent : Component
+    protected TComponent GetRequiredComponent<TComponent>()
+    where TComponent : Component
     {
-        return GameObject.Get<TComponent>() is not TComponent component ?
+        return this.GameObject.Get<TComponent>() is not TComponent component ?
             throw new MissingComponentException<TComponent>(this) : component;
+    }
+
+    private void Tick()
+    {
+        this.Ticked?.Invoke();
     }
 }
 

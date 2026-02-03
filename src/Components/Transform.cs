@@ -1,25 +1,32 @@
-using Termule.Core;
-using Termule.Types;
-
 namespace Termule.Components;
+
+using Core;
+using Types;
 
 public sealed class Transform : Component
 {
-    private bool _hasBeenRooted = false;
-    private Transform _parent;
-    private List<Transform> _children = [];
+    private Transform parent;
+    private List<Transform> children = [];
+
+    private Vector cachedPosition;
+    private bool cachedPositionIsLocal = true;
+
+    public Transform()
+    {
+        this.Registered += this.ApplyPositioning;
+    }
 
     public Vector Pos
     {
-        get => _hasBeenRooted ? field
-            : (_cachedPositionIsLocal ? (0, 0) : _cachedPosition);
+        get => this.IsRegistered ? field
+            : (this.cachedPositionIsLocal ? (0, 0) : this.cachedPosition);
 
         set
         {
-            if (_hasBeenRooted)
+            if (this.IsRegistered)
             {
-                Vector difference = value - Pos;
-                foreach (Transform child in _children)
+                Vector difference = value - this.Pos;
+                foreach (Transform child in this.children)
                 {
                     child.Pos += difference;
                 }
@@ -28,52 +35,42 @@ public sealed class Transform : Component
             }
             else
             {
-                _cachedPosition = value;
-                _cachedPositionIsLocal = false;
+                this.cachedPosition = value;
+                this.cachedPositionIsLocal = false;
             }
         }
     }
 
     public Vector LocalPos
     {
-        get => _hasBeenRooted ? Pos - (_parent?.Pos ?? (0, 0))
-            : (_cachedPositionIsLocal ? _cachedPosition : (0, 0));
+        get => this.IsRegistered ? this.Pos - (this.parent?.Pos ?? (0, 0))
+            : (this.cachedPositionIsLocal ? this.cachedPosition : (0, 0));
 
         set
         {
-            if (_hasBeenRooted)
+            if (this.IsRegistered)
             {
-                Pos = (_parent?.Pos ?? (0, 0)) + value;
+                this.Pos = (this.parent?.Pos ?? (0, 0)) + value;
             }
             else
             {
-                _cachedPosition = value;
-                _cachedPositionIsLocal = true;
+                this.cachedPosition = value;
+                this.cachedPositionIsLocal = true;
             }
         }
     }
 
-    private Vector _cachedPosition;
-    private bool _cachedPositionIsLocal = true;
-
-    public Transform()
-    {
-        Registered += ApplyPositioning;
-    }
-
     private void ApplyPositioning()
     {
-        _hasBeenRooted = true;
+        this.parent = this.GameObject.GameObject?.Get<Transform>();
+        this.Pos = this.cachedPositionIsLocal ? (this.parent?.Pos ?? (0, 0)) + this.cachedPosition : this.cachedPosition;
 
-        _parent = GameObject.GameObject?.Get<Transform>();
-        Pos = _cachedPositionIsLocal ? (_parent?.Pos ?? (0, 0)) + _cachedPosition : _cachedPosition;
-
-        _children = [];
-        foreach (Component component in GameObject)
+        this.children = [];
+        foreach (Component component in this.GameObject)
         {
             if (component is GameObject componentGameObject && componentGameObject.Get<Transform>() is Transform childTransform)
             {
-                _children.Add(childTransform);
+                this.children.Add(childTransform);
             }
         }
     }

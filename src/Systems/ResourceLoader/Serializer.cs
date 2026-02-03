@@ -1,24 +1,24 @@
+namespace Termule.Systems.ResourceLoader;
+
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Termule.Systems.ResourceLoader;
-
 public static class Serializer
 {
-    private static readonly JsonSerializerOptions _serializerOptions = new()
+    private static readonly JsonSerializerOptions SerializerOptions = new()
     {
         Converters = { new Array2DConverterFactory() },
-        WriteIndented = true
+        WriteIndented = true,
     };
 
     public static string Serialize<T>(T value)
     {
-        return JsonSerializer.Serialize(value, _serializerOptions);
+        return JsonSerializer.Serialize(value, SerializerOptions);
     }
 
     public static T Deserialize<T>(string json)
     {
-        return JsonSerializer.Deserialize<T>(json, _serializerOptions);
+        return JsonSerializer.Deserialize<T>(json, SerializerOptions);
     }
 }
 
@@ -37,9 +37,23 @@ internal class Array2DConverterFactory : JsonConverterFactory
 
     private class Array2DConverter<T> : JsonConverter<T[,]>
     {
-        private static JsonConverter<T> GetConverter(JsonSerializerOptions options)
+        public override void Write(Utf8JsonWriter writer, T[,] value, JsonSerializerOptions options)
         {
-            return (JsonConverter<T>)options.GetConverter(typeof(T));
+            JsonConverter<T> converter = GetConverter(options);
+
+            writer.WriteStartArray();
+            for (int x = 0; x < value.GetLength(0); x++)
+            {
+                writer.WriteStartArray();
+                for (int y = 0; y < value.GetLength(1); y++)
+                {
+                    converter.Write(writer, value[x, y], options);
+                }
+
+                writer.WriteEndArray();
+            }
+
+            writer.WriteEndArray();
         }
 
         public override T[,] Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
@@ -50,6 +64,7 @@ internal class Array2DConverterFactory : JsonConverterFactory
             {
                 throw new JsonException($"Expected an array, but found a {reader.TokenType}");
             }
+
             reader.Read();
 
             // Read the array as a list of lists
@@ -82,21 +97,9 @@ internal class Array2DConverterFactory : JsonConverterFactory
             return value;
         }
 
-        public override void Write(Utf8JsonWriter writer, T[,] value, JsonSerializerOptions options)
+        private static JsonConverter<T> GetConverter(JsonSerializerOptions options)
         {
-            JsonConverter<T> converter = GetConverter(options);
-
-            writer.WriteStartArray();
-            for (int x = 0; x < value.GetLength(0); x++)
-            {
-                writer.WriteStartArray();
-                for (int y = 0; y < value.GetLength(1); y++)
-                {
-                    converter.Write(writer, value[x, y], options);
-                }
-                writer.WriteEndArray();
-            }
-            writer.WriteEndArray();
+            return (JsonConverter<T>)options.GetConverter(typeof(T));
         }
     }
 }

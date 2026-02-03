@@ -2,41 +2,52 @@ namespace Termule.Systems.Controller;
 
 public abstract class Controller : Core.System
 {
+    private Dictionary<string, object> values = [];
+
+    private Controller()
+    {
+    }
+
     public BindMap Binds
     {
+        private get => field;
+
         set
         {
-            _binds = value;
-            _binds.Controller = this;
+            field = value;
+            field.Controller = this;
         }
     }
-    private BindMap _binds = [];
 
-    private Dictionary<string, object> _values = [];
-
-    private Controller() { }
+    = [];
 
     public TValue Get<TValue>(string name)
     {
-        return (TValue)_values[name];
+        return (TValue)this.values[name];
     }
 
-    public abstract class GenericController<TBind> : Controller where TBind : Bind
+    public abstract class GenericController<TBind> : Controller
+        where TBind : Bind
     {
-        internal GenericController() { }
+        internal GenericController()
+        {
+        }
 
         protected override void Update()
         {
-            _values = [];
-            foreach (KeyValuePair<string, Bind> bindPair in _binds)
+            this.values = [];
+            foreach (KeyValuePair<string, Bind> bindPair in this.Binds)
             {
-                _values.Add(bindPair.Key, bindPair.Value.GetValue());
+                this.values.Add(bindPair.Key, bindPair.Value.GetValue());
             }
         }
     }
 }
 
-public abstract class Controller<TBind> : Controller.GenericController<TBind> where TBind : Bind
+public abstract class Controller<TBind> : Controller.GenericController<TBind>
+    where TBind : Bind
 {
-    internal Controller() { }
+    internal Controller()
+    {
+    }
 }

@@ -1,9 +1,11 @@
 namespace Termule.Types;
 
+#pragma warning disable SA1313 // Parameter names should begin with lower-case letter
 public readonly record struct VectorInt(int X = 0, int Y = 0)
+#pragma warning restore SA1313 // Parameter names should begin with lower-case letter
 {
-    public readonly float Magnitude => MathF.Sqrt((X * X) + (Y * Y));
-    public readonly Vector Normalized => Magnitude > 0 ? ((Vector)this) / Magnitude : (0, 0);
+    public readonly float Magnitude => MathF.Sqrt((this.X * this.X) + (this.Y * this.Y));
+    public readonly Vector Normalized => this.Magnitude > 0 ? ((Vector)this) / this.Magnitude : (0, 0);
 
     public static implicit operator VectorInt((int x, int y) t)
     {
@@ -42,6 +44,6 @@ public readonly record struct VectorInt(int X = 0, int Y = 0)
 
     public override readonly string ToString()
     {
-        return $"({X}, {Y})";
+        return $"({this.X}, {this.Y})";
     }
 }

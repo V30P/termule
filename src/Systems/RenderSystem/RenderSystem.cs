@@ -1,7 +1,7 @@
-using Termule.Components;
-using Termule.Types;
-
 namespace Termule.Systems.RenderSystem;
+
+using Components;
+using Types;
 
 public sealed class RenderSystem : Core.System
 {
@@ -18,13 +18,16 @@ public sealed class RenderSystem : Core.System
 
             field = value;
         }
-    } = [new SimpleLayer()];
-    public Layer DefaultLayer => Layers[0];
+    }
+
+    = [new SimpleLayer()];
+
+    public Layer DefaultLayer => this.Layers[0];
 
     internal Frame Render(Vector viewOrigin, Content background)
     {
         Frame frame = new(background);
-        foreach (Layer layer in Layers)
+        foreach (Layer layer in this.Layers)
         {
             foreach (Renderer renderer in layer)
             {

@@ -2,13 +2,18 @@ namespace Termule.Systems.Controller.Keyboard;
 
 public sealed class ButtonBind(Button button) : KeyboardBind
 {
-    private bool _pressed;
+    private bool pressed;
+
+    internal override object GetValue()
+    {
+        return this.pressed;
+    }
 
     protected override void OnButtonDown(Button downButton)
     {
         if (downButton == button)
         {
-            _pressed = true;
+            this.pressed = true;
         }
     }
 
@@ -16,12 +21,7 @@ public sealed class ButtonBind(Button button) : KeyboardBind
     {
         if (upBotton == button)
         {
-            _pressed = false;
+            this.pressed = false;
         }
-    }
-
-    internal override object GetValue()
-    {
-        return _pressed;
     }
 }

@@ -1,10 +1,16 @@
-using Termule.Systems.RenderSystem;
-using Termule.Types;
-
 namespace Termule.Components;
+
+using Systems.RenderSystem;
+using Types;
 
 public sealed class CircleRenderer : TransformRenderer
 {
+    public Color Color { get; set; }
+
+    public bool Filled { get; set; }
+
+    public bool DoubleWide { get; set; }
+
     public float Radius
     {
         get;
@@ -13,30 +19,27 @@ public sealed class CircleRenderer : TransformRenderer
         {
             if (value < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(Radius), value, "Radius cannot be negative");
+                throw new ArgumentOutOfRangeException(nameof(this.Radius), value, "Radius cannot be negative");
             }
 
             field = value;
         }
     }
-    public Color Color;
-    public bool Filled;
-    public bool DoubleWide;
 
     private protected override void Render(Frame frame, VectorInt framespacePos)
     {
-        IEnumerable<VectorInt> positions = GetCirclePositions(Radius, Filled);
-        if (DoubleWide)
+        IEnumerable<VectorInt> positions = GetCirclePositions(this.Radius, this.Filled);
+        if (this.DoubleWide)
         {
             positions = DoubleUp(positions, framespacePos);
         }
-        positions = positions.Select(p => p + framespacePos);
 
+        positions = positions.Select(p => p + framespacePos);
         foreach (VectorInt pos in positions)
         {
             if ((uint)pos.X < frame.Size.X && (uint)pos.Y < frame.Size.Y)
             {
-                frame.Contribute(this, pos, Color);
+                frame.Contribute(this, pos, this.Color);
             }
         }
     }

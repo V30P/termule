@@ -1,17 +1,17 @@
-using Termule.Systems.Controller.Keyboard;
-using Termule.Systems.Display;
-using Termule.Systems.RenderSystem;
-using Termule.Systems.ResourceLoader;
-
 namespace Termule.Core;
+
+using Systems.Controller.Keyboard;
+using Systems.Display;
+using Systems.RenderSystem;
+using Systems.ResourceLoader;
 
 public class SystemManager : GameElement, IHostedSystemManager, IConfigurableSystemManager
 {
-    private readonly Dictionary<Type, IHostedSystem> _systems = [];
+    private readonly Dictionary<Type, IHostedSystem> systems = [];
 
     void IHostedSystemManager.Start()
     {
-        foreach (IHostedSystem system in _systems.Values)
+        foreach (IHostedSystem system in this.systems.Values)
         {
             system.Start();
         }
@@ -19,7 +19,7 @@ public class SystemManager : GameElement, IHostedSystemManager, IConfigurableSys
 
     void IHostedSystemManager.Update()
     {
-        foreach (IHostedSystem system in _systems.Values)
+        foreach (IHostedSystem system in this.systems.Values)
         {
             system.Update();
         }
@@ -27,7 +27,7 @@ public class SystemManager : GameElement, IHostedSystemManager, IConfigurableSys
 
     void IHostedSystemManager.Stop()
     {
-        foreach (IHostedSystem system in _systems.Values)
+        foreach (IHostedSystem system in this.systems.Values)
         {
             system.Stop();
         }
@@ -37,26 +37,46 @@ public class SystemManager : GameElement, IHostedSystemManager, IConfigurableSys
     {
         ((IConfigurableSystemManager)this).Uninstall<TSystem>();
 
-        _systems[GetSystemType<TSystem>()] = system;
-        Game.Register(system);
+        this.systems[GetSystemType<TSystem>()] = system;
+        this.Game.Register(system);
     }
 
     void IConfigurableSystemManager.Uninstall<TSystem>()
     {
         Type systemType = GetSystemType<TSystem>();
-        if (_systems.TryGetValue(systemType, out IHostedSystem system))
+        if (this.systems.TryGetValue(systemType, out IHostedSystem system))
         {
-            _systems.Remove(systemType);
-            Game.Unregister((System)system);
+            this.systems.Remove(systemType);
+            this.Game.Unregister((System)system);
         }
     }
 
-    public TSystem Get<TSystem>() where TSystem : System
+    void IConfigurableSystemManager.UseDefaults()
     {
-        return (TSystem)(_systems.TryGetValue(GetSystemType<TSystem>(), out IHostedSystem system) ? system : null);
+        IConfigurableSystemManager self = this;
+        self.Install(new KeyboardController());
+
+        if (OperatingSystem.IsWindows())
+        {
+            self.Install(new WindowsDisplay());
+        }
+        else if (OperatingSystem.IsMacOS() || OperatingSystem.IsLinux())
+        {
+            self.Install(new UnixDisplay());
+        }
+
+        self.Install(new RenderSystem());
+        self.Install(new ResourceLoader());
     }
 
-    private static Type GetSystemType<TSystem>() where TSystem : IHostedSystem
+    public TSystem Get<TSystem>()
+        where TSystem : System
+    {
+        return (TSystem)(this.systems.TryGetValue(GetSystemType<TSystem>(), out IHostedSystem system) ? system : null);
+    }
+
+    private static Type GetSystemType<TSystem>()
+        where TSystem : IHostedSystem
     {
         Type type = typeof(TSystem);
         while (type.BaseType != typeof(System))
@@ -66,22 +86,18 @@ public class SystemManager : GameElement, IHostedSystemManager, IConfigurableSys
 
         return type;
     }
-
-    void IConfigurableSystemManager.UseDefaults()
-    {
-        IConfigurableSystemManager self = this;
-        self.Install(new KeyboardController());
-        self.Install(new UnixDisplay());
-        self.Install(new RenderSystem());
-        self.Install(new ResourceLoader());
-    }
 }
 
 public interface IConfigurableSystemManager
 {
-    void Install<TSystem>(TSystem system) where TSystem : System;
-    void Uninstall<TSystem>() where TSystem : System;
-    TSystem Get<TSystem>() where TSystem : System;
+    void Install<TSystem>(TSystem system)
+        where TSystem : System;
+
+    void Uninstall<TSystem>()
+        where TSystem : System;
+
+    TSystem Get<TSystem>()
+        where TSystem : System;
 
     void UseDefaults();
 }
@@ -89,6 +105,8 @@ public interface IConfigurableSystemManager
 public interface IHostedSystemManager
 {
     void Start();
+
     void Update();
+
     void Stop();
 }

@@ -1,47 +1,23 @@
-using System.Collections;
-
 namespace Termule.Core;
+
+using global::System.Collections;
 
 public class GameObject : Component, IEnumerable<Component>
 {
-    private readonly List<Component> _components = [];
-    private readonly Dictionary<Type, List<Component>> _typesToComponents = [];
+    private readonly List<Component> components = [];
+    private readonly Dictionary<Type, List<Component>> typesToComponents = [];
 
     public GameObject()
     {
-        Registered += RegisterComponents;
-        Ticked += TickComponents;
-        Unregistered += UnregisterComponents;
-    }
-
-    private void RegisterComponents()
-    {
-        foreach (Component component in this.ToArray())
-        {
-            Game.Register(component);
-        }
-    }
-
-    private protected void TickComponents()
-    {
-        foreach (IHostedComponent component in this.ToArray())
-        {
-            component.Tick();
-        }
-    }
-
-    private void UnregisterComponents()
-    {
-        foreach (Component component in this.ToArray())
-        {
-            Game.Unregister(component);
-        }
+        this.Registered += this.RegisterComponents;
+        this.Ticked += this.TickComponents;
+        this.Unregistered += this.UnregisterComponents;
     }
 
     public void Add(Component component)
     {
-        AddComponent(component);
-        Game?.Register(component);
+        this.AddComponent(component);
+        this.Game?.Register(component);
     }
 
     // Adds several components, then registers them simultaneously
@@ -50,36 +26,12 @@ public class GameObject : Component, IEnumerable<Component>
     {
         foreach (Component component in components)
         {
-            AddComponent(component);
+            this.AddComponent(component);
         }
 
         foreach (Component component in components)
         {
-            Game?.Register(component);
-        }
-    }
-
-    private void AddComponent(Component component)
-    {
-        ArgumentNullException.ThrowIfNull(component);
-        if (component.GameObject != null)
-        {
-            throw new InvalidOperationException($"Component '{component.GetType().Name}' is already part of a GameObject");
-        }
-
-        IHostedComponent hostedComponent = component;
-        _components.Add(component);
-        hostedComponent.GameObject = this;
-
-        foreach (Type type in GetImplementedTypes(component))
-        {
-            if (!_typesToComponents.TryGetValue(type, out List<Component> componentList))
-            {
-                componentList = [];
-                _typesToComponents.Add(type, componentList);
-            }
-
-            componentList.Add(component);
+            this.Game?.Register(component);
         }
     }
 
@@ -91,18 +43,41 @@ public class GameObject : Component, IEnumerable<Component>
             throw new InvalidOperationException($"Cannot remove Component '{component.GetType().Name}' since it is not part of this GameObject");
         }
 
-        bool wasRemoved = _components.Remove(component);
+        bool wasRemoved = this.components.Remove(component);
         if (wasRemoved)
         {
-            Game?.Unregister(component);
+            this.Game?.Unregister(component);
             ((IHostedComponent)component).GameObject = null;
 
             foreach (Type type in GetImplementedTypes(component))
             {
-                List<Component> componentList = _typesToComponents[type];
+                List<Component> componentList = this.typesToComponents[type];
                 componentList.Remove(component);
             }
         }
+    }
+
+    public IEnumerable<TComponent> GetAll<TComponent>()
+        where TComponent : Component
+    {
+        return this.typesToComponents.TryGetValue(typeof(TComponent), out List<Component> components) ?
+            components.Cast<TComponent>() : [];
+    }
+
+    public TComponent Get<TComponent>()
+        where TComponent : Component
+    {
+        return this.GetAll<TComponent>()?.FirstOrDefault();
+    }
+
+    public IEnumerator<Component> GetEnumerator()
+    {
+        return this.components.GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return this.GetEnumerator();
     }
 
     private static List<Type> GetImplementedTypes(object o)
@@ -118,24 +93,51 @@ public class GameObject : Component, IEnumerable<Component>
         return implementedTypes;
     }
 
-    public IEnumerable<TComponent> GetAll<TComponent>() where TComponent : Component
+    private void RegisterComponents()
     {
-        return _typesToComponents.TryGetValue(typeof(TComponent), out List<Component> components) ?
-            components.Cast<TComponent>() : [];
+        foreach (Component component in this.ToArray())
+        {
+            this.Game.Register(component);
+        }
     }
 
-    public TComponent Get<TComponent>() where TComponent : Component
+    private void TickComponents()
     {
-        return GetAll<TComponent>()?.FirstOrDefault();
+        foreach (IHostedComponent component in this.ToArray())
+        {
+            component.Tick();
+        }
     }
 
-    public IEnumerator<Component> GetEnumerator()
+    private void UnregisterComponents()
     {
-        return _components.Cast<Component>().OrderBy(c => c is GameObject).GetEnumerator();
+        foreach (Component component in this.ToArray())
+        {
+            this.Game.Unregister(component);
+        }
     }
 
-    IEnumerator IEnumerable.GetEnumerator()
+    private void AddComponent(Component component)
     {
-        return GetEnumerator();
+        ArgumentNullException.ThrowIfNull(component);
+        if (component.GameObject != null)
+        {
+            throw new InvalidOperationException($"Component '{component.GetType().Name}' is already part of a GameObject");
+        }
+
+        IHostedComponent hostedComponent = component;
+        this.components.Add(component);
+        hostedComponent.GameObject = this;
+
+        foreach (Type type in GetImplementedTypes(component))
+        {
+            if (!this.typesToComponents.TryGetValue(type, out List<Component> componentList))
+            {
+                componentList = [];
+                this.typesToComponents.Add(type, componentList);
+            }
+
+            componentList.Add(component);
+        }
     }
 }

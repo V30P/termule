@@ -1,29 +1,31 @@
-using System.Diagnostics;
 namespace Termule.Core;
+
+using global::System.Diagnostics;
 
 public sealed class Game : IConfigurableGame
 {
-    private readonly List<IHostedGameElement> _elements = [];
-
-    public readonly GameObject Root;
-    GameObject IConfigurableGame.Root => Root;
-
-    public readonly SystemManager Systems;
-    IConfigurableSystemManager IConfigurableGame.Systems => Systems;
-
-    private readonly Stopwatch _stopwatch = new();
-    public float DeltaTime { get; private set; }
-
-    private bool _stop = false;
+    private readonly List<IHostedGameElement> elements = [];
+    private readonly Stopwatch stopwatch = new();
+    private bool stop = false;
 
     public Game()
     {
-        Root = [];
-        Register(Root);
+        this.Root = [];
+        this.Register(this.Root);
 
-        Systems = new SystemManager();
-        Register(Systems);
+        this.Systems = new SystemManager();
+        this.Register(this.Systems);
     }
+
+    public GameObject Root { get; }
+
+    GameObject IConfigurableGame.Root => this.Root;
+
+    public SystemManager Systems { get; }
+
+    IConfigurableSystemManager IConfigurableGame.Systems => this.Systems;
+
+    public float DeltaTime { get; private set; }
 
     public static IConfigurableGame Create()
     {
@@ -32,8 +34,8 @@ public sealed class Game : IConfigurableGame
 
     void IConfigurableGame.Run()
     {
-        IHostedSystemManager systems = Systems;
-        IHostedComponent root = Root;
+        IHostedSystemManager systems = this.Systems;
+        IHostedComponent root = this.Root;
 
         systems.Start();
 #if RELEASE
@@ -41,10 +43,10 @@ public sealed class Game : IConfigurableGame
         {
 #endif
 
-        while (!_stop)
+        while (!this.stop)
         {
-            DeltaTime = (float)_stopwatch.Elapsed.TotalSeconds;
-            _stopwatch.Restart();
+            this.DeltaTime = (float)this.stopwatch.Elapsed.TotalSeconds;
+            this.stopwatch.Restart();
 
             systems.Update();
             root.Tick();
@@ -62,15 +64,15 @@ public sealed class Game : IConfigurableGame
 
     public void Stop()
     {
-        _stop = true;
+        this.stop = true;
     }
 
     internal void Register(IHostedGameElement element)
     {
         element.Game = this;
-        uint id = (uint)_elements.Count;
+        uint id = (uint)this.elements.Count;
 
-        _elements.Add(element);
+        this.elements.Add(element);
         element.InvokeRegistered(id);
     }
 
@@ -79,13 +81,14 @@ public sealed class Game : IConfigurableGame
         element.InvokeUnregistered();
 
         element.Game = null;
-        _elements.Remove(element);
+        this.elements.Remove(element);
     }
 }
 
 public interface IConfigurableGame
 {
     GameObject Root { get; }
+
     IConfigurableSystemManager Systems { get; }
 
     void Run();

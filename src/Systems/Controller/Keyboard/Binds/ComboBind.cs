@@ -2,30 +2,30 @@ namespace Termule.Systems.Controller.Keyboard;
 
 public sealed class ComboBind(HashSet<Button> buttons) : KeyboardBind
 {
-    private readonly HashSet<Button> _heldButtons = [];
-    private bool _triggeredSinceLastFrame;
+    private readonly HashSet<Button> heldButtons = [];
+    private bool triggeredSinceLastFrame;
+
+    internal override object GetValue()
+    {
+        bool value = this.triggeredSinceLastFrame;
+        this.triggeredSinceLastFrame = false;
+        return value;
+    }
 
     protected override void OnButtonDown(Button button)
     {
         if (buttons.Contains(button))
         {
-            _heldButtons.Add(button);
-            if (_heldButtons.SetEquals(buttons))
+            this.heldButtons.Add(button);
+            if (this.heldButtons.SetEquals(buttons))
             {
-                _triggeredSinceLastFrame = true;
+                this.triggeredSinceLastFrame = true;
             }
         }
     }
 
     protected override void OnButtonUp(Button button)
     {
-        _heldButtons.Remove(button);
-    }
-
-    internal override object GetValue()
-    {
-        bool value = _triggeredSinceLastFrame;
-        _triggeredSinceLastFrame = false;
-        return value;
+        this.heldButtons.Remove(button);
     }
 }

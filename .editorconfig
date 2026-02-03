@@ -1,43 +1,30 @@
-root = true
+root = true;
 
 [*.cs]
 
-# PascalCase for non-private members
-dotnet_naming_symbols.public_symbols.applicable_kinds = property, field, event, method
-dotnet_naming_symbols.public_symbols.applicable_accessibilities = public, protected, internal, protected_internal
+# SA1633: File should have header
+dotnet_diagnostic.SA1633.severity = none
 
-dotnet_naming_style.pascal_case.capitalization = pascal_case
+# IDE0130: Namespace does not match folder structure
+dotnet_diagnostic.IDE0130.severity = none
 
-dotnet_naming_rule.public_members_should_be_pascal_case.symbols = public_symbols
-dotnet_naming_rule.public_members_should_be_pascal_case.style = pascal_case
-dotnet_naming_rule.public_members_should_be_pascal_case.severity = warning
+# SA1010: Opening square brackets should be spaced correctly
+dotnet_diagnostic.SA1010.severity = none
 
-# _camelCase for private fields
-dotnet_naming_symbols.private_fields.applicable_kinds = field
-dotnet_naming_symbols.private_fields.applicable_accessibilities = private
+# SA1009: Closing parenthesis should be spaced correctly
+dotnet_diagnostic.SA1009.severity = none
 
-dotnet_naming_style.underscore_camel_case.capitalization = camel_case
-dotnet_naming_style.underscore_camel_case.required_prefix = _
+# IDE0003: Remove qualification
+dotnet_diagnostic.IDE0003.severity = none
 
-dotnet_naming_rule.private_fields_should_be_underscore_camel_case.symbols = private_fields
-dotnet_naming_rule.private_fields_should_be_underscore_camel_case.style = underscore_camel_case
-dotnet_naming_rule.private_fields_should_be_underscore_camel_case.severity = warning
+# SA1600: Elements should be documented
+dotnet_diagnostic.SA1600.severity = none
 
-# PascalCase for constants
-dotnet_naming_symbols.constant_symbols.applicable_kinds = field
-dotnet_naming_symbols.constant_symbols.required_modifiers = const
+# SA1602: Enumeration items should be documented
+dotnet_diagnostic.SA1602.severity = none
 
-dotnet_naming_rule.constants_should_be_pascal_case.symbols = constant_symbols
-dotnet_naming_rule.constants_should_be_pascal_case.style = pascal_case
-dotnet_naming_rule.constants_should_be_pascal_case.severity = warning
+# SA1601: Partial elements should be documented
+dotnet_diagnostic.SA1601.severity = none
 
-# Other config
-dotnet_analyzer_diagnostic.category-Style.severity = warning
-dotnet_analyzer_diagnostic.category-Simplification.severity = warning
-dotnet_analyzer_diagnostic.category-Formatting.severity = warning
-
-dotnet_style_namespace_match_folder = false
-csharp_style_namespace_declarations = file_scoped
-
-# IDE0058: Expression value is never used
-dotnet_diagnostic.IDE0058.severity = none
+# SA1000: Keywords should be spaced correctly
+dotnet_diagnostic.SA1000.severity = none

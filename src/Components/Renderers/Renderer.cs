@@ -1,47 +1,33 @@
-using Termule.Core;
-using Termule.Systems.RenderSystem;
-using Termule.Types;
-
 namespace Termule.Components;
+
+using Core;
+using Systems.RenderSystem;
+using Types;
 
 public abstract class Renderer : Component
 {
-    private bool _registeredToGame;
+    public Renderer()
+    {
+        this.Registered += () => ((IHostLayer)this.Layer).Register(this);
+        this.Unregistered += () => ((IHostLayer)this.Layer).Unregister(this);
+    }
 
     public Layer Layer
     {
-        get => field ?? GetRequiredSystem<RenderSystem>().DefaultLayer;
+        get => field ?? this.GetRequiredSystem<RenderSystem>().DefaultLayer;
 
         set
         {
             IHostLayer previousLayer = field;
             IHostLayer newLayer = field = value;
 
-            if (_registeredToGame)
+            if (this.IsRegistered)
             {
                 previousLayer.Unregister(this);
                 field = value;
                 newLayer.Register(this);
             }
         }
-    }
-
-    public Renderer()
-    {
-        Registered += OnRegistered;
-        Unregistered += OnUnregistered;
-    }
-
-    private void OnRegistered()
-    {
-        _registeredToGame = true;
-        ((IHostLayer)Layer).Register(this);
-    }
-
-    private void OnUnregistered()
-    {
-        _registeredToGame = false;
-        ((IHostLayer)Layer).Unregister(this);
     }
 
     protected internal abstract void Render(Frame frame, Vector viewOrigin);

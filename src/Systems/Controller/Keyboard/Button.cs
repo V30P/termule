@@ -1,5 +1,6 @@
 namespace Termule.Systems.Controller.Keyboard;
 
+#pragma warning disable SA1136 // Enum values should be on separate lines
 public enum Button
 {
     Mouse1, Mouse2, Mouse3, Mouse4, Mouse5,
@@ -37,3 +38,4 @@ public enum Button
     MediaPlay, MediaPause, MediaPlayPause,
     MediaStop, MediaNext, MediaPrevious, MediaSelect,
 }
+#pragma warning restore SA1136 // Enum values should be on separate lines

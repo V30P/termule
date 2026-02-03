@@ -1,87 +1,98 @@
-using SharpHook;
-
 namespace Termule.Systems.Controller.Keyboard;
+
+using SharpHook;
 
 public sealed class KeyboardController : Controller<KeyboardBind>
 {
-    private static readonly TaskPoolGlobalHook _sharpHook;
+    private static readonly TaskPoolGlobalHook SharpHook;
 
-    private readonly HashSet<Button> _pressedButtons = [];
-
-    private event Action<Button> ButtonDown;
-    private event Action<Button> ButtonUp;
-    private event Action<char> CharacterTyped;
+    private readonly HashSet<Button> pressedButtons = [];
 
     static KeyboardController()
     {
-        _sharpHook = new TaskPoolGlobalHook(runAsyncOnBackgroundThread: true);
-        _sharpHook.RunAsync();
+        SharpHook = new TaskPoolGlobalHook(runAsyncOnBackgroundThread: true);
+        SharpHook.RunAsync();
     }
 
     public KeyboardController()
     {
-        _sharpHook.MousePressed += (_, e) => OnButtonPressed(e.Data.Button.ToButton());
-        _sharpHook.MouseReleased += (_, e) => OnButtonReleased(e.Data.Button.ToButton());
+        SharpHook.MousePressed += (_, e) => this.OnButtonPressed(e.Data.Button.ToButton());
+        SharpHook.MouseReleased += (_, e) => this.OnButtonReleased(e.Data.Button.ToButton());
 
-        _sharpHook.KeyPressed += (_, e) => OnButtonPressed(e.Data.KeyCode.ToButton());
-        _sharpHook.KeyReleased += (_, e) => OnButtonReleased(e.Data.KeyCode.ToButton());
-        _sharpHook.KeyTyped += (_, e) => CharacterTyped?.Invoke(e.Data.KeyChar);
+        SharpHook.KeyPressed += (_, e) => this.OnButtonPressed(e.Data.KeyCode.ToButton());
+        SharpHook.KeyReleased += (_, e) => this.OnButtonReleased(e.Data.KeyCode.ToButton());
+        SharpHook.KeyTyped += (_, e) => this.CharacterTyped?.Invoke(e.Data.KeyChar);
     }
+
+    private event Action<Button> ButtonDown;
+
+    private event Action<Button> ButtonUp;
+
+    private event Action<char> CharacterTyped;
 
     private void OnButtonPressed(Button? button)
     {
-        if (button is not Button pressedButton || !_pressedButtons.Add(pressedButton))
+        if (button is not Button pressedButton || !this.pressedButtons.Add(pressedButton))
         {
             return;
         }
 
-        ButtonDown?.Invoke(pressedButton);
+        this.ButtonDown?.Invoke(pressedButton);
     }
 
     private void OnButtonReleased(Button? button)
     {
-        if (button is not Button releasedButton || !_pressedButtons.Remove(releasedButton))
+        if (button is not Button releasedButton || !this.pressedButtons.Remove(releasedButton))
         {
             return;
         }
 
-        ButtonUp?.Invoke(releasedButton);
+        this.ButtonUp?.Invoke(releasedButton);
     }
 
     public abstract class KeyboardBind : Bind<KeyboardController>
     {
+        private KeyboardController controller;
+
         internal override KeyboardController Controller
         {
             set
             {
-                if (_controller != null)
+                if (this.controller != null)
                 {
-                    _controller.ButtonDown -= OnButtonDown;
-                    _controller.ButtonUp -= OnButtonUp;
-                    _controller.CharacterTyped -= OnCharacterTyped;
+                    this.controller.ButtonDown -= this.OnButtonDown;
+                    this.controller.ButtonUp -= this.OnButtonUp;
+                    this.controller.CharacterTyped -= this.OnCharacterTyped;
                 }
 
-                _controller = value;
+                this.controller = value;
 
-                if (_controller != null)
+                if (this.controller != null)
                 {
-                    _controller.ButtonDown += OnButtonDown;
-                    _controller.ButtonUp += OnButtonUp;
-                    _controller.CharacterTyped += OnCharacterTyped;
+                    this.controller.ButtonDown += this.OnButtonDown;
+                    this.controller.ButtonUp += this.OnButtonUp;
+                    this.controller.CharacterTyped += this.OnCharacterTyped;
                 }
             }
         }
-        private KeyboardController _controller;
 
-        internal KeyboardBind() { }
+        protected virtual void OnButtonDown(Button button)
+        {
+        }
 
-        protected virtual void OnButtonDown(Button button) { }
-        protected virtual void OnButtonUp(Button button) { }
-        protected virtual void OnCharacterTyped(char character) { }
+        protected virtual void OnButtonUp(Button button)
+        {
+        }
+
+        protected virtual void OnCharacterTyped(char character)
+        {
+        }
     }
 }
 
 public abstract class KeyboardBind : KeyboardController.KeyboardBind
 {
-    internal KeyboardBind() { }
+    internal KeyboardBind()
+    {
+    }
 }

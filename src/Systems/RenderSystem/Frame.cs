@@ -1,29 +1,31 @@
-using Termule.Types;
-using Termule.Components;
-
 namespace Termule.Systems.RenderSystem;
+
+using Types;
+using Components;
 
 public sealed class Frame : Content
 {
-    internal readonly HashSet<Renderer>[,] Contributors;
-    internal readonly Dictionary<Renderer, HashSet<VectorInt>> Contributions = [];
-
-    public Cell this[int x, int y] => Cells[x, y];
-
-    internal Frame(Content background) : base(background)
+    internal Frame(Content background)
+    : base(background)
     {
-        Contributors = new HashSet<Renderer>[Size.X, Size.Y];
+        this.Contributors = new HashSet<Renderer>[this.Size.X, this.Size.Y];
     }
+
+    internal HashSet<Renderer>[,] Contributors { get; }
+
+    internal Dictionary<Renderer, HashSet<VectorInt>> Contributions { get; } = [];
+
+    public Cell this[int x, int y] => this.Cells[x, y];
 
     public void Contribute(Renderer renderer, VectorInt pos, Color? color = null, char? character = null, Color? characterColor = null)
     {
         ArgumentNullException.ThrowIfNull(renderer);
-        if (pos.X < 0 || pos.X >= Size.X || pos.Y < 0 || pos.Y >= Size.Y)
+        if (pos.X < 0 || pos.X >= this.Size.X || pos.Y < 0 || pos.Y >= this.Size.Y)
         {
             throw new ArgumentOutOfRangeException(nameof(pos), pos, "Contribution must be within the bounds of the Frame");
         }
 
-        Cell cell = Cells[pos.X, pos.Y];
+        Cell cell = this.Cells[pos.X, pos.Y];
         bool madeChange = false;
 
         // Tracks if a change has been made so we can credit the renderer
@@ -37,35 +39,41 @@ public sealed class Frame : Content
         {
             ChangeCell(_ => new() { Color = colorValue });
         }
+
+#pragma warning disable SA1101 // Prefix local calls with this
         if (character is char characterValue)
         {
             ChangeCell(c => c with { Char = characterValue, CharColor = BasicColor.Default });
         }
+
         if (characterColor is Color characterColorValue)
         {
             ChangeCell(c => c with { CharColor = characterColorValue });
+#pragma warning restore SA1101 // Prefix local calls with this
         }
 
         if (madeChange)
         {
-            Cells[pos.X, pos.Y] = cell;
-            Credit(renderer, pos);
+            this.Cells[pos.X, pos.Y] = cell;
+            this.Credit(renderer, pos);
         }
     }
 
     private void Credit(Renderer renderer, VectorInt pos)
     {
-        if (Contributors[pos.X, pos.Y] is not HashSet<Renderer> contributors)
+        if (this.Contributors[pos.X, pos.Y] is not HashSet<Renderer> contributors)
         {
-            Contributors[pos.X, pos.Y] = contributors = [];
+            this.Contributors[pos.X, pos.Y] = contributors = [];
         }
+
         contributors.Add(renderer);
 
-        if (!Contributions.TryGetValue(renderer, out HashSet<VectorInt> contributions))
+        if (!this.Contributions.TryGetValue(renderer, out HashSet<VectorInt> contributions))
         {
             contributions = [];
-            Contributions.Add(renderer, contributions);
+            this.Contributions.Add(renderer, contributions);
         }
+
         contributions.Add(pos);
     }
 }

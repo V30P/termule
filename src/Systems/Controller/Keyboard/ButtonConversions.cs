@@ -1,10 +1,10 @@
-using SharpHook.Data;
-
 namespace Termule.Systems.Controller.Keyboard;
+
+using SharpHook.Data;
 
 internal static class ButtonConversions
 {
-    private static readonly Dictionary<MouseButton, Button> _mouseButtonToButton = new()
+    private static readonly Dictionary<MouseButton, Button> MouseButtonToButton = new()
     {
         { MouseButton.Button1, Button.Mouse1 },
         { MouseButton.Button2, Button.Mouse2 },
@@ -13,7 +13,8 @@ internal static class ButtonConversions
         { MouseButton.Button5, Button.Mouse5 },
     };
 
-    private static readonly Dictionary<KeyCode, Button> _keyCodeToButton = new()
+#pragma warning disable SA1509 // Opening braces should not be preceded by blank line
+    private static readonly Dictionary<KeyCode, Button> KeyCodeToButton = new()
     {
         { KeyCode.VcA, Button.A }, { KeyCode.VcB, Button.B }, { KeyCode.VcC, Button.C },
         { KeyCode.VcD, Button.D }, { KeyCode.VcE, Button.E }, { KeyCode.VcF, Button.F },
@@ -39,7 +40,6 @@ internal static class ButtonConversions
         { KeyCode.VcF19, Button.F19 }, { KeyCode.VcF20, Button.F20 }, { KeyCode.VcF21, Button.F21 },
         { KeyCode.VcF22, Button.F22 }, { KeyCode.VcF23, Button.F23 }, { KeyCode.VcF24, Button.F24 },
 
-
         { KeyCode.VcLeftShift, Button.LeftShift }, { KeyCode.VcRightShift, Button.RightShift },
         { KeyCode.VcLeftControl, Button.LeftControl }, { KeyCode.VcRightControl, Button.RightControl },
         { KeyCode.VcLeftAlt, Button.LeftAlt }, { KeyCode.VcRightAlt, Button.RightAlt },
@@ -59,16 +59,13 @@ internal static class ButtonConversions
         { KeyCode.VcEnd, Button.End },
         { KeyCode.VcPageUp, Button.PageUp },
         { KeyCode.VcPageDown, Button.PageDown },
-
         { KeyCode.VcPrintScreen, Button.PrintScreen },
         { KeyCode.VcPause, Button.Pause },
         { KeyCode.VcContextMenu, Button.ContextMenu },
-
         { KeyCode.VcLeft, Button.LeftArrow },
         { KeyCode.VcRight, Button.RightArrow },
         { KeyCode.VcUp, Button.UpArrow },
         { KeyCode.VcDown, Button.DownArrow },
-
         { KeyCode.VcSpace, Button.Space },
         { KeyCode.VcMinus, Button.Minus },
         { KeyCode.VcEquals, Button.Equals },
@@ -81,7 +78,6 @@ internal static class ButtonConversions
         { KeyCode.VcPeriod, Button.Period },
         { KeyCode.VcSlash, Button.Slash },
         { KeyCode.VcBackQuote, Button.BackQuote },
-
         { KeyCode.VcNumPad0, Button.NP0 }, { KeyCode.VcNumPad1, Button.NP1 },
         { KeyCode.VcNumPad2, Button.NP2 }, { KeyCode.VcNumPad3, Button.NP3 },
         { KeyCode.VcNumPad4, Button.NP4 }, { KeyCode.VcNumPad5, Button.NP5 },
@@ -94,14 +90,15 @@ internal static class ButtonConversions
         { KeyCode.VcNumPadDivide, Button.NPDivide },
         { KeyCode.VcNumPadDecimal, Button.NPDecimal },
     };
+#pragma warning restore SA1509 // Opening braces should not be preceded by blank line
 
     internal static Button? ToButton(this MouseButton mouseButton)
     {
-        return _mouseButtonToButton.TryGetValue(mouseButton, out Button button) ? button : null;
+        return MouseButtonToButton.TryGetValue(mouseButton, out Button button) ? button : null;
     }
 
     internal static Button? ToButton(this KeyCode keyCode)
     {
-        return _keyCodeToButton.TryGetValue(keyCode, out Button button) ? button : null;
+        return KeyCodeToButton.TryGetValue(keyCode, out Button button) ? button : null;
     }
 }

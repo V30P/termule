@@ -1,53 +1,54 @@
-using System.Collections;
-
 namespace Termule.Systems.Controller;
+
+using System.Collections;
 
 public sealed class BindMap : IEnumerable<KeyValuePair<string, Bind>>
 {
+    private readonly Dictionary<string, Bind> binds = [];
+
     internal Controller Controller
     {
+        private get;
+
         set
         {
-            _controller = value;
+            field = value;
 
-            foreach (Bind bind in _binds.Values)
+            foreach (Bind bind in this.binds.Values)
             {
                 bind.SetController(value);
             }
         }
     }
-    private Controller _controller;
-
-    private readonly Dictionary<string, Bind> _binds = [];
 
     public Bind this[string name]
     {
-        get => _binds[name];
+        get => this.binds[name];
 
         set
         {
-            _binds[name].SetController(null);
-            _binds[name] = value;
-            value.SetController(_controller);
+            this.binds[name].SetController(null);
+            this.binds[name] = value;
+            value.SetController(this.Controller);
         }
     }
 
     public void Add(string name, Bind bind)
     {
-        _binds.Add(name, bind);
-        bind.SetController(_controller);
+        this.binds.Add(name, bind);
+        bind.SetController(this.Controller);
     }
 
     public void Remove(string name)
     {
-        Bind bind = _binds[name];
-        _binds.Remove(name);
+        Bind bind = this.binds[name];
+        this.binds.Remove(name);
         bind.SetController(null);
     }
 
     IEnumerator<KeyValuePair<string, Bind>> IEnumerable<KeyValuePair<string, Bind>>.GetEnumerator()
     {
-        return _binds.GetEnumerator();
+        return this.binds.GetEnumerator();
     }
 
     public IEnumerator GetEnumerator()
