@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Engine/Termule.csproj" />
+  <Project Path="Demos/Demos.csproj" />
+</Solution>
