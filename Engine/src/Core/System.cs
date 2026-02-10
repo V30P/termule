@@ -1,7 +1,8 @@
 namespace Termule.Core;
 
 /// <summary>
-/// A <see cref="GameElement"/> that can be added to a <see cref="SystemManager"/>s to provide global behavior every frame.
+/// Game element that can be added to the <see cref="SystemManager"/> to provide global behavior every tick.
+/// Only one instance of each direct child class of System can be in a <see cref="Game"/> at a time.
 /// </summary>
 public abstract class System : GameElement, IHostedSystem
 {
@@ -10,9 +11,9 @@ public abstract class System : GameElement, IHostedSystem
         this.Start();
     }
 
-    void IHostedSystem.Update()
+    void IHostedSystem.Tick()
     {
-        this.Update();
+        this.Tick();
     }
 
     void IHostedSystem.Stop()
@@ -21,21 +22,21 @@ public abstract class System : GameElement, IHostedSystem
     }
 
     /// <summary>
-    /// The behavior to execute when the containing Game is run.
+    /// Behavior to execute when the containing <see cref="Game"/> is run.
     /// </summary>
     protected virtual void Start()
     {
     }
 
     /// <summary>
-    /// The behavior to execute every frame.
+    /// Behavior to execute every tick.
     /// </summary>
-    protected virtual void Update()
+    protected virtual void Tick()
     {
     }
 
     /// <summary>
-    /// The behavior to execute when the containing Game is stopped.
+    /// Behavior to execute when the containing <see cref="Game"/> is stopped.
     /// </summary>
     protected virtual void Stop()
     {
@@ -46,7 +47,7 @@ internal interface IHostedSystem
 {
     void Start();
 
-    void Update();
+    void Tick();
 
     void Stop();
 }

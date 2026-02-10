@@ -3,7 +3,7 @@ namespace Termule.Systems.Controller.Keyboard;
 using SharpHook;
 
 /// <summary>
-/// A <see cref="Controller"/> that handles input from a keyboard (and mouse).
+/// Controller that handles keyboard and mouse input.
 /// </summary>
 public sealed class KeyboardController : Controller<KeyboardBind>
 {
@@ -57,9 +57,9 @@ public sealed class KeyboardController : Controller<KeyboardBind>
     }
 
     /// <summary>
-    /// The base class for Keyboard binds.
+    /// Base class for keyboard binds.
     /// </summary>
-    public abstract class KeyboardBindBase : Bind<KeyboardController>
+    public abstract class KeyboardBind : Bind<KeyboardController>
     {
         private KeyboardController controller;
 
@@ -86,7 +86,7 @@ public sealed class KeyboardController : Controller<KeyboardBind>
         }
 
         /// <summary>
-        /// Invoked when a Button is first pressed.
+        /// Invoked when a button is first pressed.
         /// </summary>
         /// <param name="button">The button that was pressed.</param>
         protected virtual void OnButtonDown(Button button)
@@ -112,9 +112,9 @@ public sealed class KeyboardController : Controller<KeyboardBind>
 }
 
 /// <summary>
-/// The base class of Binds that exist on a KeyboardController and consume its events.
+/// Base class for binds that consume keyboard controller events.
 /// </summary>
-public abstract class KeyboardBind : KeyboardController.KeyboardBindBase
+public abstract class KeyboardBind : KeyboardController.KeyboardBind
 {
     internal KeyboardBind()
     {

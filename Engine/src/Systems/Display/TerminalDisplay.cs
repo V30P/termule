@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 using Types;
 
 /// <summary>
-/// The base class of Displays that use a terminal for output.
+/// Display class for terminal-based output.
 /// </summary>
 public abstract partial class TerminalDisplay : Display
 {

@@ -1,12 +1,13 @@
 namespace Termule.Core;
 
 /// <summary>
-/// A <see cref="GameElement"/> that can be added to <see cref="GameObject"/>s in order to provide behavior on tick every frame.
+/// Game element that can be added to <see cref="GameObject"/>s to provide behavior every tick.
+/// Components can be added, moved, and removed at runtime.
 /// </summary>
 public abstract class Component : GameElement, IHostedComponent
 {
     /// <summary>
-    /// Invoked once per frame.
+    /// Invoked every time the game loop runs.
     /// </summary>
     protected event Action Ticked;
 
@@ -31,11 +32,11 @@ public abstract class Component : GameElement, IHostedComponent
     }
 
     /// <summary>
-    /// Tries to get a component of type <typeparamref name="TComponent"/> from the containing GameObject.
+    /// Tries to get a component of type <typeparamref name="TComponent"/> from the containing game object.
     /// </summary>
-    /// <typeparam name="TComponent"> The type of component to look for. </typeparam>
-    /// <returns> The GameObject's instance of <typeparamref name="TComponent"/>. </returns>
-    /// <exception cref="MissingComponentException{TComponent}"> Thrown if no matching component is found.</exception>
+    /// <typeparam name="TComponent">The type of component to look for.</typeparam>
+    /// <returns>The game object's instance of <typeparamref name="TComponent"/>.</returns>
+    /// <exception cref="MissingComponentException{TComponent}">Thrown if no matching component is found.</exception>
     protected TComponent GetRequiredComponent<TComponent>()
         where TComponent : Component
     {

@@ -4,13 +4,12 @@ using Systems.RenderSystem;
 using Types;
 
 /// <summary>
-/// A <see cref="TransformRenderer"/> implementation to render a line or series of lines.
+/// Renders a line or series of lines relative to the local <see cref="Transform"/>'s position.
 /// </summary>
 public sealed class LineRenderer : TransformRenderer
 {
     /// <summary>
-    /// Gets or sets the collection of points to render. Points are specified in renderer-local coordinates.
-    /// When not in display-space, the Y component will be inverted to convert game-space to frame-space.
+    /// Gets or sets the collection of line points relative to this renderer's transform.
     /// </summary>
     public IEnumerable<Vector> Points { get; set; } = [];
 
@@ -19,11 +18,6 @@ public sealed class LineRenderer : TransformRenderer
     /// </summary>
     public Color Color { get; set; }
 
-    /// <summary>
-    /// Renders the polyline defined by <see cref="Points"/> into the given <see cref="Frame"/>.
-    /// </summary>
-    /// <param name="frame">The frame to which contributions should be made.</param>
-    /// <param name="framespacePos">The integer frame-space origin position for the renderer.</param>
     private protected override void Render(Frame frame, VectorInt framespacePos)
     {
         if (!this.Points.Any())

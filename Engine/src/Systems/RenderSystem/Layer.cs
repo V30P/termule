@@ -4,7 +4,7 @@ using System.Collections;
 using Components;
 
 /// <summary>
-/// The base class for layers used to specify the rendering order of contained <see cref="Renderer"/>s.
+/// Base class for that specifies the rendering order of contained renderers.
 /// </summary>
 /// <param name="comparer">The comparer to use for ordering renderers.</param>
 public abstract class Layer(IComparer<Renderer> comparer) : IHostLayer, IEnumerable<Renderer>
@@ -60,7 +60,7 @@ public abstract class Layer(IComparer<Renderer> comparer) : IHostLayer, IEnumera
     }
 
     /// <summary>
-    /// Invoked when a new Renderer is added.
+    /// Invoked when a new renderer is added.
     /// </summary>
     /// <param name="renderer">The renderer that was added.</param>
     protected virtual void OnRendererRegistered(Renderer renderer)
@@ -84,7 +84,7 @@ internal interface IHostLayer
 }
 
 /// <summary>
-/// A basic layer implementation that provides registration-order-based sorting.
+/// Basic layer implementation that provides registration-order-based sorting.
 /// </summary>
 public sealed class SimpleLayer : Layer
 {

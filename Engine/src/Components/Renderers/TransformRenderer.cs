@@ -4,7 +4,7 @@ using Systems.RenderSystem;
 using Types;
 
 /// <summary>
-/// A <see cref="Renderer"/> implementation to ease rendering at the position of a <see cref="Transform"/>.
+/// Base component class for renderers that render based on their local transform's position.
 /// </summary>
 public abstract class TransformRenderer : Renderer
 {
@@ -13,7 +13,8 @@ public abstract class TransformRenderer : Renderer
     }
 
     /// <summary>
-    /// Gets or sets a value indicating whether rendering should occur at the Display space or Game space position.
+    /// Gets or sets a value indicating whether the <see cref="Transform"/>'s
+    /// position should be considered display-space when rendering.
     /// </summary>
     public bool DisplaySpace { get; set; }
 
@@ -31,7 +32,7 @@ public abstract class TransformRenderer : Renderer
             // Get integer position relative to viewOrigin
             framespacePos = this.GetRequiredComponent<Transform>().Pos - viewOrigin;
 
-            // Flip y to account for the change from world to display space
+            // Flip y to account for the change from game space to display space.
             framespacePos = (framespacePos.X, -framespacePos.Y);
         }
         else
@@ -43,10 +44,5 @@ public abstract class TransformRenderer : Renderer
         this.Render(frame, framespacePos.FloorToInt());
     }
 
-    /// <summary>
-    /// Renders to the provided <see cref="Frame"/> at the specified integer frame-space position.
-    /// </summary>
-    /// <param name="frame">The frame to which contributions should be made.</param>
-    /// <param name="displaySpacePos">The integer position within the frame (frame-space) at which to render.</param>
     private protected abstract void Render(Frame frame, VectorInt displaySpacePos);
 }

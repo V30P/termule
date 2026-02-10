@@ -1,9 +1,9 @@
 namespace Termule.Systems.Controller.Keyboard;
 
 /// <summary>
-/// A <see cref="Bind"/> whose value is whether a <see cref="Button"/> is currently down.
+/// Bind that returns whether a button is currently down.
 /// </summary>
-/// <param name="button">The target <see cref="Button"/>.</param>
+/// <param name="button">The target button.</param>
 public sealed class ButtonBind(Button button) : KeyboardBind
 {
     private bool pressed;

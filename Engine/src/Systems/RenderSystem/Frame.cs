@@ -4,7 +4,7 @@ using Types;
 using Components;
 
 /// <summary>
-/// A type of <see cref="Content"/> for <see cref="Renderer"/>s to contribute to during the render process.
+/// Content that <see cref="Renderer"/>s contribute to during the render process.
 /// </summary>
 public sealed class Frame : Content
 {
@@ -27,14 +27,14 @@ public sealed class Frame : Content
     public Cell this[int x, int y] => this.Cells[x, y];
 
     /// <summary>
-    /// Applies changes to the frame while tracking which renderer made the change.
+    /// Makes a contribution a cell in this frame, tracking which renderer made the change.
     /// </summary>
-    /// <param name="renderer">The <see cref="Renderer"/> responsible for the contribution.</param>
-    /// <param name="pos">The position of the cell to change.</param>
-    /// <param name="color">The color to set the cell to (or <c>null</c> to leave it unchanged).</param>
-    /// <param name="character">The character to set the cell to (or <c>null</c> to leave it unchanged).</param>
-    /// <param name="characterColor">The color to set the cell's character color to (or <c>null</c> to leave it unchanged).</param>
-    /// <exception cref="ArgumentOutOfRangeException">Thrown if the provided position is outside the bounds of the frame.</exception>
+    /// <param name="renderer">The renderer making the contribution.</param>
+    /// <param name="pos">The position of the cell.</param>
+    /// <param name="color">The color to set, or <c>null</c> to leave unchanged.</param>
+    /// <param name="character">The character to set, or <c>null</c> to leave unchanged.</param>
+    /// <param name="characterColor">The character color to set, or <c>null</c> to leave unchanged.</param>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown if the position is outside the frame bounds.</exception>
     public void Contribute(Renderer renderer, VectorInt pos, Color? color = null, char? character = null, Color? characterColor = null)
     {
         ArgumentNullException.ThrowIfNull(renderer);

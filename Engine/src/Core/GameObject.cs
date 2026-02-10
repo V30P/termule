@@ -3,7 +3,7 @@ namespace Termule.Core;
 using global::System.Collections;
 
 /// <summary>
-/// A <see cref="Component"/> that groups other components.
+/// Component that groups other components.
 /// </summary>
 public class GameObject : Component, IEnumerable<Component>
 {
@@ -21,9 +21,9 @@ public class GameObject : Component, IEnumerable<Component>
     }
 
     /// <summary>
-    /// Adds the <see cref="Component"/> to this <see cref="GameObject"/>.
+    /// Adds the provided <paramref name="component"/> to this game object.
     /// </summary>
-    /// <param name="component">The <see cref="Component"/> to add.</param>
+    /// <param name="component">The component to add.</param>
     public void Add(Component component)
     {
         this.AddComponent(component);
@@ -51,10 +51,12 @@ public class GameObject : Component, IEnumerable<Component>
     }
 
     /// <summary>
-    /// Removes the <see cref="Component"/> from this <see cref="GameObject"/>.
+    /// Removes the provided <paramref name="component"/> from this game object.
     /// </summary>
-    /// <param name="component">The <see cref="Component"/> to remove.</param>
-    /// <exception cref="InvalidOperationException">Thrown if the provided component is not part of this GameObject.</exception>
+    /// <param name="component">The component to remove.</param>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown if the provided <paramref name="component"/> is not part of this game object.
+    /// </exception>
     public void Remove(Component component)
     {
         ArgumentNullException.ThrowIfNull(component);
@@ -78,10 +80,10 @@ public class GameObject : Component, IEnumerable<Component>
     }
 
     /// <summary>
-    /// Gets all Components of type <typeparamref name="TComponent"/>.
+    /// Gets all components of type <typeparamref name="TComponent"/>.
     /// </summary>
-    /// <typeparam name="TComponent">The type of component to look for. </typeparam>
-    /// <returns> The collection of all matching components. </returns>
+    /// <typeparam name="TComponent">The type of component to look for.</typeparam>
+    /// <returns>The collection of all matching components.</returns>
     public IEnumerable<TComponent> GetAll<TComponent>()
         where TComponent : Component
     {
@@ -90,10 +92,10 @@ public class GameObject : Component, IEnumerable<Component>
     }
 
     /// <summary>
-    /// Gets a Component  of type <typeparamref name="TComponent"/>.
+    /// Gets a component of type <typeparamref name="TComponent"/>.
     /// </summary>
-    /// <typeparam name="TComponent"> The type of component to look for. </typeparam>
-    /// <returns> The component if one is found or null. </returns>
+    /// <typeparam name="TComponent">The type of component to look for.</typeparam>
+    /// <returns>The component if one is found or <c>null</c>.</returns>
     public TComponent Get<TComponent>()
         where TComponent : Component
     {

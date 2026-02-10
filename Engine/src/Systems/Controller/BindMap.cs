@@ -3,7 +3,7 @@ namespace Termule.Systems.Controller;
 using System.Collections;
 
 /// <summary>
-/// A collection to hold Binds for a controller.
+/// Collection to hold <see cref="Bind"/>s for a <see cref="Systems.Controller.Controller"/>.
 /// </summary>
 public sealed class BindMap : IEnumerable<KeyValuePair<string, Bind>>
 {
@@ -25,10 +25,10 @@ public sealed class BindMap : IEnumerable<KeyValuePair<string, Bind>>
     }
 
     /// <summary>
-    /// Gets or sets the Bind associated with <paramref name="name"/>.
+    /// Gets or sets the bind associated with the provided <paramref name="name"/>.
     /// </summary>
     /// <param name="name">The name of the bind to look for.</param>
-    /// <returns>The bind associated with <paramref name="name"/>.</returns>
+    /// <returns>The bind with name <paramref name="name"/>.</returns>
     public Bind this[string name]
     {
         get => this.binds[name];
@@ -42,7 +42,7 @@ public sealed class BindMap : IEnumerable<KeyValuePair<string, Bind>>
     }
 
     /// <summary>
-    /// Add a Bind with provided name.
+    /// Add a <see cref="Bind"/> with provided <paramref name="name"/>.
     /// </summary>
     /// <param name="name">The name to add the bind under.</param>
     /// <param name="bind">The bind to add.</param>
@@ -53,9 +53,9 @@ public sealed class BindMap : IEnumerable<KeyValuePair<string, Bind>>
     }
 
     /// <summary>
-    /// Remove the Bind with provided name.
+    /// Remove the <see cref="Bind"/> with provided <paramref name="name"/>.
     /// </summary>
-    /// <param name="name">The name to remove the bind for.</param>
+    /// <param name="name">The name to remove the <see cref="Bind"/> for.</param>
     public void Remove(string name)
     {
         Bind bind = this.binds[name];

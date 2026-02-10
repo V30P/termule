@@ -1,7 +1,7 @@
 namespace Termule.Types;
 
 /// <summary>
-/// .
+/// Content that represents textual content.
 /// </summary>
 public sealed class Text : Content
 {
@@ -14,7 +14,7 @@ public sealed class Text : Content
     }
 
     /// <summary>
-    /// Gets or sets the string that this Content should show.
+    /// Gets or sets the string displayed by this Text.
     /// </summary>
     public string Value
     {
@@ -57,7 +57,7 @@ public sealed class Text : Content
     }
 
     /// <summary>
-    /// Gets or sets the color that this Text's characters should be.
+    /// Gets or sets the color for this text's characters.
     /// </summary>
     public Color Color
     {

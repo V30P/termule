@@ -1,7 +1,7 @@
 namespace Termule.Systems.Controller.Keyboard;
 
 /// <summary>
-/// A binds whose values is all of the characters that have been typed in the last frame.
+/// Bind whose value is all of the characters that have been typed in the last tick.
 /// </summary>
 public sealed class TypingBind : KeyboardBind
 {

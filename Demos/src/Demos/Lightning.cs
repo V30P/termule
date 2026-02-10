@@ -22,7 +22,7 @@ internal class Lightning : Demo
             });
     }
 
-    protected override void Update()
+    protected override void Tick()
     {
         cooldown -= Game.DeltaTime;
         if (cooldown < 0)

@@ -5,7 +5,7 @@ using Systems.RenderSystem;
 using Types;
 
 /// <summary>
-/// A <see cref="Component"/> that contributes to Frames produced by the <see cref="RenderSystem"/>.
+/// Base component class for contributing to frames produced by the render system.
 /// </summary>
 public abstract class Renderer : Component
 {
@@ -19,7 +19,8 @@ public abstract class Renderer : Component
     }
 
     /// <summary>
-    /// Gets or sets the <see cref="Layer"/> to render in. If set to <c>null</c>, the default <see cref="Layer"/> will be used.
+    /// Gets or sets the render <see cref="Layer"/>.
+    /// If set to <c>null</c>, the default <see cref="Layer"/> will be used.
     /// </summary>
     public Layer Layer
     {
@@ -38,9 +39,9 @@ public abstract class Renderer : Component
     }
 
     /// <summary>
-    /// Renders to the provided <see cref="Frame"/> via contributions.
+    /// Renders to the provided <see cref="Frame"/> by contributing <see cref="Cell"/> changes.
     /// </summary>
-    /// <param name="frame">The <see cref="Frame"/> to contribute to.</param>
+    /// <param name="frame">The target frame to contribute to.</param>
     /// <param name="viewOrigin">The origin of the view in game space.</param>
     protected internal abstract void Render(Frame frame, Vector viewOrigin);
 }

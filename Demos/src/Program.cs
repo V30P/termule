@@ -23,7 +23,7 @@ internal static class Program
         {
             Console.WriteLine(
                 """
-                Usage: tm-demo <DEMO>
+                Usage: tm-demo <demo>
                 Demos:
                 """);
 
@@ -43,7 +43,7 @@ internal static class Program
             game.Systems.Install(demo);
 
 #if DEBUG
-            FPSIndicator fpsIndicator = [];
+            TPSIndicator fpsIndicator = [];
             fpsIndicator.Get<Renderer>().Layer = UILayer;
             game.Root.Add(fpsIndicator);
 #endif

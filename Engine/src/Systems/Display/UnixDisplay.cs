@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 
 /// <summary>
-/// A <see cref="Display"/> implementation for use on unix-like operating systems.
+/// Display implementation for Unix-like operating systems.
 /// </summary>
 public sealed partial class UnixDisplay : TerminalDisplay
 {
@@ -36,7 +36,7 @@ public sealed partial class UnixDisplay : TerminalDisplay
     /// <summary>
     /// Parses SGR events to determine mouse position.
     /// </summary>
-    protected override void Update()
+    protected override void Tick()
     {
         // Get everything in STDIN
         byte[] buffer = new byte[1024];

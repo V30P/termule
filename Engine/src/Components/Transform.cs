@@ -4,7 +4,7 @@ using Core;
 using Types;
 
 /// <summary>
-/// A <see cref="Component"/> that defines position and allows local positioning relative to parent.
+/// Component that stores a position and handles local positioning relative to parent.
 /// </summary>
 public sealed class Transform : Component
 {

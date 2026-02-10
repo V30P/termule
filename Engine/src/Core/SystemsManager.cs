@@ -6,7 +6,7 @@ using Systems.RenderSystem;
 using Systems.ResourceLoader;
 
 /// <summary>
-/// Manages hosted systems for the game and provides configuration helpers to install, uninstall and retrieve systems.
+/// Manages systems and provides an interface to install, uninstall and retrieve systems during <see cref="Game"/> configuration.
 /// </summary>
 public class SystemManager : GameElement, IHostedSystemManager, IConfigurableSystemManager
 {
@@ -20,11 +20,11 @@ public class SystemManager : GameElement, IHostedSystemManager, IConfigurableSys
         }
     }
 
-    void IHostedSystemManager.Update()
+    void IHostedSystemManager.Tick()
     {
         foreach (IHostedSystem system in this.systems.Values)
         {
-            system.Update();
+            system.Tick();
         }
     }
 
@@ -73,7 +73,7 @@ public class SystemManager : GameElement, IHostedSystemManager, IConfigurableSys
     }
 
     /// <summary>
-    /// Gets the installed system of the specified type, or <c>null</c> if none is installed.
+    /// Gets the installed system of type <typeparamref name="TSystem"/>, or <c>null</c> if none is installed.
     /// </summary>
     /// <typeparam name="TSystem">The type of system to retrieve.</typeparam>
     /// <returns>The installed system or <c>null</c>.</returns>
@@ -97,15 +97,15 @@ public class SystemManager : GameElement, IHostedSystemManager, IConfigurableSys
 }
 
 /// <summary>
-/// Provides configuration operations for installing, uninstalling and retrieving <see cref="System"/> instances.
+/// Provides configuration operations for installing, uninstalling and retrieving <see cref="System"/>s.
 /// </summary>
 public interface IConfigurableSystemManager
 {
     /// <summary>
-    /// Installs the given system, replacing any previously installed implementation of the same runtime type.
+    /// Installs the given <paramref name="system"/>, replacing any previously installed implementation of the same system.
     /// </summary>
     /// <param name="system">The system instance to install.</param>
-    /// <typeparam name="TSystem">The compile-time type of the system.</typeparam>
+    /// <typeparam name="TSystem">The type of the system to install.</typeparam>
     void Install<TSystem>(TSystem system)
         where TSystem : System;
 
@@ -117,9 +117,9 @@ public interface IConfigurableSystemManager
         where TSystem : System;
 
     /// <summary>
-    /// Gets the installed system of the specified type, or <c>null</c> if none is installed.
+    /// Gets the installed <see cref="System"/> of the specified type, or <c>null</c> if none is installed.
     /// </summary>
-    /// <typeparam name="TSystem">The type of system to retrieve.</typeparam>
+    /// <typeparam name="TSystem">The type of system to look for.</typeparam>
     /// <returns>The installed system or <c>null</c>.</returns>
     TSystem Get<TSystem>()
         where TSystem : System;
@@ -134,7 +134,7 @@ internal interface IHostedSystemManager
 {
     void Start();
 
-    void Update();
+    void Tick();
 
     void Stop();
 }

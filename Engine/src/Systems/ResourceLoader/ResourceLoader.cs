@@ -3,7 +3,7 @@ namespace Termule.Systems.ResourceLoader;
 using System.Reflection;
 
 /// <summary>
-/// The <see cref="System"/> responsible for loading resources from disk.
+/// System responsible for loading resources from disk.
 /// </summary>
 public sealed class ResourceLoader : Core.System
 {
@@ -18,7 +18,7 @@ public sealed class ResourceLoader : Core.System
     /// <returns>The loaded resource.</returns>
     /// <exception cref="FileNotFoundException">Thrown if the resource does not exist at the provided path.</exception>
     /// <exception cref="ResourceLoadException">Thrown if the resource is found, but fails to load.</exception>
-    /// <remarks>If no extension is provided in the path, the default extension set in the Resource class will be used.</remarks>
+    /// <remarks>If no extension is provided in the path, the default extension set by the resource will be used.</remarks>
     public TResource Load<TResource>(string path)
     where TResource : IResource
     {

@@ -4,8 +4,7 @@ namespace Termule.Systems.ResourceLoader;
 /// Marker base interface for types that represent loadable resources.
 /// </summary>
 /// <remarks>
-/// This interface is used internally by the <see cref="ResourceLoader"/> cache.
-/// Consumers should typically implement <see cref="IResource"/> for concrete resources.
+/// Do not implement this directly, instead implement <see cref="IResource"/>.
 /// </remarks>
 public interface IResourceBase
 {

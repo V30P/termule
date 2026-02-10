@@ -24,22 +24,22 @@ public abstract class GameElement : IHostedGameElement
     internal uint ElementID { get; private set; }
 
     /// <summary>
-    /// Gets the <see cref="Game"/> that this element is a part of.
+    /// Gets the game that this element is a part of.
     /// </summary>
     protected Game Game { get; private set; }
 
     /// <summary>
-    /// Gets a value indicating whether this element is part of a Game.
+    /// Gets a value indicating whether this element is part of a game.
     /// </summary>
     protected bool IsRegistered => this.Game != null;
 
     /// <summary>
-    /// Gets the root GameObject of this element's Game.
+    /// Gets the root of this element's game.
     /// </summary>
     protected GameObject Root => this.Game?.Root;
 
     /// <summary>
-    /// Gets the SystemManager of this element's Game.
+    /// Gets the <see cref="SystemManager"/> of this element's game.
     /// </summary>
     protected SystemManager Systems => this.Game?.Systems;
 
@@ -55,11 +55,11 @@ public abstract class GameElement : IHostedGameElement
     }
 
     /// <summary>
-    /// Tries to get a System of type <typeparamref name="TSystem"/> from the containing Game.
+    /// Tries to get a system of type <typeparamref name="TSystem"/> from the containing game.
     /// </summary>
-    /// <typeparam name="TSystem"> The type of System to look for. </typeparam>
-    /// <returns> The Game's instance of <typeparamref name="TSystem"/>. </returns>
-    /// <exception cref="MissingSystemException{TSystem}"> Thrown if no matching System is found.</exception>
+    /// <typeparam name="TSystem">The type of system to look for.</typeparam>
+    /// <returns>The games's instance of <typeparamref name="TSystem"/>.</returns>
+    /// <exception cref="MissingSystemException{TComponent}">Thrown if no matching system is found.</exception>
     protected TSystem GetRequiredSystem<TSystem>()
         where TSystem : System
     {

@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 using Systems.ResourceLoader;
 
 /// <summary>
-/// A rectangular collection of terminal cells.
+/// Rectangular collection of terminal cells.
 /// </summary>
 public class Content : IResource
 {
@@ -38,14 +38,13 @@ public class Content : IResource
     static string IResource.FileExtension => ".tmc";
 
     /// <summary>
-    /// Gets the size of this <see cref="Content"/>.
+    /// Gets the size of this content.
     /// </summary>
-    /// <value>A <see cref="VectorInt"/> representing width (X) and height (Y).</value>
     [JsonIgnore]
     public VectorInt Size => (this.Cells.GetLength(0), this.Cells.GetLength(1));
 
     /// <summary>
-    /// Gets or sets the array of <see cref="Cell"/>s that make up this <see cref="Content"/>.
+    /// Gets or sets the array of <see cref="Cell"/>s that make up this content.
     /// </summary>
     [JsonInclude]
     protected Cell[,] Cells { get; set; }
@@ -56,12 +55,12 @@ public class Content : IResource
     }
 
     /// <summary>
-    /// Gets the <see cref="Cell"/> at position (<paramref name="x"/>, <paramref name="y"/>).
+    /// Gets the cell at position (<paramref name="x"/>, <paramref name="y"/>).
     /// </summary>
     /// <param name="x">The x position of the cell.</param>
     /// <param name="y">The y position of the cell.</param>
-    /// <returns>The <see cref="Cell"/> at the given position.</returns>
-    /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="x"/> or <paramref name="y"/> is outside of the bounds of the <see cref="Content"/>.</exception>
+    /// <returns>The cell at the given position.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="x"/> or <paramref name="y"/> is outside the bounds of the content.</exception>
     protected internal Cell At(int x, int y)
     {
         if (x < 0 || x >= this.Size.X)
@@ -77,11 +76,11 @@ public class Content : IResource
     }
 
     /// <summary>
-    /// Resizes this <see cref="Content"/> to the specified dimensions.
+    /// Resizes this content to the specified dimensions.
     /// </summary>
     /// <param name="width">The new width.</param>
     /// <param name="height">The new height.</param>
-    /// <exception cref="ArgumentOutOfRangeException"> Thrown if width or height are negative. </exception>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="width"/> or <paramref name="height"/> are negative.</exception>
     protected void Resize(int width, int height)
     {
         if (width < 0)
@@ -106,7 +105,7 @@ public class Content : IResource
 }
 
 /// <summary>
-/// A single cell on a terminal.
+/// Single cell on a terminal.
 /// </summary>
 /// <param name="Color">The background color of the cell.</param>
 /// <param name="Char">The character in the cell.</param>

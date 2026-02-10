@@ -45,7 +45,7 @@ internal class Shooter : Demo
             });
     }
 
-    protected override void Update()
+    protected override void Tick()
     {
         switch (state)
         {
@@ -157,7 +157,7 @@ internal class Shooter : Demo
         {
             hp--;
             hitColorTimeRemaining = HitColorLength;
-            if (hp < 0)
+            if (hp == 0)
             {
                 Destroy();
             }

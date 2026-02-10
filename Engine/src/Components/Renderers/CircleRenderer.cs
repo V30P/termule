@@ -4,12 +4,12 @@ using Systems.RenderSystem;
 using Types;
 
 /// <summary>
-/// A <see cref="TransformRenderer"/> implementation to render a circle.
+/// Renders a circle at the local <see cref="Transform"/>'s position.
 /// </summary>
 public sealed class CircleRenderer : TransformRenderer
 {
     /// <summary>
-    /// Gets or sets the color to render the circle.
+    /// Gets or sets the color to render the circle with.
     /// </summary>
     public Color Color { get; set; }
 
@@ -62,13 +62,6 @@ public sealed class CircleRenderer : TransformRenderer
         }
     }
 
-    /// <summary>
-    /// Computes the integer positions that form a circle of the given radius (centered at the origin).
-    /// If <paramref name="filled"/> is true the interior of the circle is included.
-    /// </summary>
-    /// <param name="radius">The circle radius.</param>
-    /// <param name="filled">Whether interior points should be included.</param>
-    /// <returns>A set of integer positions that form the circle (and interior when <paramref name="filled"/> is true).</returns>
     private static HashSet<VectorInt> GetCirclePositions(float radius, bool filled)
     {
         HashSet<VectorInt> positions = [];
@@ -102,11 +95,6 @@ public sealed class CircleRenderer : TransformRenderer
         return positions;
     }
 
-    /// <summary>
-    /// Generates pixel positions for one octant of a circle with the given radius.
-    /// </summary>
-    /// <param name="radius">The radius for the octant computation.</param>
-    /// <returns>A list of integer positions for the octant.</returns>
     private static List<VectorInt> MidpointCircle(int radius)
     {
         List<VectorInt> positions = [];
@@ -122,12 +110,6 @@ public sealed class CircleRenderer : TransformRenderer
         return positions;
     }
 
-    /// <summary>
-    /// Expands horizontally to make the shape double-wide, adjusting by the renderer's center subpixel fraction.
-    /// </summary>
-    /// <param name="positions">The original positions to widen.</param>
-    /// <param name="center">The center to use when deciding horizontal offset.</param>
-    /// <returns>A new list of widened integer positions.</returns>
     private static List<VectorInt> DoubleUp(IEnumerable<VectorInt> positions, Vector center)
     {
         List<VectorInt> widenedPositions = [];

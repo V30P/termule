@@ -1,7 +1,7 @@
 namespace Termule.Systems.Controller;
 
 /// <summary>
-/// The non-generic base class for Controllers.
+/// Non-generic base system class for controllers.
 /// </summary>
 public abstract class Controller : Core.System
 {
@@ -10,7 +10,7 @@ public abstract class Controller : Core.System
     }
 
     /// <summary>
-    /// Gets or Sets the BindMap that this controller should use.
+    /// Gets or sets the <see cref="BindMap"/> that this controller should use.
     /// </summary>
     public BindMap Binds
     {
@@ -26,16 +26,16 @@ public abstract class Controller : Core.System
     = [];
 
     /// <summary>
-    /// Gets or sets the values retrieved from Binds last frame.
+    /// Gets or sets the values retrieved from <see cref="Bind"/>s last tick.
     /// </summary>
     protected Dictionary<string, object> Values { get; set; } = [];
 
     /// <summary>
-    /// Gets the value provided by the Bind of given name last frame.
+    /// Gets the value of the bind with the given name from the last tick.
     /// </summary>
-    /// <typeparam name="TValue"> The type of value to get. </typeparam>
+    /// <typeparam name="TValue">The type of value to get.</typeparam>
     /// <param name="name">The name of the bind to get the value for.</param>
-    /// <returns> The value of the specified Bind. </returns>
+    /// <returns> The value of the specified bind. </returns>
     public TValue Get<TValue>(string name)
     {
         return (TValue)this.Values[name];
@@ -43,9 +43,9 @@ public abstract class Controller : Core.System
 }
 
 /// <summary>
-/// The base <see cref="System"/> class for Controllers that manage <see cref="Bind"/>s.
+/// Generic base system class that collects the values from <see cref="Bind"/>s.
 /// </summary>
-/// <typeparam name="TBind"> The type of Bind this Controller uses. </typeparam>
+/// <typeparam name="TBind">The type of bind this controller uses.</typeparam>
 public abstract class Controller<TBind> : Controller
     where TBind : Bind
 {
@@ -54,9 +54,9 @@ public abstract class Controller<TBind> : Controller
     }
 
     /// <summary>
-    /// Updates the value associated with each Bind.
+    /// Updates the value associated with each <see cref="Bind"/>.
     /// </summary>
-    protected override void Update()
+    protected override void Tick()
     {
         this.Values = [];
         foreach (KeyValuePair<string, Bind> bindPair in this.Binds)

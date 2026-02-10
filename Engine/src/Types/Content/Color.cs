@@ -3,7 +3,7 @@ namespace Termule.Types;
 using System.Text.Json.Serialization;
 
 /// <summary>
-/// A Color that is able to be rendered by Terminals.
+/// Color that can be rendered by terminals.
 /// </summary>
 public readonly record struct Color
 {
@@ -54,9 +54,9 @@ public readonly record struct Color
     }
 
     /// <summary>
-    /// Creates a Color from a BasicColor.
+    /// Creates a color from a basic color.
     /// </summary>
-    /// <param name="b">The BasicColor to use.</param>
+    /// <param name="b">The basic color to use.</param>
     public static implicit operator Color(BasicColor b)
     {
         return new Color(b);
@@ -64,22 +64,22 @@ public readonly record struct Color
 }
 
 /// <summary>
-/// A full RGB color.
+/// Full RGB color.
 /// </summary>
 public readonly record struct FullColor
 {
     /// <summary>
-    /// The red component.
+    /// Red component.
     /// </summary>
     public readonly int R;
 
     /// <summary>
-    /// The green component.
+    /// Green component.
     /// </summary>
     public readonly int G;
 
     /// <summary>
-    /// The blue component.
+    /// Blue component.
     /// </summary>
     public readonly int B;
 
@@ -105,7 +105,7 @@ public readonly record struct FullColor
 }
 
 /// <summary>
-/// The 16 basic color values supported on even older terminals.
+/// Basic color values supported on older terminals.
 /// </summary>
 public enum BasicColor
 {

@@ -6,7 +6,7 @@ using Systems.RenderSystem;
 using Systems.Display;
 
 /// <summary>
-/// A <see cref="Component"/> that gets rendered <see cref="Frame"/>s and draws them to the <see cref="Display"/>.
+/// Component that gets rendered <see cref="Frame"/>s from the <see cref="RenderSystem"/> and draws them to the <see cref="Display"/>.
 /// </summary>
 public sealed class Camera : Component
 {
@@ -23,17 +23,17 @@ public sealed class Camera : Component
     }
 
     /// <summary>
-    /// Gets or sets a value indicating whether the Camera should draw <see cref="Frame"/>s to the <see cref="Display"/>.
+    /// Gets or sets a value indicating whether the Camera should draw to the <see cref="Display"/> every tick.
     /// </summary>
     public bool Draw { get; set; } = true;
 
     /// <summary>
-    /// Gets or sets a value indicating whether the Camera should render with its view size matching the size of the <see cref="Display"/>.
+    /// Gets or sets a value indicating whether the view size should match the <see cref="Display"/> size.
     /// </summary>
     public bool MatchDisplaySize { get; set; } = false;
 
     /// <summary>
-    /// Gets or sets the size of view that the Camera should render.
+    /// Gets or sets the view size that the camera should render.
     /// </summary>
     public VectorInt ViewSize
     {
@@ -53,7 +53,7 @@ public sealed class Camera : Component
     = (0, 0);
 
     /// <summary>
-    /// Gets or sets a color that should fill the background <see cref="Content"/> for rendered <see cref="Frame"/>s.
+    /// Gets or sets a color that should fill the background of rendered <see cref="Frame"/>s.
     /// </summary>
     public Color BackgroundColor { get; set; }
 
@@ -83,11 +83,11 @@ public sealed class Camera : Component
     = new(0, 0);
 
     /// <summary>
-    /// Gets all renderers that contributed to any cell also contributed by the specified renderer.
+    /// Gets all renderers that contributed to the same cell as the specified <paramref name="renderer"/>.
     /// </summary>
-    /// <param name="renderer">The renderer whose overlapping contributors to inspect.</param>
-    /// <returns>An array of renderers that overlapped the specified renderer's contributions; empty if none or if no frame has been rendered yet.</returns>
-    public Renderer[] GetOverlappers(Renderer renderer)
+    /// <param name="renderer">The renderer to check for overlaps.</param>
+    /// <returns>Renderers that overlapped with the specified <paramref name="renderer"/>, or empty if none found.</returns>
+    public IEnumerable<Renderer> GetOverlappers(Renderer renderer)
     {
         if (this.lastFrame == null)
         {
@@ -103,14 +103,14 @@ public sealed class Camera : Component
             }
         }
 
-        return [.. overlappers];
+        return overlappers;
     }
 
     /// <summary>
-    /// Converts a position from display space to game space relative to this camera.
+    /// Converts a position from display-space to game-space relative to this camera.
     /// </summary>
-    /// <param name="pos">The position in display coordinates.</param>
-    /// <returns>The corresponding position in game coordinates.</returns>
+    /// <param name="pos">The position in display-space.</param>
+    /// <returns>The corresponding position in game-space.</returns>
     public Vector DisplayToGamePos(Vector pos)
     {
         Vector relativeDisplayPos = pos - ((Vector)this.ViewSize / 2f);
@@ -119,10 +119,10 @@ public sealed class Camera : Component
     }
 
     /// <summary>
-    /// Converts a position from game space to display space relative to this camera.
+    /// Converts a position from game-space to display-space relative to this camera.
     /// </summary>
-    /// <param name="pos">The position in game coordinates.</param>
-    /// <returns>The corresponding position in display coordinates.</returns>
+    /// <param name="pos">The position in game-space.</param>
+    /// <returns>The corresponding position in display-space.</returns>
     public Vector GameToDisplayPos(Vector pos)
     {
         Vector relativePos = pos - this.transform.Pos;
@@ -130,10 +130,6 @@ public sealed class Camera : Component
         return relativeDisplayPos - ((Vector)this.ViewSize / 2f);
     }
 
-    /// <summary>
-    /// Renders the camera's view into a frame and updates <see cref="lastFrame"/>.
-    /// If <see cref="Draw"/> is true the frame is also drawn to the <see cref="Display"/> system.
-    /// </summary>
     private void RenderView()
     {
         Vector viewOrigin = this.transform.Pos + (new Vector(-this.ViewSize.X, this.ViewSize.Y) / 2f);

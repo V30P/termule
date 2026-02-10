@@ -3,12 +3,12 @@ namespace Termule.Systems.Controller.Keyboard;
 using Types;
 
 /// <summary>
-/// A <see cref="Bind"/> whose value is a <see cref="Vector"/> based on the directions associated with the pressed buttons.
+/// Bind that returns a vector based on the directions associated with the pressed buttons.
 /// </summary>
-/// <param name="posY">The target <see cref="Button"/> for the positive Y direction.</param>
-/// <param name="negX">The target <see cref="Button"/> for the negative X direction.</param>
-/// <param name="negY">The target <see cref="Button"/> for the negative Y direction.</param>
-/// <param name="posX">The target <see cref="Button"/> for the positive X direction.</param>
+/// <param name="posY">The button for the positive Y direction.</param>
+/// <param name="negX">The button for the negative X direction.</param>
+/// <param name="negY">The button for the negative Y direction.</param>
+/// <param name="posX">The button for the positive X direction.</param>
 public sealed class VectorBind(Button posY, Button negX, Button negY, Button posX) : KeyboardBind
 {
     private static readonly Dictionary<int, Vector> DirectionVectors = new()

@@ -1,7 +1,7 @@
 namespace Termule.Types;
 
 /// <summary>
-/// A two-dimensional integer vector.
+/// Two-dimensional integer vector.
 /// </summary>
 /// <param name="X">The X component of the vector.</param>
 /// <param name="Y">The Y component of the vector.</param>
@@ -29,54 +29,54 @@ public readonly record struct VectorInt(int X = 0, int Y = 0)
     }
 
     /// <summary>
-    /// Adds two <see cref="VectorInt"/> values.
+    /// Adds two integer vectors.
     /// </summary>
-    /// <param name="v1">The first <see cref="VectorInt"/>.</param>
-    /// <param name="v2">The second <see cref="VectorInt"/>.</param>
-    /// <returns>The sum as a <see cref="VectorInt"/>.</returns>
+    /// <param name="v1">The first vector.</param>
+    /// <param name="v2">The second vector.</param>
+    /// <returns>The sum as an integer vector.</returns>
     public static VectorInt operator +(VectorInt v1, VectorInt v2)
     {
         return new(v1.X + v2.X, v1.Y + v2.Y);
     }
 
     /// <summary>
-    /// Subtracts one <see cref="VectorInt"/> from another.
+    /// Subtracts one integer vector from another.
     /// </summary>
-    /// <param name="v1">The first <see cref="VectorInt"/>.</param>
-    /// <param name="v2">The second <see cref="VectorInt"/>.</param>
-    /// <returns>The difference as a <see cref="VectorInt"/>.</returns>
+    /// <param name="v1">The first vector.</param>
+    /// <param name="v2">The second vector.</param>
+    /// <returns>The difference as an integer vector.</returns>
     public static VectorInt operator -(VectorInt v1, VectorInt v2)
     {
         return new(v1.X - v2.X, v1.Y - v2.Y);
     }
 
     /// <summary>
-    /// Multiplies a <see cref="VectorInt"/> by a scalar, returning a <see cref="Vector"/>.
+    /// Multiplies an integer vector by a scalar, returning a <see cref="Vector"/>.
     /// </summary>
-    /// <param name="v">The <see cref="VectorInt"/> to scale.</param>
+    /// <param name="v">The integer vector to scale.</param>
     /// <param name="f">The scalar multiplier.</param>
-    /// <returns>The scaled <see cref="Vector"/>.</returns>
+    /// <returns>The scaled vector.</returns>
     public static Vector operator *(VectorInt v, float f)
     {
         return new Vector(v.X * f, v.Y * f);
     }
 
     /// <summary>
-    /// Divides a <see cref="VectorInt"/> by an integer scalar, returning a <see cref="Vector"/>.
+    /// Divides an integer vector by a scalar, returning a <see cref="Vector"/>.
     /// </summary>
-    /// <param name="v">The <see cref="VectorInt"/> to divide.</param>
+    /// <param name="v">The integer vector to divide.</param>
     /// <param name="f">The scalar divisor.</param>
-    /// <returns>The resulting <see cref="Vector"/>.</returns>
+    /// <returns>The resulting vector.</returns>
     public static Vector operator /(VectorInt v, int f)
     {
         return new Vector(v.X / f, v.Y / f);
     }
 
     /// <summary>
-    /// Negates a <see cref="VectorInt"/>.
+    /// Negates an integer vector.
     /// </summary>
-    /// <param name="v">The <see cref="VectorInt"/> to negate.</param>
-    /// <returns>The negated <see cref="VectorInt"/>.</returns>
+    /// <param name="v">The vector to negate.</param>
+    /// <returns>The negated integer vector.</returns>
     public static VectorInt operator -(VectorInt v)
     {
         return (v.X * -1, v.Y * -1);

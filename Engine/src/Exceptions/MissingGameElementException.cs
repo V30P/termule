@@ -7,10 +7,6 @@ namespace Termule.Core;
 public abstract class MissingGameElementException<TMissing> : Exception
     where TMissing : GameElement
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="MissingGameElementException{TMissing}"/> class.
-    /// </summary>
-    /// <param name="dependent">The <see cref="GameElement"/> that required the missing element.</param>
     private protected MissingGameElementException(GameElement dependent)
     {
         this.Dependent = dependent;
@@ -28,9 +24,9 @@ public abstract class MissingGameElementException<TMissing> : Exception
 }
 
 /// <summary>
-/// The exception that is thrown when a Component is missing.
+/// Exception that is thrown when a required <see cref="Component"/> is missing.
 /// </summary>
-/// <typeparam name="TMissing"> The type of Component that is missing. </typeparam>
+/// <typeparam name="TMissing">The type of <see cref="Component"/> that is missing.</typeparam>
 public class MissingComponentException<TMissing> : MissingGameElementException<TMissing>
     where TMissing : Component
 {
@@ -44,9 +40,9 @@ public class MissingComponentException<TMissing> : MissingGameElementException<T
 }
 
 /// <summary>
-/// The exception that is thrown when a <see cref="System"/> is missing.
+/// Exception that is thrown when a required <see cref="System"/> is missing.
 /// </summary>
-/// <typeparam name="TMissing"> The type of <see cref="System"/> that is missing. </typeparam>
+/// <typeparam name="TMissing">The type of <see cref="System"/> that is missing.</typeparam>
 public class MissingSystemException<TMissing> : MissingGameElementException<TMissing>
     where TMissing : System
 {

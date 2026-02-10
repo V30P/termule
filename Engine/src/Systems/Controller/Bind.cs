@@ -1,7 +1,7 @@
 namespace Termule.Systems.Controller;
 
 /// <summary>
-/// The base class for Binds.
+/// Non-generic base class for binds.
 /// </summary>
 public abstract class Bind
 {
@@ -15,9 +15,9 @@ public abstract class Bind
 }
 
 /// <summary>
-/// The base class for Binds that live on a host Controller <see cref="Controller"/> and convert user input to usable values.
+/// Generic base class that lives on a host controller and convert user input to usable values.
 /// </summary>
-/// <typeparam name="TController"> The required host Controller type. </typeparam>
+/// <typeparam name="TController">The controller type this bind can be used in.</typeparam>
 public abstract class Bind<TController> : Bind
     where TController : Controller
 {

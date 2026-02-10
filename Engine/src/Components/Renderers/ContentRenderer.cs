@@ -5,10 +5,11 @@ using Systems.RenderSystem;
 using Types;
 
 /// <summary>
-/// A <see cref="TransformRenderer"/> implementation to render <see cref="Content"/> instances.
+/// Renders a <see cref="Content"/> instance at the local <see cref="Transform"/>'s position.
 /// </summary>
 /// <typeparam name="TContent">
-/// The type of <see cref="Content"/> to render. An instance will be created if a parameterless constructor exists.
+/// The type of content to render.
+/// An instance will be created automatically if a parameterless constructor exists.
 /// </typeparam>
 public sealed class ContentRenderer<TContent> : TransformRenderer
     where TContent : Content
@@ -35,14 +36,9 @@ public sealed class ContentRenderer<TContent> : TransformRenderer
     public bool Centered { get; set; }
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
-    protected sealed override Vector Offset => this.Centered && this.Content != null ? -(Vector)this.Content.Size / 2 : (0, 0);
+    protected override Vector Offset => this.Centered && this.Content != null ? -(Vector)this.Content.Size / 2 : (0, 0);
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 
-    /// <summary>
-    /// Renders <see cref="Content"/> into the provided <see cref="Frame"/> starting at <paramref name="framespacePos"/>.
-    /// </summary>
-    /// <param name="frame">The frame to contribute to.</param>
-    /// <param name="framespacePos">The integer frame-space origin position for the content.</param>
     private protected override void Render(Frame frame, VectorInt framespacePos)
     {
         for (int x = 0; x < this.Content?.Size.X; x++)

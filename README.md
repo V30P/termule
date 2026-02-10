@@ -1,21 +1,21 @@
 # Termule
 
-A terminal-based game engine written in C#/.NET, focusing on extensible architecture and a pure OOP approach.
+A lightweight game engine written in C#/.NET, built for responsive, real-time games in the terminal.
 
 ## Overview
 
-Termule is written in C# on .NET 10.0. Its primary goal is to provide an easy-to-use, extensible API that supports straightforward future expansion. The engine has minimal dependencies, with nearly all systems implemented from scratch.
+Termule is written in C# on .NET 10.0. It is designed similarly to a traditional game engine, with a primary game loop rather than the event driven approach of other console-based engines. This enables the creation of fast, fluid games for terminal environments.
 
-To achieve this extensibility, the core architecture separates runtime behavior into System and Component instances, which live within a configurable Game environment. All engine functionality is built on top of this expandable core architecture.
+The API is designed to be easy-to-use and extensible, with a focus on clean user-side code. The project also relies on minimal dependencies, with nearly all systems implemented from scratch. Most of this from-scratch functionality is built on top of Termule's core System and Component types which neatly organize runtime behavior and data.
 
 ## Features
 
-- Extensible, pure OOP core architecture  
+- Clean, flexible core architecture  
 - Sprite, line, and circle rendering capabilities  
 - Performant terminal display using escape sequences  
 - Keyboard and mouse input (mouse input not currently supported on Windows)  
 - Resource loading system  
-- Clean API with full XML documentation  
+- API fully documented with XML comments
 
 ## Architecture
 
@@ -25,21 +25,21 @@ Termule splits runtime behavior into two major types: `System`s and `Component`s
 
 - Live inside the `Game`'s `SystemManager`  
 - Provide a home for global behavior and data  
-- Can only be installed or swapped before the game runs  
-- Easily accessible by other `System`s and `Component`s  
+- Can only be installed, uninstalled, or swapped before the game runs  
+- Easily accessible by other `System`s or `Component`s  
 
 ### Components
 
 - Live inside the `Game`'s root `GameObject`  
 - Can be created, destroyed, and moved during runtime  
-- Exist within `GameObject`s, allowing for relative behavior  
+- Grouped by `GameObject`s to enable collaborative behavior
 - Enforce composition over inheritance  
 
-This architecture allows for modular, yet digestible code and avoids too much behavior living inside components.
+This architecture allows for modular, yet digestible code and avoids the classic problem of too much behavior living in components.
 
 An example `Game` structure:
 
-```text
+```
 Game
  ├── SystemManager
  │    ├── RenderSystem
@@ -56,9 +56,11 @@ Game
 
 ## Demos
 
-For examples of what’s possible with Termule, see the demo project's README [here](./Demos/README.md).  
+For examples of what’s possible with Termule, see the demo project [here](Demos).  
 
-// Gif here
+![shooter demo](Demos/gifs/shooter.gif)
+
+More GIFs can be found in the demo project's [README](Demos/README.md).
 
 ## Getting Started
 
@@ -83,7 +85,7 @@ game.Systems.Install(new MyTimerSystem());
 game.Root.Add(new MyStopperComponent());
 ```
 
-For information about individual elements of the engine, hover over a Termule type or member to see the documentation.
+For information about individual elements of the engine, hover over a Termule type or member to see its documentation.
 
 ## License
 

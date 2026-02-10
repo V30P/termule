@@ -1,7 +1,7 @@
 namespace Termule.Systems.Controller.Keyboard;
 
 /// <summary>
-/// A Bind whose value is true for the first frame where all provided buttons are pressed.
+/// Bind whose value is true for the first tick where all provided buttons are pressed.
 /// </summary>
 /// <param name="buttons">The buttons to target.</param>
 public sealed class ComboBind(HashSet<Button> buttons) : KeyboardBind

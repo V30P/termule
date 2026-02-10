@@ -3,7 +3,7 @@ namespace Termule.Core;
 using global::System.Diagnostics;
 
 /// <summary>
-/// The primary class that contains and manages <see cref="Component"/>s and <see cref="System"/>s.
+/// Central environment that manages <see cref="Component"/>s and <see cref="System"/>s.
 /// Also controls the main game loop.
 /// </summary>
 public sealed class Game : IConfigurableGame
@@ -22,26 +22,26 @@ public sealed class Game : IConfigurableGame
     }
 
     /// <summary>
-    /// Gets the root GameObject.
+    /// Gets the root game object.
     /// </summary>
     public GameObject Root { get; }
 
     GameObject IConfigurableGame.Root => this.Root;
 
     /// <summary>
-    /// Gets the SystemManager.
+    /// Gets the system manager.
     /// </summary>
     public SystemManager Systems { get; }
 
     IConfigurableSystemManager IConfigurableGame.Systems => this.Systems;
 
     /// <summary>
-    /// Gets the length of the last frame in seconds.
+    /// Gets the length of the last game loop iteration in seconds.
     /// </summary>
     public float DeltaTime { get; private set; }
 
     /// <summary>
-    /// Creates a configurable instance of <see cref="Game"/>.
+    /// Creates a configurable <see cref="Game"/> instance.
     /// </summary>
     /// <returns>A new <see cref="Game"/> open for configuration.</returns>
     public static IConfigurableGame Create()
@@ -65,7 +65,7 @@ public sealed class Game : IConfigurableGame
             this.DeltaTime = (float)this.stopwatch.Elapsed.TotalSeconds;
             this.stopwatch.Restart();
 
-            systems.Update();
+            systems.Tick();
             root.Tick();
         }
 #if RELEASE
@@ -80,7 +80,7 @@ public sealed class Game : IConfigurableGame
     }
 
     /// <summary>
-    /// Request the Game to halt the game loop and stop running.
+    /// Request this game to stop the game loop and clean up.
     /// </summary>
     public void Stop()
     {
@@ -111,7 +111,7 @@ public sealed class Game : IConfigurableGame
 public interface IConfigurableGame
 {
     /// <summary>
-    /// Gets the root GameObject.
+    /// Gets the root game object.
     /// </summary>
     GameObject Root { get; }
 
@@ -121,7 +121,7 @@ public interface IConfigurableGame
     IConfigurableSystemManager Systems { get; }
 
     /// <summary>
-    /// Runs the Game.
+    /// Runs the game.
     /// </summary>
     void Run();
 }

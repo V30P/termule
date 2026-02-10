@@ -3,7 +3,7 @@ namespace Termule.Systems.Display;
 using System.Runtime.InteropServices;
 
 /// <summary>
-/// A <see cref="Display"/> implementation for use on Windows.
+/// Display implementation for Windows.
 /// </summary>
 public sealed partial class WindowsDisplay : TerminalDisplay
 {

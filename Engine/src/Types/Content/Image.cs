@@ -1,7 +1,7 @@
 namespace Termule.Types;
 
 /// <summary>
-/// A type of Content with methods for easy modification.
+/// Content with methods for easy modification.
 /// </summary>
 public sealed class Image : Content
 {
@@ -25,7 +25,7 @@ public sealed class Image : Content
     }
 
     /// <summary>
-    /// Gets or sets the <see cref="Cell"/> at (x, y).
+    /// Gets or sets the cell at (x, y).
     /// </summary>
     /// <param name="x">The x position of the cell.</param>
     /// <param name="y">The y position of the cell.</param>

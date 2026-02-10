@@ -7,7 +7,7 @@ namespace Termule.Types;
 /// <param name="Y">The Y component of the vector.</param>
 #pragma warning disable SA1313 // Parameter names should begin with lower-case letter
 public readonly record struct Vector(float X = 0, float Y = 0)
-#pragma warning disable SA1313 // Parameter names should begin with lower-case letter
+#pragma warning restore SA1313 // Parameter names should begin with lower-case letter
 {
     /// <summary>
     /// Gets the magnitude (length) of the vector.
@@ -31,61 +31,61 @@ public readonly record struct Vector(float X = 0, float Y = 0)
     /// <summary>
     /// Creates a <see cref="Vector"/> from a <see cref="VectorInt"/>.
     /// </summary>
-    /// <param name="v">The VectorInt to convert.</param>
+    /// <param name="v">The integer vector to convert.</param>
     public static implicit operator Vector(VectorInt v)
     {
         return new(v.X, v.Y);
     }
 
     /// <summary>
-    /// Adds two <see cref="Vector"/> values.
+    /// Adds two vectors.
     /// </summary>
-    /// <param name="v1">The first <see cref="Vector"/>.</param>
-    /// <param name="v2">The second <see cref="Vector"/>.</param>
-    /// <returns>The sum as a <see cref="Vector"/>.</returns>
+    /// <param name="v1">The first vector.</param>
+    /// <param name="v2">The second vector.</param>
+    /// <returns>The sum as a vector.</returns>
     public static Vector operator +(Vector v1, Vector v2)
     {
         return new(v1.X + v2.X, v1.Y + v2.Y);
     }
 
     /// <summary>
-    /// Subtracts one <see cref="Vector"/> from another.
+    /// Subtracts one vector from another.
     /// </summary>
-    /// <param name="v1">The first <see cref="Vector"/>.</param>
-    /// <param name="v2">The second <see cref="Vector"/>.</param>
-    /// <returns>The difference as a <see cref="Vector"/>.</returns>
+    /// <param name="v1">The first vector.</param>
+    /// <param name="v2">The second vector.</param>
+    /// <returns>The difference as a vector.</returns>
     public static Vector operator -(Vector v1, Vector v2)
     {
         return new(v1.X - v2.X, v1.Y - v2.Y);
     }
 
     /// <summary>
-    /// Multiplies a <see cref="Vector"/> by a scalar.
+    /// Multiplies a vector by a scalar.
     /// </summary>
-    /// <param name="v">The <see cref="Vector"/> to scale.</param>
+    /// <param name="v">The vector to scale.</param>
     /// <param name="f">The scalar multiplier.</param>
-    /// <returns>The scaled <see cref="Vector"/>.</returns>
+    /// <returns>The scaled vector.</returns>
     public static Vector operator *(Vector v, float f)
     {
         return new(v.X * f, v.Y * f);
     }
 
     /// <summary>
-    /// Divides a <see cref="Vector"/> by a scalar.
+    /// Divides a vector by a scalar.
     /// </summary>
-    /// <param name="v">The <see cref="Vector"/> to divide.</param>
+    /// <param name="v">The vector to divide.</param>
     /// <param name="f">The scalar divisor.</param>
-    /// <returns>The resulting <see cref="Vector"/>.</returns>
+    /// <returns>The resulting vector.</returns>
     public static Vector operator /(Vector v, float f)
     {
         return new(v.X / f, v.Y / f);
     }
 
     /// <summary>
-    /// Negates a <see cref="Vector"/>.
+    /// Negates a vector.
     /// </summary>
-    /// <param name="v">The <see cref="Vector"/> to negate.</param>
-    /// <returns>The negated <see cref="Vector"/>.</returns>
+    /// <param name="v">The vector to negate.</param>
+    /// <returns>The negated vector.</returns>
     public static Vector operator -(Vector v)
     {
         return v * -1;

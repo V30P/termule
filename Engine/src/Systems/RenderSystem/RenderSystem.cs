@@ -4,12 +4,12 @@ using Components;
 using Types;
 
 /// <summary>
-/// The <see cref="System"/> responsible for getting the rendering contributions according to Layer order.
+/// System responsible for collecting rendering contributions according to layer order.
 /// </summary>
 public sealed class RenderSystem : Core.System
 {
     /// <summary>
-    /// Gets or initializes the Layers that Renderers should exist in.
+    /// Gets or initializes the rendering layers.
     /// </summary>
     public Layer[] Layers
     {
@@ -29,7 +29,7 @@ public sealed class RenderSystem : Core.System
     = [new SimpleLayer()];
 
     /// <summary>
-    /// Gets the DefaultLayer that Renderers without a specified Layer should exist in.
+    /// Gets the default layer for renderers without an explicit layer.
     /// </summary>
     public Layer DefaultLayer => this.Layers[0];
 

@@ -3,14 +3,14 @@ using Termule.Core;
 using Termule.Systems.RenderSystem;
 using Termule.Types;
 
-internal class FPSIndicator : GameObject
+internal class TPSIndicator : GameObject
 {
-    private const string TextTemplate = " FPS: {0}";
+    private const string TextTemplate = " TPS: {0}";
 
     private float time;
-    private int frames;
+    private int ticks;
 
-    internal FPSIndicator()
+    internal TPSIndicator()
     {
         Add(
             new Transform(),
@@ -26,12 +26,12 @@ internal class FPSIndicator : GameObject
     private void OnTicked()
     {
         time += Game.DeltaTime;
-        frames++;
+        ticks++;
 
         if (time > 1)
         {
-            Get<ContentRenderer<Text>>().Content.Value = string.Format(TextTemplate, (int)(frames / time));
-            time = frames = 0;
+            Get<ContentRenderer<Text>>().Content.Value = string.Format(TextTemplate, (int)(ticks / time));
+            time = ticks = 0;
         }
     }
 }
