@@ -43,9 +43,9 @@ internal static class Program
             game.Systems.Install(demo);
 
 #if DEBUG
-            TPSIndicator fpsIndicator = [];
-            fpsIndicator.Get<Renderer>().Layer = UILayer;
-            game.Root.Add(fpsIndicator);
+            TPSIndicator tpsIndicator = [];
+            tpsIndicator.Get<Renderer>().Layer = UILayer;
+            game.Root.Add(tpsIndicator);
 #endif
 
             game.Run();

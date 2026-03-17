@@ -1,21 +1,29 @@
 # Termule
 
-A lightweight game engine written in C#/.NET, built for responsive, real-time games in the terminal.
+A lightweight game engine for creating responsive, real-time games in the terminal. 
 
 ## Overview
 
-Termule is written in C# on .NET 10.0. It is designed similarly to a traditional game engine, with a primary game loop rather than the event driven approach of other console-based engines. This enables the creation of fast, fluid games for terminal environments.
+Termule is written in C# on .NET 10.0 and is built to bring a modern experience to terminal game development. Unlike many console-based libraries, Termule uses a traditional game loop rather than an event-driven model. This enables the creation of fast, fluid games more like today's 2D titles than classic text-based experiences. Termule's API is designed with ease of use at the forefront and is built to be easily extensible, with a focus on clean, readable game code.
 
-The API is designed to be easy-to-use and extensible, with a focus on clean user-side code. The project also relies on minimal dependencies, with nearly all systems implemented from scratch. Most of this from-scratch functionality is built on top of Termule's core System and Component types which neatly organize runtime behavior and data.
+I started Termule to explore the process of creating a game engine scratch and gain experience planning and constructing larger systems. A core design goal of mine is to implement the majority of engine functionality from scratch, minimizing external dependencies and keeping architectural decisions explicit. Most of this from-scratch functionality is built on top of Termule's core System and Component types, which neatly organize runtime behavior and data.
+
+## Demos
+
+For examples of what’s possible with Termule, see the demo project [here](Demos).  
+
+![shooter demo](Demos/gifs/shooter.gif)
+
+More GIFs can be found in the demo project's [README](Demos/README.md).
 
 ## Features
 
 - Clean, flexible core architecture  
 - Sprite, line, and circle rendering capabilities  
 - Performant terminal display using escape sequences  
-- Keyboard and mouse input (mouse input not currently supported on Windows)  
+- Support for keyboard and mouse input (mouse not yet implemented for Windows)  
 - Resource loading system  
-- API fully documented with XML comments
+- Fully documented API via XML comments
 
 ## Architecture
 
@@ -35,7 +43,7 @@ Termule splits runtime behavior into two major types: `System`s and `Component`s
 - Grouped by `GameObject`s to enable collaborative behavior
 - Enforce composition over inheritance  
 
-This architecture allows for modular, yet digestible code and avoids the classic problem of too much behavior living in components.
+This architecture allows for modular, maintainable code that takes full advantage of C#'s syntax. Separating systems and components increases organization and eases the classic problem of too much behavior living on game objects.
 
 An example `Game` structure:
 
@@ -53,14 +61,6 @@ Game
            ├── Transform
            └── ContentRenderer
 ```
-
-## Demos
-
-For examples of what’s possible with Termule, see the demo project [here](Demos).  
-
-![shooter demo](Demos/gifs/shooter.gif)
-
-More GIFs can be found in the demo project's [README](Demos/README.md).
 
 ## Getting Started
 
@@ -81,8 +81,8 @@ static class Program
 Before the game is run, `System`s and `Component`s can be added to `Game.Systems` and `Game.Root`, respectively:
 
 ```csharp
-game.Systems.Install(new MyTimerSystem());
-game.Root.Add(new MyStopperComponent());
+game.Systems.Install(new MySystem());
+game.Root.Add(new MyComponent());
 ```
 
 For information about individual elements of the engine, hover over a Termule type or member to see its documentation.

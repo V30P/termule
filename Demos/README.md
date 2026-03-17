@@ -30,7 +30,7 @@ Below is a list of the included demos and the functionality they demonstrate.
 
 ## Running
 
-After cloning the full repository, you can run this project from the repository root via the .NET CLI with:
+After cloning the full Termule repository, you can run this project from the repository root via the .NET CLI with:
 
 ```bash
 dotnet run --project Demos
