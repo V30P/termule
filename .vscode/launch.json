@@ -1,0 +1,30 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug Demo",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "dotnet: build",
+            "program": "${workspaceFolder}/Demos/bin/Debug/net10.0/Demos.dll",
+            "args": [
+                "${input:demo}"
+            ],
+            "console": "externalTerminal"
+        }
+    ],
+    "inputs": [
+        {
+            "id": "demo",
+            "type": "pickString",
+            "description": "Select demo",
+            "options": [
+                "screensaver",
+                "lightning",
+                "raindrops",
+                "shooter",
+                "gradient"
+            ]
+        }
+    ],
+}

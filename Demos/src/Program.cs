@@ -44,8 +44,8 @@ internal static class Program
 
 #if DEBUG
             TPSIndicator tpsIndicator = [];
-            tpsIndicator.Get<Renderer>().Layer = UILayer;
             game.Root.Add(tpsIndicator);
+            tpsIndicator.Get<Renderer>().Layer = UILayer;
 #endif
 
             game.Run();

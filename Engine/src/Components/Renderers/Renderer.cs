@@ -9,13 +9,15 @@ using Types;
 /// </summary>
 public abstract class Renderer : Component
 {
+    private IHostLayer layer;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="Renderer"/> class.
     /// </summary>
     public Renderer()
     {
-        this.Registered += () => ((IHostLayer)this.Layer).Register(this);
-        this.Unregistered += () => ((IHostLayer)this.Layer).Unregister(this);
+        this.Registered += this.RegisterToLayer;
+        this.Unregistered += this.UnregisterFromLayer;
     }
 
     /// <summary>
@@ -24,17 +26,21 @@ public abstract class Renderer : Component
     /// </summary>
     public Layer Layer
     {
-        get => field ?? this.GetRequiredSystem<RenderSystem>().DefaultLayer;
+        get => (Layer)this.layer;
 
         set
         {
-            IHostLayer previousLayer = field;
-            if (this.IsRegistered)
+            if (!this.IsRegistered)
             {
-                previousLayer.Unregister(this);
-                field = value;
-                ((IHostLayer)this.Layer).Register(this);
+                this.layer = value;
+                return;
             }
+
+            value ??= this.GetRequiredSystem<RenderSystem>().DefaultLayer;
+
+            this.layer.Unregister(this);
+            this.layer = value;
+            this.layer.Register(this);
         }
     }
 
@@ -44,4 +50,15 @@ public abstract class Renderer : Component
     /// <param name="frame">The target frame to contribute to.</param>
     /// <param name="viewOrigin">The origin of the view in game space.</param>
     protected internal abstract void Render(Frame frame, Vector viewOrigin);
+
+    private void RegisterToLayer()
+    {
+        this.layer ??= this.GetRequiredSystem<RenderSystem>().DefaultLayer;
+        this.layer.Register(this);
+    }
+
+    private void UnregisterFromLayer()
+    {
+        this.layer.Unregister(this);
+    }
 }
