@@ -40,6 +40,8 @@ public sealed class Game : IConfigurableGame
     /// </summary>
     public float DeltaTime { get; private set; }
 
+    internal bool Started { get; private set; }
+
     /// <summary>
     /// Creates a configurable <see cref="Game"/> instance.
     /// </summary>
@@ -51,32 +53,42 @@ public sealed class Game : IConfigurableGame
 
     void IConfigurableGame.Run()
     {
-        IHostedSystemManager systems = this.Systems;
-        IHostedComponent root = this.Root;
-
-        systems.Start();
+        this.Prepare();
 #if RELEASE
         try
         {
 #endif
-
         while (!this.stop)
         {
-            this.DeltaTime = (float)this.stopwatch.Elapsed.TotalSeconds;
-            this.stopwatch.Restart();
-
-            systems.Tick();
-            root.Tick();
+            this.RunFrame();
         }
 #if RELEASE
         }
         finally
         {
 #endif
-        systems.Stop();
+        this.CleanUp();
 #if RELEASE
         }
 #endif
+    }
+
+    void IConfigurableGame.Prepare()
+    {
+        this.Prepare();
+    }
+
+    void IConfigurableGame.RunForFrames(int frames)
+    {
+        for (int i = 0; i < frames; i++)
+        {
+            this.RunFrame();
+        }
+    }
+
+    void IConfigurableGame.CleanUp()
+    {
+        this.CleanUp();
     }
 
     /// <summary>
@@ -103,6 +115,27 @@ public sealed class Game : IConfigurableGame
         element.Game = null;
         this.elements.Remove(element);
     }
+
+    private void Prepare()
+    {
+        ((IHostedSystemManager)this.Systems).Start();
+
+        this.Started = true;
+    }
+
+    private void RunFrame()
+    {
+        this.DeltaTime = (float)this.stopwatch.Elapsed.TotalSeconds;
+        this.stopwatch.Restart();
+
+        ((IHostedSystemManager)this.Systems).Tick();
+        ((IHostedComponent)this.Root).Tick();
+    }
+
+    private void CleanUp()
+    {
+        ((IHostedSystemManager)this.Systems).Stop();
+    }
 }
 
 /// <summary>
@@ -124,4 +157,10 @@ public interface IConfigurableGame
     /// Runs the game.
     /// </summary>
     void Run();
+
+    internal void Prepare();
+
+    internal void RunForFrames(int frames);
+
+    internal void CleanUp();
 }

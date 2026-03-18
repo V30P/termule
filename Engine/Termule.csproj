@@ -15,4 +15,8 @@
     </PackageReference>
     <PackageReference Include="SharpHook" Version="6.2.0" />
   </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Tests" />
+  </ItemGroup>
 </Project>

@@ -23,6 +23,8 @@ internal class Gradient : Demo
 
         protected override void Render(Frame frame, Vector viewOrigin)
         {
+            var test = Game.Systems.Get<RenderSystem>();
+
             for (int x = 0; x < frame.Size.X; x++)
             {
                 for (int y = 0; y < frame.Size.Y; y++)

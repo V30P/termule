@@ -38,6 +38,11 @@ public class SystemManager : GameElement, IHostedSystemManager, IConfigurableSys
 
     void IConfigurableSystemManager.Install<TSystem>(TSystem system)
     {
+        if (this.Game.Started)
+        {
+            throw new InvalidOperationException("Cannot change systems once the game is started.");
+        }
+
         ((IConfigurableSystemManager)this).Uninstall<TSystem>();
 
         this.systems[GetSystemType<TSystem>()] = system;
@@ -46,6 +51,11 @@ public class SystemManager : GameElement, IHostedSystemManager, IConfigurableSys
 
     void IConfigurableSystemManager.Uninstall<TSystem>()
     {
+        if (this.Game.Started)
+        {
+            throw new InvalidOperationException("Cannot change systems once the game is started.");
+        }
+
         Type systemType = GetSystemType<TSystem>();
         if (this.systems.TryGetValue(systemType, out IHostedSystem system))
         {

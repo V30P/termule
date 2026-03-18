@@ -23,6 +23,11 @@ public abstract class Component : GameElement, IHostedComponent
     /// </summary>
     public void Destroy()
     {
+        if (this.GameObject == null)
+        {
+            throw new InvalidOperationException("Cannot destroy a component with no GameObject.");
+        }
+
         this.GameObject.Remove(this);
     }
 

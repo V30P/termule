@@ -80,26 +80,24 @@ public class GameObject : Component, IEnumerable<Component>
     }
 
     /// <summary>
-    /// Gets all components of type <typeparamref name="TComponent"/>.
-    /// </summary>
-    /// <typeparam name="TComponent">The type of component to look for.</typeparam>
-    /// <returns>The collection of all matching components.</returns>
-    public IEnumerable<TComponent> GetAll<TComponent>()
-        where TComponent : Component
-    {
-        return this.typesToComponents.TryGetValue(typeof(TComponent), out List<Component> components) ?
-            components.Cast<TComponent>() : [];
-    }
-
-    /// <summary>
     /// Gets a component of type <typeparamref name="TComponent"/>.
     /// </summary>
     /// <typeparam name="TComponent">The type of component to look for.</typeparam>
     /// <returns>The component if one is found or <c>null</c>.</returns>
     public TComponent Get<TComponent>()
-        where TComponent : Component
     {
-        return this.GetAll<TComponent>()?.FirstOrDefault();
+        return this.GetAll<TComponent>().FirstOrDefault();
+    }
+
+    /// <summary>
+    /// Gets all components of type <typeparamref name="TComponent"/>.
+    /// </summary>
+    /// <typeparam name="TComponent">The type of component to look for.</typeparam>
+    /// <returns>The collection of all matching components.</returns>
+    public IEnumerable<TComponent> GetAll<TComponent>()
+    {
+        return this.typesToComponents.TryGetValue(typeof(TComponent), out List<Component> components) ?
+            components.Cast<TComponent>() : [];
     }
 
     /// <inheritdoc/>
