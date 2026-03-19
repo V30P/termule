@@ -7,7 +7,7 @@ using Types;
 /// <summary>
 /// Display class for terminal-based output.
 /// </summary>
-public abstract partial class TerminalDisplay : Display
+public abstract class TerminalDisplay : Display
 {
     private static readonly Dictionary<BasicColor, string> BackgroundColorCodes = new()
     {
@@ -51,6 +51,11 @@ public abstract partial class TerminalDisplay : Display
         [BasicColor.BrightWhite] = "97",
     };
 
+    private readonly StringBuilder builder = new();
+
+    private Color currentColor = default;
+    private Color currentCharColor = default;
+
     internal TerminalDisplay()
     {
     }
@@ -71,41 +76,54 @@ public abstract partial class TerminalDisplay : Display
             this.Size = (Console.WindowWidth, Console.WindowHeight);
         }
 
-        StringBuilder output = new();
-        for (int x = 0; x < this.Buffer.Size.X; x++)
+        bool skipping = true;
+        for (int y = 0; y < this.Size.Y; y++)
         {
-            for (int y = 0; y < this.Buffer.Size.Y; y++)
+            for (int x = 0; x < this.Size.X; x++)
             {
-                if (this.Screen?.EqualsAt(this.Buffer, (x, y)) == true)
+                if (this.Screen.EqualsAt(this.Buffer, (x, y)) == true)
                 {
+                    skipping = true;
                     continue;
+                }
+
+                // Go to position
+                if (skipping)
+                {
+                    this.AppendMove(x, y);
+                    skipping = false;
                 }
 
                 Cell cell = this.Buffer.At(x, y);
 
-                // Go to position
-                output.Append("\x1b[");
-                output.Append(y + 1);
-                output.Append(';');
-                output.Append(x + 1);
-                output.Append('H');
+                // Apply color changes if necessary
+                if (cell.Color != this.currentColor || cell.CharColor != this.currentCharColor)
+                {
+                    this.builder.Append("\x1b[");
 
-                // Apply the cell color
-                output.Append("\x1b[");
-                AppendForegroundColorCode(cell.Color, output);
-                output.Append('m');
+                    if (cell.Color != this.currentColor)
+                    {
+                        this.AppendBackgroundColorCode(cell.Color);
+                        this.currentColor = cell.Color;
+                    }
 
-                // Apply the character color
-                output.Append("\x1b[");
-                AppendBackgroundColorCode(cell.CharColor, output);
-                output.Append('m');
+                    if (cell.CharColor != this.currentCharColor)
+                    {
+                        this.builder.Append(';');
+                        this.AppendForegroundColorCode(cell.CharColor);
+                        this.currentCharColor = cell.CharColor;
+                    }
+
+                    this.builder.Append('m');
+                }
 
                 // Write the character
-                output.Append(cell.Char != default(char) ? cell.Char : ' ');
+                this.builder.Append(cell.Char != default(char) ? cell.Char : ' ');
             }
         }
 
-        Console.Write(output);
+        Console.Write(this.builder);
+        this.builder.Clear();
     }
 
     /// <summary>
@@ -134,37 +152,46 @@ public abstract partial class TerminalDisplay : Display
         Console.Write("\x1b[?1049l");
     }
 
-    private static void AppendForegroundColorCode(Color color, StringBuilder output)
+    private void AppendMove(int x, int y)
+    {
+        this.builder.Append("\x1b[");
+        this.builder.Append(y + 1);
+        this.builder.Append(';');
+        this.builder.Append(x + 1);
+        this.builder.Append('H');
+    }
+
+    private void AppendBackgroundColorCode(Color color)
     {
         if (color.Full is FullColor fullColor)
         {
-            output.Append("48;2;");
-            output.Append(fullColor.R);
-            output.Append(';');
-            output.Append(fullColor.G);
-            output.Append(';');
-            output.Append(fullColor.B);
+            this.builder.Append("48;2;");
+            this.builder.Append(fullColor.R);
+            this.builder.Append(';');
+            this.builder.Append(fullColor.G);
+            this.builder.Append(';');
+            this.builder.Append(fullColor.B);
         }
         else
         {
-            output.Append(BackgroundColorCodes[color.Basic]);
+            this.builder.Append(BackgroundColorCodes[color.Basic]);
         }
     }
 
-    private static void AppendBackgroundColorCode(Color color, StringBuilder output)
+    private void AppendForegroundColorCode(Color color)
     {
         if (color.Full is FullColor fullColor)
         {
-            output.Append("38;2;");
-            output.Append(fullColor.R);
-            output.Append(';');
-            output.Append(fullColor.G);
-            output.Append(';');
-            output.Append(fullColor.B);
+            this.builder.Append("38;2;");
+            this.builder.Append(fullColor.R);
+            this.builder.Append(';');
+            this.builder.Append(fullColor.G);
+            this.builder.Append(';');
+            this.builder.Append(fullColor.B);
         }
         else
         {
-            output.Append(ForegroundColorCodes[color.Basic]);
+            this.builder.Append(ForegroundColorCodes[color.Basic]);
         }
     }
 }

@@ -10,9 +10,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Tests for core types
 
 ### Changed
-- Rework 
-- Improved `TerminalDisplay` performance by reducing string allocations
-- Improved `RenderSystem` performance by cutting unnecessary delegate allocations
+
+- Improved `Display` performance by switching to double buffering
+- Improved `TerminalDisplay` performance by reducing string allocations and unnecessary escape sequences
+- Renamed `Frame` to `FrameBuffer` and moved it to the display namespace
+- Improved `FrameBuffer` performance by removing unnecessary delegate allocations
+
+### Removed
+
+- Renderer crediting and `GetOverlappers()` for abysmal performance (switch to manually implemented collision detection)
+- Size-related methods from `Camera`, will now always match display size
 
 ### Fixed
 - Improper layering of TPS indicator in debug builds of Demos
