@@ -1,6 +1,7 @@
 namespace Termule.Systems.RenderSystem;
 
 using Components;
+using Termule.Systems.Display;
 using Types;
 
 /// <summary>
@@ -33,9 +34,8 @@ public sealed class RenderSystem : Core.System
     /// </summary>
     public Layer DefaultLayer => this.Layers[0];
 
-    internal Frame Render(Vector viewOrigin, Content background)
+    internal void Render(Vector viewOrigin, FrameBuffer frame)
     {
-        Frame frame = new(background);
         foreach (Layer layer in this.Layers)
         {
             foreach (Renderer renderer in layer)
@@ -43,7 +43,5 @@ public sealed class RenderSystem : Core.System
                 renderer.Render(frame, viewOrigin);
             }
         }
-
-        return frame;
     }
 }

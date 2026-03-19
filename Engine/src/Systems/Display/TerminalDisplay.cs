@@ -51,19 +51,17 @@ public abstract partial class TerminalDisplay : Display
         [BasicColor.BrightWhite] = "97",
     };
 
-    private Content state;
-
     internal TerminalDisplay()
     {
     }
 
-    internal override void Draw(Content content)
+    internal sealed override void DrawBuffer()
     {
         if
         (
             Console.WindowTop != 0
             || Console.BufferWidth != Console.WindowWidth || Console.BufferHeight != Console.WindowHeight
-            || content.Size != this.state?.Size
+            || this.Buffer.Size != this.Screen?.Size
             || Console.WindowWidth != this.Size.X || Console.WindowHeight != this.Size.Y
         )
         {
@@ -71,30 +69,43 @@ public abstract partial class TerminalDisplay : Display
             Console.Clear();
 
             this.Size = (Console.WindowWidth, Console.WindowHeight);
-            this.state = null;
         }
 
         StringBuilder output = new();
-        for (int x = 0; x < content.Size.X; x++)
+        for (int x = 0; x < this.Buffer.Size.X; x++)
         {
-            for (int y = 0; y < content.Size.Y; y++)
+            for (int y = 0; y < this.Buffer.Size.Y; y++)
             {
-                if (this.state?.EqualsAt(content, (x, y)) == true)
+                if (this.Screen?.EqualsAt(this.Buffer, (x, y)) == true)
                 {
                     continue;
                 }
 
-                Cell cell = content.At(x, y);
-                output.Append(
-                    $"\x1b[{y + 1};{x + 1}H" + // Go to the position
-                    $"\x1b[{GetBackgroundColorCode(cell.Color)}m" + // Apply the background color
-                    $"\x1b[{GetForegroundColorCode(cell.CharColor)}m" + // Apply the foreground color
-                    (cell.Char != default(char) ? cell.Char : ' ')); // Write the character
+                Cell cell = this.Buffer.At(x, y);
+
+                // Go to position
+                output.Append("\x1b[");
+                output.Append(y + 1);
+                output.Append(';');
+                output.Append(x + 1);
+                output.Append('H');
+
+                // Apply the cell color
+                output.Append("\x1b[");
+                AppendForegroundColorCode(cell.Color, output);
+                output.Append('m');
+
+                // Apply the character color
+                output.Append("\x1b[");
+                AppendBackgroundColorCode(cell.CharColor, output);
+                output.Append('m');
+
+                // Write the character
+                output.Append(cell.Char != default(char) ? cell.Char : ' ');
             }
         }
 
         Console.Write(output);
-        this.state = content;
     }
 
     /// <summary>
@@ -123,15 +134,37 @@ public abstract partial class TerminalDisplay : Display
         Console.Write("\x1b[?1049l");
     }
 
-    private static string GetBackgroundColorCode(Color color)
+    private static void AppendForegroundColorCode(Color color, StringBuilder output)
     {
-        return color.Full is FullColor f ?
-            $"48;2;{f.R};{f.G};{f.B}" : BackgroundColorCodes[color.Basic];
+        if (color.Full is FullColor fullColor)
+        {
+            output.Append("48;2;");
+            output.Append(fullColor.R);
+            output.Append(';');
+            output.Append(fullColor.G);
+            output.Append(';');
+            output.Append(fullColor.B);
+        }
+        else
+        {
+            output.Append(BackgroundColorCodes[color.Basic]);
+        }
     }
 
-    private static string GetForegroundColorCode(Color color)
+    private static void AppendBackgroundColorCode(Color color, StringBuilder output)
     {
-        return color.Full is FullColor f ?
-            $"38;2;{f.R};{f.G};{f.B}" : ForegroundColorCodes[color.Basic];
+        if (color.Full is FullColor fullColor)
+        {
+            output.Append("38;2;");
+            output.Append(fullColor.R);
+            output.Append(';');
+            output.Append(fullColor.G);
+            output.Append(';');
+            output.Append(fullColor.B);
+        }
+        else
+        {
+            output.Append(ForegroundColorCodes[color.Basic]);
+        }
     }
 }

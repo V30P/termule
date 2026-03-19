@@ -10,11 +10,7 @@ internal class Screensaver : Demo
     {
         Root.Add(
             new Transform(),
-            new Camera()
-            {
-                MatchDisplaySize = true,
-                BackgroundColor = (0, 0, 0),
-            },
+            new Camera(),
             new Logo());
     }
 

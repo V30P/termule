@@ -15,11 +15,7 @@ internal class Lightning : Demo
     {
         Root.Add(
             new Transform(),
-            new Camera()
-            {
-                MatchDisplaySize = true,
-                BackgroundColor = (0, 0, 0),
-            });
+            new Camera());
     }
 
     protected override void Tick()

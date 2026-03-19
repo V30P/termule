@@ -1,5 +1,6 @@
 namespace Termule.Systems.Display;
 
+using Termule.Components;
 using Types;
 
 /// <summary>
@@ -17,9 +18,30 @@ public abstract class Display : Core.System
     public VectorInt MousePos { get; protected set; }
 
     /// <summary>
-    /// Gets or sets the size of the display (in cells).
+    /// Gets the size of the display (in cells).
     /// </summary>
-    public VectorInt Size { get; protected set; }
+    public VectorInt Size
+    {
+        get => field;
 
-    internal abstract void Draw(Content content);
+        private protected set
+        {
+            this.Buffer = new FrameBuffer(value.X, value.Y);
+            this.Screen = new FrameBuffer(value.X, value.Y);
+
+            field = value;
+        }
+    }
+
+    internal FrameBuffer Buffer { get; set; } = new FrameBuffer(0, 0);
+
+    private protected FrameBuffer Screen { get; private set; } = new FrameBuffer(0, 0);
+
+    internal void Draw()
+    {
+        this.DrawBuffer();
+        (this.Buffer, this.Screen) = (this.Screen, this.Buffer);
+    }
+
+    internal abstract void DrawBuffer();
 }

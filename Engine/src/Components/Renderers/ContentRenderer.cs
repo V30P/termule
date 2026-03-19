@@ -2,6 +2,7 @@ namespace Termule.Components;
 
 using System.Reflection;
 using Systems.RenderSystem;
+using Termule.Systems.Display;
 using Types;
 
 /// <summary>
@@ -39,7 +40,7 @@ public sealed class ContentRenderer<TContent> : TransformRenderer
     protected override Vector Offset => this.Centered && this.Content != null ? -(Vector)this.Content.Size / 2 : (0, 0);
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 
-    private protected override void Render(Frame frame, VectorInt framespacePos)
+    private protected override void Render(FrameBuffer frame, VectorInt framespacePos)
     {
         for (int x = 0; x < this.Content?.Size.X; x++)
         {

@@ -1,6 +1,6 @@
 namespace Termule.Components;
 
-using Systems.RenderSystem;
+using Systems.Display;
 using Types;
 
 /// <summary>
@@ -18,7 +18,7 @@ public sealed class LineRenderer : TransformRenderer
     /// </summary>
     public Color Color { get; set; }
 
-    private protected override void Render(Frame frame, VectorInt framespacePos)
+    private protected override void Render(FrameBuffer frame, VectorInt framespacePos)
     {
         if (!this.Points.Any())
         {

@@ -1,4 +1,5 @@
 using Termule.Components;
+using Termule.Systems.Display;
 using Termule.Systems.RenderSystem;
 using Termule.Types;
 
@@ -8,7 +9,7 @@ internal class Gradient : Demo
     {
         Root.Add(
             new Transform(),
-            new Camera() { MatchDisplaySize = true },
+            new Camera() { BackgroundCell = new((0, 0, 0)) },
             new GradientRenderer());
     }
 
@@ -21,7 +22,7 @@ internal class Gradient : Demo
             Ticked += OnTicked;
         }
 
-        protected override void Render(Frame frame, Vector viewOrigin)
+        protected override void Render(FrameBuffer frame, Vector viewOrigin)
         {
             var test = Game.Systems.Get<RenderSystem>();
 

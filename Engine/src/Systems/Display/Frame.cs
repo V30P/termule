@@ -1,22 +1,20 @@
-namespace Termule.Systems.RenderSystem;
+namespace Termule.Systems.Display;
 
 using Types;
 using Components;
+using System;
+using System.IO.Compression;
+using System.Security.Cryptography.X509Certificates;
 
 /// <summary>
 /// Content that <see cref="Renderer"/>s contribute to during the render process.
 /// </summary>
-public sealed class Frame : Content
+public sealed class FrameBuffer : Content
 {
-    internal Frame(Content background)
-    : base(background)
+    internal FrameBuffer(int width, int height)
+    : base(width, height)
     {
-        this.Contributors = new HashSet<Renderer>[this.Size.X, this.Size.Y];
     }
-
-    internal HashSet<Renderer>[,] Contributors { get; }
-
-    internal Dictionary<Renderer, HashSet<VectorInt>> Contributions { get; } = [];
 
     /// <summary>
     /// Gets the <see cref="Cell"/> at the given position.
@@ -43,55 +41,33 @@ public sealed class Frame : Content
             throw new ArgumentOutOfRangeException(nameof(pos), pos, "Contribution must be within the bounds of the Frame");
         }
 
-        Cell cell = this.Cells[pos.X, pos.Y];
-        bool madeChange = false;
-
-        // Tracks if a change has been made so we can credit the renderer
-        void ChangeCell(Func<Cell, Cell> update)
-        {
-            cell = update(cell);
-            madeChange = true;
-        }
+        ref Cell cell = ref this.Cells[pos.X, pos.Y];
 
         if (color is Color colorValue)
         {
-            ChangeCell(_ => new() { Color = colorValue });
+            cell.Color = colorValue;
         }
 
-#pragma warning disable SA1101 // Prefix local calls with this
         if (character is char characterValue)
         {
-            ChangeCell(c => c with { Char = characterValue, CharColor = BasicColor.Default });
+            cell.Char = characterValue;
+            cell.CharColor = default(BasicColor);
         }
 
         if (characterColor is Color characterColorValue)
         {
-            ChangeCell(c => c with { CharColor = characterColorValue });
-#pragma warning restore SA1101 // Prefix local calls with this
-        }
-
-        if (madeChange)
-        {
-            this.Cells[pos.X, pos.Y] = cell;
-            this.Credit(renderer, pos);
+            cell.CharColor = characterColorValue;
         }
     }
 
-    private void Credit(Renderer renderer, VectorInt pos)
+    internal void Reset(Cell cell = default)
     {
-        if (this.Contributors[pos.X, pos.Y] is not HashSet<Renderer> contributors)
+        for (int x = 0; x < this.Size.X; x++)
         {
-            this.Contributors[pos.X, pos.Y] = contributors = [];
+            for (int y = 0; y < this.Size.Y; y++)
+            {
+                this.Cells[x, y] = cell;
+            }
         }
-
-        contributors.Add(renderer);
-
-        if (!this.Contributions.TryGetValue(renderer, out HashSet<VectorInt> contributions))
-        {
-            contributions = [];
-            this.Contributions.Add(renderer, contributions);
-        }
-
-        contributions.Add(pos);
     }
 }

@@ -1,6 +1,6 @@
 namespace Termule.Components;
 
-using Systems.RenderSystem;
+using Systems.Display;
 using Types;
 
 /// <summary>
@@ -24,7 +24,7 @@ public abstract class TransformRenderer : Renderer
     protected virtual Vector Offset { get; }
 
     /// <inheritdoc/>
-    protected internal sealed override void Render(Frame frame, Vector viewOrigin)
+    protected internal sealed override void Render(FrameBuffer frame, Vector viewOrigin)
     {
         Vector framespacePos;
         if (!this.DisplaySpace)
@@ -44,5 +44,5 @@ public abstract class TransformRenderer : Renderer
         this.Render(frame, framespacePos.FloorToInt());
     }
 
-    private protected abstract void Render(Frame frame, VectorInt displaySpacePos);
+    private protected abstract void Render(FrameBuffer frame, VectorInt displaySpacePos);
 }

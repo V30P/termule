@@ -103,13 +103,3 @@ public class Content : IResource
         }
     }
 }
-
-/// <summary>
-/// Single cell on a terminal.
-/// </summary>
-/// <param name="Color">The background color of the cell.</param>
-/// <param name="Char">The character in the cell.</param>
-/// <param name="CharColor">The color of the cell's character.</param>
-#pragma warning disable SA1313
-public readonly record struct Cell(Color Color, char Char, Color CharColor) { }
-#pragma warning restore SA1313

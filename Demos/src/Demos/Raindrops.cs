@@ -15,11 +15,7 @@ internal class Raindrops : Demo
     {
         Root.Add(
             new Transform(),
-            new Camera()
-            {
-                MatchDisplaySize = true,
-                BackgroundColor = (0, 0, 0),
-            });
+            new Camera() { BackgroundCell = new((0, 0, 0)) });
     }
 
     protected override void Tick()

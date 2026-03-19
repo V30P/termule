@@ -1,7 +1,8 @@
 namespace Termule.Components;
 
 using Core;
-using Systems.RenderSystem;
+using Systems.Display;
+using Termule.Systems.RenderSystem;
 using Types;
 
 /// <summary>
@@ -45,11 +46,11 @@ public abstract class Renderer : Component
     }
 
     /// <summary>
-    /// Renders to the provided <see cref="Frame"/> by contributing <see cref="Cell"/> changes.
+    /// Renders to the provided <see cref="FrameBuffer"/> by contributing <see cref="Cell"/> changes.
     /// </summary>
     /// <param name="frame">The target frame to contribute to.</param>
     /// <param name="viewOrigin">The origin of the view in game space.</param>
-    protected internal abstract void Render(Frame frame, Vector viewOrigin);
+    protected internal abstract void Render(FrameBuffer frame, Vector viewOrigin);
 
     private void RegisterToLayer()
     {

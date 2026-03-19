@@ -1,6 +1,6 @@
 namespace Termule.Components;
 
-using Systems.RenderSystem;
+using Systems.Display;
 using Types;
 
 /// <summary>
@@ -44,7 +44,7 @@ public sealed class CircleRenderer : TransformRenderer
         }
     }
 
-    private protected override void Render(Frame frame, VectorInt framespacePos)
+    private protected override void Render(FrameBuffer frame, VectorInt framespacePos)
     {
         IEnumerable<VectorInt> positions = GetCirclePositions(this.Radius, this.Filled);
         if (this.DoubleWide)

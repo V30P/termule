@@ -36,7 +36,7 @@ internal class Shooter : Demo
 
         Root.Add(
             new Transform(),
-            new Camera() { MatchDisplaySize = true },
+            new Camera(),
             new Player(),
             new ContentRenderer<Text>()
             {
@@ -292,7 +292,7 @@ internal class Shooter : Demo
         {
             Get<Transform>().Pos += ScaleVelocity(direction * Speed) * Game.DeltaTime;
 
-            foreach (Renderer overlapper in Root.Get<Camera>().GetOverlappers(Get<ContentRenderer<Content>>()))
+            foreach (Renderer overlapper in new List<Renderer>())
             {
                 if
                 (

@@ -9,6 +9,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Added
 - Tests for core types
 
+### Changed
+- Rework 
+- Improved `TerminalDisplay` performance by reducing string allocations
+- Improved `RenderSystem` performance by cutting unnecessary delegate allocations
+
 ### Fixed
 - Improper layering of TPS indicator in debug builds of Demos
 
