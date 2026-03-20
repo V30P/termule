@@ -1,6 +1,8 @@
 # Termule Demos
 
-This directory contains the demo project for the Termule game engine. Each demo highlights a specific engine capability and serves as a simple, but practical example of interacting with the Termule API. For this reason, demo source code prioritizes clarity and elegance over raw performance. 
+This directory contains the demo project for the Termule game engine. Each demo highlights a specific engine capability
+and serves as a simple, but practical example of interacting with the Termule API. For this reason, demo source code
+prioritizes clarity and elegance over raw performance.
 
 For information about the engine itself, see the main README [here](../README.md).
 

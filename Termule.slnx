@@ -1,5 +1,5 @@
 <Solution>
-  <Project Path="Engine/Termule.csproj" />
-  <Project Path="Tests/Tests.csproj" />
-  <Project Path="Demos/Demos.csproj" />
+    <Project Path="Engine/Termule.csproj"/>
+    <Project Path="Tests/Tests.csproj"/>
+    <Project Path="Demos/Demos.csproj"/>
 </Solution>
