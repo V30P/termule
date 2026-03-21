@@ -1,10 +1,9 @@
-using Termule.Core;
-using Termule.Systems.Display;
-using Termule.Systems.RenderSystem;
-using Termule.Types.Content;
-using Termule.Types.Vectors;
+using Termule.Engine.Core;
+using Termule.Engine.Systems.Display;
+using Termule.Engine.Systems.RenderSystem;
+using Termule.Engine.Types.Vectors;
 
-namespace Termule.Components;
+namespace Termule.Engine.Components;
 
 /// <summary>
 ///     Base component class for contributing to frames produced by the render system.
@@ -48,7 +47,7 @@ public abstract class Renderer : Component
     }
 
     /// <summary>
-    ///     Renders to the provided <see cref="FrameBuffer" /> by contributing <see cref="Cell" /> changes.
+    ///     Renders to the provided <see cref="FrameBuffer" /> by contributing <see cref="FrameBuffer" /> changes.
     /// </summary>
     /// <param name="frame">The target frame to contribute to.</param>
     /// <param name="viewOrigin">The origin of the view in game space.</param>

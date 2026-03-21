@@ -1,12 +1,12 @@
 using Demos.Application;
-using Termule.Components;
-using Termule.Core;
-using Termule.Systems.Controller;
-using Termule.Systems.Controller.Keyboard;
-using Termule.Systems.Display;
-using Termule.Systems.ResourceLoader;
-using Termule.Types.Content;
-using Termule.Types.Vectors;
+using Termule.Engine.Components;
+using Termule.Engine.Core;
+using Termule.Engine.Systems.Controller;
+using Termule.Engine.Systems.Controller.Keyboard;
+using Termule.Engine.Systems.Display;
+using Termule.Engine.Systems.ResourceLoader;
+using Termule.Engine.Types.Content;
+using Termule.Engine.Types.Vectors;
 using static Demos.Application.Utilities;
 
 namespace Demos.Demos;
@@ -17,6 +17,9 @@ internal class Shooter : Demo
     private const float GameOverLength = 5;
 
     private readonly Random random = new();
+
+    private static Image _characterSprite;
+    private static Image _projectileSprite;
 
     private float gameOverTimeRemaining;
     private float gracePeriodTimeRemaining;
@@ -38,6 +41,9 @@ internal class Shooter : Demo
             { Binds.Movement, new VectorBind(Button.W, Button.A, Button.S, Button.D) },
             { Binds.Fire, new ButtonBind(Button.Mouse1) }
         };
+
+        _characterSprite = new Image(Systems.Get<ResourceLoader>().Load<Content>("Shooter/Character"));
+        _projectileSprite = new Image(Systems.Get<ResourceLoader>().Load<Content>("Shooter/Projectile"));
 
         Root.Add(
             new Transform(),
@@ -131,8 +137,6 @@ internal class Shooter : Demo
     {
         private const float HitColorLength = 0.05f;
 
-        private static Image _sprite;
-
         private float hitColorTimeRemaining;
 
         private int hp = 3;
@@ -150,9 +154,12 @@ internal class Shooter : Demo
         {
             Add(
                 new Transform(),
-                new ContentRenderer<Content> { Centered = true });
+                new ContentRenderer<Content>
+                {
+                    Centered = true,
+                    Content = _characterSprite
+                });
 
-            Registered += OnRegistered;
             Ticked += OnTicked;
         }
 
@@ -177,11 +184,6 @@ internal class Shooter : Demo
             shotCooldownTimeRemaining = ShotCooldownLength;
         }
 
-        private void OnRegistered()
-        {
-            _sprite ??= new Image(Systems.Get<ResourceLoader>().Load<Content>("Shooter/Character"));
-        }
-
         private void OnTicked()
         {
             var transform = Get<Transform>();
@@ -189,7 +191,7 @@ internal class Shooter : Demo
 
             hitColorTimeRemaining -= Game.DeltaTime;
             Get<ContentRenderer<Content>>().Content =
-                (Target.X > transform.Pos.X ? _sprite : _sprite.Flipped())
+                (Target.X > transform.Pos.X ? _characterSprite : _characterSprite.Flipped())
                 .WithColorSwapped(BasicColor.White, hitColorTimeRemaining < 0 ? Color : HitColor);
 
             shotCooldownTimeRemaining -= Game.DeltaTime;
@@ -263,38 +265,40 @@ internal class Shooter : Demo
         private const float Speed = 30;
 
         private readonly Vector direction;
-        private readonly Color sourceColor;
         private readonly Type sourceType;
 
         internal Projectile(Character source, Vector position, Vector target)
         {
             sourceType = source.GetType();
-            sourceColor = source.Color;
             direction = (target - position).Normalized;
 
-            Add(
-                new Transform { Pos = position },
-                new ContentRenderer<Content> { Centered = true });
+            Add(new Transform { Pos = position }, new ContentRenderer<Content>
+            {
+                Centered = true,
+                Content = new Image(_projectileSprite).WithColorSwapped(BasicColor.White, source.Color)
+            });
 
-            Registered += OnRegistered;
             Ticked += OnTicked;
-        }
-
-        private void OnRegistered()
-        {
-            Get<ContentRenderer<Content>>().Content =
-                new Image(Systems.Get<ResourceLoader>().Load<Content>("Shooter/Projectile"))
-                    .WithColorSwapped(BasicColor.White, sourceColor);
         }
 
         private void OnTicked()
         {
             Get<Transform>().Pos += ScaleVelocity(direction * Speed) * Game.DeltaTime;
 
-            foreach (var overlapper in new List<Renderer>())
+            foreach (var character in Root.GetAll<Character>())
             {
-                if (overlapper.GameObject is Character character
-                    && character.GetType() != sourceType)
+                if (character.GetType() == sourceType)
+                {
+                    continue;
+                }
+
+                var characterPos = character.Get<Transform>().Pos;
+                var projectilePos = Get<Transform>().Pos;
+
+                if (MathF.Abs(characterPos.X - projectilePos.X) <
+                    (float)(_characterSprite.Size.X + _projectileSprite.Size.X) / 2
+                    && MathF.Abs(characterPos.Y - projectilePos.Y) <
+                    (float)(_characterSprite.Size.Y + _projectileSprite.Size.Y) / 2)
                 {
                     character.Hit();
                     Destroy();

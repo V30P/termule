@@ -1,6 +1,6 @@
-using Termule.Core;
+using Termule.Engine.Core;
 
-namespace Tests.Utilities;
+namespace Termule.Tests.Utilities;
 
 internal class FakeComponent : Component
 {

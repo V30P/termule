@@ -1,4 +1,4 @@
-namespace Termule.Core;
+namespace Termule.Engine.Core;
 
 /// <summary>
 ///     Provides configuration operations for installing, uninstalling and retrieving <see cref="System" />s.

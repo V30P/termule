@@ -1,8 +1,8 @@
 using System.Text.Json.Serialization;
-using Termule.Systems.ResourceLoader;
-using Termule.Types.Vectors;
+using Termule.Engine.Systems.ResourceLoader;
+using Termule.Engine.Types.Vectors;
 
-namespace Termule.Types.Content;
+namespace Termule.Engine.Types.Content;
 
 /// <summary>
 ///     Rectangular collection of terminal cells.

@@ -1,8 +1,8 @@
 using Demos.Application;
-using Termule.Components;
-using Termule.Systems.Display;
-using Termule.Types.Content;
-using Termule.Types.Vectors;
+using Termule.Engine.Components;
+using Termule.Engine.Systems.Display;
+using Termule.Engine.Types.Content;
+using Termule.Engine.Types.Vectors;
 
 namespace Demos.Demos;
 

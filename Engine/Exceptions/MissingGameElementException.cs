@@ -1,9 +1,9 @@
-using Termule.Core;
+using Termule.Engine.Core;
 
-namespace Termule.Exceptions;
+namespace Termule.Engine.Exceptions;
 
 /// <summary>
-///     Base exception type for cases where a required <see cref="GameElement" /> is missing.
+///     Base exception type for cases where a required <typeparamref name="TMissing" /> is missing.
 /// </summary>
 /// <typeparam name="TMissing">The type of the missing <see cref="GameElement" />.</typeparam>
 public abstract class MissingGameElementException<TMissing> : Exception

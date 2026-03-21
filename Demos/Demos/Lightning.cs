@@ -1,8 +1,8 @@
 using Demos.Application;
-using Termule.Components;
-using Termule.Core;
-using Termule.Systems.Display;
-using Termule.Types.Vectors;
+using Termule.Engine.Components;
+using Termule.Engine.Core;
+using Termule.Engine.Systems.Display;
+using Termule.Engine.Types.Vectors;
 
 namespace Demos.Demos;
 
@@ -84,6 +84,7 @@ internal class Lightning : Demo
                         }
 
                         continue;
+
                         Vector GenerateDisplacedMidpoint()
                         {
                             return midpoint + normal * ((float)random.NextDouble() * maxOffset * 2 - maxOffset);

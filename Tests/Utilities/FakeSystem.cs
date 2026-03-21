@@ -1,6 +1,6 @@
-namespace Tests.Utilities;
+namespace Termule.Tests.Utilities;
 
-internal class FakeSystem : Termule.Core.System
+internal class FakeSystem : Engine.Core.System
 {
     internal bool Started { get; private set; }
 

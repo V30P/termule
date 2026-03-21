@@ -1,4 +1,4 @@
-namespace Termule.Core;
+namespace Termule.Engine.Core;
 
 /// <summary>
 ///     Provides access to <see cref="Game" /> methods used for configuration.

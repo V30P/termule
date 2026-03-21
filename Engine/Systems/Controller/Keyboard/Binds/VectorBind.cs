@@ -1,6 +1,6 @@
-using Termule.Types.Vectors;
+using Termule.Engine.Types.Vectors;
 
-namespace Termule.Systems.Controller.Keyboard;
+namespace Termule.Engine.Systems.Controller.Keyboard;
 
 /// <summary>
 ///     Bind that returns a vector based on the directions associated with the pressed buttons.

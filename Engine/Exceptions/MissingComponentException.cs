@@ -1,6 +1,6 @@
-using Termule.Core;
+using Termule.Engine.Core;
 
-namespace Termule.Exceptions;
+namespace Termule.Engine.Exceptions;
 
 /// <summary>
 ///     Exception that is thrown when a required <see cref="Component" /> is missing.

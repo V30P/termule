@@ -1,4 +1,4 @@
-namespace Termule.Systems.Controller.Keyboard;
+namespace Termule.Engine.Systems.Controller.Keyboard;
 
 /// <summary>
 ///     Bind whose value is all of the characters that have been typed in the last tick.

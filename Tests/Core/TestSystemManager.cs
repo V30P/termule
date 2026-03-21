@@ -1,7 +1,7 @@
-using Termule.Core;
-using Tests.Utilities;
+using Termule.Engine.Core;
+using Termule.Tests.Utilities;
 
-namespace Tests.CoreTests;
+namespace Termule.Tests.Core;
 
 public class TestSystemManager
 {

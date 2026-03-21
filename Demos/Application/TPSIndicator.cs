@@ -1,6 +1,6 @@
-using Termule.Components;
-using Termule.Core;
-using Termule.Types.Content;
+using Termule.Engine.Components;
+using Termule.Engine.Core;
+using Termule.Engine.Types.Content;
 
 namespace Demos.Application;
 

@@ -1,6 +1,6 @@
-using Termule.Types.Vectors;
+using Termule.Engine.Types.Vectors;
 
-namespace Termule.Types.Content;
+namespace Termule.Engine.Types.Content;
 
 /// <summary>
 ///     Content that represents textual content.

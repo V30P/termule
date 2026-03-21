@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace Termule.Systems.Controller;
+namespace Termule.Engine.Systems.Controller;
 
 /// <summary>
 ///     Collection to hold <see cref="Bind" />s for a <see cref="Systems.Controller.Controller" />.

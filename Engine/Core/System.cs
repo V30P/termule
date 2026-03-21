@@ -1,4 +1,4 @@
-namespace Termule.Core;
+namespace Termule.Engine.Core;
 
 /// <summary>
 ///     Game element that can be added to the <see cref="SystemManager" /> to provide global behavior every tick.

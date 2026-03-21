@@ -1,8 +1,8 @@
-using Termule.Core;
-using Termule.Exceptions;
-using Tests.Utilities;
+using Termule.Engine.Core;
+using Termule.Engine.Exceptions;
+using Termule.Tests.Utilities;
 
-namespace Tests.CoreTests;
+namespace Termule.Tests.Core;
 
 public class TestGameElement
 {

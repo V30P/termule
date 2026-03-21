@@ -1,4 +1,4 @@
-namespace Termule.Systems.Controller.Keyboard;
+namespace Termule.Engine.Systems.Controller.Keyboard;
 
 /// <summary>
 ///     Bind that returns whether a <see cref="Button" /> was just pressed.

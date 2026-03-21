@@ -1,4 +1,4 @@
-namespace Termule.Systems.Controller.Keyboard;
+namespace Termule.Engine.Systems.Controller.Keyboard;
 
 /// <summary>
 ///     Bind whose value is true for the first tick where all provided buttons are pressed.

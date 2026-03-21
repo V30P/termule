@@ -1,4 +1,4 @@
-namespace Termule.Systems.Controller;
+namespace Termule.Engine.Systems.Controller;
 
 /// <summary>
 ///     Non-generic base class for binds.

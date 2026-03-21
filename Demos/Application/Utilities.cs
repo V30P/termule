@@ -1,5 +1,5 @@
-using Termule.Types.Content;
-using Termule.Types.Vectors;
+using Termule.Engine.Types.Content;
+using Termule.Engine.Types.Vectors;
 
 namespace Demos.Application;
 
@@ -30,18 +30,18 @@ internal static class Utilities
         {
             return (corner.X + dist, corner.Y);
         }
-        else if (dist < size.X + size.Y)
+
+        if (dist < size.X + size.Y)
         {
             return (corner.X + size.X, corner.Y + (dist - size.X));
         }
-        else if (dist < size.X * 2 + size.Y)
+
+        if (dist < size.X * 2 + size.Y)
         {
             return (corner.X + size.X - (dist - size.X - size.Y), corner.Y + size.Y);
         }
-        else
-        {
-            return(corner.X, corner.Y + size.Y - (dist - 2 * size.X - size.Y));
-        }
+
+        return (corner.X, corner.Y + size.Y - (dist - 2 * size.X - size.Y));
     }
 
     extension(Image image)

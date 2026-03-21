@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace Termule.Systems.Display;
+namespace Termule.Engine.Systems.Display;
 
 /// <summary>
 ///     Display implementation for Windows.

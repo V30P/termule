@@ -1,8 +1,8 @@
-using Termule.Systems.Display;
-using Termule.Types.Content;
-using Termule.Types.Vectors;
+using Termule.Engine.Systems.Display;
+using Termule.Engine.Types.Content;
+using Termule.Engine.Types.Vectors;
 
-namespace Termule.Components;
+namespace Termule.Engine.Components;
 
 /// <summary>
 ///     Renders a line or series of lines relative to the local <see cref="Transform" />'s position.

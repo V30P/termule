@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace Termule.Core;
+namespace Termule.Engine.Core;
 
 /// <summary>
 ///     Central environment that manages <see cref="Component" />s and <see cref="System" />s.

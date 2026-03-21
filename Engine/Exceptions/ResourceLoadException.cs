@@ -1,4 +1,4 @@
-namespace Termule.Exceptions;
+namespace Termule.Engine.Exceptions;
 
 /// <summary>
 ///     Exception that is thrown when a resource fails to load.

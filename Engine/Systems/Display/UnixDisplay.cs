@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Termule.Systems.Display;
+namespace Termule.Engine.Systems.Display;
 
 /// <summary>
 ///     Display implementation for Unix-like operating systems.

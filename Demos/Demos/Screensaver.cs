@@ -1,10 +1,10 @@
 using Demos.Application;
-using Termule.Components;
-using Termule.Core;
-using Termule.Systems.Display;
-using Termule.Systems.ResourceLoader;
-using Termule.Types.Content;
-using Termule.Types.Vectors;
+using Termule.Engine.Components;
+using Termule.Engine.Core;
+using Termule.Engine.Systems.Display;
+using Termule.Engine.Systems.ResourceLoader;
+using Termule.Engine.Types.Content;
+using Termule.Engine.Types.Vectors;
 
 namespace Demos.Demos;
 

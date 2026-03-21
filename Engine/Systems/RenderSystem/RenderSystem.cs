@@ -1,7 +1,7 @@
-using Termule.Systems.Display;
-using Termule.Types.Vectors;
+using Termule.Engine.Systems.Display;
+using Termule.Engine.Types.Vectors;
 
-namespace Termule.Systems.RenderSystem;
+namespace Termule.Engine.Systems.RenderSystem;
 
 /// <summary>
 ///     System responsible for collecting rendering contributions according to layer order.

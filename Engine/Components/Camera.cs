@@ -1,10 +1,10 @@
-using Termule.Core;
-using Termule.Systems.Display;
-using Termule.Systems.RenderSystem;
-using Termule.Types.Content;
-using Termule.Types.Vectors;
+using Termule.Engine.Core;
+using Termule.Engine.Systems.Display;
+using Termule.Engine.Systems.RenderSystem;
+using Termule.Engine.Types.Content;
+using Termule.Engine.Types.Vectors;
 
-namespace Termule.Components;
+namespace Termule.Engine.Components;
 
 /// <summary>
 ///     Component that gets rendered <see cref="FrameBuffer" />s from the <see cref="RenderSystem" /> and draws them to the

@@ -1,6 +1,6 @@
-using Termule.Core;
+using Termule.Engine.Core;
 
-namespace Tests.Utilities;
+namespace Termule.Tests.Utilities;
 
 internal class FakeGameElement : GameElement
 {
@@ -17,7 +17,7 @@ internal class FakeGameElement : GameElement
     }
 
     internal TSystem CallGetRequiredSystem<TSystem>()
-        where TSystem : Termule.Core.System
+        where TSystem : Engine.Core.System
     {
         return GetRequiredSystem<TSystem>();
     }

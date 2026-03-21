@@ -1,4 +1,4 @@
-namespace Termule.Systems.ResourceLoader;
+namespace Termule.Engine.Systems.ResourceLoader;
 
 /// <summary>
 ///     Denotes a resource that can be loaded by the <see cref="ResourceLoader" />.

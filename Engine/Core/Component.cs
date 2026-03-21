@@ -1,6 +1,6 @@
-using Termule.Exceptions;
+using Termule.Engine.Exceptions;
 
-namespace Termule.Core;
+namespace Termule.Engine.Core;
 
 /// <summary>
 ///     Game element that can be added to <see cref="GameObject" />s to provide behavior every tick.

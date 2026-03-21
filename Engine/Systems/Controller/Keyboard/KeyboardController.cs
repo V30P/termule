@@ -1,6 +1,6 @@
 using SharpHook;
 
-namespace Termule.Systems.Controller.Keyboard;
+namespace Termule.Engine.Systems.Controller.Keyboard;
 
 /// <summary>
 ///     Controller that handles keyboard and mouse input.

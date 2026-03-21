@@ -1,6 +1,6 @@
-using Termule.Exceptions;
+using Termule.Engine.Exceptions;
 
-namespace Termule.Core;
+namespace Termule.Engine.Core;
 
 /// <summary>
 ///     Base class for elements that live within a <see cref="Game" />.

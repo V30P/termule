@@ -1,4 +1,4 @@
-namespace Termule.Systems.ResourceLoader;
+namespace Termule.Engine.Systems.ResourceLoader;
 
 /// <summary>
 ///     Marker base interface for types that represent loadable resources.

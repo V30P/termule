@@ -1,8 +1,8 @@
-using Termule.Components;
-using Termule.Types.Content;
-using Termule.Types.Vectors;
+using Termule.Engine.Components;
+using Termule.Engine.Types.Content;
+using Termule.Engine.Types.Vectors;
 
-namespace Termule.Systems.Display;
+namespace Termule.Engine.Systems.Display;
 
 /// <summary>
 ///     Content that <see cref="Renderer" />s contribute to during the render process.

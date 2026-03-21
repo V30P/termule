@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace Termule.Core;
+namespace Termule.Engine.Core;
 
 /// <summary>
 ///     Component that groups other components.

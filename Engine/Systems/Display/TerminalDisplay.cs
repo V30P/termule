@@ -1,7 +1,7 @@
 using System.Text;
-using Termule.Types.Content;
+using Termule.Engine.Types.Content;
 
-namespace Termule.Systems.Display;
+namespace Termule.Engine.Systems.Display;
 
 /// <summary>
 ///     Display class for terminal-based output.

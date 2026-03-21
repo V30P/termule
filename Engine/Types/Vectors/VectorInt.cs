@@ -1,4 +1,4 @@
-namespace Termule.Types.Vectors;
+namespace Termule.Engine.Types.Vectors;
 
 /// <summary>
 ///     Two-dimensional integer vector.

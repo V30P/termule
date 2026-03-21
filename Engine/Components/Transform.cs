@@ -1,7 +1,7 @@
-using Termule.Core;
-using Termule.Types.Vectors;
+using Termule.Engine.Core;
+using Termule.Engine.Types.Vectors;
 
-namespace Termule.Components;
+namespace Termule.Engine.Components;
 
 /// <summary>
 ///     Component that stores a position and handles local positioning relative to parent.
@@ -10,7 +10,7 @@ public sealed class Transform : Component
 {
     private Vector cachedPosition;
     private bool cachedPositionIsLocal = true;
-    
+
     private List<Transform> children = [];
     private Transform parent;
 

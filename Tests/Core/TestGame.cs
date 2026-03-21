@@ -1,7 +1,7 @@
-﻿using Termule.Core;
-using Tests.Utilities;
+﻿using Termule.Engine.Core;
+using Termule.Tests.Utilities;
 
-namespace Tests.CoreTests;
+namespace Termule.Tests.Core;
 
 public class TestGame
 {
@@ -21,7 +21,7 @@ public class TestGame
         FakeGameElement element = new();
 
         game.Register(element);
-        
+
         Assert.Equal(game, element.GameInstance);
         Assert.True(element.RegisteredInvoked);
     }

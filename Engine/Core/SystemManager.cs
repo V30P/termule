@@ -1,9 +1,9 @@
-using Termule.Systems.Controller.Keyboard;
-using Termule.Systems.Display;
-using Termule.Systems.RenderSystem;
-using Termule.Systems.ResourceLoader;
+using Termule.Engine.Systems.Controller.Keyboard;
+using Termule.Engine.Systems.Display;
+using Termule.Engine.Systems.RenderSystem;
+using Termule.Engine.Systems.ResourceLoader;
 
-namespace Termule.Core;
+namespace Termule.Engine.Core;
 
 /// <summary>
 ///     Manages systems and provides an interface to install, uninstall, and retrieve systems during <see cref="Game" />

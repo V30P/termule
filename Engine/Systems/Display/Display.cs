@@ -1,6 +1,6 @@
-using Termule.Types.Vectors;
+using Termule.Engine.Types.Vectors;
 
-namespace Termule.Systems.Display;
+namespace Termule.Engine.Systems.Display;
 
 /// <summary>
 ///     Base system for drawing content to the screen or other interface.
