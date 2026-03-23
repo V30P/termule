@@ -4,6 +4,8 @@
         <OutputType>Exe</OutputType>
         <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
+        <AssemblyName>Termule.Demos</AssemblyName>
+        <RootNamespace>Termule.Demos</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

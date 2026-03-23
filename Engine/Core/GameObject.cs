@@ -10,14 +10,18 @@ public class GameObject : Component, IEnumerable<Component>
     private readonly List<Component> components = [];
     private readonly Dictionary<Type, List<Component>> typesToComponents = [];
 
+    private bool tickingDirty;
+    private readonly List<Component> tickingComponents = [];
+
+
     /// <summary>
     ///     Initializes a new instance of the <see cref="GameObject" /> class.
     /// </summary>
     public GameObject()
     {
-        Registered += RegisterComponents;
-        Ticked += TickComponents;
-        Unregistered += UnregisterComponents;
+        Registered += OnRegister;
+        Ticked += OnTick;
+        Unregistered += OnUnregister;
     }
 
     /// <inheritdoc />
@@ -32,29 +36,37 @@ public class GameObject : Component, IEnumerable<Component>
     }
 
     /// <summary>
-    ///     Adds the provided <paramref name="component" /> to this game object.
-    /// </summary>
-    /// <param name="component">The component to add.</param>
-    public void Add(Component component)
-    {
-        AddComponent(component);
-        Game?.Register(component);
-    }
-
-    /// <summary>
-    ///     Adds several components at once.
+    ///     Adds the provided components to this game object.
     /// </summary>
     /// <param name="componentsToAdd">The components to add.</param>
-    /// <remarks>
-    ///     This is useful when components depend on each other at registration.
-    /// </remarks>
     public void Add(params Component[] componentsToAdd)
     {
         foreach (var component in componentsToAdd)
         {
-            AddComponent(component);
-        }
+            ArgumentNullException.ThrowIfNull(component);
+            if (component.GameObject != null)
+            {
+                throw new ArgumentException(
+                    $"Component '{component.GetType().Name}' is already part of a GameObject");
+            }
 
+            components.Add(component);
+            tickingDirty = true;
+            component.SetGameObject(this);
+
+            foreach (var type in GetImplementedTypes(component))
+            {
+                if (!typesToComponents.TryGetValue(type, out var componentList))
+                {
+                    componentList = [];
+                    typesToComponents.Add(type, componentList);
+                }
+
+                componentList.Add(component);
+            }
+        }
+        
+        // Register all components simultaneously to handle dependencies
         foreach (var component in componentsToAdd)
         {
             Game?.Register(component);
@@ -76,15 +88,12 @@ public class GameObject : Component, IEnumerable<Component>
             throw new InvalidOperationException(
                 $"Cannot remove Component '{component.GetType().Name}' since it is not part of this GameObject");
         }
-
-        var wasRemoved = components.Remove(component);
-        if (!wasRemoved)
-        {
-            return;
-        }
-
-        Game?.Unregister(component);
+        
+        components.Remove(component);
         component.SetGameObject(null);
+        tickingDirty = true;
+        
+        Game?.Unregister(component);
 
         foreach (var componentList in GetImplementedTypes(component).Select(type => typesToComponents[type]))
         {
@@ -97,7 +106,7 @@ public class GameObject : Component, IEnumerable<Component>
     /// </summary>
     /// <typeparam name="TComponent">The type of component to look for.</typeparam>
     /// <returns>The component if one is found or <c>null</c>.</returns>
-    public TComponent Get<TComponent>()
+    public TComponent  Get<TComponent>()
     {
         return GetAll<TComponent>().FirstOrDefault();
     }
@@ -127,51 +136,45 @@ public class GameObject : Component, IEnumerable<Component>
         return implementedTypes;
     }
 
-    private void RegisterComponents()
+    private void OnRegister()
     {
-        foreach (var component in this.ToArray())
+        foreach (var component in components)
         {
             Game.Register(component);
         }
     }
 
-    private void TickComponents()
+    private void OnTick()
     {
-        foreach (var component in this.ToArray())
+        // Rebuild the ticking list if necessary
+        if (tickingDirty)
         {
+            tickingComponents.Clear();
+            foreach (var component in  components)
+            {
+                tickingComponents.Add(component);
+            }
+
+            tickingDirty = false;
+        }
+        
+        foreach (var component in tickingComponents)
+        {
+            // Handles the case where a component is removed during Tick
+            if (component.GameObject != this)
+            {
+                continue;
+            }
+            
             component.Tick();
         }
     }
 
-    private void UnregisterComponents()
+    private void OnUnregister()
     {
-        foreach (var component in this.ToArray())
+        foreach (var component in components)
         {
             Game.Unregister(component);
-        }
-    }
-
-    private void AddComponent(Component component)
-    {
-        ArgumentNullException.ThrowIfNull(component);
-        if (component.GameObject != null)
-        {
-            throw new InvalidOperationException(
-                $"Component '{component.GetType().Name}' is already part of a GameObject");
-        }
-
-        components.Add(component);
-        component.SetGameObject(this);
-
-        foreach (var type in GetImplementedTypes(component))
-        {
-            if (!typesToComponents.TryGetValue(type, out var componentList))
-            {
-                componentList = [];
-                typesToComponents.Add(type, componentList);
-            }
-
-            componentList.Add(component);
         }
     }
 }

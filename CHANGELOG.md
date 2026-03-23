@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Added
 - Tests for core types
+- `--help`, `--interactive`, and `--stats` flags for the demo project
 
 ### Changed
 
@@ -15,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Improved `TerminalDisplay` performance by reducing string allocations and unnecessary escape sequences
 - Renamed `Frame` to `FrameBuffer` and moved it to the display namespace
 - Improved `FrameBuffer` performance by removing unnecessary delegate allocations
+- Made GameObjects only add components to the tick list on the next frame after they are added to avoid snapshot allocation
 
 ### Removed
 

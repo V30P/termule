@@ -1,3 +1,5 @@
+using System.ComponentModel;
+
 namespace Termule.Engine.Systems.Controller;
 
 /// <summary>
@@ -17,14 +19,16 @@ public abstract class Controller : Core.System
             field = value;
             field.Controller = this;
         }
-    }
-
-        = [];
-
+    } = [];
+    
+    
     /// <summary>
-    ///     Gets or sets the values retrieved from <see cref="Bind" />s last tick.
+    ///     Updates the value associated with each <see cref="Bind" />.
     /// </summary>
-    protected Dictionary<string, object> Values { get; set; } = [];
+    protected internal override void Tick()
+    {
+        Binds.PollValues();
+    }
 
     internal Controller()
     {
@@ -38,30 +42,11 @@ public abstract class Controller : Core.System
     /// <returns> The value of the specified bind. </returns>
     public TValue Get<TValue>(string name)
     {
-        return (TValue)Values[name];
-    }
-}
-
-/// <summary>
-///     Generic base system class that collects the values from <see cref="Bind" />s.
-/// </summary>
-/// <typeparam name="TBind">The type of bind this controller uses.</typeparam>
-public abstract class Controller<TBind> : Controller
-    where TBind : Bind
-{
-    internal Controller()
-    {
-    }
-
-    /// <summary>
-    ///     Updates the value associated with each <see cref="Bind" />.
-    /// </summary>
-    protected internal override void Tick()
-    {
-        Values = [];
-        foreach (KeyValuePair<string, Bind> bindPair in Binds)
+        if (!Binds.TryGetValue(name, out var value))
         {
-            Values.Add(bindPair.Key, bindPair.Value.GetValue());
+            throw new ArgumentException($"No bind named '{name}' exists.");
         }
+
+        return value is not TValue typedValue ? throw new ArgumentException($"A bind named '{name}' exists, but it is not of type '{typeof(TValue)}'.") : typedValue;
     }
 }

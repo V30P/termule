@@ -2,7 +2,7 @@ using Termule.Engine.Components;
 using Termule.Engine.Core;
 using Termule.Engine.Types.Content;
 
-namespace Demos.Application;
+namespace Termule.Demos.Application;
 
 internal class TpsIndicator : GameObject
 {

@@ -8,6 +8,7 @@ namespace Termule.Engine.Systems.Controller;
 public sealed class BindMap : IEnumerable<KeyValuePair<string, Bind>>
 {
     private readonly Dictionary<string, Bind> binds = [];
+    private readonly Dictionary<string, object> values = [];
 
     internal Controller Controller
     {
@@ -59,8 +60,10 @@ public sealed class BindMap : IEnumerable<KeyValuePair<string, Bind>>
     /// <param name="bind">The bind to add.</param>
     public void Add(string name, Bind bind)
     {
-        binds.Add(name, bind);
         bind.SetController(Controller);
+        
+        binds.Add(name, bind);
+        values.Add(name, bind.GetValue());
     }
 
     /// <summary>
@@ -72,5 +75,25 @@ public sealed class BindMap : IEnumerable<KeyValuePair<string, Bind>>
         var bind = binds[name];
         binds.Remove(name);
         bind.SetController(null);
+    }
+
+    internal void PollValues()
+    {
+        foreach (var bindPair in binds)
+        {
+            values[bindPair.Key] = bindPair.Value.GetValue();
+        }
+    }
+
+    internal bool TryGetValue(string name, out object value)
+    {
+        if (values.TryGetValue(name, out var existingValue))
+        {
+            value = existingValue;
+            return true;
+        }
+
+        value = null;
+        return false;
     }
 }

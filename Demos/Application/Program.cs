@@ -3,7 +3,7 @@ using Termule.Engine.Components;
 using Termule.Engine.Core;
 using Termule.Engine.Systems.RenderSystem;
 
-namespace Demos.Application;
+namespace Termule.Demos.Application;
 
 internal static class Program
 {

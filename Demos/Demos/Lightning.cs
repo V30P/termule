@@ -1,10 +1,10 @@
-using Demos.Application;
+using Termule.Demos.Application;
 using Termule.Engine.Components;
 using Termule.Engine.Core;
 using Termule.Engine.Systems.Display;
 using Termule.Engine.Types.Vectors;
 
-namespace Demos.Demos;
+namespace Termule.Demos.Demos;
 
 internal class Lightning : Demo
 {

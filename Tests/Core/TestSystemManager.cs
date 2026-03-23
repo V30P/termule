@@ -72,4 +72,12 @@ public class TestSystemManager
 
         Assert.Throws<InvalidOperationException>(() => game.Systems.Uninstall<FakeSystem>());
     }
+
+    [Fact]
+    internal void Get_ShouldReturnNull_WhenSystemMissing()
+    {
+        var game = Game.Create();
+
+        Assert.Null(game.Systems.Get<FakeSystem>());
+    }
 }

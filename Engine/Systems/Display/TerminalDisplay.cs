@@ -8,6 +8,10 @@ namespace Termule.Engine.Systems.Display;
 /// </summary>
 public abstract class TerminalDisplay : Display
 {
+    // Stop built strings from going to the LOH
+    private const int BuilderLimit = 42_500;
+    private const int FlushLimit = 42_000;
+    
     private static readonly Dictionary<BasicColor, string> BackgroundColorCodes = new()
     {
         [BasicColor.Black] = "40",
@@ -50,14 +54,14 @@ public abstract class TerminalDisplay : Display
         [BasicColor.BrightWhite] = "97"
     };
 
-    private readonly StringBuilder builder = new();
+    private readonly StringBuilder builder = new(BuilderLimit);
 
     private Color currentCharColor;
-
     private Color currentColor;
 
     internal TerminalDisplay()
     {
+        Size = (Console.WindowWidth, Console.WindowHeight);
     }
 
     private protected sealed override void DrawBuffer()
@@ -118,10 +122,14 @@ public abstract class TerminalDisplay : Display
 
             // Write the character
             builder.Append(cell.Char != '\0' ? cell.Char : ' ');
+
+            if (builder.Length > FlushLimit)
+            {
+                FlushBuilder();
+            }
         }
 
-        Console.Write(builder);
-        builder.Clear();
+        FlushBuilder();
     }
 
     /// <summary>
@@ -148,6 +156,16 @@ public abstract class TerminalDisplay : Display
 
         Console.CursorVisible = true;
         Console.Write("\e[?1049l");
+    }
+
+    private void FlushBuilder()
+    {
+        foreach (var chunk in builder.GetChunks())
+        {
+            Console.Write(chunk);
+        }
+
+        builder.Clear();
     }
 
     private void AppendMove(int x, int y)

@@ -1,7 +1,7 @@
 using Termule.Engine.Types.Content;
 using Termule.Engine.Types.Vectors;
 
-namespace Demos.Application;
+namespace Termule.Demos.Application;
 
 internal static class Utilities
 {

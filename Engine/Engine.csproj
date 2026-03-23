@@ -7,7 +7,7 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <LangVersion>preview</LangVersion>
-        <AssemblyName>Engine</AssemblyName>
+        <AssemblyName>Termule.Engine</AssemblyName>
         <RootNamespace>Termule.Engine</RootNamespace>
     </PropertyGroup>
 
