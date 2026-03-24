@@ -4,7 +4,7 @@ using Termule.Engine.Types.Vectors;
 namespace Termule.Engine.Systems.RenderSystem;
 
 /// <summary>
-///     System responsible for collecting rendering contributions according to layer order.
+///     Base system responsible for building frameBuffers from renderers according to layer order.
 /// </summary>
 public sealed class RenderSystem : Core.System
 {
@@ -24,9 +24,7 @@ public sealed class RenderSystem : Core.System
 
             field = value;
         }
-    }
-
-        = [new SimpleLayer()];
+    }  = [new SimpleLayer()];
 
     /// <summary>
     ///     Gets the default layer for renderers without an explicit layer.

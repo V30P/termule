@@ -4,18 +4,17 @@ using Termule.Engine.Types.Vectors;
 namespace Termule.Engine.Components;
 
 /// <summary>
-///     Base component for renderers that contribute based on their local transform's position.
+///     Base component for renderers that render based on their local transform's position.
 /// </summary>
 public abstract class TransformRenderer : Renderer
 {
     /// <summary>
-    ///     Gets or sets a value indicating whether the <see cref="Transform" />'s
-    ///     position should be considered display-space when rendering.
+    ///     Gets or sets whether the <see cref="Transform"/>'s position is interpreted as display-space during rendering.
     /// </summary>
     public bool DisplaySpace { get; set; }
 
     /// <summary>
-    ///     Gets an offset to apply to the transform's position before rendering.
+    ///     Gets an offset applied to the transform position before rendering.
     /// </summary>
     // ReSharper disable once UnassignedGetOnlyAutoProperty
     protected virtual Vector Offset { get; }
@@ -42,8 +41,8 @@ public abstract class TransformRenderer : Renderer
         }
 
         frameSpacePos += Offset + (0.5f, 0.5f);
-        Render(frame, frameSpacePos.FloorToInt());
+        RenderAtPosition(frame, frameSpacePos);
     }
 
-    private protected abstract void Render(FrameBuffer frame, VectorInt frameSpacePos);
+    private protected abstract void RenderAtPosition(FrameBuffer frame, Vector frameSpacePos);
 }

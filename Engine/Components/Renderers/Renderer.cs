@@ -47,7 +47,7 @@ public abstract class Renderer : Component
     }
 
     /// <summary>
-    ///     Renders to the provided <see cref="FrameBuffer" /> by contributing <see cref="FrameBuffer" /> changes.
+    ///     Renders to the provided <see cref="FrameBuffer" />.
     /// </summary>
     /// <param name="frame">The target frame to contribute to.</param>
     /// <param name="viewOrigin">The origin of the view in game space.</param>

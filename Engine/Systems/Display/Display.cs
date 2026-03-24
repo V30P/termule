@@ -3,14 +3,14 @@ using Termule.Engine.Types.Vectors;
 namespace Termule.Engine.Systems.Display;
 
 /// <summary>
-///     Base system for drawing content to the screen or other interface.
+///     Base system for displaying frames on the screen or another output target.
 /// </summary>
 public abstract class Display : Core.System
 {
     /// <summary>
-    ///     Gets or sets the display-space position of the mouse (in cells).
+    ///     Gets the display-space position of the mouse (in cells).
     /// </summary>
-    public VectorInt MousePos { get; protected set; }
+    public VectorInt MousePos { get; private protected set; }
 
     /// <summary>
     ///     Gets the size of the display (in cells).
@@ -38,9 +38,9 @@ public abstract class Display : Core.System
 
     internal void Draw()
     {
-        DrawBuffer();
+        PrintBuffer();
         (Buffer, Screen) = (Screen, Buffer);
     }
 
-    private protected abstract void DrawBuffer();
+    private protected abstract void PrintBuffer();
 }

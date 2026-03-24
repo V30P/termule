@@ -39,17 +39,16 @@ public sealed class ContentRenderer<TContent> : TransformRenderer
         }
     }
 
-    private protected override void Render(FrameBuffer frame, VectorInt frameSpacePos)
+    private protected override void RenderAtPosition(FrameBuffer frame, Vector frameSpacePos)
     {
         for (var x = 0; x < Content?.Size.X; x++)
         for (var y = 0; y < Content.Size.Y; y++)
         {
             var cell = Content.At(x, y);
-            var cellPos = frameSpacePos + (x, y);
+            var cellPos = (frameSpacePos + (x, y)).FloorToInt();
             if ((uint)cellPos.X < frame.Size.X && (uint)cellPos.Y < frame.Size.Y)
             {
-                frame.Contribute(
-                    this,
+                frame.Draw(
                     cellPos,
                     cell.Color != BasicColor.Default ? cell.Color : null,
                     cell.Char != '\0' ? cell.Char : null,

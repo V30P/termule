@@ -11,7 +11,7 @@ public abstract class TerminalDisplay : Display
     // Stop built strings from going to the LOH
     private const int BuilderLimit = 42_500;
     private const int FlushLimit = 42_000;
-    
+
     private static readonly Dictionary<BasicColor, string> BackgroundColorCodes = new()
     {
         [BasicColor.Black] = "40",
@@ -64,7 +64,7 @@ public abstract class TerminalDisplay : Display
         Size = (Console.WindowWidth, Console.WindowHeight);
     }
 
-    private protected sealed override void DrawBuffer()
+    private protected sealed override void PrintBuffer()
     {
         if
         (
@@ -133,7 +133,7 @@ public abstract class TerminalDisplay : Display
     }
 
     /// <summary>
-    ///     Prepares the terminal environment for drawing.
+    ///     Prepares the terminal environment for printing.
     /// </summary>
     protected internal override void Start()
     {

@@ -7,8 +7,7 @@ using Termule.Engine.Types.Vectors;
 namespace Termule.Engine.Components;
 
 /// <summary>
-///     Component that gets rendered <see cref="FrameBuffer" />s from the <see cref="RenderSystem" /> and draws them to the
-///     <see cref="Display" />.
+///     Component that uses the <see cref="RenderSystem"/> to render its view to the <see cref="Display" />.
 /// </summary>
 public sealed class Camera : Component
 {

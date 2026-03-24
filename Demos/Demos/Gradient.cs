@@ -30,10 +30,7 @@ internal class Gradient : Demo
             for (var x = 0; x < frame.Size.X; x++)
             for (var y = 0; y < frame.Size.Y; y++)
             {
-                frame.Contribute(
-                    this,
-                    (x, y),
-                    GetColor((float)x / frame.Size.X + time));
+                frame.Draw((x, y), GetColor((float)x / frame.Size.X + time));
             }
         }
 

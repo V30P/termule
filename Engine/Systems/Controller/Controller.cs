@@ -1,9 +1,7 @@
-using System.ComponentModel;
-
 namespace Termule.Engine.Systems.Controller;
 
 /// <summary>
-///     Non-generic base system class for controllers.
+///     Base system for collecting user input from a <see cref="BindMap" />.
 /// </summary>
 public abstract class Controller : Core.System
 {
@@ -20,15 +18,6 @@ public abstract class Controller : Core.System
             field.Controller = this;
         }
     } = [];
-    
-    
-    /// <summary>
-    ///     Updates the value associated with each <see cref="Bind" />.
-    /// </summary>
-    protected internal override void Tick()
-    {
-        Binds.PollValues();
-    }
 
     internal Controller()
     {
@@ -47,6 +36,17 @@ public abstract class Controller : Core.System
             throw new ArgumentException($"No bind named '{name}' exists.");
         }
 
-        return value is not TValue typedValue ? throw new ArgumentException($"A bind named '{name}' exists, but it is not of type '{typeof(TValue)}'.") : typedValue;
+        return value is not TValue typedValue
+            ? throw new ArgumentException($"A bind named '{name}' exists, but it is not of type '{typeof(TValue)}'.")
+            : typedValue;
+    }
+
+
+    /// <summary>
+    ///     Updates the value associated with each <see cref="Bind" />.
+    /// </summary>
+    protected internal override void Tick()
+    {
+        Binds.PollValues();
     }
 }

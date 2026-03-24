@@ -26,7 +26,7 @@ internal class Raindrops : Demo
     protected override void Tick()
     {
         cooldown -= Game.DeltaTime;
-        if (!(cooldown < 0))
+        if (cooldown > 0)
         {
             return;
         }

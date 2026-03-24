@@ -3,7 +3,7 @@ using System.Collections;
 namespace Termule.Engine.Systems.Controller;
 
 /// <summary>
-///     Collection to hold <see cref="Bind" />s for a <see cref="Systems.Controller.Controller" />.
+///     Collection to manage <see cref="Bind" />s for a <see cref="Systems.Controller.Controller" />.
 /// </summary>
 public sealed class BindMap : IEnumerable<KeyValuePair<string, Bind>>
 {
@@ -29,7 +29,7 @@ public sealed class BindMap : IEnumerable<KeyValuePair<string, Bind>>
     ///     Gets or sets the bind associated with the provided <paramref name="name" />.
     /// </summary>
     /// <param name="name">The name of the bind to look for.</param>
-    /// <returns>The bind with name <paramref name="name" />.</returns>
+    /// <returns>The corresponding bind.</returns>
     public Bind this[string name]
     {
         get => binds[name];
@@ -60,8 +60,18 @@ public sealed class BindMap : IEnumerable<KeyValuePair<string, Bind>>
     /// <param name="bind">The bind to add.</param>
     public void Add(string name, Bind bind)
     {
+        if (binds.ContainsKey(name))
+        {
+            throw new ArgumentException($"A bind with name '{name}' already exists.");
+        }
+
+        if (binds.ContainsValue(bind))
+        {
+            var existingName = binds.Where(p => p.Value == bind).Select(p => p.Key).First();
+            throw new ArgumentException($"Bind '{bind}' is already added under the name '{existingName}'.");
+        }
+
         bind.SetController(Controller);
-        
         binds.Add(name, bind);
         values.Add(name, bind.GetValue());
     }

@@ -5,12 +5,12 @@ using Termule.Engine.Types.Vectors;
 namespace Termule.Engine.Systems.Display;
 
 /// <summary>
-///     Content that <see cref="Renderer" />s contribute to during the render process.
+///     Content implementation that <see cref="Renderer" />s draw to during the render process.
 /// </summary>
 public sealed class FrameBuffer : Content
 {
     /// <summary>
-    ///     Gets the <see cref="Cell" /> at the given position.
+    ///     Gets the cell at the specified position.
     /// </summary>
     /// <param name="x">The X position of the cell to get.</param>
     /// <param name="y">The Y position of the cell to get.</param>
@@ -23,22 +23,18 @@ public sealed class FrameBuffer : Content
     }
 
     /// <summary>
-    ///     Makes a contribution a cell in this frame, tracking which renderer made the change.
+    ///     Modifies a cell in this frame buffer.
     /// </summary>
-    /// <param name="renderer">The renderer making the contribution.</param>
     /// <param name="pos">The position of the cell.</param>
     /// <param name="color">The color to set, or <c>null</c> to leave unchanged.</param>
     /// <param name="character">The character to set, or <c>null</c> to leave unchanged.</param>
     /// <param name="characterColor">The character color to set, or <c>null</c> to leave unchanged.</param>
-    /// <exception cref="ArgumentOutOfRangeException">Thrown if the position is outside the frame bounds.</exception>
-    public void Contribute(Renderer renderer, VectorInt pos, Color? color = null, char? character = null,
+    public void Draw(VectorInt pos, Color? color = null, char? character = null,
         Color? characterColor = null)
     {
-        ArgumentNullException.ThrowIfNull(renderer);
         if (pos.X < 0 || pos.X >= Size.X || pos.Y < 0 || pos.Y >= Size.Y)
         {
-            throw new ArgumentOutOfRangeException(nameof(pos), pos,
-                "Contribution must be within the bounds of the Frame");
+            return;
         }
 
         ref var cell = ref Cells[pos.X, pos.Y];
