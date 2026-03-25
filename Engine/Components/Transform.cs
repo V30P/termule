@@ -8,10 +8,9 @@ namespace Termule.Engine.Components;
 /// </summary>
 public sealed class Transform : Component
 {
+    private readonly List<Transform> children = [];
     private Vector cachedPosition;
     private bool cachedPositionIsLocal = true;
-
-    private List<Transform> children = [];
     private Transform parent;
 
     /// <summary>
@@ -69,22 +68,25 @@ public sealed class Transform : Component
     /// </summary>
     public Transform()
     {
-        Registered += ApplyPositioning;
+        Registered += OnRegistered;
+        Unregistered += OnUnregistered;
     }
 
-    private void ApplyPositioning()
+    private void OnRegistered()
     {
         parent = GameObject.GameObject?.Get<Transform>();
-        Pos = cachedPositionIsLocal ? (parent?.Pos ?? (0, 0)) + cachedPosition : cachedPosition;
+        parent?.children.Add(this);
 
-        children = [];
-        foreach (var component in GameObject)
-        {
-            if (component is GameObject componentGameObject &&
-                componentGameObject.Get<Transform>() is { } childTransform)
-            {
-                children.Add(childTransform);
-            }
-        }
+        Pos = cachedPositionIsLocal ? (parent?.Pos ?? (0, 0)) + cachedPosition : cachedPosition;
+    }
+
+    private void OnUnregistered()
+    {
+        // Cache the current position so it can be restored when re-registered.
+        cachedPosition = Pos;
+        cachedPositionIsLocal = false;
+
+        parent?.children.Remove(this);
+        parent = null;
     }
 }

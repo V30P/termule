@@ -1,3 +1,4 @@
+using Termule.Engine.Components;
 using Termule.Engine.Types.Vectors;
 
 namespace Termule.Engine.Systems.Display;
@@ -5,12 +6,20 @@ namespace Termule.Engine.Systems.Display;
 /// <summary>
 ///     Base system for displaying frames on the screen or another output target.
 /// </summary>
-public abstract class Display : Core.System
+public abstract class Display : Core.System, ICameraTarget
 {
+    private protected FrameBuffer Buffer = new(0, 0);
+
     /// <summary>
     ///     Gets the display-space position of the mouse (in cells).
     /// </summary>
     public VectorInt MousePos { get; private protected set; }
+
+    private protected FrameBuffer Screen { get; private set; } = new(0, 0);
+
+    internal Display()
+    {
+    }
 
     /// <summary>
     ///     Gets the size of the display (in cells).
@@ -19,7 +28,7 @@ public abstract class Display : Core.System
     {
         get;
 
-        private protected set
+        set
         {
             Buffer = new FrameBuffer(value.X, value.Y);
             Screen = new FrameBuffer(value.X, value.Y);
@@ -28,15 +37,14 @@ public abstract class Display : Core.System
         }
     }
 
-    internal FrameBuffer Buffer { get; private set; } = new(0, 0);
 
-    private protected FrameBuffer Screen { get; private set; } = new(0, 0);
-
-    internal Display()
+    FrameBuffer ICameraTarget.Buffer
     {
+        get => Buffer;
+        set => Buffer = value;
     }
 
-    internal void Draw()
+    void ICameraTarget.Update()
     {
         PrintBuffer();
         (Buffer, Screen) = (Screen, Buffer);

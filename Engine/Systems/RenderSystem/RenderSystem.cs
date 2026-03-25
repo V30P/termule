@@ -24,7 +24,7 @@ public sealed class RenderSystem : Core.System
 
             field = value;
         }
-    }  = [new SimpleLayer()];
+    } = [new SimpleLayer()];
 
     /// <summary>
     ///     Gets the default layer for renderers without an explicit layer.

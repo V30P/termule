@@ -1,12 +1,12 @@
 namespace Termule.Tests.Utilities;
 
-internal class FakeSystem : Engine.Core.System
+public class FakeSystem : Engine.Core.System
 {
-    internal bool Started { get; private set; }
+    public bool Started { get; private set; }
 
-    internal int TickCount { get; private set; }
+    public int TickCount { get; private set; }
 
-    internal bool Stopped { get; private set; }
+    public bool Stopped { get; private set; }
 
     protected internal override void Start()
     {

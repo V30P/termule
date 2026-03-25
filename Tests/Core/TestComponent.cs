@@ -17,7 +17,7 @@ public class TestComponent
     }
 
     [Fact]
-    internal void Destroy_ShouldRemoveFromGameObject()
+    public void Destroy_ShouldRemoveFromGameObject()
     {
         var component = GetComponentOnGameObject();
         component.Destroy();
@@ -25,23 +25,29 @@ public class TestComponent
     }
 
     [Fact]
-    internal void Destroy_ShouldThrow_WhenGameObjectIsNull()
-    {
-        FakeComponent component = new();
-        Assert.Throws<InvalidOperationException>(component.Destroy);
-    }
-
-    [Fact]
-    internal void GetRequiredComponent_ShouldReturnExistingComponent()
+    public void GetRequiredComponent_ShouldReturnExistingComponent()
     {
         var component = GetComponentOnGameObject();
         Assert.Equal(component, component.CallGetRequiredComponent<FakeComponent>());
     }
 
     [Fact]
-    internal void GetRequiredComponent_ShouldThrow_WhenComponentMissing()
+    public void GetRequiredComponent_ShouldThrow_WhenComponentMissing()
     {
         var component = GetComponentOnGameObject();
         Assert.Throws<MissingComponentException<Transform>>(component.CallGetRequiredComponent<Transform>);
+    }
+
+    [Fact]
+    public void SetGameObject_ShouldRemoveFromOldGameObjectThenAddToNewGameObject()
+    {
+        var component = new FakeComponent();
+        GameObject oldGameObject = [component];
+        GameObject newGameObject = [];
+
+        component.GameObject = newGameObject;
+
+        Assert.Null(oldGameObject.Get<FakeComponent>());
+        Assert.Equal(newGameObject.Get<FakeComponent>(), component);
     }
 }

@@ -2,22 +2,22 @@ using Termule.Engine.Core;
 
 namespace Termule.Tests.Utilities;
 
-internal class FakeComponent : Component
+public class FakeComponent : Component
 {
-    internal int TickCount { get; private set; }
+    public int TickCount { get; private set; }
 
-    internal bool RegisteredInvoked { get; private set; }
+    public int RegisterCount { get; private set; }
 
-    internal bool UnregisteredInvoked { get; private set; }
+    public int UnregisterCount { get; private set; }
 
-    internal FakeComponent()
+    public FakeComponent()
     {
-        Registered += () => RegisteredInvoked = true;
+        Registered += () => RegisterCount++;
         Ticked += () => TickCount++;
-        Unregistered += () => UnregisteredInvoked = true;
+        Unregistered += () => UnregisterCount++;
     }
 
-    internal TComponent CallGetRequiredComponent<TComponent>()
+    public TComponent CallGetRequiredComponent<TComponent>()
         where TComponent : Component
     {
         return GetRequiredComponent<TComponent>();

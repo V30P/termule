@@ -6,7 +6,7 @@ namespace Termule.Tests.Core;
 public class TestGame
 {
     [Fact]
-    internal void Create_ShouldInitializeSystemsAndRoot()
+    public void Create_ShouldInitializeSystemsAndRoot()
     {
         var game = Game.Create();
 
@@ -15,7 +15,7 @@ public class TestGame
     }
 
     [Fact]
-    internal void Register_ShouldConfigureElement()
+    public void Register_ShouldConfigureElement()
     {
         var game = (Game)Game.Create();
         FakeGameElement element = new();
@@ -27,7 +27,7 @@ public class TestGame
     }
 
     [Fact]
-    internal void RunFrame_ShouldTickComponents()
+    public void RunFrame_ShouldTickComponents()
     {
         var game = Game.Create();
         FakeComponent component = new();
@@ -40,7 +40,7 @@ public class TestGame
     }
 
     [Fact]
-    internal void Unregister_ShouldClearElementConfiguration()
+    public void Unregister_ShouldClearElementConfiguration()
     {
         var game = (Game)Game.Create();
         FakeGameElement element = new();

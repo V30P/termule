@@ -48,8 +48,8 @@ public sealed class CircleRenderer : TransformRenderer
     private protected override void RenderAtPosition(FrameBuffer frame, Vector frameSpacePos)
     {
         // Midpoint circle algorithm
-        var y = (int) Radius;
-        var p = (int) (1 - Radius);
+        var y = (int)Radius;
+        var p = (int)(1 - Radius);
         for (var x = 0; x <= y; x++)
         {
             DrawMidpointTransformations((x, y), frame, frameSpacePos);
@@ -57,7 +57,7 @@ public sealed class CircleRenderer : TransformRenderer
             {
                 FillHorizontals((x, y), frame, frameSpacePos);
             }
-            
+
             p += 2 * (p < 0 ? 2 * x : x - --y) + 1;
         }
     }
@@ -100,7 +100,7 @@ public sealed class CircleRenderer : TransformRenderer
         {
             var widenedPos = ((pos.X * 2, pos.Y) + offset).FloorToInt();
             frame.Draw(widenedPos, Color);
-            
+
             var fraction = offset.X - (float)Math.Truncate(offset.X);
             frame.Draw(widenedPos + (fraction > 0.5f ? (1, 0) : (-1, 0)), Color);
         }

@@ -8,7 +8,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Added
 - Tests for core types
+- Test for components
 - `--help`, `--interactive`, and `--stats` flags for the demo project
+- Setter for `gameObject` property of components for easy movement
+- `ICameraTarget` for rendering to non-display objects
 
 ### Changed
 
@@ -21,10 +24,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Removed
 
 - Renderer crediting and `GetOverlappers()` for abysmal performance (switch to manually implemented collision detection)
-- Size-related methods from `Camera`, will now always match display size
+- Size-related methods from `Camera`, will now always match target size
 
 ### Fixed
 - Improper layering of TPS indicator in debug builds of Demos
+- Transforms not properly clearing state when reparenting
+- Camera continuing to use a transform after it moves
 
 ## [0.1.0] 
 

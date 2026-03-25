@@ -14,11 +14,6 @@ public sealed class Game : IConfigurableGame
     private bool stop;
 
     /// <summary>
-    ///     Gets the root game object.
-    /// </summary>
-    public GameObject Root { get; }
-
-    /// <summary>
     ///     Gets the system manager.
     /// </summary>
     public SystemManager Systems { get; }
@@ -39,7 +34,10 @@ public sealed class Game : IConfigurableGame
         Register(Systems);
     }
 
-    GameObject IConfigurableGame.Root => Root;
+    /// <summary>
+    ///     Gets the root game object.
+    /// </summary>
+    public GameObject Root { get; }
 
     IConfigurableSystemManager IConfigurableGame.Systems => Systems;
 

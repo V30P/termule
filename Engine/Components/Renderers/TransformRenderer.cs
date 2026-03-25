@@ -9,7 +9,7 @@ namespace Termule.Engine.Components;
 public abstract class TransformRenderer : Renderer
 {
     /// <summary>
-    ///     Gets or sets whether the <see cref="Transform"/>'s position is interpreted as display-space during rendering.
+    ///     Gets or sets whether the <see cref="Transform" />'s position is interpreted as display-space during rendering.
     /// </summary>
     public bool DisplaySpace { get; set; }
 

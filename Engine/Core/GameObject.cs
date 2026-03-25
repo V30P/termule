@@ -13,15 +13,14 @@ public class GameObject : Component, IEnumerable<Component>
 
     private bool tickingDirty;
 
-
     /// <summary>
     ///     Initializes a new instance of the <see cref="GameObject" /> class.
     /// </summary>
     public GameObject()
     {
-        Registered += OnRegister;
+        Registered += OnRegistered;
         Ticked += OnTick;
-        Unregistered += OnUnregister;
+        Unregistered += OnUnregistered;
     }
 
     /// <inheritdoc />
@@ -108,7 +107,12 @@ public class GameObject : Component, IEnumerable<Component>
     /// <returns>The component if one is found or <c>null</c>.</returns>
     public TComponent Get<TComponent>()
     {
-        return GetAll<TComponent>().FirstOrDefault();
+        if (typesToComponents.TryGetValue(typeof(TComponent), out var matchingComponents))
+        {
+            return (TComponent)(object)matchingComponents.FirstOrDefault();
+        }
+
+        return default;
     }
 
     /// <summary>
@@ -136,7 +140,7 @@ public class GameObject : Component, IEnumerable<Component>
         return implementedTypes;
     }
 
-    private void OnRegister()
+    private void OnRegistered()
     {
         foreach (var component in components)
         {
@@ -170,7 +174,7 @@ public class GameObject : Component, IEnumerable<Component>
         }
     }
 
-    private void OnUnregister()
+    private void OnUnregistered()
     {
         foreach (var component in components)
         {

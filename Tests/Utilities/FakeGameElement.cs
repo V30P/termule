@@ -2,21 +2,21 @@ using Termule.Engine.Core;
 
 namespace Termule.Tests.Utilities;
 
-internal class FakeGameElement : GameElement
+public class FakeGameElement : GameElement
 {
-    internal bool RegisteredInvoked { get; private set; }
+    public bool RegisteredInvoked { get; private set; }
 
-    internal bool UnregisteredInvoked { get; private set; }
+    public bool UnregisteredInvoked { get; private set; }
 
-    internal Game GameInstance => Game;
+    public Game GameInstance => Game;
 
-    internal FakeGameElement()
+    public FakeGameElement()
     {
         Registered += () => RegisteredInvoked = true;
         Unregistered += () => UnregisteredInvoked = true;
     }
 
-    internal TSystem CallGetRequiredSystem<TSystem>()
+    public TSystem CallGetRequiredSystem<TSystem>()
         where TSystem : Engine.Core.System
     {
         return GetRequiredSystem<TSystem>();

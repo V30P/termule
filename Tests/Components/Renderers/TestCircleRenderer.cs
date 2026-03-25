@@ -1,6 +1,5 @@
 namespace Termule.Tests.Components;
 
-public class CircleRenderer
+public class TestCircleRenderer
 {
-    
 }

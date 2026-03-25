@@ -9,9 +9,9 @@ public class TestGameObjectd
 
     private class DependentComponent : Component
     {
-        internal bool HasDependency { get; private set; }
+        public bool HasDependency { get; private set; }
 
-        internal DependentComponent()
+        public DependentComponent()
         {
             Registered += CheckForDependency;
         }
@@ -31,7 +31,7 @@ public class TestGameObjectd
     public class TestAdd
     {
         [Fact]
-        internal void Add_ShouldAddAndRegisterComponent()
+        public void Add_ShouldAddAndRegisterComponent()
         {
             var game = Game.Create();
             GameObject gameObject = [];
@@ -41,11 +41,11 @@ public class TestGameObjectd
             gameObject.Add(component);
 
             Assert.Equal(component, gameObject.Get<FakeComponent>());
-            Assert.True(component.RegisteredInvoked);
+            Assert.Equal(1, component.RegisterCount);
         }
 
         [Fact]
-        internal void Add_ShouldAddThenRegisterComponentsSimultaneously()
+        public void Add_ShouldAddThenRegisterComponentsSimultaneously()
         {
             var game = Game.Create();
             GameObject gameObject = [];
@@ -58,7 +58,7 @@ public class TestGameObjectd
         }
 
         [Fact]
-        internal void Add_ShouldThrow_WhenComponentAlreadyInAGameObject()
+        public void Add_ShouldThrow_WhenComponentAlreadyInAGameObject()
         {
             FakeComponent component = new();
             new GameObject().Add(component);
@@ -66,7 +66,7 @@ public class TestGameObjectd
         }
 
         [Fact]
-        internal void Add_ShouldThrow_WhenSameComponentIAddedTwice()
+        public void Add_ShouldThrow_WhenSameComponentIAddedTwice()
         {
             GameObject gameObject = [];
             FakeComponent component = new();
@@ -76,11 +76,11 @@ public class TestGameObjectd
             Assert.Throws<ArgumentException>(() => gameObject.Add(component));
         }
     }
-    
+
     public class TestRemove
     {
         [Fact]
-        internal void Remove_ShouldRemoveAndUnregisterComponent()
+        public void Remove_ShouldRemoveAndUnregisterComponent()
         {
             var game = Game.Create();
             GameObject gameObject = [];
@@ -92,11 +92,11 @@ public class TestGameObjectd
             gameObject.Remove(component);
 
             Assert.Null(gameObject.Get<FakeComponent>());
-            Assert.True(component.UnregisteredInvoked);
+            Assert.Equal(1, component.UnregisterCount);
         }
 
         [Fact]
-        internal void Remove_ShouldThrow_WhenComponentNotOnGameObject()
+        public void Remove_ShouldThrow_WhenComponentNotOnGameObject()
         {
             FakeComponent component = new();
             new GameObject().Add(component);
@@ -107,37 +107,12 @@ public class TestGameObjectd
 
     public class TestGet
     {
-        [Fact]
-        internal void Get_ShouldReturnQueuedAdditions()
-        {
-            GameObject gameObject = [];
-            FakeComponent component = new();
-
-            gameObject.Add(component);
-
-            Assert.Same(component, gameObject.Get<FakeComponent>());
-        }
-
-        [Fact]
-        internal void Get_ShouldReturnFullyAddedComponents()
-        {
-            var game = Game.Create();
-            var component = new FakeComponent();
-            GameObject gameObject = [component];
-            game.Root.Add(gameObject);
-        
-            game.Prepare();
-            game.RunForFrames(1);
-        
-            Assert.Same(component, gameObject.Get<FakeComponent>());
-        }
-    
         [Theory]
         [InlineData(typeof(Component))]
         [InlineData(typeof(FakeComponent))]
         [InlineData(typeof(IDerivedComponent))]
         [InlineData(typeof(DerivedComponent))]
-        internal void Get_ShouldReturnExistingComponent(Type getType)
+        public void Get_ShouldReturnExistingComponent(Type getType)
         {
             Component component = new DerivedComponent();
             GameObject gameObject = [component];
@@ -151,10 +126,35 @@ public class TestGameObjectd
         }
 
         [Fact]
-        internal void Get_ShouldReturnNull_WhenComponentMissing()
+        public void Get_ShouldReturnFullyAddedComponents()
+        {
+            var game = Game.Create();
+            var component = new FakeComponent();
+            GameObject gameObject = [component];
+            game.Root.Add(gameObject);
+
+            game.Prepare();
+            game.RunForFrames(1);
+
+            Assert.Same(component, gameObject.Get<FakeComponent>());
+        }
+
+        [Fact]
+        public void Get_ShouldReturnNull_WhenComponentMissing()
         {
             GameObject gameObject = [];
             Assert.Null(gameObject.Get<FakeComponent>());
+        }
+
+        [Fact]
+        public void Get_ShouldReturnQueuedAdditions()
+        {
+            GameObject gameObject = [];
+            FakeComponent component = new();
+
+            gameObject.Add(component);
+
+            Assert.Same(component, gameObject.Get<FakeComponent>());
         }
     }
 
@@ -174,18 +174,7 @@ public class TestGameObjectd
         }
 
         [Fact]
-        internal void GetAll_ShouldReturnComponentsRegardlessOfAdditionState()
-        {
-            GameObject gameObject = [new FakeComponent()];
-            gameObject.Tick();
-            
-            gameObject.Add(new FakeComponent());
-            
-            Assert.Equal(2, gameObject.GetAll<FakeComponent>().Count());
-        }
-        
-        [Fact]
-        internal void GetAll_ShouldIncludeQueuedComponents()
+        public void GetAll_ShouldIncludeQueuedComponents()
         {
             GameObject gameObject = [];
             FakeComponent queuedComponent = new();
@@ -195,9 +184,20 @@ public class TestGameObjectd
             Assert.Contains(queuedComponent, gameObject.GetAll<FakeComponent>());
         }
 
+        [Fact]
+        public void GetAll_ShouldReturnComponentsRegardlessOfAdditionState()
+        {
+            GameObject gameObject = [new FakeComponent()];
+            gameObject.Tick();
+
+            gameObject.Add(new FakeComponent());
+
+            Assert.Equal(2, gameObject.GetAll<FakeComponent>().Count());
+        }
+
         [Theory]
         [ClassData(typeof(GetAllData))]
-        internal void GetAll_ShouldReturnMatchingComponents(Component[] components, int matchingCount)
+        public void GetAll_ShouldReturnMatchingComponents(Component[] components, int matchingCount)
         {
             GameObject gameObject = [.. components];
             Assert.Equal(matchingCount, gameObject.GetAll<ComponentA>().Count());
@@ -205,7 +205,7 @@ public class TestGameObjectd
     }
 
     [Fact]
-    internal void Register_ShouldRegisterComponents()
+    public void Register_ShouldRegisterComponents()
     {
         var game = Game.Create();
         FakeComponent component = new();
@@ -213,11 +213,11 @@ public class TestGameObjectd
 
         game.Root.Add(gameObject);
 
-        Assert.True(component.RegisteredInvoked);
+        Assert.Equal(1, component.RegisterCount);
     }
 
     [Fact]
-    internal void Tick_ShouldTickComponents()
+    public void Tick_ShouldTickComponents()
     {
         FakeComponent component = new();
         GameObject gameObject = [component];
@@ -228,7 +228,7 @@ public class TestGameObjectd
     }
 
     [Fact]
-    internal void Unregister_ShouldUnregisterComponents()
+    public void Unregister_ShouldUnregisterComponents()
     {
         var game = Game.Create();
         FakeComponent component = new();
@@ -236,7 +236,7 @@ public class TestGameObjectd
         game.Root.Add(gameObject);
 
         game.Root.Remove(gameObject);
-        
-        Assert.True(component.UnregisteredInvoked);
+
+        Assert.Equal(1, component.UnregisterCount);
     }
 }

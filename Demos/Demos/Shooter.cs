@@ -213,7 +213,7 @@ internal class Shooter : Demo
         private void OnTicked()
         {
             MovementDir = Systems.Get<Controller>().Get<Vector>(Binds.Movement);
-            Target = Root.Get<Camera>().DisplayToGamePos(Systems.Get<Display>().MousePos);
+            Target = Root.Get<Camera>().TargetToGamePos(Systems.Get<Display>().MousePos);
 
             if (Systems.Get<Controller>().Get<bool>(Binds.Fire))
             {

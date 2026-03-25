@@ -8,6 +8,8 @@ namespace Termule.Engine.Core;
 /// </summary>
 public abstract class Component : GameElement
 {
+    private GameObject gameObject;
+
     /// <summary>
     ///     Invoked every time the game loop runs.
     /// </summary>
@@ -16,24 +18,28 @@ public abstract class Component : GameElement
     /// <summary>
     ///     Gets the <see cref="GameObject" /> that this component is part of.
     /// </summary>
-    public GameObject GameObject { get; private set; }
+    public GameObject GameObject
+    {
+        get => gameObject;
+
+        set
+        {
+            gameObject?.Remove(this);
+            value?.Add(this);
+        }
+    }
 
     /// <summary>
     ///     Removes this component from its GameObject.
     /// </summary>
     public void Destroy()
     {
-        if (GameObject == null)
-        {
-            throw new InvalidOperationException("Cannot destroy a component with no GameObject.");
-        }
-
-        GameObject.Remove(this);
+        GameObject?.Remove(this);
     }
 
-    internal void SetGameObject(GameObject gameObject)
+    internal void SetGameObject(GameObject value)
     {
-        GameObject = gameObject;
+        gameObject = value;
     }
 
     /// <summary>

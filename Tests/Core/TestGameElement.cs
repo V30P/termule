@@ -14,7 +14,7 @@ public class TestGameElement
     }
 
     [Fact]
-    internal void GetRequiredSystem_ShouldReturnInstalledSystem()
+    public void GetRequiredSystem_ShouldReturnInstalledSystem()
     {
         GetGameWithGameElement(out var game, out var element);
 
@@ -25,7 +25,7 @@ public class TestGameElement
     }
 
     [Fact]
-    internal void GetRequiredSystem_ShouldThrow_WhenSystemMissing()
+    public void GetRequiredSystem_ShouldThrow_WhenSystemMissing()
     {
         GetGameWithGameElement(out _, out var element);
         Assert.Throws<MissingSystemException<FakeSystem>>(() => element.CallGetRequiredSystem<FakeSystem>());
