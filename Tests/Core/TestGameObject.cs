@@ -133,7 +133,7 @@ public class TestGameObjectd
             GameObject gameObject = [component];
             game.Root.Add(gameObject);
 
-            game.Prepare();
+            game.Start();
             game.RunForFrames(1);
 
             Assert.Same(component, gameObject.Get<FakeComponent>());

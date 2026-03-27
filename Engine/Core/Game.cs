@@ -43,6 +43,11 @@ public sealed class Game : IConfigurableGame
 
     void IConfigurableGame.Run()
     {
+        if (!Started)
+        {
+            Start();
+        }
+
 #if RELEASE
         try
         {
@@ -61,18 +66,18 @@ public sealed class Game : IConfigurableGame
         }
 #endif
     }
-    
+
     // Manual lifecycle control
-    void IConfigurableGame.Prepare()
+    void IConfigurableGame.Start()
     {
-        Prepare();
+        Start();
     }
 
     void IConfigurableGame.RunFrame()
     {
         RunFrame();
     }
-    
+
     void IConfigurableGame.RunForFrames(int frames)
     {
         for (var i = 0; i < frames; i++)
@@ -120,8 +125,13 @@ public sealed class Game : IConfigurableGame
         elements.Remove(element);
     }
 
-    private void Prepare()
+    private void Start()
     {
+        if (Started)
+        {
+            return;
+        }
+
         Systems.Start();
         Started = true;
     }
@@ -137,6 +147,12 @@ public sealed class Game : IConfigurableGame
 
     private void CleanUp()
     {
+        if (!Started)
+        {
+            return;
+        }
+
         Systems.Stop();
+        Started = false;
     }
 }

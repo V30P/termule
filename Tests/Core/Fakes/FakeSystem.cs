@@ -18,7 +18,7 @@ public class FakeSystem : Engine.Core.System
         TickCount++;
     }
 
-    protected internal  override void Stop()
+    protected internal override void Stop()
     {
         Stopped = true;
     }

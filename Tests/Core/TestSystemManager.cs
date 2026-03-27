@@ -1,4 +1,8 @@
 using Termule.Engine.Core;
+using Termule.Engine.Systems.Controller;
+using Termule.Engine.Systems.Display;
+using Termule.Engine.Systems.RenderSystem;
+using Termule.Engine.Systems.ResourceLoader;
 using Termule.Tests.Core.Fakes;
 
 namespace Termule.Tests.Core;
@@ -39,7 +43,7 @@ public class TestSystemManager
     public void Install_ShouldThrow_WhenGameStarted()
     {
         var game = Game.Create();
-        game.Prepare();
+        game.Start();
 
         Assert.Throws<InvalidOperationException>(() => game.Systems.Install(new FakeSystem()));
     }
@@ -51,7 +55,7 @@ public class TestSystemManager
         FakeSystem system = new();
         game.Systems.Install(system);
 
-        game.Prepare();
+        game.Start();
         Assert.True(system.Started);
 
         game.RunForFrames(5);
@@ -76,8 +80,28 @@ public class TestSystemManager
     public void Uninstall_ShouldThrow_WhenGameStarted()
     {
         var game = Game.Create();
-        game.Prepare();
+        game.Start();
 
         Assert.Throws<InvalidOperationException>(() => game.Systems.Uninstall<FakeSystem>());
+    }
+
+    [Fact]
+    public void UseDefaults_ShouldInstallCoreSystems()
+    {
+        // Headless test hosts may report invalid console dimensions (-1),
+        // which makes terminal display construction fail before defaults install.
+        if (Console.WindowWidth <= 0 || Console.WindowHeight <= 0)
+        {
+            return;
+        }
+
+        var game = Game.Create();
+
+        game.Systems.UseDefaults();
+
+        Assert.NotNull(game.Systems.Get<Controller>());
+        Assert.NotNull(game.Systems.Get<Display>());
+        Assert.NotNull(game.Systems.Get<RenderSystem>());
+        Assert.NotNull(game.Systems.Get<ResourceLoader>());
     }
 }

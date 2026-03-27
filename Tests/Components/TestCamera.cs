@@ -50,7 +50,7 @@ public class TestCamera
             new Camera { Target = target, BackgroundCell = background });
 
         game.Systems.Install(new RenderSystem());
-        game.Prepare();
+        game.Start();
 
         game.RunFrame();
 
@@ -98,7 +98,7 @@ public class TestCamera
         game.Root.Add(new Camera { Target = target });
 
         game.Systems.Install(new RenderSystem());
-        game.Prepare();
+        game.Start();
 
         game.RunForFrames(5);
 

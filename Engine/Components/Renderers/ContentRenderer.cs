@@ -24,7 +24,8 @@ public sealed class ContentRenderer<TContent> : PositionalRenderer
     public bool Centered { get; set; }
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
-    protected override Vector Offset => Centered && Content != null ? new Vector(-Content.Size.X, Content.Size.Y) / 2 : (0, 0);
+    protected override Vector Offset =>
+        Centered && Content != null ? new Vector(-Content.Size.X, Content.Size.Y) / 2 : (0, 0);
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 
     /// <summary>

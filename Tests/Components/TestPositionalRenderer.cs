@@ -9,12 +9,11 @@ public class TestPositionalRenderer
 {
     private sealed class FakePositionalRenderer(Vector offset = default) : PositionalRenderer
     {
-        protected override Vector Offset { get; } = offset;
-
         public FrameBuffer? CapturedFrame { get; private set; }
         public VectorInt? CapturedOrigin { get; private set; }
         public Vector? CapturedOffset { get; private set; }
         public int RenderCount { get; private set; }
+        protected override Vector Offset { get; } = offset;
 
         private protected override void RenderAtPosition(PositionalRenderContext context)
         {
@@ -38,7 +37,7 @@ public class TestPositionalRenderer
 
         [(10.25f, 5f), (5f, 5f), (5, 0), (0.25f, 0f)],
         [(3f, 2f), (0.75f, 0.25f), (2, -2), (0.25f, 0.25f)],
-        [(-3f, -2f), (-0.75f, -0.25f), (-2, 2), (-0.25f, -0.25f)],
+        [(-3f, -2f), (-0.75f, -0.25f), (-2, 2), (-0.25f, -0.25f)]
     ];
 
     public static IEnumerable<object[]> TargetSpaceConversionData =
@@ -48,8 +47,39 @@ public class TestPositionalRenderer
         [(10.25f, 5f), (5f, 5f), (10, 5), (0.25f, 0f)],
 
         [(-1.25f, 2.5f), (100f, -50f), (-1, 2), (-0.25f, 0.5f)],
-        [(4.8f, -3.2f), (-9.1f, 12.3f), (5, -3), (-0.2f, -0.2f)],
+        [(4.8f, -3.2f), (-9.1f, 12.3f), (5, -3), (-0.2f, -0.2f)]
     ];
+
+    private static void AssertVectorApproximately(Vector expected, Vector? actual, float epsilon)
+    {
+        Assert.NotNull(actual);
+        Assert.InRange(actual.Value.X, expected.X - epsilon, expected.X + epsilon);
+        Assert.InRange(actual.Value.Y, expected.Y - epsilon, expected.Y + epsilon);
+    }
+
+    [Fact]
+    public void Offset_ShouldApplyCorrectly_WhenInGameSpace()
+    {
+        var renderer = new FakePositionalRenderer((0.75f, 0.75f));
+        GameObject _ = [new Transform { Pos = (0, 0) }, renderer];
+
+        renderer.Render(new FrameBuffer(0, 0), (0, 0));
+
+        Assert.Equal((1, -1), renderer.CapturedOrigin);
+        AssertVectorApproximately((-0.25f, 0.25f), renderer.CapturedOffset, PositionEpsilon);
+    }
+
+    [Fact]
+    public void Offset_ShouldApplyCorrectly_WhenInTargetSpace()
+    {
+        var renderer = new FakePositionalRenderer((0.75f, 0.75f)) { TargetSpace = true };
+        GameObject _ = [new Transform { Pos = (0, 0) }, renderer];
+
+        renderer.Render(new FrameBuffer(0, 0), (0, 0));
+
+        Assert.Equal((1, 1), renderer.CapturedOrigin);
+        AssertVectorApproximately((-0.25f, -0.25f), renderer.CapturedOffset, PositionEpsilon);
+    }
 
     [Theory]
     [MemberData(nameof(GameSpaceConversionData))]
@@ -96,36 +126,5 @@ public class TestPositionalRenderer
 
         Assert.Equal(1, renderer.RenderCount);
         Assert.Same(frame, renderer.CapturedFrame);
-    }
-
-    [Fact]
-    public void Offset_ShouldApplyCorrectly_WhenInGameSpace()
-    {
-        var renderer = new FakePositionalRenderer((0.75f, 0.75f));
-        GameObject _ = [new Transform { Pos = (0, 0) }, renderer];
-
-        renderer.Render(new FrameBuffer(0, 0), (0, 0));
-
-        Assert.Equal((1, -1), renderer.CapturedOrigin);
-        AssertVectorApproximately((-0.25f, 0.25f), renderer.CapturedOffset, PositionEpsilon);
-    }
-
-    [Fact]
-    public void Offset_ShouldApplyCorrectly_WhenInTargetSpace()
-    {
-        var renderer = new FakePositionalRenderer((0.75f, 0.75f)) { TargetSpace = true };
-        GameObject _ = [new Transform { Pos = (0, 0) }, renderer];
-
-        renderer.Render(new FrameBuffer(0, 0), (0, 0));
-
-        Assert.Equal((1, 1), renderer.CapturedOrigin);
-        AssertVectorApproximately((-0.25f, -0.25f), renderer.CapturedOffset, PositionEpsilon);
-    }
-
-    private static void AssertVectorApproximately(Vector expected, Vector? actual, float epsilon)
-    {
-        Assert.NotNull(actual);
-        Assert.InRange(actual.Value.X, expected.X - epsilon, expected.X + epsilon);
-        Assert.InRange(actual.Value.Y, expected.Y - epsilon, expected.Y + epsilon);
     }
 }
