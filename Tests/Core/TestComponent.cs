@@ -1,7 +1,7 @@
 using Termule.Engine.Components;
 using Termule.Engine.Core;
 using Termule.Engine.Exceptions;
-using Termule.Tests.Utilities;
+using Termule.Tests.Core.Fakes;
 
 namespace Termule.Tests.Core;
 

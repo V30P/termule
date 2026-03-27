@@ -1,4 +1,3 @@
-using Termule.Engine.Systems.Display;
 using Termule.Engine.Types.Content;
 using Termule.Engine.Types.Vectors;
 
@@ -7,7 +6,7 @@ namespace Termule.Engine.Components;
 /// <summary>
 ///     Renders a circle at the local <see cref="Transform" />'s position.
 /// </summary>
-public sealed class CircleRenderer : TransformRenderer
+public sealed class CircleRenderer : PositionalRenderer
 {
     /// <summary>
     ///     Gets or sets the color to render the circle with.
@@ -45,64 +44,63 @@ public sealed class CircleRenderer : TransformRenderer
         }
     }
 
-    private protected override void RenderAtPosition(FrameBuffer frame, Vector frameSpacePos)
+    private protected override void RenderAtPosition(PositionalRenderContext context)
     {
         // Midpoint circle algorithm
         var y = (int)Radius;
         var p = (int)(1 - Radius);
         for (var x = 0; x <= y; x++)
         {
-            DrawMidpointTransformations((x, y), frame, frameSpacePos);
+            DrawMidpointTransformations((x, y), context);
             if (Filled)
             {
-                FillHorizontals((x, y), frame, frameSpacePos);
+                FillHorizontals((x, y), context);
             }
 
             p += 2 * (p < 0 ? 2 * x : x - --y) + 1;
         }
     }
 
-    private void DrawMidpointTransformations(VectorInt pos, FrameBuffer frame, Vector offset)
+    private void DrawMidpointTransformations(VectorInt pos, PositionalRenderContext context)
     {
-        DrawPoint((pos.X, pos.Y), frame, offset);
-        DrawPoint((pos.X, -pos.Y), frame, offset);
-        DrawPoint((pos.Y, -pos.X), frame, offset);
-        DrawPoint((-pos.Y, -pos.X), frame, offset);
-        DrawPoint((-pos.X, -pos.Y), frame, offset);
-        DrawPoint((-pos.X, pos.Y), frame, offset);
-        DrawPoint((-pos.Y, pos.X), frame, offset);
-        DrawPoint((pos.Y, pos.X), frame, offset);
+        DrawPoint((pos.X, pos.Y), context);
+        DrawPoint((pos.X, -pos.Y), context);
+        DrawPoint((pos.Y, -pos.X), context);
+        DrawPoint((-pos.Y, -pos.X), context);
+        DrawPoint((-pos.X, -pos.Y), context);
+        DrawPoint((-pos.X, pos.Y), context);
+        DrawPoint((-pos.Y, pos.X), context);
+        DrawPoint((pos.Y, pos.X), context);
     }
 
-    private void FillHorizontals(VectorInt pos, FrameBuffer frame, Vector offset)
+    private void FillHorizontals(VectorInt pos, PositionalRenderContext context)
     {
         for (var x = -pos.X + 1; x < pos.X; x++)
         {
-            DrawPoint((x, pos.Y), frame, offset);
-            DrawPoint((x, -pos.Y), frame, offset);
+            DrawPoint((x, pos.Y), context);
+            DrawPoint((x, -pos.Y), context);
         }
 
         for (var x = -pos.Y + 1; x < pos.Y; x++)
         {
-            DrawPoint((x, pos.X), frame, offset);
-            DrawPoint((x, -pos.X), frame, offset);
+            DrawPoint((x, pos.X), context);
+            DrawPoint((x, -pos.X), context);
         }
     }
 
-    private void DrawPoint(VectorInt pos, FrameBuffer frame, Vector offset)
+    private void DrawPoint(VectorInt pos, PositionalRenderContext context)
     {
         if (!DoubleWide)
         {
-            var frameSpacePos = (pos + offset).FloorToInt();
-            frame.Draw(frameSpacePos, Color);
+            var frameSpacePos = pos + context.Origin;
+            context.Frame.Draw(frameSpacePos, Color);
         }
         else
         {
-            var widenedPos = ((pos.X * 2, pos.Y) + offset).FloorToInt();
-            frame.Draw(widenedPos, Color);
+            var widenedPos = (pos.X * 2, pos.Y) + context.Origin;
+            context.Frame.Draw(widenedPos, Color);
 
-            var fraction = offset.X - (float)Math.Truncate(offset.X);
-            frame.Draw(widenedPos + (fraction > 0.5f ? (1, 0) : (-1, 0)), Color);
+            context.Frame.Draw(widenedPos + (context.Offset.X > 0 ? (1, 0) : (-1, 0)), Color);
         }
     }
 }

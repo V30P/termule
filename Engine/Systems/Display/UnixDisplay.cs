@@ -12,6 +12,11 @@ namespace Termule.Engine.Systems.Display;
 /// </summary>
 public sealed partial class UnixDisplay : TerminalDisplay
 {
+    private const int F_GETFL = 3;
+    private const int F_SETFL = 4;
+    private static readonly int O_NONBLOCK = OperatingSystem.IsMacOS() ? 0x0004 : 0x800;
+    private static readonly int STDIN_FILENO = 0;
+
     /// <inheritdoc />
     protected internal override void Start()
     {
@@ -73,11 +78,4 @@ public sealed partial class UnixDisplay : TerminalDisplay
 
     [GeneratedRegex(@"\x1b\[<\d+;(\d+);(\d+)[Mm]")]
     private static partial Regex sgrRegex();
-
-#pragma warning disable SA1310 // Field names should not contain underscore
-    private const int F_GETFL = 3;
-    private const int F_SETFL = 4;
-    private static readonly int O_NONBLOCK = OperatingSystem.IsMacOS() ? 0x0004 : 0x800;
-    private static readonly int STDIN_FILENO = 0;
-#pragma warning restore SA1310 // Field names should not contain underscore
 }

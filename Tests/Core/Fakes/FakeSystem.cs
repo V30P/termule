@@ -1,4 +1,4 @@
-namespace Termule.Tests.Utilities;
+namespace Termule.Tests.Core.Fakes;
 
 public class FakeSystem : Engine.Core.System
 {
@@ -18,7 +18,7 @@ public class FakeSystem : Engine.Core.System
         TickCount++;
     }
 
-    protected internal override void Stop()
+    protected internal  override void Stop()
     {
         Stopped = true;
     }

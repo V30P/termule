@@ -12,13 +12,17 @@ namespace Termule.Engine.Components;
 public sealed class Camera : Component
 {
     /// <summary>
-    /// </summary>
-    public ICameraTarget Target { get; set; }
-
-    /// <summary>
     ///     Gets or sets a cell that should make up the background of rendered <see cref="FrameBuffer" />s.
     /// </summary>
     public Cell BackgroundCell { get; set; }
+
+    /// <summary>
+    /// </summary>
+    public ICameraTarget Target
+    {
+        get => field ?? GetRequiredSystem<Display>();
+        set;
+    }
 
     private Vector TransformPos => GameObject.Get<Transform>()?.Pos ?? (0, 0);
 
@@ -27,7 +31,6 @@ public sealed class Camera : Component
     /// </summary>
     public Camera()
     {
-        Registered += OnRegistered;
         Ticked += RenderToTarget;
     }
 
@@ -38,11 +41,6 @@ public sealed class Camera : Component
     /// <returns>The corresponding position in game-space.</returns>
     public Vector TargetToGamePos(Vector pos)
     {
-        if (Target == null)
-        {
-            throw new InvalidOperationException("Camera has no target.");
-        }
-
         var relativeTargetPos = pos - (Vector)Target.Size / 2f;
         Vector relativePos = (relativeTargetPos.X, -relativeTargetPos.Y);
         return relativePos - TransformPos;
@@ -55,19 +53,9 @@ public sealed class Camera : Component
     /// <returns>The corresponding position in target-space.</returns>
     public Vector GameToTargetPos(Vector pos)
     {
-        if (Target == null)
-        {
-            throw new InvalidOperationException("Camera has no target.");
-        }
-
         var relativePos = pos + TransformPos;
         Vector relativeTargetPos = (relativePos.X, -relativePos.Y);
         return relativeTargetPos + (Vector)Target.Size / 2f;
-    }
-
-    private void OnRegistered()
-    {
-        Target ??= GetRequiredSystem<Display>();
     }
 
     private void RenderToTarget()

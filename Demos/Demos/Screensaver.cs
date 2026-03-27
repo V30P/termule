@@ -47,7 +47,7 @@ internal class Screensaver : Demo
         {
             Add(
                 new Transform(),
-                new ContentRenderer<Image> { DisplaySpace = true });
+                new ContentRenderer<Image> { TargetSpace = true });
 
             Registered += OnRegistered;
             Ticked += OnTicked;

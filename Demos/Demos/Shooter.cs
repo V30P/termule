@@ -120,7 +120,7 @@ internal class Shooter : Demo
         Root.Get<ContentRenderer<Text>>().Content.Value =
             $"""
                      GAME OVER
-                 ROUNDS SURVIVED: {roundNumber}
+                 ROUNDS SURVIVED: {roundNumber - 1}
              """;
         gameOverTimeRemaining = GameOverLength;
 

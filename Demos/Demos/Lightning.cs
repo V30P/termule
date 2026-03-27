@@ -101,7 +101,7 @@ internal class Lightning : Demo
                     new LineRenderer
                     {
                         Color = (255, 255, 255),
-                        DisplaySpace = true,
+                        TargetSpace = true,
                         Points = branch
                     });
             }

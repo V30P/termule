@@ -23,6 +23,15 @@ public class GameObject : Component, IEnumerable<Component>
         Unregistered += OnUnregistered;
     }
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="GameObject" /> class with the provided components.
+    /// </summary>
+    /// <param name="components"> The components that the GameObject should contain. </param>
+    public GameObject(params Component[] components) : this()
+    {
+        Add(components);
+    }
+
     /// <inheritdoc />
     public IEnumerator<Component> GetEnumerator()
     {

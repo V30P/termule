@@ -19,9 +19,12 @@ public interface IConfigurableGame
     ///     Runs the game.
     /// </summary>
     void Run();
-
+    
+    // Use these for manual lifecycle control
     internal void Prepare();
-
+    
+    internal void RunFrame();
+    
     internal void RunForFrames(int frames);
 
     internal void CleanUp();

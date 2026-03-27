@@ -53,7 +53,7 @@ internal class Raindrops : Demo
                 new Transform(),
                 new CircleRenderer
                 {
-                    DisplaySpace = true,
+                    TargetSpace = true,
                     DoubleWide = true
                 });
 

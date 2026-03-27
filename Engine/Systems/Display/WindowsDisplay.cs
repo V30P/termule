@@ -12,9 +12,9 @@ public sealed partial class WindowsDisplay : TerminalDisplay
     {
         base.Start();
 
-        var handle = GetStdHandle(StdInputHandle);
+        var handle = GetStdHandle(STD_INPUT_HANDLE);
         _ = GetConsoleMode(handle, out var mode);
-        mode &= ~(EnableEchoInput | EnableLineInput);
+        mode &= ~(ENABLE_ECHO_INPUT | ENABLE_LINE_INPUT);
         SetConsoleMode(handle, mode);
     }
 
@@ -23,9 +23,9 @@ public sealed partial class WindowsDisplay : TerminalDisplay
     {
         base.Stop();
 
-        var handle = GetStdHandle(StdInputHandle);
+        var handle = GetStdHandle(STD_INPUT_HANDLE);
         GetConsoleMode(handle, out var mode);
-        mode |= EnableEchoInput | EnableLineInput;
+        mode |= ENABLE_ECHO_INPUT | ENABLE_LINE_INPUT;
         _ = SetConsoleMode(handle, mode);
     }
 
@@ -40,9 +40,10 @@ public sealed partial class WindowsDisplay : TerminalDisplay
     [return: MarshalAs(UnmanagedType.Bool)]
     private static partial bool SetConsoleMode(IntPtr hConsoleHandle, uint dwMode);
 
-#pragma warning disable SA1310 // Field names should not contain underscore
-    private const int StdInputHandle = -10;
-    private const uint EnableEchoInput = 0x0004;
-    private const uint EnableLineInput = 0x0002;
-#pragma warning restore SA1310 // Field names should not contain underscore
+    // ReSharper disable InconsistentNaming
+    private const int STD_INPUT_HANDLE = -10;
+    private const uint ENABLE_ECHO_INPUT = 0x0004;
+
+    private const uint ENABLE_LINE_INPUT = 0x0002;
+    // ReSharper restore InconsistentNaming
 }

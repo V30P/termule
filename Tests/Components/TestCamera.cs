@@ -52,7 +52,7 @@ public class TestCamera
         game.Systems.Install(new RenderSystem());
         game.Prepare();
 
-        game.RunForFrames(1);
+        game.RunFrame();
 
         for (var x = 0; x < target.Size.X; x++)
         {
@@ -61,15 +61,6 @@ public class TestCamera
                 Assert.Equal(background, target.Buffer[x, y]);
             }
         }
-    }
-
-    [Fact]
-    public void ConversionMethods_ShouldThrow_WhenTargetMissing()
-    {
-        var camera = new Camera();
-
-        Assert.Throws<InvalidOperationException>(() => camera.TargetToGamePos((0, 0)));
-        Assert.Throws<InvalidOperationException>(() => camera.GameToTargetPos((0, 0)));
     }
 
     [Theory]

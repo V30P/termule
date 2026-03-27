@@ -17,7 +17,7 @@ internal class TpsIndicator : GameObject
             new Transform(),
             new ContentRenderer<Text>
             {
-                DisplaySpace = true,
+                TargetSpace = true,
                 Content = new Text { Value = string.Format(TextTemplate, "N/A") }
             });
 

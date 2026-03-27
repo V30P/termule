@@ -1,5 +1,5 @@
 using Termule.Engine.Core;
-using Termule.Tests.Utilities;
+using Termule.Tests.Core.Fakes;
 
 namespace Termule.Tests.Core;
 

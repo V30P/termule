@@ -43,7 +43,6 @@ public sealed class Game : IConfigurableGame
 
     void IConfigurableGame.Run()
     {
-        Prepare();
 #if RELEASE
         try
         {
@@ -62,12 +61,18 @@ public sealed class Game : IConfigurableGame
         }
 #endif
     }
-
+    
+    // Manual lifecycle control
     void IConfigurableGame.Prepare()
     {
         Prepare();
     }
 
+    void IConfigurableGame.RunFrame()
+    {
+        RunFrame();
+    }
+    
     void IConfigurableGame.RunForFrames(int frames)
     {
         for (var i = 0; i < frames; i++)

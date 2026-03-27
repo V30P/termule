@@ -1,4 +1,3 @@
-using Termule.Engine.Systems.Display;
 using Termule.Engine.Types.Content;
 using Termule.Engine.Types.Vectors;
 
@@ -7,7 +6,7 @@ namespace Termule.Engine.Components;
 /// <summary>
 ///     Renders a line or polyline relative to the local <see cref="Transform" />'s position.
 /// </summary>
-public sealed class LineRenderer : TransformRenderer
+public sealed class LineRenderer : PositionalRenderer
 {
     /// <summary>
     ///     Gets or sets the points defining the line or polyline relative to this renderer’s transform.
@@ -19,15 +18,15 @@ public sealed class LineRenderer : TransformRenderer
     /// </summary>
     public Color Color { get; set; }
 
-    private protected override void RenderAtPosition(FrameBuffer frame, Vector frameSpacePos)
+    private protected override void RenderAtPosition(PositionalRenderContext context)
     {
         for (var i = 1; i < Points.Count; i++)
         {
-            DrawLine(Points[i - 1].RoundToInt(), Points[i].RoundToInt(), frame, frameSpacePos);
+            DrawLine(Points[i - 1].RoundToInt(), Points[i].RoundToInt(), context);
         }
     }
 
-    private void DrawLine(VectorInt start, VectorInt end, FrameBuffer frame, Vector offset)
+    private void DrawLine(VectorInt start, VectorInt end, PositionalRenderContext context)
     {
         // Bresenham's line algorithm
         var x0 = start.X;
@@ -43,7 +42,7 @@ public sealed class LineRenderer : TransformRenderer
 
         while (true)
         {
-            frame.Draw((x0, y0) + offset.FloorToInt(), Color);
+            context.Frame.Draw((x0, y0) + context.Offset.FloorToInt(), Color);
 
             if (x0 == x1 && y0 == y1)
             {

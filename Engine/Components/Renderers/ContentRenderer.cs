@@ -1,4 +1,3 @@
-using Termule.Engine.Systems.Display;
 using Termule.Engine.Types.Content;
 using Termule.Engine.Types.Vectors;
 
@@ -11,7 +10,7 @@ namespace Termule.Engine.Components;
 ///     The type of content to render.
 ///     An instance will be created automatically if a parameterless constructor exists.
 /// </typeparam>
-public sealed class ContentRenderer<TContent> : TransformRenderer
+public sealed class ContentRenderer<TContent> : PositionalRenderer
     where TContent : Content
 {
     /// <summary>
@@ -25,7 +24,7 @@ public sealed class ContentRenderer<TContent> : TransformRenderer
     public bool Centered { get; set; }
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
-    protected override Vector Offset => Centered && Content != null ? -(Vector)Content.Size / 2 : (0, 0);
+    protected override Vector Offset => Centered && Content != null ? new Vector(-Content.Size.X, Content.Size.Y) / 2 : (0, 0);
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 
     /// <summary>
@@ -39,21 +38,18 @@ public sealed class ContentRenderer<TContent> : TransformRenderer
         }
     }
 
-    private protected override void RenderAtPosition(FrameBuffer frame, Vector frameSpacePos)
+    private protected override void RenderAtPosition(PositionalRenderContext context)
     {
         for (var x = 0; x < Content?.Size.X; x++)
         for (var y = 0; y < Content.Size.Y; y++)
         {
             var cell = Content.At(x, y);
-            var cellPos = (frameSpacePos + (x, y)).FloorToInt();
-            if ((uint)cellPos.X < frame.Size.X && (uint)cellPos.Y < frame.Size.Y)
-            {
-                frame.Draw(
-                    cellPos,
-                    cell.Color != BasicColor.Default ? cell.Color : null,
-                    cell.Char != '\0' ? cell.Char : null,
-                    cell.CharColor != BasicColor.Default ? cell.CharColor : null);
-            }
+            var cellPos = context.Origin + (x, y);
+            context.Frame.Draw(
+                cellPos,
+                cell.Color != BasicColor.Default ? cell.Color : null,
+                cell.Char != '\0' ? cell.Char : null,
+                cell.CharColor != BasicColor.Default ? cell.CharColor : null);
         }
     }
 }
