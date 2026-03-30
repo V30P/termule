@@ -42,8 +42,8 @@ internal class Shooter : Demo
             { Binds.Fire, new ButtonBind(Button.Mouse1) }
         };
 
-        _characterSprite = new Image(Systems.Get<ResourceLoader>().Load<Content>("Shooter/Character"));
-        _projectileSprite = new Image(Systems.Get<ResourceLoader>().Load<Content>("Shooter/Projectile"));
+        _characterSprite = new Image(Systems.Get<ResourceLoader>().Load<Content>("shooter/character"));
+        _projectileSprite = new Image(Systems.Get<ResourceLoader>().Load<Content>("shooter/projectile"));
 
         Root.Add(
             new Transform(),
