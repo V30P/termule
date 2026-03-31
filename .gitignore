@@ -1,5 +1,10 @@
+# Build artifacts
 */bin
 */obj
-.idea/
-Termule.sln.DotSettings.user
-.vscode/
+
+# Hidden files
+.*
+!.gitignore
+
+# Editor settings
+*.DotSettings.user

@@ -12,7 +12,7 @@ public class TestSystemManager
     [Fact]
     public void Get_ShouldReturnNull_WhenSystemMissing()
     {
-        var game = Game.Create();
+        IConfigurableGame? game = Game.Create();
 
         Assert.Null(game.Systems.Get<FakeSystem>());
     }
@@ -20,7 +20,7 @@ public class TestSystemManager
     [Fact]
     public void Install_ShouldAddSystem()
     {
-        var game = Game.Create();
+        IConfigurableGame? game = Game.Create();
         FakeSystem system = new();
 
         game.Systems.Install(system);
@@ -30,7 +30,7 @@ public class TestSystemManager
     [Fact]
     public void Install_ShouldReplaceExistingSystem()
     {
-        var game = Game.Create();
+        IConfigurableGame? game = Game.Create();
         game.Systems.Install(new FakeSystem());
 
         FakeSystem system = new();
@@ -42,7 +42,7 @@ public class TestSystemManager
     [Fact]
     public void Install_ShouldThrow_WhenGameStarted()
     {
-        var game = Game.Create();
+        IConfigurableGame? game = Game.Create();
         game.Start();
 
         Assert.Throws<InvalidOperationException>(() => game.Systems.Install(new FakeSystem()));
@@ -51,7 +51,7 @@ public class TestSystemManager
     [Fact]
     public void InstalledSystem_ShouldFollowLifecycle()
     {
-        var game = Game.Create();
+        IConfigurableGame? game = Game.Create();
         FakeSystem system = new();
         game.Systems.Install(system);
 
@@ -68,7 +68,7 @@ public class TestSystemManager
     [Fact]
     public void Uninstall_ShouldRemoveSystem()
     {
-        var game = Game.Create();
+        IConfigurableGame? game = Game.Create();
         game.Systems.Install(new FakeSystem());
 
         game.Systems.Uninstall<FakeSystem>();
@@ -79,7 +79,7 @@ public class TestSystemManager
     [Fact]
     public void Uninstall_ShouldThrow_WhenGameStarted()
     {
-        var game = Game.Create();
+        IConfigurableGame? game = Game.Create();
         game.Start();
 
         Assert.Throws<InvalidOperationException>(() => game.Systems.Uninstall<FakeSystem>());
@@ -95,7 +95,7 @@ public class TestSystemManager
             return;
         }
 
-        var game = Game.Create();
+        IConfigurableGame? game = Game.Create();
 
         game.Systems.UseDefaults();
 

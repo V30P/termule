@@ -1,5 +1,6 @@
+using Termule.Engine.Components;
 using Termule.Engine.Systems.Display;
-using Termule.Engine.Types.Vectors;
+using Termule.Engine.Types;
 
 namespace Termule.Engine.Systems.RenderSystem;
 
@@ -33,8 +34,8 @@ public sealed class RenderSystem : Core.System
 
     internal void Render(Vector viewOrigin, FrameBuffer frame)
     {
-        foreach (var layer in Layers)
-        foreach (var renderer in layer)
+        foreach (Layer layer in Layers)
+        foreach (Renderer renderer in layer)
         {
             renderer.Render(frame, viewOrigin);
         }

@@ -1,6 +1,4 @@
-using Termule.Engine.Types.Vectors;
-
-namespace Termule.Engine.Types.Content;
+namespace Termule.Engine.Types;
 
 /// <summary>
 ///     Content that represents textual content.
@@ -23,13 +21,13 @@ public sealed class Text : Content
                 return;
             }
 
-            var lines = field.Split('\n', StringSplitOptions.RemoveEmptyEntries);
-            var width = lines.Length > 0 ? lines.Max(l => l.Length) : 0;
-            var height = lines.Length;
+            string[] lines = field.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+            int width = lines.Length > 0 ? lines.Max(l => l.Length) : 0;
+            int height = lines.Length;
 
             Resize(width, height);
             VectorInt pos = (0, 0);
-            foreach (var character in field)
+            foreach (char character in field)
             {
                 if (character == '\n')
                 {
@@ -74,8 +72,8 @@ public sealed class Text : Content
 
     private void ApplyColor()
     {
-        for (var x = 0; x < Size.X; x++)
-        for (var y = 0; y < Size.Y; y++)
+        for (int x = 0; x < Size.X; x++)
+        for (int y = 0; y < Size.Y; y++)
         {
 #pragma warning disable SA1101
             // Prefix local calls with this

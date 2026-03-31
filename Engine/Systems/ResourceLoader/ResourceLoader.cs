@@ -24,13 +24,14 @@ public sealed class ResourceLoader : Core.System
     public TResource Load<TResource>(string path)
         where TResource : IResource
     {
-        var extendedPath = Path.GetExtension(path) == TResource.FileExtension ? path : path + TResource.FileExtension;
-        if (cache.TryGetValue(extendedPath, out var cachedResource))
+        string extendedPath =
+            Path.GetExtension(path) == TResource.FileExtension ? path : path + TResource.FileExtension;
+        if (cache.TryGetValue(extendedPath, out IResourceBase cachedResource))
         {
             return Serializer.Deserialize<TResource>(Serializer.Serialize(cachedResource));
         }
 
-        var fullPath = Path.Combine(resourcesDir, extendedPath);
+        string fullPath = Path.Combine(resourcesDir, extendedPath);
         if (!Path.Exists(fullPath))
         {
             throw new FileNotFoundException("Resource file could not be found", fullPath);
@@ -46,7 +47,7 @@ public sealed class ResourceLoader : Core.System
             throw new ResourceLoadException(fullPath, e);
         }
 
-        var resource = Serializer.Deserialize<TResource>(text);
+        TResource resource = Serializer.Deserialize<TResource>(text);
         cache.Add(extendedPath, resource);
         return Serializer.Deserialize<TResource>(text);
     }

@@ -3,10 +3,9 @@ using Termule.Engine.Components;
 using Termule.Engine.Core;
 using Termule.Engine.Systems.Display;
 using Termule.Engine.Systems.ResourceLoader;
-using Termule.Engine.Types.Content;
-using Termule.Engine.Types.Vectors;
+using Termule.Engine.Types;
 
-namespace Termule.Demos.Demos;
+namespace Termule.Demos.Implementations;
 
 internal class Screensaver : Demo
 {
@@ -65,8 +64,8 @@ internal class Screensaver : Demo
 
         private void OnTicked()
         {
-            var transform = Get<Transform>();
-            var displaySize = Systems.Get<Display>().Size;
+            Transform transform = Get<Transform>();
+            VectorInt displaySize = Systems.Get<Display>().Size;
 
             if (transform.Pos.Y < 0 && Math.Abs(dir.Y - unsignedDir.Y) > 0.01f)
             {
@@ -96,8 +95,8 @@ internal class Screensaver : Demo
 
         private void RandomizeColor()
         {
-            var imageRenderer = Get<ContentRenderer<Image>>();
-            var newColor = colors.Where(c => c != currentColor).ElementAt(random.Next(0, colors.Length - 1));
+            ContentRenderer<Image> imageRenderer = Get<ContentRenderer<Image>>();
+            Color newColor = colors.Where(c => c != currentColor).ElementAt(random.Next(0, colors.Length - 1));
             imageRenderer.Content = imageRenderer.Content.WithColorSwapped(currentColor, newColor);
             currentColor = newColor;
         }

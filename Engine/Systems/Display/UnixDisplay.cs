@@ -26,7 +26,7 @@ public sealed partial class UnixDisplay : TerminalDisplay
         Console.Write("\e[?1006h"); // Enable SGR coordinates for mouse tracking
 
         // Configure stdin
-        var flags = fcntl(STDIN_FILENO, F_GETFL, 0);
+        int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
         _ = fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
 
         // Configure the terminal driver
@@ -39,7 +39,7 @@ public sealed partial class UnixDisplay : TerminalDisplay
     protected internal override void Tick()
     {
         // Get everything in STDIN
-        var buffer = new byte[1024];
+        byte[] buffer = new byte[1024];
         StringBuilder input = new();
         while (read(STDIN_FILENO, buffer, buffer.Length) is int bytesRead and > 0)
         {
@@ -47,10 +47,10 @@ public sealed partial class UnixDisplay : TerminalDisplay
         }
 
         // Parse out the SGR events
-        var sgrEvents = sgrRegex().Matches(input.ToString());
+        MatchCollection sgrEvents = sgrRegex().Matches(input.ToString());
         if (sgrEvents.Count > 0)
         {
-            var lastSGREvent = sgrEvents[^1];
+            Match lastSGREvent = sgrEvents[^1];
             MousePos =
             (
                 int.Parse(lastSGREvent.Groups[1].Value) - 1,

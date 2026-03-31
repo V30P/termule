@@ -2,10 +2,9 @@ using Termule.Demos.Application;
 using Termule.Engine.Components;
 using Termule.Engine.Core;
 using Termule.Engine.Systems.Display;
-using Termule.Engine.Types.Content;
-using Termule.Engine.Types.Vectors;
+using Termule.Engine.Types;
 
-namespace Termule.Demos.Demos;
+namespace Termule.Demos.Implementations;
 
 internal class Raindrops : Demo
 {
@@ -69,11 +68,11 @@ internal class Raindrops : Demo
                 return;
             }
 
-            var circleRenderer = Get<CircleRenderer>();
+            CircleRenderer circleRenderer = Get<CircleRenderer>();
             circleRenderer.Radius = GetRadius(time);
             circleRenderer.Color = (0, 0, (int)(255 * (1 - time / Lifespan)));
 
-            var displaySize = Systems.Get<Display>().Size;
+            VectorInt displaySize = Systems.Get<Display>().Size;
             Get<Transform>().Pos = (pos.X * displaySize.X, pos.Y * displaySize.Y);
         }
 

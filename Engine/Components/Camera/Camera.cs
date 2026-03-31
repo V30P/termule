@@ -1,8 +1,7 @@
 using Termule.Engine.Core;
 using Termule.Engine.Systems.Display;
 using Termule.Engine.Systems.RenderSystem;
-using Termule.Engine.Types.Content;
-using Termule.Engine.Types.Vectors;
+using Termule.Engine.Types;
 
 namespace Termule.Engine.Components;
 
@@ -41,7 +40,7 @@ public sealed class Camera : Component
     /// <returns>The corresponding position in game-space.</returns>
     public Vector TargetToGamePos(Vector pos)
     {
-        var relativeTargetPos = pos - (Vector)Target.Size / 2f;
+        Vector relativeTargetPos = pos - (Vector)Target.Size / 2f;
         Vector relativePos = (relativeTargetPos.X, -relativeTargetPos.Y);
         return relativePos - TransformPos;
     }
@@ -53,7 +52,7 @@ public sealed class Camera : Component
     /// <returns>The corresponding position in target-space.</returns>
     public Vector GameToTargetPos(Vector pos)
     {
-        var relativePos = pos + TransformPos;
+        Vector relativePos = pos + TransformPos;
         Vector relativeTargetPos = (relativePos.X, -relativePos.Y);
         return relativeTargetPos + (Vector)Target.Size / 2f;
     }

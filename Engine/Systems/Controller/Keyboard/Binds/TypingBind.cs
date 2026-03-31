@@ -9,7 +9,7 @@ public sealed class TypingBind : KeyboardBind
 
     internal override object GetValue()
     {
-        var value = textSinceLastFrame;
+        string value = textSinceLastFrame;
         textSinceLastFrame = string.Empty;
         return value;
     }

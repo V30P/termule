@@ -18,7 +18,7 @@ public sealed class BindMap : IEnumerable<KeyValuePair<string, Bind>>
         {
             field = value;
 
-            foreach (var bind in binds.Values)
+            foreach (Bind bind in binds.Values)
             {
                 bind.SetController(value);
             }
@@ -67,7 +67,7 @@ public sealed class BindMap : IEnumerable<KeyValuePair<string, Bind>>
 
         if (binds.ContainsValue(bind))
         {
-            var existingName = binds.Where(p => p.Value == bind).Select(p => p.Key).First();
+            string existingName = binds.Where(p => p.Value == bind).Select(p => p.Key).First();
             throw new ArgumentException($"Bind '{bind}' is already added under the name '{existingName}'.");
         }
 
@@ -82,14 +82,14 @@ public sealed class BindMap : IEnumerable<KeyValuePair<string, Bind>>
     /// <param name="name">The name to remove the <see cref="Bind" /> for.</param>
     public void Remove(string name)
     {
-        var bind = binds[name];
+        Bind bind = binds[name];
         binds.Remove(name);
         bind.SetController(null);
     }
 
     internal void PollValues()
     {
-        foreach (var bindPair in binds)
+        foreach (KeyValuePair<string, Bind> bindPair in binds)
         {
             values[bindPair.Key] = bindPair.Value.GetValue();
         }
@@ -97,7 +97,7 @@ public sealed class BindMap : IEnumerable<KeyValuePair<string, Bind>>
 
     internal bool TryGetValue(string name, out object value)
     {
-        if (values.TryGetValue(name, out var existingValue))
+        if (values.TryGetValue(name, out object existingValue))
         {
             value = existingValue;
             return true;

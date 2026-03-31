@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Termule.Engine.Types.Content;
+namespace Termule.Engine.Types;
 
 /// <summary>
 ///     Full RGB color.

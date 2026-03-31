@@ -31,7 +31,7 @@ public abstract class Controller : Core.System
     /// <returns> The value of the specified bind. </returns>
     public TValue Get<TValue>(string name)
     {
-        if (!Binds.TryGetValue(name, out var value))
+        if (!Binds.TryGetValue(name, out object value))
         {
             throw new ArgumentException($"No bind named '{name}' exists.");
         }

@@ -2,9 +2,9 @@ using Termule.Demos.Application;
 using Termule.Engine.Components;
 using Termule.Engine.Core;
 using Termule.Engine.Systems.Display;
-using Termule.Engine.Types.Vectors;
+using Termule.Engine.Types;
 
-namespace Termule.Demos.Demos;
+namespace Termule.Demos.Implementations;
 
 internal class Lightning : Demo
 {
@@ -19,7 +19,7 @@ internal class Lightning : Demo
     {
         Root.Add(
             new Transform(),
-            new Camera());
+            new Camera { BackgroundCell = new Cell((0, 0, 0)) });
     }
 
     protected override void Tick()
@@ -61,19 +61,19 @@ internal class Lightning : Demo
             Vector target = (Systems.Get<Display>().Size.X / 2, Systems.Get<Display>().Size.Y);
 
             List<List<Vector>> branches = [[origin, target]];
-            var maxOffset = Systems.Get<Display>().Size.X * OffsetToDisplayRatio;
-            for (var generation = 0; generation < BendGenerations; generation++)
+            float maxOffset = Systems.Get<Display>().Size.X * OffsetToDisplayRatio;
+            for (int generation = 0; generation < BendGenerations; generation++)
             {
-                var branchCount = branches.Count;
-                for (var branchIndex = 0; branchIndex < branchCount; branchIndex++)
+                int branchCount = branches.Count;
+                for (int branchIndex = 0; branchIndex < branchCount; branchIndex++)
                 {
-                    var line = branches[branchIndex];
-                    for (var pointIndex = 0; pointIndex < line.Count - 1; pointIndex += 2)
+                    List<Vector> line = branches[branchIndex];
+                    for (int pointIndex = 0; pointIndex < line.Count - 1; pointIndex += 2)
                     {
-                        var prev = line[pointIndex];
-                        var next = line[pointIndex + 1];
-                        var midpoint = (prev + next) / 2;
-                        var normal = (next - prev).Normalized.Perpendicular();
+                        Vector prev = line[pointIndex];
+                        Vector next = line[pointIndex + 1];
+                        Vector midpoint = (prev + next) / 2;
+                        Vector normal = (next - prev).Normalized.Perpendicular();
 
                         line.Insert(pointIndex + 1, GenerateDisplacedMidpoint());
 
@@ -95,7 +95,7 @@ internal class Lightning : Demo
                 maxOffset /= 2;
             }
 
-            foreach (var branch in branches)
+            foreach (List<Vector> branch in branches)
             {
                 Add(
                     new LineRenderer

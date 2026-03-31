@@ -68,7 +68,7 @@ public abstract class GameElement
     protected TSystem GetRequiredSystem<TSystem>()
         where TSystem : System
     {
-        var system = Systems.Get<TSystem>();
+        TSystem system = Systems.Get<TSystem>();
         return system ?? throw new MissingSystemException<TSystem>(this);
     }
 }

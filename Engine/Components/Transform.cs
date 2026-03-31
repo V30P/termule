@@ -1,5 +1,5 @@
 using Termule.Engine.Core;
-using Termule.Engine.Types.Vectors;
+using Termule.Engine.Types;
 
 namespace Termule.Engine.Components;
 
@@ -25,8 +25,8 @@ public sealed class Transform : Component
         {
             if (IsRegistered)
             {
-                var difference = value - Pos;
-                foreach (var child in children)
+                Vector difference = value - Pos;
+                foreach (Transform child in children)
                 {
                     child.Pos += difference;
                 }

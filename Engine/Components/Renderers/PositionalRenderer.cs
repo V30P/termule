@@ -1,5 +1,5 @@
 using Termule.Engine.Systems.Display;
-using Termule.Engine.Types.Vectors;
+using Termule.Engine.Types;
 
 namespace Termule.Engine.Components;
 
@@ -26,7 +26,7 @@ public abstract class PositionalRenderer : Renderer
     /// <inheritdoc />
     protected internal sealed override void Render(FrameBuffer frame, Vector viewOrigin)
     {
-        var frameSpaceOrigin = GetRequiredComponent<Transform>().Pos + Offset;
+        Vector frameSpaceOrigin = GetRequiredComponent<Transform>().Pos;
         if (!TargetSpace)
         {
             // Get integer position relative to viewOrigin
@@ -36,7 +36,9 @@ public abstract class PositionalRenderer : Renderer
             frameSpaceOrigin = (frameSpaceOrigin.X, -frameSpaceOrigin.Y);
         }
 
-        var frameSpaceCellOrigin = frameSpaceOrigin.RoundToInt();
+        frameSpaceOrigin += Offset;
+        VectorInt frameSpaceCellOrigin = frameSpaceOrigin.RoundToInt();
+        
         RenderAtPosition(new PositionalRenderContext(frame, frameSpaceCellOrigin,
             frameSpaceOrigin - frameSpaceCellOrigin));
     }

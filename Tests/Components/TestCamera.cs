@@ -2,8 +2,7 @@ using Termule.Engine.Components;
 using Termule.Engine.Core;
 using Termule.Engine.Systems.Display;
 using Termule.Engine.Systems.RenderSystem;
-using Termule.Engine.Types.Content;
-using Termule.Engine.Types.Vectors;
+using Termule.Engine.Types;
 
 namespace Termule.Tests.Components;
 
@@ -43,9 +42,9 @@ public class TestCamera
     [Fact]
     public void BackgroundCell_ShouldFillBuffer()
     {
-        var background = new Cell(BasicColor.White, 'T', BasicColor.Black);
+        Cell background = new(BasicColor.White, 'T', BasicColor.Black);
         FakeTarget target = new((5, 5));
-        var game = Game.Create();
+        IConfigurableGame? game = Game.Create();
         game.Root.Add(
             new Camera { Target = target, BackgroundCell = background });
 
@@ -54,9 +53,9 @@ public class TestCamera
 
         game.RunFrame();
 
-        for (var x = 0; x < target.Size.X; x++)
+        for (int x = 0; x < target.Size.X; x++)
         {
-            for (var y = 0; y < target.Size.Y; y++)
+            for (int y = 0; y < target.Size.Y; y++)
             {
                 Assert.Equal(background, target.Buffer[x, y]);
             }
@@ -69,8 +68,8 @@ public class TestCamera
         VectorInt targetPos)
     {
         FakeTarget target = new(targetSize);
-        var game = Game.Create();
-        var camera = new Camera { Target = target };
+        IConfigurableGame? game = Game.Create();
+        Camera camera = new() { Target = target };
         game.Root.Add(new Transform { Pos = transformPos }, camera);
 
         Assert.Equal(targetPos, camera.GameToTargetPos(gamePos));
@@ -83,8 +82,8 @@ public class TestCamera
         VectorInt targetPos)
     {
         FakeTarget target = new(targetSize);
-        var game = Game.Create();
-        var camera = new Camera { Target = target };
+        IConfigurableGame? game = Game.Create();
+        Camera camera = new() { Target = target };
         game.Root.Add(new Transform { Pos = transformPos }, camera);
 
         Assert.Equal(gamePos, camera.TargetToGamePos(targetPos));
@@ -94,7 +93,7 @@ public class TestCamera
     public void Tick_ShouldCallPrintOnTarget()
     {
         FakeTarget target = new((0, 0));
-        var game = Game.Create();
+        IConfigurableGame? game = Game.Create();
         game.Root.Add(new Camera { Target = target });
 
         game.Systems.Install(new RenderSystem());

@@ -2,7 +2,7 @@ using Termule.Engine.Components;
 using Termule.Engine.Core;
 using Termule.Engine.Systems.Display;
 using Termule.Engine.Systems.RenderSystem;
-using Termule.Engine.Types.Vectors;
+using Termule.Engine.Types;
 
 namespace Termule.Tests.Components;
 
@@ -37,13 +37,13 @@ public class TestRenderer
     [Fact]
     public void LayerSetter_ShouldMoveRendererBetweenLayers_WhenRegistered()
     {
-        var game = Game.Create();
-        var defaultLayer = new FakeLayer();
-        var customLayer = new FakeLayer();
-        var renderSystem = new RenderSystem { Layers = [defaultLayer, customLayer] };
+        IConfigurableGame? game = Game.Create();
+        FakeLayer defaultLayer = new();
+        FakeLayer customLayer = new();
+        RenderSystem renderSystem = new() { Layers = [defaultLayer, customLayer] };
         game.Systems.Install(renderSystem);
 
-        var renderer = new FakeRenderer();
+        FakeRenderer renderer = new();
         game.Root.Add(renderer);
 
         Assert.Same(defaultLayer, renderer.Layer);
@@ -60,13 +60,13 @@ public class TestRenderer
     [Fact]
     public void LayerSetter_ShouldMoveRendererToDefaultLayer_WhenSetToNullWhileRegistered()
     {
-        var game = Game.Create();
-        var defaultLayer = new FakeLayer();
-        var customLayer = new FakeLayer();
-        var renderSystem = new RenderSystem { Layers = [defaultLayer, customLayer] };
+        IConfigurableGame? game = Game.Create();
+        FakeLayer defaultLayer = new();
+        FakeLayer customLayer = new();
+        RenderSystem renderSystem = new() { Layers = [defaultLayer, customLayer] };
         game.Systems.Install(renderSystem);
 
-        var renderer = new FakeRenderer { Layer = customLayer };
+        FakeRenderer renderer = new() { Layer = customLayer };
         game.Root.Add(renderer);
 
         renderer.Layer = null;
@@ -79,13 +79,13 @@ public class TestRenderer
     [Fact]
     public void Register_ShouldUseConfiguredLayer_WhenLayerIsSetBeforeRegistration()
     {
-        var game = Game.Create();
-        var defaultLayer = new FakeLayer();
-        var customLayer = new FakeLayer();
-        var renderSystem = new RenderSystem { Layers = [defaultLayer, customLayer] };
+        IConfigurableGame? game = Game.Create();
+        FakeLayer defaultLayer = new();
+        FakeLayer customLayer = new();
+        RenderSystem renderSystem = new() { Layers = [defaultLayer, customLayer] };
         game.Systems.Install(renderSystem);
 
-        var renderer = new FakeRenderer { Layer = customLayer };
+        FakeRenderer renderer = new() { Layer = customLayer };
 
         game.Root.Add(renderer);
 
@@ -98,12 +98,12 @@ public class TestRenderer
     [Fact]
     public void Register_ShouldUseDefaultLayer_WhenNoLayerSet()
     {
-        var game = Game.Create();
-        var layer = new FakeLayer();
-        var renderSystem = new RenderSystem { Layers = [layer] };
+        IConfigurableGame? game = Game.Create();
+        FakeLayer layer = new();
+        RenderSystem renderSystem = new() { Layers = [layer] };
         game.Systems.Install(renderSystem);
 
-        var renderer = new FakeRenderer();
+        FakeRenderer renderer = new();
 
         game.Root.Add(renderer);
 
@@ -115,12 +115,12 @@ public class TestRenderer
     [Fact]
     public void Unregister_ShouldUnregisterFromCurrentLayer()
     {
-        var game = Game.Create();
-        var defaultLayer = new FakeLayer();
-        var renderSystem = new RenderSystem { Layers = [defaultLayer] };
+        IConfigurableGame? game = Game.Create();
+        FakeLayer defaultLayer = new();
+        RenderSystem renderSystem = new() { Layers = [defaultLayer] };
         game.Systems.Install(renderSystem);
 
-        var renderer = new FakeRenderer();
+        FakeRenderer renderer = new();
         game.Root.Add(renderer);
     }
 }

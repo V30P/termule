@@ -12,8 +12,8 @@ public sealed partial class WindowsDisplay : TerminalDisplay
     {
         base.Start();
 
-        var handle = GetStdHandle(STD_INPUT_HANDLE);
-        _ = GetConsoleMode(handle, out var mode);
+        IntPtr handle = GetStdHandle(STD_INPUT_HANDLE);
+        _ = GetConsoleMode(handle, out uint mode);
         mode &= ~(ENABLE_ECHO_INPUT | ENABLE_LINE_INPUT);
         SetConsoleMode(handle, mode);
     }
@@ -23,8 +23,8 @@ public sealed partial class WindowsDisplay : TerminalDisplay
     {
         base.Stop();
 
-        var handle = GetStdHandle(STD_INPUT_HANDLE);
-        GetConsoleMode(handle, out var mode);
+        IntPtr handle = GetStdHandle(STD_INPUT_HANDLE);
+        GetConsoleMode(handle, out uint mode);
         mode |= ENABLE_ECHO_INPUT | ENABLE_LINE_INPUT;
         _ = SetConsoleMode(handle, mode);
     }

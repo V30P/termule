@@ -1,8 +1,7 @@
 using System.Text.Json.Serialization;
 using Termule.Engine.Systems.ResourceLoader;
-using Termule.Engine.Types.Vectors;
 
-namespace Termule.Engine.Types.Content;
+namespace Termule.Engine.Types;
 
 /// <summary>
 ///     Rectangular collection of terminal cells.
@@ -102,8 +101,8 @@ public class Content : IResource
         }
 
         Cells = new Cell[width, height];
-        for (var x = 0; x < Size.X; x++)
-        for (var y = 0; y < Size.Y; y++)
+        for (int x = 0; x < Size.X; x++)
+        for (int y = 0; y < Size.Y; y++)
         {
             Cells[x, y] = default;
         }

@@ -8,8 +8,8 @@ namespace Termule.Engine.Core;
 /// </summary>
 public sealed class Game : IConfigurableGame
 {
-    private readonly List<GameElement> elements = [];
     private readonly Stopwatch stopwatch = new();
+    private uint registerCount;
 
     private bool stop;
 
@@ -80,7 +80,7 @@ public sealed class Game : IConfigurableGame
 
     void IConfigurableGame.RunForFrames(int frames)
     {
-        for (var i = 0; i < frames; i++)
+        for (int i = 0; i < frames; i++)
         {
             RunFrame();
         }
@@ -111,18 +111,13 @@ public sealed class Game : IConfigurableGame
     internal void Register(GameElement element)
     {
         element.SetGame(this);
-        var id = (uint)elements.Count;
-
-        elements.Add(element);
-        element.InvokeRegistered(id);
+        element.InvokeRegistered(registerCount++);
     }
 
     internal void Unregister(GameElement element)
     {
         element.InvokeUnregistered();
-
         element.SetGame(null);
-        elements.Remove(element);
     }
 
     private void Start()

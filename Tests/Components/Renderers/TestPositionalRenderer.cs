@@ -1,7 +1,7 @@
 using Termule.Engine.Components;
 using Termule.Engine.Core;
 using Termule.Engine.Systems.Display;
-using Termule.Engine.Types.Vectors;
+using Termule.Engine.Types;
 
 namespace Termule.Tests.Components;
 
@@ -58,21 +58,9 @@ public class TestPositionalRenderer
     }
 
     [Fact]
-    public void Offset_ShouldApplyCorrectly_WhenInGameSpace()
+    public void Offset_ShouldApplyCorrectly()
     {
-        var renderer = new FakePositionalRenderer((0.75f, 0.75f));
-        GameObject _ = [new Transform { Pos = (0, 0) }, renderer];
-
-        renderer.Render(new FrameBuffer(0, 0), (0, 0));
-
-        Assert.Equal((1, -1), renderer.CapturedOrigin);
-        AssertVectorApproximately((-0.25f, 0.25f), renderer.CapturedOffset, PositionEpsilon);
-    }
-
-    [Fact]
-    public void Offset_ShouldApplyCorrectly_WhenInTargetSpace()
-    {
-        var renderer = new FakePositionalRenderer((0.75f, 0.75f)) { TargetSpace = true };
+        FakePositionalRenderer renderer = new((0.75f, 0.75f));
         GameObject _ = [new Transform { Pos = (0, 0) }, renderer];
 
         renderer.Render(new FrameBuffer(0, 0), (0, 0));
@@ -89,7 +77,7 @@ public class TestPositionalRenderer
         VectorInt expectedOrigin,
         Vector expectedOffset)
     {
-        var renderer = new FakePositionalRenderer();
+        FakePositionalRenderer renderer = new();
         GameObject _ = [new Transform { Pos = transformPos }, renderer];
 
         renderer.Render(new FrameBuffer(0, 0), viewOrigin);
@@ -106,7 +94,7 @@ public class TestPositionalRenderer
         VectorInt expectedOrigin,
         Vector expectedOffset)
     {
-        var renderer = new FakePositionalRenderer { TargetSpace = true };
+        FakePositionalRenderer renderer = new() { TargetSpace = true };
         GameObject _ = [new Transform { Pos = transformPos }, renderer];
 
         renderer.Render(new FrameBuffer(0, 0), viewOrigin);
@@ -118,8 +106,8 @@ public class TestPositionalRenderer
     [Fact]
     public void Render_ShouldInvokeDerivedRendererOnce_AndPassFrameThrough()
     {
-        var frame = new FrameBuffer(0, 0);
-        var renderer = new FakePositionalRenderer();
+        FrameBuffer frame = new(0, 0);
+        FakePositionalRenderer renderer = new();
         GameObject _ = [new Transform { Pos = (0, 0) }, renderer];
 
         renderer.Render(frame, (0, 0));

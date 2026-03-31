@@ -10,7 +10,7 @@ public sealed class TriggerBind(Button button) : KeyboardBind
 
     internal override object GetValue()
     {
-        var value = triggeredSinceLastFrame;
+        bool value = triggeredSinceLastFrame;
         triggeredSinceLastFrame = false;
         return value;
     }

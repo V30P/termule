@@ -1,4 +1,4 @@
-namespace Termule.Engine.Types.Content;
+namespace Termule.Engine.Types;
 
 /// <summary>
 ///     Single cell on a terminal.

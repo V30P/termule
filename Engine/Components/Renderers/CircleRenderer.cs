@@ -1,5 +1,4 @@
-using Termule.Engine.Types.Content;
-using Termule.Engine.Types.Vectors;
+using Termule.Engine.Types;
 
 namespace Termule.Engine.Components;
 
@@ -47,9 +46,9 @@ public sealed class CircleRenderer : PositionalRenderer
     private protected override void RenderAtPosition(PositionalRenderContext context)
     {
         // Midpoint circle algorithm
-        var y = (int)Radius;
-        var p = (int)(1 - Radius);
-        for (var x = 0; x <= y; x++)
+        int y = (int)Radius;
+        int p = (int)(1 - Radius);
+        for (int x = 0; x <= y; x++)
         {
             DrawMidpointTransformations((x, y), context);
             if (Filled)
@@ -75,13 +74,13 @@ public sealed class CircleRenderer : PositionalRenderer
 
     private void FillHorizontals(VectorInt pos, PositionalRenderContext context)
     {
-        for (var x = -pos.X + 1; x < pos.X; x++)
+        for (int x = -pos.X + 1; x < pos.X; x++)
         {
             DrawPoint((x, pos.Y), context);
             DrawPoint((x, -pos.Y), context);
         }
 
-        for (var x = -pos.Y + 1; x < pos.Y; x++)
+        for (int x = -pos.Y + 1; x < pos.Y; x++)
         {
             DrawPoint((x, pos.X), context);
             DrawPoint((x, -pos.X), context);
@@ -92,12 +91,12 @@ public sealed class CircleRenderer : PositionalRenderer
     {
         if (!DoubleWide)
         {
-            var frameSpacePos = pos + context.Origin;
+            VectorInt frameSpacePos = pos + context.Origin;
             context.Frame.Draw(frameSpacePos, Color);
         }
         else
         {
-            var widenedPos = (pos.X * 2, pos.Y) + context.Origin;
+            VectorInt widenedPos = (pos.X * 2, pos.Y) + context.Origin;
             context.Frame.Draw(widenedPos, Color);
 
             context.Frame.Draw(widenedPos + (context.Offset.X > 0 ? (1, 0) : (-1, 0)), Color);

@@ -94,11 +94,11 @@ internal static class ButtonConversions
 
     internal static Button? ToButton(this MouseButton mouseButton)
     {
-        return MouseButtonToButton.TryGetValue(mouseButton, out var button) ? button : null;
+        return MouseButtonToButton.TryGetValue(mouseButton, out Button button) ? button : null;
     }
 
     internal static Button? ToButton(this KeyCode keyCode)
     {
-        return KeyCodeToButton.TryGetValue(keyCode, out var button) ? button : null;
+        return KeyCodeToButton.TryGetValue(keyCode, out Button button) ? button : null;
     }
 }

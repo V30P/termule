@@ -1,5 +1,5 @@
 using System.Text;
-using Termule.Engine.Types.Content;
+using Termule.Engine.Types;
 
 namespace Termule.Engine.Systems.Display;
 
@@ -66,6 +66,8 @@ public abstract class TerminalDisplay : Display
 
     private protected sealed override void PrintBuffer()
     {
+        // Handle window resizing
+        bool screenCleared = false;
         if
         (
             Console.WindowTop != 0
@@ -78,13 +80,14 @@ public abstract class TerminalDisplay : Display
             Console.Clear();
 
             Size = (Console.WindowWidth, Console.WindowHeight);
+            screenCleared = true;
         }
 
-        var skipping = true;
-        for (var y = 0; y < Size.Y; y++)
-        for (var x = 0; x < Size.X; x++)
+        bool skipping = true;
+        for (int y = 0; y < Size.Y; y++)
+        for (int x = 0; x < Size.X; x++)
         {
-            if (Screen!.EqualsAt(Buffer, (x, y)))
+            if (!screenCleared && Screen!.EqualsAt(Buffer, (x, y)))
             {
                 skipping = true;
                 continue;
@@ -97,7 +100,7 @@ public abstract class TerminalDisplay : Display
                 skipping = false;
             }
 
-            var cell = Buffer.At(x, y);
+            Cell cell = Buffer.At(x, y);
 
             // Apply color changes if necessary
             if (cell.Color != currentColor || cell.CharColor != currentCharColor)
@@ -160,7 +163,7 @@ public abstract class TerminalDisplay : Display
 
     private void FlushBuilder()
     {
-        foreach (var chunk in builder.GetChunks())
+        foreach (ReadOnlyMemory<char> chunk in builder.GetChunks())
         {
             Console.Write(chunk);
         }

@@ -33,8 +33,8 @@ public class SystemManager : GameElement, IConfigurableSystemManager
             throw new InvalidOperationException("Cannot change systems once the game is started.");
         }
 
-        var systemType = GetSystemType<TSystem>();
-        if (systems.Remove(systemType, out var system))
+        Type systemType = GetSystemType<TSystem>();
+        if (systems.Remove(systemType, out System system))
         {
             Game.Unregister(system);
         }
@@ -71,7 +71,7 @@ public class SystemManager : GameElement, IConfigurableSystemManager
 
     internal void Start()
     {
-        foreach (var system in systems.Values)
+        foreach (System system in systems.Values)
         {
             system.Start();
         }
@@ -79,7 +79,7 @@ public class SystemManager : GameElement, IConfigurableSystemManager
 
     internal void Tick()
     {
-        foreach (var system in systems.Values)
+        foreach (System system in systems.Values)
         {
             system.Tick();
         }
@@ -87,7 +87,7 @@ public class SystemManager : GameElement, IConfigurableSystemManager
 
     internal void Stop()
     {
-        foreach (var system in systems.Values)
+        foreach (System system in systems.Values)
         {
             system.Stop();
         }
@@ -96,7 +96,7 @@ public class SystemManager : GameElement, IConfigurableSystemManager
     private static Type GetSystemType<TSystem>()
         where TSystem : System
     {
-        var type = typeof(TSystem);
+        Type type = typeof(TSystem);
         while (type!.BaseType != typeof(System))
         {
             type = type.BaseType;

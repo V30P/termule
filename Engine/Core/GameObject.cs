@@ -49,7 +49,7 @@ public class GameObject : Component, IEnumerable<Component>
     /// <param name="componentsToAdd">The components to add.</param>
     public void Add(params Component[] componentsToAdd)
     {
-        foreach (var component in componentsToAdd)
+        foreach (Component component in componentsToAdd)
         {
             ArgumentNullException.ThrowIfNull(component);
             if (component.GameObject != null)
@@ -62,9 +62,9 @@ public class GameObject : Component, IEnumerable<Component>
             tickingDirty = true;
             component.SetGameObject(this);
 
-            foreach (var type in GetImplementedTypes(component))
+            foreach (Type type in GetImplementedTypes(component))
             {
-                if (!typesToComponents.TryGetValue(type, out var componentList))
+                if (!typesToComponents.TryGetValue(type, out List<Component> componentList))
                 {
                     componentList = [];
                     typesToComponents.Add(type, componentList);
@@ -75,7 +75,7 @@ public class GameObject : Component, IEnumerable<Component>
         }
 
         // Register all components simultaneously to handle dependencies
-        foreach (var component in componentsToAdd)
+        foreach (Component component in componentsToAdd)
         {
             Game?.Register(component);
         }
@@ -103,7 +103,8 @@ public class GameObject : Component, IEnumerable<Component>
 
         Game?.Unregister(component);
 
-        foreach (var componentList in GetImplementedTypes(component).Select(type => typesToComponents[type]))
+        foreach (List<Component> componentList in
+                 GetImplementedTypes(component).Select(type => typesToComponents[type]))
         {
             componentList.Remove(component);
         }
@@ -116,7 +117,7 @@ public class GameObject : Component, IEnumerable<Component>
     /// <returns>The component if one is found or <c>null</c>.</returns>
     public TComponent Get<TComponent>()
     {
-        if (typesToComponents.TryGetValue(typeof(TComponent), out var matchingComponents))
+        if (typesToComponents.TryGetValue(typeof(TComponent), out List<Component> matchingComponents))
         {
             return (TComponent)(object)matchingComponents.FirstOrDefault();
         }
@@ -131,17 +132,17 @@ public class GameObject : Component, IEnumerable<Component>
     /// <returns>The collection of all matching components.</returns>
     public IEnumerable<TComponent> GetAll<TComponent>()
     {
-        return typesToComponents.TryGetValue(typeof(TComponent), out var matchingComponents)
+        return typesToComponents.TryGetValue(typeof(TComponent), out List<Component> matchingComponents)
             ? matchingComponents.Cast<TComponent>()
             : [];
     }
 
     private static List<Type> GetImplementedTypes(object o)
     {
-        var type = o.GetType();
+        Type type = o.GetType();
         List<Type> implementedTypes = [type, .. o.GetType().GetInterfaces()];
 
-        for (var ancestor = type.BaseType; ancestor != null; ancestor = ancestor.BaseType)
+        for (Type ancestor = type.BaseType; ancestor != null; ancestor = ancestor.BaseType)
         {
             implementedTypes.Add(ancestor);
         }
@@ -151,7 +152,7 @@ public class GameObject : Component, IEnumerable<Component>
 
     private void OnRegistered()
     {
-        foreach (var component in components)
+        foreach (Component component in components)
         {
             Game.Register(component);
         }
@@ -163,7 +164,7 @@ public class GameObject : Component, IEnumerable<Component>
         if (tickingDirty)
         {
             tickingComponents.Clear();
-            foreach (var component in components)
+            foreach (Component component in components)
             {
                 tickingComponents.Add(component);
             }
@@ -171,7 +172,7 @@ public class GameObject : Component, IEnumerable<Component>
             tickingDirty = false;
         }
 
-        foreach (var component in tickingComponents)
+        foreach (Component component in tickingComponents)
         {
             // Handles the case where a component is removed during Tick
             if (component.GameObject != this)
@@ -185,7 +186,7 @@ public class GameObject : Component, IEnumerable<Component>
 
     private void OnUnregistered()
     {
-        foreach (var component in components)
+        foreach (Component component in components)
         {
             Game.Unregister(component);
         }

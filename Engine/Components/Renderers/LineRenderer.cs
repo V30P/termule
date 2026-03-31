@@ -1,5 +1,4 @@
-using Termule.Engine.Types.Content;
-using Termule.Engine.Types.Vectors;
+using Termule.Engine.Types;
 
 namespace Termule.Engine.Components;
 
@@ -20,7 +19,7 @@ public sealed class LineRenderer : PositionalRenderer
 
     private protected override void RenderAtPosition(PositionalRenderContext context)
     {
-        for (var i = 1; i < Points.Count; i++)
+        for (int i = 1; i < Points.Count; i++)
         {
             DrawLine(Points[i - 1].RoundToInt(), Points[i].RoundToInt(), context);
         }
@@ -29,16 +28,16 @@ public sealed class LineRenderer : PositionalRenderer
     private void DrawLine(VectorInt start, VectorInt end, PositionalRenderContext context)
     {
         // Bresenham's line algorithm
-        var x0 = start.X;
-        var y0 = start.Y;
-        var x1 = end.X;
-        var y1 = end.Y;
+        int x0 = start.X;
+        int y0 = start.Y;
+        int x1 = end.X;
+        int y1 = end.Y;
 
-        var dx = Math.Abs(x1 - x0);
-        var dy = Math.Abs(y1 - y0);
-        var sx = x0 < x1 ? 1 : -1;
-        var sy = y0 < y1 ? 1 : -1;
-        var err = dx - dy;
+        int dx = Math.Abs(x1 - x0);
+        int dy = Math.Abs(y1 - y0);
+        int sx = x0 < x1 ? 1 : -1;
+        int sy = y0 < y1 ? 1 : -1;
+        int err = dx - dy;
 
         while (true)
         {
@@ -49,7 +48,7 @@ public sealed class LineRenderer : PositionalRenderer
                 break;
             }
 
-            var e2 = err * 2;
+            int e2 = err * 2;
             if (e2 > -dy)
             {
                 err -= dy;

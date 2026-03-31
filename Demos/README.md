@@ -1,46 +1,52 @@
 # Termule Demos
 
-This directory contains the demo project for the Termule game engine. Each demo highlights a specific engine capability
-and serves as a simple but practical example of interacting with the Termule API. For this reason, demo source code
-prioritizes clarity and elegance over raw performance.
+This directory contains the demo collection project for the Termule game engine. Each demo highlights one engine
+capability
+and serves as a practical example of using the Termule API. Demos are implemented as self-contained, single-file systems
+and can be found in the `Implementations` directory.
 
 For information about the engine itself, see the main README [here](../README.md).
 
+## Running
+
+After cloning the full repository, navigate to the `Demos` directory. The demo project can be run without installation
+via the .NET CLI:
+
+```bash
+# To learn how to use the demo project 
+dotnet run --help
+
+# To run a specific demo by name
+dotnet run --project DEMO
+```
+
 ## Demos
 
-Below is a list of the included demos and the functionality they demonstrate.
-
-- *gradient* - full RGB colors
+### Gradient
 
 ![gradient demo](gifs/gradient.gif)
 
-- *lightning* - line rendering
+---
+
+### Lightning
 
 ![lightning demo](gifs/lightning.gif)
 
-- *raindrops* - circle rendering
+---
+
+### Raindrops
 
 ![raindrops demo](gifs/raindrops.gif)
 
-- *screensaver* - runtime loading and positioning of content
+---
+
+### Screensaver
 
 ![screensaver demo](gifs/screensaver.gif)
 
-- *shooter* - input handling
+---
+
+### Shooter
 
 ![shooter demo](gifs/shooter.gif)
 
-## Running
-
-After cloning the full Termule repository, run the following command from the repository root to learn how to use this
-demo project:
-
-```bash
-dotnet run --project Demos --help
-```
-
-Or to run a specific demo by name:
-
-```bash
-dotnet run --project Demos <demo>
-```

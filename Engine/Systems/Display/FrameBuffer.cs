@@ -1,6 +1,5 @@
 using Termule.Engine.Components;
-using Termule.Engine.Types.Content;
-using Termule.Engine.Types.Vectors;
+using Termule.Engine.Types;
 
 namespace Termule.Engine.Systems.Display;
 
@@ -37,7 +36,7 @@ public sealed class FrameBuffer : Content
             return;
         }
 
-        ref var cell = ref Cells[pos.X, pos.Y];
+        ref Cell cell = ref Cells[pos.X, pos.Y];
 
         if (color is { } colorValue)
         {
@@ -58,8 +57,8 @@ public sealed class FrameBuffer : Content
 
     internal void Reset(Cell cell = default)
     {
-        for (var x = 0; x < Size.X; x++)
-        for (var y = 0; y < Size.Y; y++)
+        for (int x = 0; x < Size.X; x++)
+        for (int y = 0; y < Size.Y; y++)
         {
             Cells[x, y] = cell;
         }

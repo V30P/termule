@@ -1,10 +1,9 @@
 using Termule.Demos.Application;
 using Termule.Engine.Components;
 using Termule.Engine.Systems.Display;
-using Termule.Engine.Types.Content;
-using Termule.Engine.Types.Vectors;
+using Termule.Engine.Types;
 
-namespace Termule.Demos.Demos;
+namespace Termule.Demos.Implementations;
 
 internal class Gradient : Demo
 {
@@ -27,8 +26,8 @@ internal class Gradient : Demo
 
         protected override void Render(FrameBuffer frame, Vector viewOrigin)
         {
-            for (var x = 0; x < frame.Size.X; x++)
-            for (var y = 0; y < frame.Size.Y; y++)
+            for (int x = 0; x < frame.Size.X; x++)
+            for (int y = 0; y < frame.Size.Y; y++)
             {
                 frame.Draw((x, y), GetColor((float)x / frame.Size.X + time));
             }
@@ -36,11 +35,11 @@ internal class Gradient : Demo
 
         private static Color GetColor(float phase)
         {
-            var segmentPosition = phase % 1 * 6f;
-            var segmentIndex = (int)segmentPosition;
-            var segmentProgress = segmentPosition - segmentIndex;
+            float segmentPosition = phase % 1 * 6f;
+            int segmentIndex = (int)segmentPosition;
+            float segmentProgress = segmentPosition - segmentIndex;
 
-            var intensity = (int)(segmentProgress * 255);
+            int intensity = (int)(segmentProgress * 255);
             return segmentIndex switch
             {
                 0 => (255, intensity, 0),

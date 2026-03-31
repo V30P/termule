@@ -8,8 +8,8 @@ public class TestTransform
     [Fact]
     public void CachedLocalPos_ShouldBeApplied_WhenRegistered()
     {
-        var game = Game.Create();
-        var transform = new Transform { LocalPos = (1, 1) };
+        IConfigurableGame? game = Game.Create();
+        Transform transform = new() { LocalPos = (1, 1) };
         GameObject gameObject = [transform];
         GameObject parentGameObject = [new Transform { Pos = (1, 1) }, gameObject];
 
@@ -21,8 +21,8 @@ public class TestTransform
     [Fact]
     public void CachedPos_ShouldBeApplied_WhenRegistered()
     {
-        var game = Game.Create();
-        var transform = new Transform { Pos = (1, 1) };
+        IConfigurableGame? game = Game.Create();
+        Transform transform = new() { Pos = (1, 1) };
 
         game.Root.Add(transform);
 
@@ -32,11 +32,11 @@ public class TestTransform
     [Fact]
     public void MovingParent_ShouldMoveChild()
     {
-        var game = Game.Create();
-        var child = new Transform { LocalPos = (1, 1) };
+        IConfigurableGame? game = Game.Create();
+        Transform child = new() { LocalPos = (1, 1) };
         GameObject gameObject = [child];
 
-        var parent = new Transform();
+        Transform parent = new();
         GameObject parentGameObject = [parent, gameObject];
         game.Root.Add(parentGameObject);
 
@@ -49,11 +49,11 @@ public class TestTransform
     [Fact]
     public void NestedTransforms_ShouldApplyRecursively()
     {
-        var game = Game.Create();
-        var transform = new Transform();
+        IConfigurableGame? game = Game.Create();
+        Transform transform = new();
         GameObject gameObject = [transform];
 
-        for (var i = 0; i < 10; i++)
+        for (int i = 0; i < 10; i++)
         {
             gameObject = [new Transform { LocalPos = (1, 1) }, gameObject];
         }
@@ -66,9 +66,9 @@ public class TestTransform
     [Fact]
     public void Pos_ShouldBeConstant_WhenParentChanges()
     {
-        var transform = new Transform { Pos = (1, 1) };
+        Transform transform = new() { Pos = (1, 1) };
         GameObject _ = [transform];
-        var newGameObject = new GameObject();
+        GameObject newGameObject = new();
 
         transform.GameObject = newGameObject;
 
@@ -78,8 +78,8 @@ public class TestTransform
     [Fact]
     public void SettingLocalPos_ShouldUpdatePos()
     {
-        var game = Game.Create();
-        var transform = new Transform { Pos = (1, 1) };
+        IConfigurableGame? game = Game.Create();
+        Transform transform = new() { Pos = (1, 1) };
         GameObject gameObject = [transform];
         GameObject parentGameObject = [new Transform { Pos = (1, 1) }, gameObject];
         game.Root.Add(parentGameObject);
@@ -92,8 +92,8 @@ public class TestTransform
     [Fact]
     public void SettingPos_ShouldUpdateLocalPos()
     {
-        var game = Game.Create();
-        var transform = new Transform { Pos = (1, 1) };
+        IConfigurableGame? game = Game.Create();
+        Transform transform = new() { Pos = (1, 1) };
         GameObject gameObject = [transform];
         GameObject parentGameObject = [new Transform { Pos = (1, 1) }, gameObject];
         game.Root.Add(parentGameObject);

@@ -1,5 +1,4 @@
-using Termule.Engine.Types.Content;
-using Termule.Engine.Types.Vectors;
+using Termule.Engine.Types;
 
 namespace Termule.Demos.Application;
 
@@ -17,14 +16,14 @@ internal static class Utilities
             return (0, 0);
         }
 
-        var factor = MathF.Sqrt((v.X * v.X + v.Y * 0.5f * v.Y * 0.5f)
-                                / (v.X * v.X + v.Y * v.Y));
+        float factor = MathF.Sqrt((v.X * v.X + v.Y * 0.5f * v.Y * 0.5f)
+                                  / (v.X * v.X + v.Y * v.Y));
         return v * factor;
     }
 
     public static Vector PointOnRectangle(Random random, Vector corner, Vector size)
     {
-        var dist = (float)random.NextDouble() * (size.X * 2 + size.Y * 2);
+        float dist = (float)random.NextDouble() * (size.X * 2 + size.Y * 2);
 
         if (dist < size.X)
         {
@@ -49,8 +48,8 @@ internal static class Utilities
         public Image Flipped()
         {
             Image flipped = new(image.Size.X, image.Size.Y);
-            for (var x = 0; x < image.Size.X; x++)
-            for (var y = 0; y < image.Size.Y; y++)
+            for (int x = 0; x < image.Size.X; x++)
+            for (int y = 0; y < image.Size.Y; y++)
             {
                 flipped[x, y] = image[image.Size.X - x - 1, y];
             }
@@ -61,8 +60,8 @@ internal static class Utilities
         public Image WithColorSwapped(Color target, Color value)
         {
             Image swapped = new(image.Size.X, image.Size.Y);
-            for (var x = 0; x < image.Size.X; x++)
-            for (var y = 0; y < image.Size.Y; y++)
+            for (int x = 0; x < image.Size.X; x++)
+            for (int y = 0; y < image.Size.Y; y++)
             {
                 swapped[x, y] = image[x, y].Color == target ? image[x, y] with { Color = value } : image[x, y];
             }

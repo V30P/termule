@@ -1,4 +1,4 @@
-namespace Termule.Engine.Types.Content;
+namespace Termule.Engine.Types;
 
 /// <summary>
 ///     Content with methods for easy modification.

@@ -1,5 +1,4 @@
-using Termule.Engine.Types.Content;
-using Termule.Engine.Types.Vectors;
+using Termule.Engine.Types;
 
 namespace Termule.Engine.Components;
 
@@ -23,10 +22,10 @@ public sealed class ContentRenderer<TContent> : PositionalRenderer
     /// </summary>
     public bool Centered { get; set; }
 
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
+    /// <inheritdoc />
     protected override Vector Offset =>
-        Centered && Content != null ? new Vector(-Content.Size.X, Content.Size.Y) / 2 : (0, 0);
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
+        Centered && Content != null ? -Content.Size / 2 : (0, 0);
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="ContentRenderer{TContent}" /> class.
@@ -41,11 +40,11 @@ public sealed class ContentRenderer<TContent> : PositionalRenderer
 
     private protected override void RenderAtPosition(PositionalRenderContext context)
     {
-        for (var x = 0; x < Content?.Size.X; x++)
-        for (var y = 0; y < Content.Size.Y; y++)
+        for (int x = 0; x < Content?.Size.X; x++)
+        for (int y = 0; y < Content.Size.Y; y++)
         {
-            var cell = Content.At(x, y);
-            var cellPos = context.Origin + (x, y);
+            Cell cell = Content.At(x, y);
+            VectorInt cellPos = context.Origin + (x, y);
             context.Frame.Draw(
                 cellPos,
                 cell.Color != BasicColor.Default ? cell.Color : null,

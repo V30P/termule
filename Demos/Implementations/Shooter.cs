@@ -5,11 +5,10 @@ using Termule.Engine.Systems.Controller;
 using Termule.Engine.Systems.Controller.Keyboard;
 using Termule.Engine.Systems.Display;
 using Termule.Engine.Systems.ResourceLoader;
-using Termule.Engine.Types.Content;
-using Termule.Engine.Types.Vectors;
+using Termule.Engine.Types;
 using static Termule.Demos.Application.Utilities;
 
-namespace Termule.Demos.Demos;
+namespace Termule.Demos.Implementations;
 
 internal class Shooter : Demo
 {
@@ -102,7 +101,7 @@ internal class Shooter : Demo
     {
         Root.Get<ContentRenderer<Text>>().Content.Value = null;
 
-        for (var i = 0; i < roundNumber; i++)
+        for (int i = 0; i < roundNumber; i++)
         {
             Enemy enemy = [];
             enemy.Get<Transform>().Pos = PointOnRectangle(
@@ -186,7 +185,7 @@ internal class Shooter : Demo
 
         private void OnTicked()
         {
-            var transform = Get<Transform>();
+            Transform transform = Get<Transform>();
             transform.Pos += ScaleVelocity(MovementDir.Normalized * Speed) * Game.DeltaTime;
 
             hitColorTimeRemaining -= Game.DeltaTime;
@@ -240,7 +239,7 @@ internal class Shooter : Demo
         {
             if (Root.Get<Player>() is { } player)
             {
-                var pos = Get<Transform>().Pos;
+                Vector pos = Get<Transform>().Pos;
                 Target = player.Get<Transform>().Pos;
 
                 if ((pos - Target).Magnitude > Range)
@@ -285,15 +284,15 @@ internal class Shooter : Demo
         {
             Get<Transform>().Pos += ScaleVelocity(direction * Speed) * Game.DeltaTime;
 
-            foreach (var character in Root.GetAll<Character>())
+            foreach (Character character in Root.GetAll<Character>())
             {
                 if (character.GetType() == sourceType)
                 {
                     continue;
                 }
 
-                var characterPos = character.Get<Transform>().Pos;
-                var projectilePos = Get<Transform>().Pos;
+                Vector characterPos = character.Get<Transform>().Pos;
+                Vector projectilePos = Get<Transform>().Pos;
 
                 if (MathF.Abs(characterPos.X - projectilePos.X) <
                     (float)(_characterSprite.Size.X + _projectileSprite.Size.X) / 2

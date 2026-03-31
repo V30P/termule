@@ -12,7 +12,7 @@ internal class Array2DConverterFactory : JsonConverterFactory
 
     public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
     {
-        var converterType = typeof(Array2DConverter<>).MakeGenericType(typeToConvert.GetElementType());
+        Type converterType = typeof(Array2DConverter<>).MakeGenericType(typeToConvert.GetElementType());
         return (JsonConverter)Activator.CreateInstance(converterType);
     }
 
@@ -20,13 +20,13 @@ internal class Array2DConverterFactory : JsonConverterFactory
     {
         public override void Write(Utf8JsonWriter writer, T[,] value, JsonSerializerOptions options)
         {
-            var converter = GetConverter(options);
+            JsonConverter<T> converter = GetConverter(options);
 
             writer.WriteStartArray();
-            for (var x = 0; x < value.GetLength(0); x++)
+            for (int x = 0; x < value.GetLength(0); x++)
             {
                 writer.WriteStartArray();
-                for (var y = 0; y < value.GetLength(1); y++)
+                for (int y = 0; y < value.GetLength(1); y++)
                 {
                     converter.Write(writer, value[x, y], options);
                 }
@@ -39,7 +39,7 @@ internal class Array2DConverterFactory : JsonConverterFactory
 
         public override T[,] Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            var converter = GetConverter(options);
+            JsonConverter<T> converter = GetConverter(options);
 
             if (reader.TokenType != JsonTokenType.StartArray)
             {
@@ -66,9 +66,9 @@ internal class Array2DConverterFactory : JsonConverterFactory
             }
 
             // Convert to an actual array
-            var value = new T[array.Count, array[0]?.Count ?? 0];
-            for (var x = 0; x < array.Count; x++)
-            for (var y = 0; y < array[0].Count; y++)
+            T[,] value = new T[array.Count, array[0]?.Count ?? 0];
+            for (int x = 0; x < array.Count; x++)
+            for (int y = 0; y < array[0].Count; y++)
             {
                 value[x, y] = array[x][y];
             }

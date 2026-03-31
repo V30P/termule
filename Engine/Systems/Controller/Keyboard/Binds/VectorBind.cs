@@ -1,4 +1,4 @@
-using Termule.Engine.Types.Vectors;
+using Termule.Engine.Types;
 
 namespace Termule.Engine.Systems.Controller.Keyboard;
 
@@ -42,7 +42,7 @@ public sealed class VectorBind(Button posY, Button negX, Button negY, Button pos
 
     private void OnButtonAction(Button button, bool isDown)
     {
-        for (var i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++)
         {
             if (buttons[i] == button)
             {
