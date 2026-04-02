@@ -38,7 +38,7 @@ public abstract class PositionalRenderer : Renderer
 
         frameSpaceOrigin += Offset;
         VectorInt frameSpaceCellOrigin = frameSpaceOrigin.RoundToInt();
-        
+
         RenderAtPosition(new PositionalRenderContext(frame, frameSpaceCellOrigin,
             frameSpaceOrigin - frameSpaceCellOrigin));
     }

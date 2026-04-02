@@ -3,12 +3,12 @@ using Termule.Engine.Types;
 
 namespace Termule.Tests.Components;
 
-public class Utilities
+public static class Utilities
 {
     public static void AssertDrawnCells(FrameBuffer frame, Color expectedColor,
         IReadOnlyCollection<VectorInt> expectedCells)
     {
-        HashSet<VectorInt> actualCells = new();
+        HashSet<VectorInt> actualCells = [];
 
         for (int x = 0; x < frame.Size.X; x++)
         for (int y = 0; y < frame.Size.Y; y++)

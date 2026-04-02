@@ -41,7 +41,7 @@ public sealed class LineRenderer : PositionalRenderer
 
         while (true)
         {
-            context.Frame.Draw((x0, y0) + context.Offset.FloorToInt(), Color);
+            context.Frame.Draw((x0, y0) + context.Origin, Color);
 
             if (x0 == x1 && y0 == y1)
             {

@@ -28,7 +28,7 @@ public abstract class Display : Core.System, ICameraTarget
     {
         get;
 
-        set
+        protected set
         {
             Buffer = new FrameBuffer(value.X, value.Y);
             Screen = new FrameBuffer(value.X, value.Y);

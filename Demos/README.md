@@ -1,8 +1,8 @@
 # Termule Demos
 
 This directory contains the demo collection project for the Termule game engine. Each demo highlights one engine
-capability
-and serves as a practical example of using the Termule API. Demos are implemented as self-contained, single-file systems
+capability and serves as a practical example of using the Termule API. Demos are implemented as self-contained,
+single-file systems
 and can be found in the `Implementations` directory.
 
 For information about the engine itself, see the main README [here](../README.md).

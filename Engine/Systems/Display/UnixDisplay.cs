@@ -41,22 +41,31 @@ public sealed partial class UnixDisplay : TerminalDisplay
         // Get everything in STDIN
         byte[] buffer = new byte[1024];
         StringBuilder input = new();
-        while (read(STDIN_FILENO, buffer, buffer.Length) is int bytesRead and > 0)
+
+        while (true)
         {
-            input.Append(Encoding.UTF8.GetString(buffer, 0, bytesRead));
+            int bytes = read(STDIN_FILENO, buffer, buffer.Length);
+            if (bytes <= 0)
+            {
+                break;
+            }
+
+            input.Append(Encoding.UTF8.GetString(buffer, 0, bytes));
         }
 
         // Parse out the SGR events
         MatchCollection sgrEvents = sgrRegex().Matches(input.ToString());
-        if (sgrEvents.Count > 0)
+        if (sgrEvents.Count <= 0)
         {
-            Match lastSGREvent = sgrEvents[^1];
-            MousePos =
-            (
-                int.Parse(lastSGREvent.Groups[1].Value) - 1,
-                int.Parse(lastSGREvent.Groups[2].Value) - 1
-            );
+            return;
         }
+
+        Match lastSGREvent = sgrEvents[^1];
+        MousePos =
+        (
+            int.Parse(lastSGREvent.Groups[1].Value) - 1,
+            int.Parse(lastSGREvent.Groups[2].Value) - 1
+        );
     }
 
     /// <inheritdoc />

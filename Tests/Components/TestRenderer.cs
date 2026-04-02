@@ -26,11 +26,8 @@ public class TestRenderer
 
     private class FakeRenderer : Renderer
     {
-        public int RenderCount { get; private set; }
-
         protected internal override void Render(FrameBuffer frame, Vector viewOrigin)
         {
-            RenderCount++;
         }
     }
 

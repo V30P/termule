@@ -20,6 +20,7 @@ public sealed class Camera : Component
     public ICameraTarget Target
     {
         get => field ?? GetRequiredSystem<Display>();
+
         set;
     }
 

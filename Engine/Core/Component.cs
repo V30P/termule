@@ -51,9 +51,7 @@ public abstract class Component : GameElement
     protected TComponent GetRequiredComponent<TComponent>()
         where TComponent : Component
     {
-        return GameObject.Get<TComponent>() is not { } component
-            ? throw new MissingComponentException<TComponent>(this)
-            : component;
+        return GameObject.Get<TComponent>() ?? throw new MissingComponentException<TComponent>(this);
     }
 
     internal void Tick()
