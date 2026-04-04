@@ -17,6 +17,19 @@ public sealed partial class UnixDisplay : TerminalDisplay
     private static readonly int O_NONBLOCK = OperatingSystem.IsMacOS() ? 0x0004 : 0x800;
     private static readonly int STDIN_FILENO = 0;
 
+    private static readonly ProcessStartInfo sttyStartInfo = new()
+    {
+        FileName = "stty",
+        RedirectStandardOutput = true,
+        UseShellExecute = false,
+        CreateNoWindow = true
+    };
+
+    private readonly byte[] inputBuffer = new byte[1024];
+    private readonly StringBuilder inputBuilder = new();
+
+    private string initialSttyConfig;
+
     /// <inheritdoc />
     protected internal override void Start()
     {
@@ -29,32 +42,40 @@ public sealed partial class UnixDisplay : TerminalDisplay
         int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
         _ = fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
 
-        // Configure the terminal driver
-        Process.Start("stty", "-echo -icanon min 0 time 0")?.WaitForExit();
+        // Configure stty
+        using (Process process = Process.Start("stty", "-echo -icanon min 0 time 0"))
+        {
+            initialSttyConfig = process.StandardOutput.ReadToEnd();
+        }
+
+        sttyStartInfo.Arguments = "-g";
+        using (Process getCurrentConfigProcess = Process.Start(sttyStartInfo))
+        {
+            initialSttyConfig = getCurrentConfigProcess.StandardOutput.ReadToEnd();
+        }
+
+        sttyStartInfo.Arguments = "-echo -icanon min 0 time 0";
+        Process.Start(sttyStartInfo).WaitForExit();
     }
 
-    /// <summary>
-    ///     Parses SGR events to determine mouse position.
-    /// </summary>
+    /// <inheritdoc/>
     protected internal override void Tick()
     {
         // Get everything in STDIN
-        byte[] buffer = new byte[1024];
-        StringBuilder input = new();
-
+        inputBuilder.Clear();
         while (true)
         {
-            int bytes = read(STDIN_FILENO, buffer, buffer.Length);
+            int bytes = read(STDIN_FILENO, inputBuffer, inputBuffer.Length);
             if (bytes <= 0)
             {
                 break;
             }
 
-            input.Append(Encoding.UTF8.GetString(buffer, 0, bytes));
+            inputBuilder.Append(Encoding.UTF8.GetChars(inputBuffer, 0, bytes));
         }
 
         // Parse out the SGR events
-        MatchCollection sgrEvents = sgrRegex().Matches(input.ToString());
+        MatchCollection sgrEvents = sgrRegex().Matches(inputBuilder.ToString());
         if (sgrEvents.Count <= 0)
         {
             return;
@@ -73,10 +94,12 @@ public sealed partial class UnixDisplay : TerminalDisplay
     {
         base.Stop();
 
-        Console.Write("\e[?1003l");
-        Console.Write("\e[?1006l");
+        Console.Write("\e[?1003l"); // Disable any-motion mouse tracking
+        Console.Write("\e[?1006l"); // Disable SGR coordinates for mouse tracking
 
-        Process.Start("stty", "sane")?.WaitForExit();
+        // Reset stty config
+        sttyStartInfo.Arguments = initialSttyConfig;
+        Process.Start(sttyStartInfo).WaitForExit();
     }
 
     [LibraryImport("libc", SetLastError = true)]

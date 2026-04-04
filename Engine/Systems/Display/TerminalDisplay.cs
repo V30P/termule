@@ -155,10 +155,8 @@ public abstract class TerminalDisplay : Display
     /// </summary>
     protected internal override void Stop()
     {
-        Console.ResetColor();
-
+        Console.Write("\e[?1049l"); // Disable alternate buffer
         Console.CursorVisible = true;
-        Console.Write("\e[?1049l");
     }
 
     private void FlushBuilder()
