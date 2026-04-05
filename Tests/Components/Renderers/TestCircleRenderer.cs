@@ -10,7 +10,7 @@ public class TestCircleRenderer
 {
     private static readonly Color TestColor = BasicColor.White;
 
-    public static IEnumerable<object[]> OutlineCircleData =>
+    public static IEnumerable<object[]> OutlineCircleData =
     [
         [1f, new VectorInt[] { (2, 3), (3, 2), (3, 4), (4, 3) }],
         [
@@ -33,7 +33,7 @@ public class TestCircleRenderer
         ]
     ];
 
-    public static IEnumerable<object[]> FilledCircleData =>
+    public static IEnumerable<object[]> FilledCircleData =
     [
         [
             1f, new VectorInt[]
@@ -66,7 +66,7 @@ public class TestCircleRenderer
         ]
     ];
 
-    public static IEnumerable<object[]> ViewOriginData =>
+    public static IEnumerable<object[]> ViewOriginData =
     [
         [(1f, 1f), (0f, 0f), (1, 1)],
         [(1f, 1f), (2f, 2f), (1, 1)],

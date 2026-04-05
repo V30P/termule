@@ -41,9 +41,7 @@ public sealed class Text : Content
                 }
 
                 Cells[pos.X, pos.Y] = new Cell { Char = character };
-#pragma warning disable SA1101 // Prefix local calls with this
                 pos = pos with { X = pos.X + 1 };
-#pragma warning restore SA1101 // Prefix local calls with this
             }
         }
     }

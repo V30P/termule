@@ -1,6 +1,3 @@
-using System.Data.SqlTypes;
-using System.Diagnostics;
-using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 
 namespace Termule.Engine.Systems.Display;
@@ -31,6 +28,14 @@ public sealed partial class WindowsDisplay : TerminalDisplay
     }
 
     /// <inheritdoc />
+    protected internal override void Stop()
+    {
+        base.Stop();
+
+        _ = SetConsoleMode(handle, initialMode);
+    }
+
+    /// <inheritdoc />
     protected internal override void Tick()
     {
         if (!GetNumberOfConsoleInputEvents(handle, out uint numEvents) || numEvents == 0)
@@ -38,12 +43,16 @@ public sealed partial class WindowsDisplay : TerminalDisplay
             return;
         }
 
-        _ = ReadConsoleInput(handle, eventBuffer, (uint) eventBuffer.Length, out uint eventsCount);
-        for (int i = ((int)eventsCount) - 1; i >= 0; i--)
+        _ = ReadConsoleInput(handle, eventBuffer, (uint)eventBuffer.Length, out uint eventsCount);
+        for (int i = (int)eventsCount - 1; i >= 0; i--)
         {
+            // ReSharper disable InconsistentNaming
             const uint MOUSE_EVENT = 0x0002;
             const uint MOUSE_MOVED = 0x0001;
-            if (eventBuffer[i].EventType == MOUSE_EVENT && (eventBuffer[i].Event.MouseEvent.dwEventFlags & MOUSE_MOVED) != 0)
+            // ReSharper restore InconsistentNaming
+
+            if (eventBuffer[i].EventType == MOUSE_EVENT &&
+                (eventBuffer[i].Event.MouseEvent.dwEventFlags & MOUSE_MOVED) != 0)
             {
                 MOUSE_EVENT_RECORD mouseEvent = eventBuffer[i].Event.MouseEvent;
                 MousePos = (mouseEvent.dwMousePosition.X, mouseEvent.dwMousePosition.Y);
@@ -51,14 +60,6 @@ public sealed partial class WindowsDisplay : TerminalDisplay
                 return;
             }
         }
-    }
-
-    /// <inheritdoc />
-    protected internal override void Stop()
-    {
-        base.Stop();
-
-        _ = SetConsoleMode(handle, initialMode);
     }
 
     [LibraryImport("kernel32.dll", SetLastError = true)]
@@ -79,11 +80,12 @@ public sealed partial class WindowsDisplay : TerminalDisplay
     [LibraryImport("kernel32.dll", EntryPoint = "ReadConsoleInputW", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
     private static partial bool ReadConsoleInput(
-    IntPtr hConsoleInput,
-    [Out] INPUT_RECORD[] lpBuffer,
-    uint nLength,
-    out uint lpNumberOfEventsRead);
+        IntPtr hConsoleInput,
+        [Out] INPUT_RECORD[] lpBuffer,
+        uint nLength,
+        out uint lpNumberOfEventsRead);
 
+    // ReSharper disable InconsistentNaming
     [StructLayout(LayoutKind.Sequential)]
     private readonly struct INPUT_RECORD
     {
@@ -94,8 +96,7 @@ public sealed partial class WindowsDisplay : TerminalDisplay
     [StructLayout(LayoutKind.Explicit)]
     private readonly struct EVENT
     {
-        [FieldOffset(0)]
-        public readonly MOUSE_EVENT_RECORD MouseEvent;
+        [FieldOffset(0)] public readonly MOUSE_EVENT_RECORD MouseEvent;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -112,4 +113,5 @@ public sealed partial class WindowsDisplay : TerminalDisplay
             public readonly short X, Y;
         }
     }
+    // ReSharper restore InconsistentNaming
 }

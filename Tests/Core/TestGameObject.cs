@@ -1,9 +1,8 @@
 using Termule.Engine.Core;
-using Termule.Tests.Core.Fakes;
 
 namespace Termule.Tests.Core;
 
-public class TestGameObjectd
+public class TestGameObject
 {
     private interface IDerivedComponent;
 

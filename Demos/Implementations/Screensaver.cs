@@ -33,7 +33,6 @@ internal class Screensaver : Demo
         ];
 
         private readonly Random random = new();
-
         private readonly Vector unsignedDir = new Vector(1.5f, 1).Normalized;
 
         private Color currentColor;

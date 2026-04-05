@@ -64,6 +64,31 @@ public abstract class TerminalDisplay : Display
         Size = (Console.WindowWidth, Console.WindowHeight);
     }
 
+
+    /// <summary>
+    ///     Prepares the terminal environment for use.
+    /// </summary>
+    protected internal override void Start()
+    {
+        Console.CursorVisible = false;
+        Console.Write("\e[?1049h"); // Enable alternate buffer
+
+        Console.CancelKeyPress += (_, e) =>
+        {
+            e.Cancel = true;
+            Game.Stop();
+        };
+    }
+
+    /// <summary>
+    ///     Cleans and resets the terminal environment.
+    /// </summary>
+    protected internal override void Stop()
+    {
+        Console.Write("\e[?1049l"); // Disable alternate buffer
+        Console.CursorVisible = true;
+    }
+
     private protected sealed override void PrintBuffer()
     {
         // Handle window resizing
@@ -133,30 +158,6 @@ public abstract class TerminalDisplay : Display
         }
 
         FlushBuilder();
-    }
-
-    /// <summary>
-    ///     Prepares the terminal environment for printing.
-    /// </summary>
-    protected internal override void Start()
-    {
-        Console.CursorVisible = false;
-        Console.Write("\e[?1049h"); // Enable alternate buffer
-
-        Console.CancelKeyPress += (_, e) =>
-        {
-            e.Cancel = true;
-            Game.Stop();
-        };
-    }
-
-    /// <summary>
-    ///     Cleans and resets the terminal environment.
-    /// </summary>
-    protected internal override void Stop()
-    {
-        Console.Write("\e[?1049l"); // Disable alternate buffer
-        Console.CursorVisible = true;
     }
 
     private void FlushBuilder()

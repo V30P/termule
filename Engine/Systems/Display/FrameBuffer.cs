@@ -16,8 +16,7 @@ public sealed class FrameBuffer : Content
     /// <returns>The <see cref="Cell" /> at the specified position.</returns>
     public Cell this[int x, int y] => Cells[x, y];
 
-    internal FrameBuffer(int width, int height)
-        : base(width, height)
+    internal FrameBuffer(int width, int height) : base(width, height)
     {
     }
 
@@ -41,12 +40,14 @@ public sealed class FrameBuffer : Content
         if (color is { } colorValue)
         {
             cell.Color = colorValue;
+            cell.Char = '\0';
+            cell.CharColor = default;
         }
 
         if (character is { } characterValue)
         {
             cell.Char = characterValue;
-            cell.CharColor = default(BasicColor);
+            cell.CharColor = default;
         }
 
         if (characterColor is { } characterColorValue)

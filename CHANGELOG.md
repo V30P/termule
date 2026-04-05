@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - `--help`, `--interactive`, and `--stats` flags for the demo project
 - Setter for `gameObject` property of components for easy movement
 - `ICameraTarget` for rendering to non-display objects
+- Proper mouse tracking for `WindowsDisplay`
 
 ### Changed
 
@@ -33,6 +34,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Transforms not properly clearing state when reparenting
 - Camera continuing to use a transform after it moves
 - GameElements occasionally getting duplicate ids
+- Terminal display implementations not fully resetting configuration
 
 ## [0.1.0] 
 

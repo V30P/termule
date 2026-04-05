@@ -1,6 +1,6 @@
 using Termule.Engine.Core;
 
-namespace Termule.Tests.Core.Fakes;
+namespace Termule.Tests.Core;
 
 public class FakeGameElement : GameElement
 {

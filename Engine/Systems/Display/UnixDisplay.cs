@@ -14,8 +14,8 @@ public sealed partial class UnixDisplay : TerminalDisplay
 {
     private const int F_GETFL = 3;
     private const int F_SETFL = 4;
+    private const int STDIN_FILENO = 0;
     private static readonly int O_NONBLOCK = OperatingSystem.IsMacOS() ? 0x0004 : 0x800;
-    private static readonly int STDIN_FILENO = 0;
 
     private static readonly ProcessStartInfo sttyStartInfo = new()
     {
@@ -43,22 +43,30 @@ public sealed partial class UnixDisplay : TerminalDisplay
         _ = fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
 
         // Configure stty
-        using (Process process = Process.Start("stty", "-echo -icanon min 0 time 0"))
-        {
-            initialSttyConfig = process.StandardOutput.ReadToEnd();
-        }
-
         sttyStartInfo.Arguments = "-g";
         using (Process getCurrentConfigProcess = Process.Start(sttyStartInfo))
         {
-            initialSttyConfig = getCurrentConfigProcess.StandardOutput.ReadToEnd();
+            initialSttyConfig = getCurrentConfigProcess?.StandardOutput.ReadLine();
         }
 
         sttyStartInfo.Arguments = "-echo -icanon min 0 time 0";
-        Process.Start(sttyStartInfo).WaitForExit();
+        Process.Start(sttyStartInfo)?.WaitForExit();
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
+    protected internal override void Stop()
+    {
+        base.Stop();
+
+        Console.Write("\e[?1003l"); // Disable any-motion mouse tracking
+        Console.Write("\e[?1006l"); // Disable SGR coordinates for mouse tracking
+
+        // Reset stty config
+        sttyStartInfo.Arguments = initialSttyConfig;
+        Process.Start(sttyStartInfo)?.WaitForExit();
+    }
+
+    /// <inheritdoc />
     protected internal override void Tick()
     {
         // Get everything in STDIN
@@ -74,7 +82,7 @@ public sealed partial class UnixDisplay : TerminalDisplay
             inputBuilder.Append(Encoding.UTF8.GetChars(inputBuffer, 0, bytes));
         }
 
-        // Parse out the SGR events
+        // Parse out SGR events
         MatchCollection sgrEvents = sgrRegex().Matches(inputBuilder.ToString());
         if (sgrEvents.Count <= 0)
         {
@@ -87,19 +95,6 @@ public sealed partial class UnixDisplay : TerminalDisplay
             int.Parse(lastSGREvent.Groups[1].Value) - 1,
             int.Parse(lastSGREvent.Groups[2].Value) - 1
         );
-    }
-
-    /// <inheritdoc />
-    protected internal override void Stop()
-    {
-        base.Stop();
-
-        Console.Write("\e[?1003l"); // Disable any-motion mouse tracking
-        Console.Write("\e[?1006l"); // Disable SGR coordinates for mouse tracking
-
-        // Reset stty config
-        sttyStartInfo.Arguments = initialSttyConfig;
-        Process.Start(sttyStartInfo).WaitForExit();
     }
 
     [LibraryImport("libc", SetLastError = true)]
