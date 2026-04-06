@@ -125,7 +125,7 @@ public abstract class TerminalDisplay : Display
                 skipping = false;
             }
 
-            Cell cell = Buffer.At(x, y);
+            Cell cell = Buffer[x, y];
 
             // Apply color changes if necessary
             if (cell.Color != currentColor || cell.CharColor != currentCharColor)

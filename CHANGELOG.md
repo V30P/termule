@@ -12,7 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - `--help`, `--interactive`, and `--stats` flags for the demo project
 - Setter for `gameObject` property of components for easy movement
 - `ICameraTarget` for rendering to non-display objects
-- Proper mouse tracking for `WindowsDisplay`
+- Proper mouse tracking for the windows display implementation
 
 ### Changed
 
@@ -22,6 +22,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Improved `FrameBuffer` performance by removing unnecessary delegate allocations
 - Made GameObjects only add components to the tick list on the next frame after they are added to avoid snapshot allocation
 - Rename `TransformRenderer` to `PositionalRenderer` and update the API
+- Converted`Content` to the `IContent` interface (use `Image` for an easy implementation)
+- Improved `Text` implementation by reducing and optimizing recalculations 
 
 ### Removed
 
@@ -54,3 +56,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Vector and content POCOs
 - Full XML doc comments for API
 - Basic demo collection
+
+0 - 0 - 0
+1 - 1 - 1
+...
+10 - A - 1010
+11 - B - 1011
+12 - C - 1100
+13 - D - 1101
+14 - E - 1110
+15 - F - 1111

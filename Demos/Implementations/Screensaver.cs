@@ -53,7 +53,7 @@ internal class Screensaver : Demo
 
         private void OnRegistered()
         {
-            logo = new Image(Systems.Get<ResourceLoader>().Load<Content>("screensaver/logo"));
+            logo = Systems.Get<ResourceLoader>().Load<Image>("screensaver/logo");
             Get<ContentRenderer<Image>>().Content = logo;
 
             dir = unsignedDir;

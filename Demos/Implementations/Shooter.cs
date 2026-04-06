@@ -41,8 +41,8 @@ internal class Shooter : Demo
             { Binds.Fire, new ButtonBind(Button.Mouse1) }
         };
 
-        _characterSprite = new Image(Systems.Get<ResourceLoader>().Load<Content>("shooter/character"));
-        _projectileSprite = new Image(Systems.Get<ResourceLoader>().Load<Content>("shooter/projectile"));
+        _characterSprite = Systems.Get<ResourceLoader>().Load<Image>("shooter/character");
+        _projectileSprite = Systems.Get<ResourceLoader>().Load<Image>("shooter/projectile");
 
         Root.Add(
             new Transform(),
@@ -153,7 +153,7 @@ internal class Shooter : Demo
         {
             Add(
                 new Transform(),
-                new ContentRenderer<Content>
+                new ContentRenderer<Image>
                 {
                     Centered = true,
                     Content = _characterSprite
@@ -189,7 +189,7 @@ internal class Shooter : Demo
             transform.Pos += ScaleVelocity(MovementDir.Normalized * Speed) * Game.DeltaTime;
 
             hitColorTimeRemaining -= Game.DeltaTime;
-            Get<ContentRenderer<Content>>().Content =
+            Get<ContentRenderer<Image>>().Content =
                 (Target.X > transform.Pos.X ? _characterSprite : _characterSprite.Flipped())
                 .WithColorSwapped(BasicColor.White, hitColorTimeRemaining < 0 ? Color : HitColor);
 
@@ -271,7 +271,7 @@ internal class Shooter : Demo
             sourceType = source.GetType();
             direction = (target - position).Normalized;
 
-            Add(new Transform { Pos = position }, new ContentRenderer<Content>
+            Add(new Transform { Pos = position }, new ContentRenderer<Image>
             {
                 Centered = true,
                 Content = new Image(_projectileSprite).WithColorSwapped(BasicColor.White, source.Color)

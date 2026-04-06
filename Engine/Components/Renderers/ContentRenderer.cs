@@ -3,14 +3,14 @@ using Termule.Engine.Types;
 namespace Termule.Engine.Components;
 
 /// <summary>
-///     Renders a <see cref="Content" /> instance at the local <see cref="Transform" />'s position.
+///     Renders a <see cref="IContent" /> instance at the local <see cref="Transform" />'s position.
 /// </summary>
 /// <typeparam name="TContent">
 ///     The type of content to render.
 ///     An instance will be created automatically if a parameterless constructor exists.
 /// </typeparam>
 public sealed class ContentRenderer<TContent> : PositionalRenderer
-    where TContent : Content
+    where TContent : IContent
 {
     /// <summary>
     ///     Gets or sets the <typeparamref name="TContent" /> to render.
@@ -43,7 +43,7 @@ public sealed class ContentRenderer<TContent> : PositionalRenderer
         for (int x = 0; x < Content?.Size.X; x++)
         for (int y = 0; y < Content.Size.Y; y++)
         {
-            Cell cell = Content.At(x, y);
+            Cell cell = Content[x, y];
             VectorInt cellPos = context.Origin + (x, y);
             context.Frame.Draw(
                 cellPos,

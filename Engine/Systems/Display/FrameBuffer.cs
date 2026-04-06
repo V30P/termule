@@ -6,16 +6,8 @@ namespace Termule.Engine.Systems.Display;
 /// <summary>
 ///     Content implementation that <see cref="Renderer" />s draw to during the render process.
 /// </summary>
-public sealed class FrameBuffer : Content
+public sealed class FrameBuffer : Image
 {
-    /// <summary>
-    ///     Gets the cell at the specified position.
-    /// </summary>
-    /// <param name="x">The X position of the cell to get.</param>
-    /// <param name="y">The Y position of the cell to get.</param>
-    /// <returns>The <see cref="Cell" /> at the specified position.</returns>
-    public Cell this[int x, int y] => Cells[x, y];
-
     internal FrameBuffer(int width, int height) : base(width, height)
     {
     }

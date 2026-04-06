@@ -18,12 +18,12 @@ public class TestContentRenderer
     ];
 
     // ReSharper disable once ClassNeverInstantiated.Local
-    private class ParameterlessContent() : Content(0, 0);
+    private class ParameterlessContent() : Image(0, 0);
 
     // ReSharper disable once ClassNeverInstantiated.Local
-    private class NonParameterlessContent(int width, int height) : Content(width, height);
+    private class NonParameterlessContent(int width, int height) : Image(width, height);
 
-    private class FakeContent : Content
+    private class FakeContent : Image
     {
         public FakeContent(Cell[,] cells) : base(cells.GetLength(0), cells.GetLength(1))
         {
@@ -35,7 +35,7 @@ public class TestContentRenderer
     public void Centered_ShouldOffsetContent()
     {
         Cell cell = new(TestColor);
-        ContentRenderer<Content> renderer = new()
+        ContentRenderer<Image> renderer = new()
         {
             TargetSpace = true,
             Content = new FakeContent(new[,]
@@ -73,7 +73,7 @@ public class TestContentRenderer
     [Fact]
     public void Render_ShouldDrawExpectedCells()
     {
-        ContentRenderer<Content> renderer = new()
+        ContentRenderer<Image> renderer = new()
         {
             TargetSpace = true,
             Content = new FakeContent(new Cell[,]
@@ -92,7 +92,7 @@ public class TestContentRenderer
     public void Render_ShouldNotContributeDefaultValues()
     {
         Cell baseCell = new(TestColor, 'X', TestColor);
-        ContentRenderer<Content> baseRenderer = new()
+        ContentRenderer<Image> baseRenderer = new()
         {
             TargetSpace = true,
             Content = new FakeContent(new[,] { { baseCell } })
@@ -102,7 +102,7 @@ public class TestContentRenderer
 
         baseRenderer.Render(frame, (0, 0));
 
-        ContentRenderer<Content> defaultRenderer = new()
+        ContentRenderer<Image> defaultRenderer = new()
         {
             TargetSpace = true,
             Content = new FakeContent(new Cell[,] { { new() } })
@@ -118,7 +118,7 @@ public class TestContentRenderer
     [MemberData(nameof(ViewOriginData))]
     public void Render_ShouldRespectViewOrigin(Vector transformPos, Vector viewOrigin, VectorInt expectedCellPos)
     {
-        ContentRenderer<Content> renderer = new()
+        ContentRenderer<Image> renderer = new()
         {
             TargetSpace = true,
             Content = new FakeContent(new Cell[,] { { new(TestColor) } })
@@ -136,7 +136,7 @@ public class TestContentRenderer
     [Fact]
     public void Render_WhenNotInTargetSpace_ShouldApplyViewOriginAndFlipY()
     {
-        ContentRenderer<Content> renderer = new()
+        ContentRenderer<Image> renderer = new()
         {
             TargetSpace = false,
             Content = new FakeContent(new Cell[,] { { new(TestColor) } })
@@ -153,7 +153,7 @@ public class TestContentRenderer
     public void Render_WithNullContent_ShouldNotMutateFrame()
     {
         Cell baseCell = new(TestColor, 'X', TestColor);
-        ContentRenderer<Content> baseRenderer = new()
+        ContentRenderer<Image> baseRenderer = new()
         {
             TargetSpace = true,
             Content = new FakeContent(new[,] { { baseCell } })
@@ -163,7 +163,7 @@ public class TestContentRenderer
 
         baseRenderer.Render(frame, (0, 0));
 
-        ContentRenderer<Content> nullRenderer = new()
+        ContentRenderer<Image> nullRenderer = new()
         {
             TargetSpace = true,
             Content = null!
