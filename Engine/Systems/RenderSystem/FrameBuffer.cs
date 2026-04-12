@@ -1,5 +1,7 @@
 using Termule.Engine.Components;
 using Termule.Engine.Types;
+using Termule.Engine.Types.Content;
+using Termule.Engine.Types.Vectors;
 
 namespace Termule.Engine.Systems.Display;
 

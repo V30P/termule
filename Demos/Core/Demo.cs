@@ -1,3 +1,3 @@
-namespace Termule.Demos.Application;
+namespace Termule.Demos.CLI;
 
 internal abstract class Demo : Engine.Core.System;

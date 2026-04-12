@@ -1,5 +1,7 @@
 using Termule.Engine.Systems.Display;
+using Termule.Engine.Systems.RenderSystem;
 using Termule.Engine.Types;
+using Termule.Engine.Types.Content;
 
 namespace Termule.Tests.Systems.Display;
 

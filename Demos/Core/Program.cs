@@ -1,4 +1,5 @@
 using System.Reflection;
+using Termule.Demos.CLI;
 using Termule.Engine.Components;
 using Termule.Engine.Core;
 using Termule.Engine.Systems.RenderSystem;

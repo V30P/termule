@@ -1,7 +1,10 @@
-using Termule.Demos.Application;
+using Termule.Demos.Core;
 using Termule.Engine.Components;
+using Termule.Engine.Components.Camera;
 using Termule.Engine.Systems.Display;
 using Termule.Engine.Types;
+using Termule.Engine.Types.Content;
+using Termule.Engine.Types.Vectors;
 
 namespace Termule.Demos.Implementations;
 
