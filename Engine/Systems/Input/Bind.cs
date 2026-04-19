@@ -1,4 +1,4 @@
-namespace Termule.Engine.Systems.Controller;
+namespace Termule.Engine.Systems.Input;
 
 /// <summary>
 ///     Non-generic base class for binds.
@@ -21,13 +21,14 @@ public abstract class Bind
 public abstract class Bind<TController> : Bind
     where TController : Controller
 {
-    internal abstract TController Controller { set; }
+    private protected virtual TController Controller { get; set; }
 
     internal Bind()
     {
     }
 
-    internal override void SetController(Controller controller)
+    // Checks that the controller is the correct type before the actual setter
+    internal sealed override void SetController(Controller controller)
     {
         if (controller is null or TController)
         {

@@ -1,10 +1,10 @@
-namespace Termule.Engine.Systems.Controller.Keyboard;
+namespace Termule.Engine.Systems.Input.Keyboard;
 
 /// <summary>
 ///     Bind that returns whether a <see cref="Button" /> was just pressed.
 /// </summary>
 /// <param name="button">The target button.</param>
-public sealed class TriggerBind(Button button) : KeyboardBind
+public sealed class TriggerBind(Button button) : KeyboardController.Bind
 {
     private bool triggeredSinceLastFrame;
 

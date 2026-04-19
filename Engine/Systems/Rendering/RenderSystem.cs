@@ -1,6 +1,6 @@
+using System.Collections.ObjectModel;
 using Termule.Engine.Components;
-using Termule.Engine.Systems.Display;
-using Termule.Engine.Types;
+using Termule.Engine.Types.Vectors;
 
 namespace Termule.Engine.Systems.RenderSystem;
 
@@ -12,13 +12,13 @@ public sealed class RenderSystem : Core.System
     /// <summary>
     ///     Gets or initializes the rendering layers.
     /// </summary>
-    public Layer[] Layers
+    public ReadOnlyCollection<Layer> Layers
     {
-        private get;
+        get;
 
         init
         {
-            if (value?.Length == 0)
+            if (value is null or { Count: 0 })
             {
                 throw new ArgumentException($"{nameof(Layers)} cannot be null or empty");
             }

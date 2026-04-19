@@ -1,10 +1,10 @@
-namespace Termule.Engine.Systems.Controller.Keyboard;
+namespace Termule.Engine.Systems.Input.Keyboard;
 
 /// <summary>
 ///     Bind that returns whether a button is currently down.
 /// </summary>
 /// <param name="button">The target button.</param>
-public sealed class ButtonBind(Button button) : KeyboardBind
+public sealed class ButtonBind(Button button) : KeyboardController.Bind
 {
     private bool pressed;
 

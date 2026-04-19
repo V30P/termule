@@ -1,5 +1,5 @@
-using Termule.Engine.Components;
-using Termule.Engine.Systems.Display;
+using Termule.Engine.Components.Camera;
+using Termule.Engine.Systems.RenderSystem;
 
 namespace Termule.Tests.Systems.Display;
 

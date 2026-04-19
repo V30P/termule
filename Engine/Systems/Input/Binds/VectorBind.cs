@@ -1,6 +1,6 @@
-using Termule.Engine.Types;
+using Termule.Engine.Types.Vectors;
 
-namespace Termule.Engine.Systems.Controller.Keyboard;
+namespace Termule.Engine.Systems.Input.Keyboard;
 
 /// <summary>
 ///     Bind that returns a vector based on the directions associated with the pressed buttons.
@@ -9,7 +9,7 @@ namespace Termule.Engine.Systems.Controller.Keyboard;
 /// <param name="negX">The button for the negative X direction.</param>
 /// <param name="negY">The button for the negative Y direction.</param>
 /// <param name="posX">The button for the positive X direction.</param>
-public sealed class VectorBind(Button posY, Button negX, Button negY, Button posX) : KeyboardBind
+public sealed class VectorBind(Button posY, Button negX, Button negY, Button posX) : KeyboardController.Bind
 {
     private static readonly Dictionary<int, Vector> DirectionVectors = new()
     {

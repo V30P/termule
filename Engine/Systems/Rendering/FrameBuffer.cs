@@ -1,9 +1,8 @@
 using Termule.Engine.Components;
-using Termule.Engine.Types;
 using Termule.Engine.Types.Content;
 using Termule.Engine.Types.Vectors;
 
-namespace Termule.Engine.Systems.Display;
+namespace Termule.Engine.Systems.RenderSystem;
 
 /// <summary>
 ///     Content implementation that <see cref="Renderer" />s draw to during the render process.

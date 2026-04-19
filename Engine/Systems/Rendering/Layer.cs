@@ -11,12 +11,11 @@ public abstract class Layer(IComparer<Renderer> comparer) : IEnumerable<Renderer
 {
     private readonly List<Renderer> renderers = [];
 
-    private bool rendererAdded;
-
     /// <summary>
     ///     Gets or sets a value indicating whether a change has occurred that requires re-sorting.
     /// </summary>
-    private bool Dirty { get; set; }
+    // ReSharper disable once MemberCanBePrivate.Global
+    protected bool Dirty;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="Layer" /> class.
@@ -30,13 +29,11 @@ public abstract class Layer(IComparer<Renderer> comparer) : IEnumerable<Renderer
     /// <inheritdoc />
     public IEnumerator<Renderer> GetEnumerator()
     {
-        if (!rendererAdded && !Dirty)
+        if (Dirty)
         {
-            return renderers.GetEnumerator();
+            renderers.Sort(comparer);
+            Dirty = false;
         }
-
-        renderers.Sort(comparer);
-        Dirty = false;
 
         return renderers.GetEnumerator();
     }
@@ -46,34 +43,33 @@ public abstract class Layer(IComparer<Renderer> comparer) : IEnumerable<Renderer
         return GetEnumerator();
     }
 
-    internal void Register(Renderer renderer)
+    internal void Add(Renderer renderer)
     {
         renderers.Add(renderer);
-        rendererAdded = true;
-
-        OnRendererRegistered(renderer);
+        OnRendererAdded(renderer);
     }
 
-    internal void Unregister(Renderer renderer)
+    internal void Remove(Renderer renderer)
     {
         renderers.Remove(renderer);
-
-        OnRendererUnregistered(renderer);
+        OnRendererRemoved(renderer);
     }
 
     /// <summary>
-    ///     Invoked when a new renderer is added.
+    ///     Invoked when a new renderer is added. This should be used to update dirtiness.
     /// </summary>
     /// <param name="renderer">The renderer that was added.</param>
-    protected virtual void OnRendererRegistered(Renderer renderer)
+    protected virtual void OnRendererAdded(Renderer renderer)
     {
+        Dirty = true;
     }
 
     /// <summary>
-    ///     Invoked when a renderer is removed.
+    ///     Invoked when a renderer is removed. This should be used to update dirtiness.
     /// </summary>
     /// <param name="renderer">The renderer that was removed.</param>
-    protected virtual void OnRendererUnregistered(Renderer renderer)
+    protected virtual void OnRendererRemoved(Renderer renderer)
     {
+        Dirty = true;
     }
 }

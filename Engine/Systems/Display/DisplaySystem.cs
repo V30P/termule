@@ -1,5 +1,6 @@
-using Termule.Engine.Components;
-using Termule.Engine.Types;
+using Termule.Engine.Components.Camera;
+using Termule.Engine.Systems.RenderSystem;
+using Termule.Engine.Types.Vectors;
 
 namespace Termule.Engine.Systems.Display;
 

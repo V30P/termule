@@ -1,10 +1,10 @@
-namespace Termule.Engine.Systems.Controller.Keyboard;
+namespace Termule.Engine.Systems.Input.Keyboard;
 
 /// <summary>
 ///     Bind whose value is true for the first tick where all provided buttons are pressed.
 /// </summary>
 /// <param name="buttons">The buttons to target.</param>
-public sealed class ComboBind(HashSet<Button> buttons) : KeyboardBind
+public sealed class ComboBind(HashSet<Button> buttons) : KeyboardController.Bind
 {
     private readonly HashSet<Button> heldButtons = [];
 

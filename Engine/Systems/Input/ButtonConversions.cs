@@ -1,6 +1,6 @@
 using SharpHook.Data;
 
-namespace Termule.Engine.Systems.Controller.Keyboard;
+namespace Termule.Engine.Systems.Input.Keyboard;
 
 internal static class ButtonConversions
 {

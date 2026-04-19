@@ -1,5 +1,5 @@
 using System.Text;
-using Termule.Engine.Types;
+using Termule.Engine.Types.Content;
 
 namespace Termule.Engine.Systems.Display;
 
