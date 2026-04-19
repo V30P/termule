@@ -1,11 +1,12 @@
 using Termule.Engine.Components.Camera;
-using Termule.Engine.Systems.RenderSystem;
+using Termule.Engine.Systems.Display;
+using Termule.Engine.Systems.Rendering;
 
 namespace Termule.Tests.Systems.Display;
 
-public class TestDisplay
+public class TestDisplaySystem
 {
-    private class FakeDisplay : Engine.Systems.Display.Display
+    private class FakeDisplaySystem : DisplaySystem
     {
         public int PrintCount { get; private set; }
 
@@ -23,25 +24,25 @@ public class TestDisplay
     [Fact]
     public void SettingSize_ShouldResizeBuffer()
     {
-        FakeDisplay display = new();
-        display.SetSize(10, 5);
+        FakeDisplaySystem displaySystem = new();
+        displaySystem.SetSize(10, 5);
 
-        Assert.Equal((10, 5), ((ICameraTarget)display).Buffer.Size);
+        Assert.Equal((10, 5), ((ICameraTarget)displaySystem).Buffer.Size);
     }
 
     [Fact]
     public void Update_ShouldCallPrint_AndSwapBuffers()
     {
-        FakeDisplay display = new();
-        ICameraTarget target = display;
+        FakeDisplaySystem displaySystem = new();
+        ICameraTarget target = displaySystem;
         FrameBuffer startingBuffer = target.Buffer;
 
         target.Update();
         Assert.NotEqual(startingBuffer, target.Buffer);
-        Assert.Equal(1, display.PrintCount);
+        Assert.Equal(1, displaySystem.PrintCount);
 
         target.Update();
         Assert.Equal(startingBuffer, target.Buffer);
-        Assert.Equal(2, display.PrintCount);
+        Assert.Equal(2, displaySystem.PrintCount);
     }
 }

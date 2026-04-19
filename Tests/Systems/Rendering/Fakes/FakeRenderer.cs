@@ -1,12 +1,12 @@
 using Termule.Engine.Components;
-using Termule.Engine.Systems.RenderSystem;
+using Termule.Engine.Systems.Rendering;
 using Termule.Engine.Types.Vectors;
 
-namespace Termule.Tests.Systems.RenderSystem.Fakes;
+namespace Termule.Tests.Systems.Rendering.Fakes;
 
 public class FakeRenderer : Renderer
 {
-    public FrameBuffer? CapturedFrame { get; private set; }
+    public FrameBuffer CapturedFrame { get; private set; }
     public Vector? CapturedViewOrigin { get; private set; }
 
     protected internal override void Render(FrameBuffer frame, Vector viewOrigin)

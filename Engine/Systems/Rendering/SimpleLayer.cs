@@ -1,4 +1,4 @@
-namespace Termule.Engine.Systems.RenderSystem;
+namespace Termule.Engine.Systems.Rendering;
 
 /// <summary>
 ///     Basic layer implementation that provides registration-order-based sorting.

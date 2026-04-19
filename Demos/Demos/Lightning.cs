@@ -4,11 +4,10 @@ using Termule.Engine.Components.Camera;
 using Termule.Engine.Components.Renderers;
 using Termule.Engine.Core;
 using Termule.Engine.Systems.Display;
-using Termule.Engine.Types;
 using Termule.Engine.Types.Content;
 using Termule.Engine.Types.Vectors;
 
-namespace Termule.Demos.Implementations;
+namespace Termule.Demos.Demos;
 
 internal class Lightning : Demo
 {
@@ -60,12 +59,12 @@ internal class Lightning : Demo
 
         private void OnRegistered()
         {
-            Vector origin = ((float)random.NextDouble() * Systems.Get<Display>().Size.X, 0);
+            Vector origin = ((float)random.NextDouble() * Systems.Get<DisplaySystem>().Size.X, 0);
             // ReSharper disable once PossibleLossOfFraction
-            Vector target = (Systems.Get<Display>().Size.X / 2, Systems.Get<Display>().Size.Y);
+            Vector target = (Systems.Get<DisplaySystem>().Size.X / 2, Systems.Get<DisplaySystem>().Size.Y);
 
             List<List<Vector>> branches = [[origin, target]];
-            float maxOffset = Systems.Get<Display>().Size.X * OffsetToDisplayRatio;
+            float maxOffset = Systems.Get<DisplaySystem>().Size.X * OffsetToDisplayRatio;
             for (int generation = 0; generation < BendGenerations; generation++)
             {
                 int branchCount = branches.Count;

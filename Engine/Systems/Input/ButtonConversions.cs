@@ -1,6 +1,6 @@
 using SharpHook.Data;
 
-namespace Termule.Engine.Systems.Input.Keyboard;
+namespace Termule.Engine.Systems.Input;
 
 internal static class ButtonConversions
 {
@@ -88,7 +88,17 @@ internal static class ButtonConversions
         { KeyCode.VcNumPadSubtract, Button.NpSubtract },
         { KeyCode.VcNumPadMultiply, Button.NpMultiply },
         { KeyCode.VcNumPadDivide, Button.NpDivide },
-        { KeyCode.VcNumPadDecimal, Button.NpDecimal }
+        { KeyCode.VcNumPadDecimal, Button.NpDecimal },
+        { KeyCode.VcNumPadEquals, Button.NpEquals },
+
+        { KeyCode.VcVolumeMute, Button.VolumeMute },
+        { KeyCode.VcVolumeUp, Button.VolumeUp },
+        { KeyCode.VcVolumeDown, Button.VolumeDown },
+        { KeyCode.VcMediaPlay, Button.MediaPlay },
+        { KeyCode.VcMediaStop, Button.MediaStop },
+        { KeyCode.VcMediaNext, Button.MediaNext },
+        { KeyCode.VcMediaPrevious, Button.MediaPrevious },
+        { KeyCode.VcMediaSelect, Button.MediaSelect }
     };
 #pragma warning restore SA1509 // Opening braces should not be preceded by blank line
 

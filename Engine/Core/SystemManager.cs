@@ -1,7 +1,7 @@
-using Termule.Engine.Systems.Controller.Keyboard;
 using Termule.Engine.Systems.Display;
-using Termule.Engine.Systems.RenderSystem;
-using Termule.Engine.Systems.ResourceLoader;
+using Termule.Engine.Systems.Input;
+using Termule.Engine.Systems.Rendering;
+using Termule.Engine.Systems.Resources;
 
 namespace Termule.Engine.Core;
 
@@ -43,15 +43,15 @@ public class SystemManager : GameElement, IConfigurableSystemManager
     void IConfigurableSystemManager.UseDefaults()
     {
         IConfigurableSystemManager self = this;
-        self.Install(new KeyboardController());
+        self.Install(new Keyboard());
 
         if (OperatingSystem.IsWindows())
         {
-            self.Install(new WindowsDisplay());
+            self.Install(new WindowsDisplaySystem());
         }
         else if (OperatingSystem.IsMacOS() || OperatingSystem.IsLinux())
         {
-            self.Install(new UnixDisplay());
+            self.Install(new UnixDisplaySystem());
         }
 
         self.Install(new RenderSystem());

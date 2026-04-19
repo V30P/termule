@@ -1,10 +1,12 @@
 using Termule.Engine.Components;
+using Termule.Engine.Components.Renderers;
 using Termule.Engine.Core;
-using Termule.Engine.Systems.Display;
-using Termule.Engine.Types;
+using Termule.Engine.Systems.Rendering;
+using Termule.Engine.Types.Content;
+using Termule.Engine.Types.Vectors;
 using static Termule.Tests.Components.Utilities;
 
-namespace Termule.Tests.Components;
+namespace Termule.Tests.Components.Renderers;
 
 public class TestLineRenderer
 {

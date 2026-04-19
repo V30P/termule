@@ -1,4 +1,4 @@
-namespace Termule.Engine.Systems.Input.Keyboard;
+namespace Termule.Engine.Systems.Input;
 
 /// <summary>
 ///     Represents a button on a keyboard or mouse.

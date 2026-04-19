@@ -1,4 +1,5 @@
 using Termule.Engine.Core;
+using Termule.Tests.Core.Fakes;
 
 namespace Termule.Tests.Core;
 
@@ -32,7 +33,7 @@ public class TestGameObject
         [Fact]
         public void Add_ShouldAddAndRegisterComponent()
         {
-            IConfigurableGame? game = Game.Create();
+            IConfigurableGame game = Game.Create();
             GameObject gameObject = [];
             game.Root.Add(gameObject);
             FakeComponent component = new();
@@ -46,7 +47,7 @@ public class TestGameObject
         [Fact]
         public void Add_ShouldAddThenRegisterComponentsSimultaneously()
         {
-            IConfigurableGame? game = Game.Create();
+            IConfigurableGame game = Game.Create();
             GameObject gameObject = [];
             game.Root.Add(gameObject);
             DependentComponent dependentComponent = new();
@@ -81,7 +82,7 @@ public class TestGameObject
         [Fact]
         public void Remove_ShouldRemoveAndUnregisterComponent()
         {
-            IConfigurableGame? game = Game.Create();
+            IConfigurableGame game = Game.Create();
             GameObject gameObject = [];
             game.Root.Add(gameObject);
 
@@ -116,7 +117,7 @@ public class TestGameObject
             Component component = new DerivedComponent();
             GameObject gameObject = [component];
 
-            Component? result = (Component?)typeof(GameObject)
+            Component result = (Component)typeof(GameObject)
                 .GetMethod(nameof(GameObject.Get))!
                 .MakeGenericMethod(getType)
                 .Invoke(gameObject, null);
@@ -127,7 +128,7 @@ public class TestGameObject
         [Fact]
         public void Get_ShouldReturnFullyAddedComponents()
         {
-            IConfigurableGame? game = Game.Create();
+            IConfigurableGame game = Game.Create();
             FakeComponent component = new();
             GameObject gameObject = [component];
             game.Root.Add(gameObject);
@@ -206,7 +207,7 @@ public class TestGameObject
     [Fact]
     public void Register_ShouldRegisterComponents()
     {
-        IConfigurableGame? game = Game.Create();
+        IConfigurableGame game = Game.Create();
         FakeComponent component = new();
         GameObject gameObject = [component];
 
@@ -229,7 +230,7 @@ public class TestGameObject
     [Fact]
     public void Unregister_ShouldUnregisterComponents()
     {
-        IConfigurableGame? game = Game.Create();
+        IConfigurableGame game = Game.Create();
         FakeComponent component = new();
         GameObject gameObject = [component];
         game.Root.Add(gameObject);

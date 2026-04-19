@@ -1,10 +1,9 @@
 using System.Reflection;
-using Termule.Demos.CLI;
 using Termule.Engine.Components;
 using Termule.Engine.Core;
-using Termule.Engine.Systems.RenderSystem;
+using Termule.Engine.Systems.Rendering;
 
-namespace Termule.Demos.Application;
+namespace Termule.Demos.Core;
 
 internal static class Program
 {

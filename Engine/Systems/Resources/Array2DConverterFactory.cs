@@ -1,7 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Termule.Engine.Systems.ResourceLoader;
+namespace Termule.Engine.Systems.Resources;
 
 internal class Array2DConverterFactory : JsonConverterFactory
 {

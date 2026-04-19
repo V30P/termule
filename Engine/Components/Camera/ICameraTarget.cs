@@ -1,7 +1,7 @@
-using Termule.Engine.Systems.Display;
-using Termule.Engine.Types;
+using Termule.Engine.Systems.Rendering;
+using Termule.Engine.Types.Vectors;
 
-namespace Termule.Engine.Components;
+namespace Termule.Engine.Components.Camera;
 
 /// <summary>
 ///     Denotes a target that can be rendered to by <see cref="Camera" />s.

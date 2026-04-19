@@ -3,7 +3,7 @@ using Termule.Tests.Systems.Input.Fakes;
 
 namespace Termule.Tests.Systems.Input;
 
-public class TestController
+public class TestKeyboard
 {
     [Fact]
     public void Get_ShouldReturnValue_WhenBindExists()

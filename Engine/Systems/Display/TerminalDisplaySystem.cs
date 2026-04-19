@@ -4,9 +4,9 @@ using Termule.Engine.Types.Content;
 namespace Termule.Engine.Systems.Display;
 
 /// <summary>
-///     Display class for terminal-based output.
+///     Display system for terminal-based output.
 /// </summary>
-public abstract class TerminalDisplay : Display
+public abstract class TerminalDisplaySystem : DisplaySystem
 {
     // Stop built strings from going to the LOH
     private const int BuilderLimit = 42_500;
@@ -59,7 +59,7 @@ public abstract class TerminalDisplay : Display
     private Color currentCharColor;
     private Color currentColor;
 
-    internal TerminalDisplay()
+    internal TerminalDisplaySystem()
     {
         Size = (Console.WindowWidth, Console.WindowHeight);
     }

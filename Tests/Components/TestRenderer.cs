@@ -1,8 +1,7 @@
 using Termule.Engine.Components;
 using Termule.Engine.Core;
-using Termule.Engine.Systems.Display;
-using Termule.Engine.Systems.RenderSystem;
-using Termule.Engine.Types;
+using Termule.Engine.Systems.Rendering;
+using Termule.Engine.Types.Vectors;
 
 namespace Termule.Tests.Components;
 
@@ -13,12 +12,12 @@ public class TestRenderer
         public int RegisterCount { get; private set; }
         public int UnregisterCount { get; private set; }
 
-        protected override void OnRendererRegistered(Renderer renderer)
+        protected override void OnRendererAdded(Renderer renderer)
         {
             RegisterCount++;
         }
 
-        protected override void OnRendererUnregistered(Renderer renderer)
+        protected override void OnRendererRemoved(Renderer renderer)
         {
             UnregisterCount++;
         }
@@ -34,7 +33,7 @@ public class TestRenderer
     [Fact]
     public void LayerSetter_ShouldMoveRendererBetweenLayers_WhenRegistered()
     {
-        IConfigurableGame? game = Game.Create();
+        IConfigurableGame game = Game.Create();
         FakeLayer defaultLayer = new();
         FakeLayer customLayer = new();
         RenderSystem renderSystem = new() { Layers = [defaultLayer, customLayer] };
@@ -57,7 +56,7 @@ public class TestRenderer
     [Fact]
     public void LayerSetter_ShouldMoveRendererToDefaultLayer_WhenSetToNullWhileRegistered()
     {
-        IConfigurableGame? game = Game.Create();
+        IConfigurableGame game = Game.Create();
         FakeLayer defaultLayer = new();
         FakeLayer customLayer = new();
         RenderSystem renderSystem = new() { Layers = [defaultLayer, customLayer] };
@@ -76,7 +75,7 @@ public class TestRenderer
     [Fact]
     public void Register_ShouldUseConfiguredLayer_WhenLayerIsSetBeforeRegistration()
     {
-        IConfigurableGame? game = Game.Create();
+        IConfigurableGame game = Game.Create();
         FakeLayer defaultLayer = new();
         FakeLayer customLayer = new();
         RenderSystem renderSystem = new() { Layers = [defaultLayer, customLayer] };
@@ -95,7 +94,7 @@ public class TestRenderer
     [Fact]
     public void Register_ShouldUseDefaultLayer_WhenNoLayerSet()
     {
-        IConfigurableGame? game = Game.Create();
+        IConfigurableGame game = Game.Create();
         FakeLayer layer = new();
         RenderSystem renderSystem = new() { Layers = [layer] };
         game.Systems.Install(renderSystem);
@@ -112,7 +111,7 @@ public class TestRenderer
     [Fact]
     public void Unregister_ShouldUnregisterFromCurrentLayer()
     {
-        IConfigurableGame? game = Game.Create();
+        IConfigurableGame game = Game.Create();
         FakeLayer defaultLayer = new();
         RenderSystem renderSystem = new() { Layers = [defaultLayer] };
         game.Systems.Install(renderSystem);

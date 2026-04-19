@@ -2,7 +2,7 @@ using System.Collections.ObjectModel;
 using Termule.Engine.Components;
 using Termule.Engine.Types.Vectors;
 
-namespace Termule.Engine.Systems.RenderSystem;
+namespace Termule.Engine.Systems.Rendering;
 
 /// <summary>
 ///     Base system responsible for building frameBuffers from renderers according to layer order.

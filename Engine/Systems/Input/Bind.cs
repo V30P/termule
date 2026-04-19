@@ -1,43 +1,60 @@
 namespace Termule.Engine.Systems.Input;
 
 /// <summary>
-///     Non-generic base class for binds.
+///     Base class for a <see cref="Keyboard"/> bind.
 /// </summary>
 public abstract class Bind
 {
+    internal Keyboard Keyboard
+    {
+
+        set
+        {
+            if (field != null)
+            {
+                field.ButtonDown -= OnButtonDown;
+                field.ButtonUp -= OnButtonUp;
+                field.CharacterTyped -= OnCharacterTyped;
+            }
+
+            field = value;
+
+            if (field != null)
+            {
+                field.ButtonDown += OnButtonDown;
+                field.ButtonUp += OnButtonUp;
+                field.CharacterTyped += OnCharacterTyped;
+            }
+        }
+    }
+
     internal Bind()
     {
     }
-
-    internal abstract void SetController(Controller controller);
 
     internal abstract object GetValue();
-}
 
-/// <summary>
-///     Generic base class that lives on a host controller and convert user input to usable values.
-/// </summary>
-/// <typeparam name="TController">The controller type this bind can be used in.</typeparam>
-public abstract class Bind<TController> : Bind
-    where TController : Controller
-{
-    private protected virtual TController Controller { get; set; }
-
-    internal Bind()
+    /// <summary>
+    ///     Invoked when a button is first pressed.
+    /// </summary>
+    /// <param name="button">The button that was pressed.</param>
+    protected virtual void OnButtonDown(Button button)
     {
     }
 
-    // Checks that the controller is the correct type before the actual setter
-    internal sealed override void SetController(Controller controller)
+    /// <summary>
+    ///     Invoked when a button is first released.
+    /// </summary>
+    /// <param name="button">The button that was released.</param>
+    protected virtual void OnButtonUp(Button button)
     {
-        if (controller is null or TController)
-        {
-            Controller = (TController)controller;
-        }
-        else
-        {
-            throw new InvalidOperationException(
-                $"Bind of Type {GetType().Name} is incompatible with a Controller of type {controller.GetType().Name}");
-        }
+    }
+
+    /// <summary>
+    ///     Invoked when a valid character is produced from keyboard input.
+    /// </summary>
+    /// <param name="character">The produced character.</param>
+    protected virtual void OnCharacterTyped(char character)
+    {
     }
 }

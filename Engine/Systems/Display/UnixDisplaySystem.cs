@@ -8,9 +8,9 @@ using System.Text.RegularExpressions;
 namespace Termule.Engine.Systems.Display;
 
 /// <summary>
-///     Display implementation for Unix-like operating systems.
+///     Display system implementation for Unix-like operating systems.
 /// </summary>
-public sealed partial class UnixDisplay : TerminalDisplay
+public sealed partial class UnixDisplaySystem : TerminalDisplaySystem
 {
     private const int F_GETFL = 3;
     private const int F_SETFL = 4;

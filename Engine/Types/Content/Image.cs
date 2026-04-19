@@ -1,19 +1,14 @@
 using System.Text.Json.Serialization;
-using Termule.Engine.Systems.ResourceLoader;
+using Termule.Engine.Systems.Resources;
+using Termule.Engine.Types.Vectors;
 
-namespace Termule.Engine.Types;
+namespace Termule.Engine.Types.Content;
 
 /// <summary>
 ///     Content with methods for easy modification.
 /// </summary>
 public class Image : IContent, IResource
 {
-    /// <summary>
-    ///     Gets the size of this content.
-    /// </summary>
-    [JsonIgnore]
-    public VectorInt Size => (Cells.GetLength(0), Cells.GetLength(1));
-
     /// <summary>
     ///     Gets or sets the array of <see cref="Cell" />s that make up this content.
     /// </summary>
@@ -40,11 +35,27 @@ public class Image : IContent, IResource
     }
 
     [JsonConstructor]
-#pragma warning disable IDE0051
     private Image(Cell[,] cells)
-#pragma warning restore IDE0051
     {
         Cells = cells;
+    }
+
+    /// <summary>
+    ///     Gets the size of this content.
+    /// </summary>
+    [JsonIgnore]
+    public VectorInt Size => (Cells.GetLength(0), Cells.GetLength(1));
+
+    /// <summary>
+    ///     Gets or sets the cell at (x, y).
+    /// </summary>
+    /// <param name="x">The x position of the cell.</param>
+    /// <param name="y">The y position of the cell.</param>
+    /// <returns>The <see cref="Cell" /> at the given position.</returns>
+    public Cell this[int x, int y]
+    {
+        get => Cells[x, y];
+        set => Cells[x, y] = value;
     }
 
     static string IResource.FileExtension => ".tmc";
@@ -81,16 +92,5 @@ public class Image : IContent, IResource
         {
             Cells[x, y] = default;
         }
-    }
-    /// <summary>
-    ///     Gets or sets the cell at (x, y).
-    /// </summary>
-    /// <param name="x">The x position of the cell.</param>
-    /// <param name="y">The y position of the cell.</param>
-    /// <returns>The <see cref="Cell" /> at the given position.</returns>
-    public Cell this[int x, int y]
-    {
-        get => Cells[x, y];
-        set => Cells[x, y] = value;
     }
 }

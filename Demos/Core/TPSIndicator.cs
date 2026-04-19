@@ -1,8 +1,9 @@
 using Termule.Engine.Components;
+using Termule.Engine.Components.Renderers;
 using Termule.Engine.Core;
-using Termule.Engine.Types;
+using Termule.Engine.Types.Content;
 
-namespace Termule.Demos.Application;
+namespace Termule.Demos.Core;
 
 internal class TpsIndicator : GameObject
 {

@@ -1,8 +1,9 @@
 using Termule.Engine.Core;
-using Termule.Engine.Systems.Controller;
 using Termule.Engine.Systems.Display;
-using Termule.Engine.Systems.RenderSystem;
-using Termule.Engine.Systems.ResourceLoader;
+using Termule.Engine.Systems.Input;
+using Termule.Engine.Systems.Rendering;
+using Termule.Engine.Systems.Resources;
+using Termule.Tests.Core.Fakes;
 
 namespace Termule.Tests.Core;
 
@@ -11,7 +12,7 @@ public class TestSystemManager
     [Fact]
     public void Get_ShouldReturnNull_WhenSystemMissing()
     {
-        IConfigurableGame? game = Game.Create();
+        IConfigurableGame game = Game.Create();
 
         Assert.Null(game.Systems.Get<FakeSystem>());
     }
@@ -19,7 +20,7 @@ public class TestSystemManager
     [Fact]
     public void Install_ShouldAddSystem()
     {
-        IConfigurableGame? game = Game.Create();
+        IConfigurableGame game = Game.Create();
         FakeSystem system = new();
 
         game.Systems.Install(system);
@@ -29,7 +30,7 @@ public class TestSystemManager
     [Fact]
     public void Install_ShouldReplaceExistingSystem()
     {
-        IConfigurableGame? game = Game.Create();
+        IConfigurableGame game = Game.Create();
         game.Systems.Install(new FakeSystem());
 
         FakeSystem system = new();
@@ -41,7 +42,7 @@ public class TestSystemManager
     [Fact]
     public void Install_ShouldThrow_WhenGameStarted()
     {
-        IConfigurableGame? game = Game.Create();
+        IConfigurableGame game = Game.Create();
         game.Start();
 
         Assert.Throws<InvalidOperationException>(() => game.Systems.Install(new FakeSystem()));
@@ -50,7 +51,7 @@ public class TestSystemManager
     [Fact]
     public void InstalledSystem_ShouldFollowLifecycle()
     {
-        IConfigurableGame? game = Game.Create();
+        IConfigurableGame game = Game.Create();
         FakeSystem system = new();
         game.Systems.Install(system);
 
@@ -67,7 +68,7 @@ public class TestSystemManager
     [Fact]
     public void Uninstall_ShouldRemoveSystem()
     {
-        IConfigurableGame? game = Game.Create();
+        IConfigurableGame game = Game.Create();
         game.Systems.Install(new FakeSystem());
 
         game.Systems.Uninstall<FakeSystem>();
@@ -78,7 +79,7 @@ public class TestSystemManager
     [Fact]
     public void Uninstall_ShouldThrow_WhenGameStarted()
     {
-        IConfigurableGame? game = Game.Create();
+        IConfigurableGame game = Game.Create();
         game.Start();
 
         Assert.Throws<InvalidOperationException>(() => game.Systems.Uninstall<FakeSystem>());
@@ -94,12 +95,12 @@ public class TestSystemManager
             return;
         }
 
-        IConfigurableGame? game = Game.Create();
+        IConfigurableGame game = Game.Create();
 
         game.Systems.UseDefaults();
 
-        Assert.NotNull(game.Systems.Get<Controller>());
-        Assert.NotNull(game.Systems.Get<Display>());
+        Assert.NotNull(game.Systems.Get<Keyboard>());
+        Assert.NotNull(game.Systems.Get<DisplaySystem>());
         Assert.NotNull(game.Systems.Get<RenderSystem>());
         Assert.NotNull(game.Systems.Get<ResourceLoader>());
     }

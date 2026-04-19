@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Termule.Engine.Types;
+namespace Termule.Engine.Types.Content;
 
 /// <summary>
 ///     Color that can be rendered by terminals.

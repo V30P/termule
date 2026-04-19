@@ -1,4 +1,5 @@
 ﻿using Termule.Engine.Core;
+using Termule.Tests.Core.Fakes;
 
 namespace Termule.Tests.Core;
 
@@ -52,7 +53,7 @@ public class TestGame
     [Fact]
     public void CleanUp_ShouldBeIdempotent()
     {
-        IConfigurableGame? game = Game.Create();
+        IConfigurableGame game = Game.Create();
         CountingSystem system = new();
         game.Systems.Install(system);
         game.Start();
@@ -66,7 +67,7 @@ public class TestGame
     [Fact]
     public void Create_ShouldInitializeSystemsAndRoot()
     {
-        IConfigurableGame? game = Game.Create();
+        IConfigurableGame game = Game.Create();
 
         Assert.NotNull(game.Systems);
         Assert.NotNull(game.Root);
@@ -75,7 +76,7 @@ public class TestGame
     [Fact]
     public void Register_ShouldConfigureElement()
     {
-        Game? game = (Game)Game.Create();
+        Game game = (Game)Game.Create();
         FakeGameElement element = new();
 
         game.Register(element);
@@ -87,7 +88,7 @@ public class TestGame
     [Fact]
     public void Run_ShouldNotPrepareTwice_WhenAlreadyPrepared()
     {
-        IConfigurableGame? game = Game.Create();
+        IConfigurableGame game = Game.Create();
         AutoStopSystem system = new();
         game.Systems.Install(system);
         game.Start();
@@ -102,7 +103,7 @@ public class TestGame
     [Fact]
     public void Run_ShouldPrepareAndCleanUp_WhenLifecycleNotManuallyStarted()
     {
-        IConfigurableGame? game = Game.Create();
+        IConfigurableGame game = Game.Create();
         AutoStopSystem system = new();
         game.Systems.Install(system);
 
@@ -116,7 +117,7 @@ public class TestGame
     [Fact]
     public void RunForFrames_ShouldTickSystemsWithoutPreparing()
     {
-        IConfigurableGame? game = Game.Create();
+        IConfigurableGame game = Game.Create();
         CountingSystem system = new();
         game.Systems.Install(system);
 
@@ -130,7 +131,7 @@ public class TestGame
     [Fact]
     public void RunFrame_ShouldTickComponents()
     {
-        IConfigurableGame? game = Game.Create();
+        IConfigurableGame game = Game.Create();
         FakeComponent component = new();
         game.Root.Add(component);
         game.Start();
@@ -143,7 +144,7 @@ public class TestGame
     [Fact]
     public void Unregister_ShouldClearElementConfiguration()
     {
-        Game? game = (Game)Game.Create();
+        Game game = (Game)Game.Create();
         FakeGameElement element = new();
         game.Register(element);
 

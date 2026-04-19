@@ -1,6 +1,7 @@
-using Termule.Engine.Types;
+using Termule.Engine.Types.Content;
+using Termule.Engine.Types.Vectors;
 
-namespace Termule.Engine.Components;
+namespace Termule.Engine.Components.Renderers;
 
 /// <summary>
 ///     Renders a <see cref="IContent" /> instance at the local <see cref="Transform" />'s position.

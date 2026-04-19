@@ -3,16 +3,14 @@ using Termule.Engine.Components;
 using Termule.Engine.Components.Camera;
 using Termule.Engine.Components.Renderers;
 using Termule.Engine.Core;
-using Termule.Engine.Systems.Controller;
-using Termule.Engine.Systems.Controller.Keyboard;
 using Termule.Engine.Systems.Display;
-using Termule.Engine.Systems.ResourceLoader;
-using Termule.Engine.Types;
+using Termule.Engine.Systems.Input;
+using Termule.Engine.Systems.Resources;
 using Termule.Engine.Types.Content;
 using Termule.Engine.Types.Vectors;
 using static Termule.Demos.Core.Utilities;
 
-namespace Termule.Demos.Implementations;
+namespace Termule.Demos.Demos;
 
 internal class Shooter : Demo
 {
@@ -39,7 +37,7 @@ internal class Shooter : Demo
 
     protected override void Start()
     {
-        Systems.Get<Controller>().Binds = new BindMap
+        Systems.Get<Keyboard>().Binds = new BindMap
         {
             { Binds.Movement, new VectorBind(Button.W, Button.A, Button.S, Button.D) },
             { Binds.Fire, new ButtonBind(Button.Mouse1) }
@@ -110,8 +108,8 @@ internal class Shooter : Demo
             Enemy enemy = [];
             enemy.Get<Transform>().Pos = PointOnRectangle(
                 random,
-                -Systems.Get<Display>().Size / 2,
-                Systems.Get<Display>().Size);
+                -Systems.Get<DisplaySystem>().Size / 2,
+                Systems.Get<DisplaySystem>().Size);
             Root.Add(enemy);
         }
 
@@ -215,10 +213,10 @@ internal class Shooter : Demo
 
         private void OnTicked()
         {
-            MovementDir = Systems.Get<Controller>().Get<Vector>(Binds.Movement);
-            Target = Root.Get<Camera>().TargetToGamePos(Systems.Get<Display>().MousePos);
+            MovementDir = Systems.Get<Keyboard>().Get<Vector>(Binds.Movement);
+            Target = Root.Get<Camera>().TargetToGamePos(Systems.Get<DisplaySystem>().MousePos);
 
-            if (Systems.Get<Controller>().Get<bool>(Binds.Fire))
+            if (Systems.Get<Keyboard>().Get<bool>(Binds.Fire))
             {
                 ShootAtTarget();
             }

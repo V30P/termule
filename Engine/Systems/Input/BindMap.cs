@@ -3,14 +3,14 @@ using System.Collections;
 namespace Termule.Engine.Systems.Input;
 
 /// <summary>
-///     Collection to manage <see cref="Bind" />s for a <see cref="Systems.Controller.Controller" />.
+///     Collection to manage <see cref="Bind" />s for a <see cref="Systems.Input.Keyboard" />.
 /// </summary>
 public sealed class BindMap : IEnumerable<KeyValuePair<string, Bind>>
 {
     private readonly Dictionary<string, Bind> binds = [];
     private readonly Dictionary<string, object> values = [];
 
-    internal Controller Controller
+    internal Keyboard Keyboard
     {
         private get;
 
@@ -20,7 +20,7 @@ public sealed class BindMap : IEnumerable<KeyValuePair<string, Bind>>
 
             foreach (Bind bind in binds.Values)
             {
-                bind.SetController(value);
+                bind.Keyboard = value;
             }
         }
     }
@@ -28,7 +28,7 @@ public sealed class BindMap : IEnumerable<KeyValuePair<string, Bind>>
     /// <summary>
     ///     Gets or sets the bind associated with the provided <paramref name="name" />.
     /// </summary>
-    /// <param name="name">The name of the bind to look for.</param>
+    /// <param name="name">The name of the bind.</param>
     /// <returns>The corresponding bind.</returns>
     public Bind this[string name]
     {
@@ -36,9 +36,14 @@ public sealed class BindMap : IEnumerable<KeyValuePair<string, Bind>>
 
         set
         {
-            binds[name].SetController(null);
-            binds[name] = value;
-            value.SetController(Controller);
+            ArgumentNullException.ThrowIfNull(value);
+
+            if (binds.GetValueOrDefault(name) != null)
+            {
+                Remove(name);
+            }
+
+            Add(name, value);
         }
     }
 
@@ -54,7 +59,7 @@ public sealed class BindMap : IEnumerable<KeyValuePair<string, Bind>>
     }
 
     /// <summary>
-    ///     Add a <see cref="Bind" /> with provided <paramref name="name" />.
+    ///     Add a bind with provided <paramref name="name" />.
     /// </summary>
     /// <param name="name">The name to add the bind under.</param>
     /// <param name="bind">The bind to add.</param>
@@ -71,20 +76,20 @@ public sealed class BindMap : IEnumerable<KeyValuePair<string, Bind>>
             throw new ArgumentException($"Bind '{bind}' is already added under the name '{existingName}'.");
         }
 
-        bind.SetController(Controller);
+        bind.Keyboard = Keyboard;
         binds.Add(name, bind);
         values.Add(name, bind.GetValue());
     }
 
     /// <summary>
-    ///     Remove the <see cref="Bind" /> with provided <paramref name="name" />.
+    ///     Remove the bind with provided <paramref name="name" />.
     /// </summary>
-    /// <param name="name">The name to remove the <see cref="Bind" /> for.</param>
+    /// <param name="name">The name to remove the bind for.</param>
     public void Remove(string name)
     {
         Bind bind = binds[name];
         binds.Remove(name);
-        bind.SetController(null);
+        bind.Keyboard = null;
     }
 
     internal void PollValues()

@@ -1,13 +1,13 @@
 using Termule.Engine.Components;
-using Termule.Engine.Systems.RenderSystem;
+using Termule.Engine.Systems.Rendering;
 using Termule.Engine.Types.Vectors;
-using Termule.Tests.Systems.RenderSystem.Fakes;
+using Termule.Tests.Systems.Rendering.Fakes;
 
-namespace Termule.Tests.Systems.RenderSystem;
+namespace Termule.Tests.Systems.Rendering;
 
 public class TestLayer
 {
-    private class FakeLayer() : Layer((r1, r2) => 0)
+    private class FakeLayer() : Layer((_, _) => 0)
     {
         public bool OnAddedCalled { get; private set; }
         public bool OnRemovedCalled { get; private set; }
@@ -26,12 +26,13 @@ public class TestLayer
         }
     }
 
-    private class PriorityLayer() : Layer((r1, r2) => ((PriorityRenderer)r1).Priority.CompareTo(((PriorityRenderer)r2).Priority));
+    private class PriorityLayer()
+        : Layer((r1, r2) => ((PriorityRenderer)r1).Priority.CompareTo(((PriorityRenderer)r2).Priority));
 
     private class PriorityRenderer(int priority) : Renderer
     {
         public readonly int Priority = priority;
-        
+
         protected internal override void Render(FrameBuffer frame, Vector viewOrigin)
         {
         }
@@ -61,17 +62,6 @@ public class TestLayer
         Assert.False(layer.IsDirty);
     }
 
-    [Fact]
-    private void Renderers_ShouldBeSorted()
-    {
-        PriorityRenderer rendererA = new(2);
-        PriorityRenderer rendererB = new(1);
-        PriorityRenderer rendererC = new(3);
-        PriorityLayer layer = [rendererB, rendererA, rendererC];
-        
-        Assert.Equal([rendererB, rendererA, rendererC], layer);
-    }
-
 
     [Fact]
     private void OnAddedAndOnRemoved_ShouldBeCalledAccordingly()
@@ -82,5 +72,16 @@ public class TestLayer
 
         Assert.True(layer.OnAddedCalled);
         Assert.True(layer.OnRemovedCalled);
+    }
+
+    [Fact]
+    private void Renderers_ShouldBeSorted()
+    {
+        PriorityRenderer rendererA = new(2);
+        PriorityRenderer rendererB = new(1);
+        PriorityRenderer rendererC = new(3);
+        PriorityLayer layer = [rendererB, rendererA, rendererC];
+
+        Assert.Equal([rendererB, rendererA, rendererC], layer);
     }
 }

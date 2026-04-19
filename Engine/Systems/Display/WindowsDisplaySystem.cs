@@ -3,9 +3,9 @@ using System.Runtime.InteropServices;
 namespace Termule.Engine.Systems.Display;
 
 /// <summary>
-///     Display implementation for Windows.
+///     Display system implementation for Windows.
 /// </summary>
-public sealed partial class WindowsDisplay : TerminalDisplay
+public sealed partial class WindowsDisplaySystem : TerminalDisplaySystem
 {
     private readonly IntPtr handle = GetStdHandle(-10);
     private readonly INPUT_RECORD[] eventBuffer = new INPUT_RECORD[64];

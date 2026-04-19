@@ -13,30 +13,32 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Setter for `gameObject` property of components for easy movement
 - `ICameraTarget` for rendering to non-display objects
 - Proper mouse tracking for the windows display implementation
+- `Keyboard` class for keyboard input (replacing old controller-based implementation)
 
 ### Changed
-
-- Improved `Display` performance by switching to double buffering
-- Improved `TerminalDisplay` performance by reducing string allocations and unnecessary escape sequences
+- System names and namespaces to be more consistent and avoid namespace/name collisions
+- Improved `DisplaySystem` performance by switching to double buffering
+- Improved `TerminalDisplaySystem` performance by reducing string allocations and unnecessary escape sequences
 - Renamed `Frame` to `FrameBuffer` and moved it to the display namespace
 - Improved `FrameBuffer` performance by removing unnecessary delegate allocations
-- Made GameObjects only add components to the tick list on the next frame after they are added to avoid snapshot allocation
+- Made game objects only add components to the tick list on the next frame after they are added to avoid snapshot allocation
 - Rename `TransformRenderer` to `PositionalRenderer` and update the API
 - Converted`Content` to the `IContent` interface (use `Image` for an easy implementation)
 - Improved `Text` implementation by reducing and optimizing recalculations 
+- Reworked RenderSystem and layer API
+
 
 ### Removed
-
 - Renderer crediting and `GetOverlappers()` for abysmal performance (switch to manually implemented collision detection)
 - Size-related methods from `Camera`, will now always match target size
+- Base `Controller` and `Bind` classes, replaced by simpler keyboard-specific system
 
 ### Fixed
-
 - Improper layering of TPS indicator in debug builds of Demos
 - Transforms not properly clearing state when reparenting
 - Camera continuing to use a transform after it moves
 - GameElements occasionally getting duplicate ids
-- Terminal display implementations not fully resetting configuration
+- Terminal display system implementations not fully resetting configuration
 
 ## [0.1.0] 
 

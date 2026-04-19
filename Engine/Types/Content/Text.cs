@@ -1,6 +1,6 @@
-using System.Diagnostics;
+using Termule.Engine.Types.Vectors;
 
-namespace Termule.Engine.Types;
+namespace Termule.Engine.Types.Content;
 
 /// <summary>
 ///     Content that represents textual content.
@@ -9,7 +9,12 @@ public sealed class Text : IContent
 {
     private Cell[][] cells = [];
     private VectorInt size = (0, 0);
-    
+
+    /// <summary>
+    ///     Gets or sets the color of this text's characters.
+    /// </summary>
+    public Color Color { get; set; }
+
     /// <summary>
     ///     Gets or sets the string of characters for this text.
     /// </summary>
@@ -23,7 +28,7 @@ public sealed class Text : IContent
             {
                 return;
             }
-            
+
             field = value;
             if (field == null)
             {
@@ -32,10 +37,10 @@ public sealed class Text : IContent
 
                 return;
             }
-            
+
             string[] lines = field.Split('\n');
             size = size with { Y = lines.Length };
-            
+
             cells = new Cell[lines.Length][];
             for (int i = 0; i < lines.Length; i++)
             {
@@ -50,12 +55,7 @@ public sealed class Text : IContent
         }
     }
 
-    /// <summary>
-    ///     Gets or sets the color of this text's characters.
-    /// </summary>
-    public Color Color { get; set; }
-
     VectorInt IContent.Size => size;
-    
+
     Cell IContent.this[int x, int y] => cells[y].Length > x ? cells[y][x] : default;
 }

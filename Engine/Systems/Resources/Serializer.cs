@@ -1,6 +1,6 @@
 using System.Text.Json;
 
-namespace Termule.Engine.Systems.ResourceLoader;
+namespace Termule.Engine.Systems.Resources;
 
 /// <summary>
 ///     Provides methods to serialize and deserialize objects.

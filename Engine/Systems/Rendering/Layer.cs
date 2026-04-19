@@ -1,7 +1,7 @@
 using System.Collections;
 using Termule.Engine.Components;
 
-namespace Termule.Engine.Systems.RenderSystem;
+namespace Termule.Engine.Systems.Rendering;
 
 /// <summary>
 ///     Base class for that specifies the rendering order of contained renderers.

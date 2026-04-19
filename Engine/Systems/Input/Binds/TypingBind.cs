@@ -1,9 +1,9 @@
-namespace Termule.Engine.Systems.Input.Keyboard;
+namespace Termule.Engine.Systems.Input;
 
 /// <summary>
-///     Bind whose value is all of the characters that have been typed in the last tick.
+///     Bind whose value is all the characters typed in the last tick.
 /// </summary>
-public sealed class TypingBind : KeyboardController.Bind
+public sealed class TypingBind : Bind
 {
     private string textSinceLastFrame = string.Empty;
 

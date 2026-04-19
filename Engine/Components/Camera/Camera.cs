@@ -1,12 +1,13 @@
 using Termule.Engine.Core;
 using Termule.Engine.Systems.Display;
-using Termule.Engine.Systems.RenderSystem;
-using Termule.Engine.Types;
+using Termule.Engine.Systems.Rendering;
+using Termule.Engine.Types.Content;
+using Termule.Engine.Types.Vectors;
 
-namespace Termule.Engine.Components;
+namespace Termule.Engine.Components.Camera;
 
 /// <summary>
-///     Component that uses the <see cref="RenderSystem" /> to render its view to the <see cref="Display" />.
+///     Component that uses the <see cref="RenderSystem" /> to render its view to the <see cref="DisplaySystem" />.
 /// </summary>
 public sealed class Camera : Component
 {
@@ -19,7 +20,7 @@ public sealed class Camera : Component
     /// </summary>
     public ICameraTarget Target
     {
-        get => field ?? GetRequiredSystem<Display>();
+        get => field ?? GetRequiredSystem<DisplaySystem>();
 
         set;
     }

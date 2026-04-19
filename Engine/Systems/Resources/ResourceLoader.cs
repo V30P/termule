@@ -1,7 +1,7 @@
 using System.Reflection;
 using Termule.Engine.Exceptions;
 
-namespace Termule.Engine.Systems.ResourceLoader;
+namespace Termule.Engine.Systems.Resources;
 
 /// <summary>
 ///     System responsible for loading resources from disk.

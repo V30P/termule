@@ -1,7 +1,6 @@
 using Termule.Engine.Core;
-using Termule.Engine.Systems.Display;
-using Termule.Engine.Systems.RenderSystem;
-using Termule.Engine.Types;
+using Termule.Engine.Systems.Rendering;
+using Termule.Engine.Types.Vectors;
 
 namespace Termule.Engine.Components;
 
@@ -30,9 +29,9 @@ public abstract class Renderer : Component
 
             value ??= GetRequiredSystem<RenderSystem>().DefaultLayer;
 
-            layer.Unregister(this);
+            layer.Remove(this);
             layer = value;
-            layer.Register(this);
+            layer.Add(this);
         }
     }
 
@@ -56,11 +55,11 @@ public abstract class Renderer : Component
     private void RegisterToLayer()
     {
         layer ??= GetRequiredSystem<RenderSystem>().DefaultLayer;
-        layer.Register(this);
+        layer.Add(this);
     }
 
     private void UnregisterFromLayer()
     {
-        layer.Unregister(this);
+        layer.Remove(this);
     }
 }

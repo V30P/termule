@@ -1,8 +1,9 @@
 using Termule.Engine.Components;
+using Termule.Engine.Components.Camera;
 using Termule.Engine.Core;
-using Termule.Engine.Systems.Display;
-using Termule.Engine.Systems.RenderSystem;
-using Termule.Engine.Types;
+using Termule.Engine.Systems.Rendering;
+using Termule.Engine.Types.Content;
+using Termule.Engine.Types.Vectors;
 
 namespace Termule.Tests.Components;
 
@@ -44,7 +45,7 @@ public class TestCamera
     {
         Cell background = new(BasicColor.White, 'T', BasicColor.Black);
         FakeTarget target = new((5, 5));
-        IConfigurableGame? game = Game.Create();
+        IConfigurableGame game = Game.Create();
         game.Root.Add(
             new Camera { Target = target, BackgroundCell = background });
 
@@ -68,7 +69,7 @@ public class TestCamera
         VectorInt targetPos)
     {
         FakeTarget target = new(targetSize);
-        IConfigurableGame? game = Game.Create();
+        IConfigurableGame game = Game.Create();
         Camera camera = new() { Target = target };
         game.Root.Add(new Transform { Pos = transformPos }, camera);
 
@@ -82,7 +83,7 @@ public class TestCamera
         VectorInt targetPos)
     {
         FakeTarget target = new(targetSize);
-        IConfigurableGame? game = Game.Create();
+        IConfigurableGame game = Game.Create();
         Camera camera = new() { Target = target };
         game.Root.Add(new Transform { Pos = transformPos }, camera);
 
@@ -93,7 +94,7 @@ public class TestCamera
     public void Tick_ShouldCallPrintOnTarget()
     {
         FakeTarget target = new((0, 0));
-        IConfigurableGame? game = Game.Create();
+        IConfigurableGame game = Game.Create();
         game.Root.Add(new Camera { Target = target });
 
         game.Systems.Install(new RenderSystem());

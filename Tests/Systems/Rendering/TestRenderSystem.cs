@@ -1,8 +1,8 @@
-using Termule.Engine.Systems.RenderSystem;
+using Termule.Engine.Systems.Rendering;
 using Termule.Engine.Types.Vectors;
-using Termule.Tests.Systems.RenderSystem.Fakes;
+using Termule.Tests.Systems.Rendering.Fakes;
 
-namespace Termule.Tests.Systems.RenderSystem;
+namespace Termule.Tests.Systems.Rendering;
 
 public class TestRenderSystem
 {
@@ -15,19 +15,19 @@ public class TestRenderSystem
             renderTracker.Add(this);
         }
     }
-    
+
     [Fact]
     public void DefaultLayer_ShouldBeTheFirstLayer()
     {
         Layer layer = new SimpleLayer();
-        Engine.Systems.RenderSystem.RenderSystem renderSystem = new() { Layers = [layer, new SimpleLayer()] };
+        RenderSystem renderSystem = new() { Layers = [layer, new SimpleLayer()] };
         Assert.Same(layer, renderSystem.DefaultLayer);
     }
 
     [Fact]
     public void Layers_ShouldDefaultToASimpleLayer()
     {
-        Engine.Systems.RenderSystem.RenderSystem renderSystem = new();
+        RenderSystem renderSystem = new();
 
         Assert.Single(renderSystem.Layers);
         Assert.IsType<SimpleLayer>(renderSystem.Layers[0]);
@@ -41,7 +41,7 @@ public class TestRenderSystem
         OrderedRenderer rendererA = new(renderTracker);
         OrderedRenderer rendererB = new(renderTracker);
 
-        Engine.Systems.RenderSystem.RenderSystem renderSystem = new()
+        RenderSystem renderSystem = new()
         {
             Layers =
             [
@@ -58,7 +58,7 @@ public class TestRenderSystem
     public void Render_ShouldPassArgumentsToRenderers()
     {
         FakeRenderer renderer = new();
-        Engine.Systems.RenderSystem.RenderSystem renderSystem = new();
+        RenderSystem renderSystem = new();
         renderSystem.DefaultLayer.Add(renderer);
 
         FrameBuffer frame = new(0, 0);
@@ -72,11 +72,11 @@ public class TestRenderSystem
     public void SettingLayers_ToNullOrEmpty_ShouldThrow()
     {
         Assert.Throws<ArgumentException>(() =>
-            new Engine.Systems.RenderSystem.RenderSystem { Layers = null }
+            new RenderSystem { Layers = null }
         );
 
         Assert.Throws<ArgumentException>(() =>
-            new Engine.Systems.RenderSystem.RenderSystem { Layers = [] }
+            new RenderSystem { Layers = [] }
         );
     }
 }

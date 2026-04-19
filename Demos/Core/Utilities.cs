@@ -1,6 +1,7 @@
-using Termule.Engine.Types;
+using Termule.Engine.Types.Content;
+using Termule.Engine.Types.Vectors;
 
-namespace Termule.Demos.Application;
+namespace Termule.Demos.Core;
 
 internal static class Utilities
 {

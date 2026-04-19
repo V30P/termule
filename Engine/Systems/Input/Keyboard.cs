@@ -1,12 +1,22 @@
+using SharpHook;
+
 namespace Termule.Engine.Systems.Input;
 
 /// <summary>
-///     Base system for collecting user input from a <see cref="BindMap" />.
+///     System for collecting keyboard input according to a <see cref="BindMap" />.
 /// </summary>
-public abstract class Keyboard : Core.System
+public sealed class Keyboard : Core.System
 {
+    private static readonly TaskPoolGlobalHook SharpHook;
+
+    private readonly HashSet<Button> pressedButtons = [];
+
+    internal event Action<Button> ButtonDown;
+    internal event Action<Button> ButtonUp;
+    internal event Action<char> CharacterTyped;
+
     /// <summary>
-    ///     Sets the <see cref="BindMap" /> that this controller should use.
+    ///     Sets the bind map that this keyboard should use.
     /// </summary>
     public BindMap Binds
     {
@@ -19,12 +29,27 @@ public abstract class Keyboard : Core.System
         }
     } = [];
 
-    internal Controller()
+    static Keyboard()
     {
+        SharpHook = new TaskPoolGlobalHook(runAsyncOnBackgroundThread: true);
+        SharpHook.RunAsync();
     }
 
     /// <summary>
-    ///     Gets the value of the bind with the given name from the last tick.
+    ///     Initializes a new instance of the <see cref="Keyboard" /> class.
+    /// </summary>
+    internal Keyboard()
+    {
+        SharpHook.MousePressed += (_, e) => OnButtonPressed(e.Data.Button.ToButton());
+        SharpHook.MouseReleased += (_, e) => OnButtonReleased(e.Data.Button.ToButton());
+
+        SharpHook.KeyPressed += (_, e) => OnButtonPressed(e.Data.KeyCode.ToButton());
+        SharpHook.KeyReleased += (_, e) => OnButtonReleased(e.Data.KeyCode.ToButton());
+        SharpHook.KeyTyped += (_, e) => CharacterTyped?.Invoke(e.Data.KeyChar);
+    }
+
+    /// <summary>
+    ///     Gets the value of the bind with given <paramref name="name"/>.
     /// </summary>
     /// <typeparam name="TValue">The type of value to get.</typeparam>
     /// <param name="name">The name of the bind to get the value for.</param>
@@ -41,40 +66,11 @@ public abstract class Keyboard : Core.System
             : typedValue;
     }
 
-    /// <summary>
-    ///     Updates the value associated with each <see cref="Bind" />.
-    /// </summary>
+
+    /// <inheritdoc />
     protected internal override void Tick()
     {
         Binds.PollValues();
-    }
-    
-    private static readonly TaskPoolGlobalHook SharpHook;
-
-    private readonly HashSet<Button> pressedButtons = [];
-
-    internal event Action<Button> ButtonDown;
-    internal event Action<Button> ButtonUp;
-    internal event Action<char> CharacterTyped;
-    
-
-    static Keyboard()
-    {
-        SharpHook = new TaskPoolGlobalHook(runAsyncOnBackgroundThread: true);
-        SharpHook.RunAsync();
-    }
-
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="Keyboard" /> class.
-    /// </summary>
-    public Keyboard()
-    {
-        SharpHook.MousePressed += (_, e) => OnButtonPressed(e.Data.Button.ToButton());
-        SharpHook.MouseReleased += (_, e) => OnButtonReleased(e.Data.Button.ToButton());
-
-        SharpHook.KeyPressed += (_, e) => OnButtonPressed(e.Data.KeyCode.ToButton());
-        SharpHook.KeyReleased += (_, e) => OnButtonReleased(e.Data.KeyCode.ToButton());
-        SharpHook.KeyTyped += (_, e) => CharacterTyped?.Invoke(e.Data.KeyChar);
     }
 
     private void OnButtonPressed(Button? button)

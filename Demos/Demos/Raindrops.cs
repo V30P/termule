@@ -4,11 +4,10 @@ using Termule.Engine.Components.Camera;
 using Termule.Engine.Components.Renderers;
 using Termule.Engine.Core;
 using Termule.Engine.Systems.Display;
-using Termule.Engine.Types;
 using Termule.Engine.Types.Content;
 using Termule.Engine.Types.Vectors;
 
-namespace Termule.Demos.Implementations;
+namespace Termule.Demos.Demos;
 
 internal class Raindrops : Demo
 {
@@ -76,13 +75,13 @@ internal class Raindrops : Demo
             circleRenderer.Radius = GetRadius(time);
             circleRenderer.Color = (0, 0, (int)(255 * (1 - time / Lifespan)));
 
-            VectorInt displaySize = Systems.Get<Display>().Size;
+            VectorInt displaySize = Systems.Get<DisplaySystem>().Size;
             Get<Transform>().Pos = (pos.X * displaySize.X, pos.Y * displaySize.Y);
         }
 
         private float GetRadius(float t)
         {
-            return Systems.Get<Display>().Size.Magnitude * 0.02f * MathF.Log2(t + 1) + 1;
+            return Systems.Get<DisplaySystem>().Size.Magnitude * 0.02f * MathF.Log2(t + 1) + 1;
         }
     }
 }

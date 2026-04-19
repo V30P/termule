@@ -1,14 +1,14 @@
-using Termule.Engine.Systems.RenderSystem;
+using Termule.Engine.Systems.Rendering;
 using Termule.Engine.Types.Content;
 
-namespace Termule.Tests.Systems.RenderSystem;
+namespace Termule.Tests.Systems.Rendering;
 
 public class TestFrameBuffer
 {
     private static readonly Color TestColor = BasicColor.White;
     private static readonly Cell TestCell = new(TestColor, 'X', TestColor);
 
-    public static IEnumerable<object?[]> DrawData =
+    public static IEnumerable<object[]> DrawData =
     [
         [null, null, null, default(Cell)],
         [TestColor, null, null, new Cell(TestColor)],
@@ -17,7 +17,7 @@ public class TestFrameBuffer
         [TestColor, 'X', TestColor, new Cell(TestColor, 'X', TestColor)]
     ];
 
-    public static IEnumerable<object?[]> DrawCoverData = [];
+    public static IEnumerable<object[]> DrawCoverData = [];
 
     private static void AssertAllCellsEqual(FrameBuffer frame, Cell expectedCell)
     {

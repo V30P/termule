@@ -1,17 +1,18 @@
 using Termule.Engine.Components;
+using Termule.Engine.Components.Renderers;
 using Termule.Engine.Core;
-using Termule.Engine.Systems.Display;
-using Termule.Engine.Types;
+using Termule.Engine.Systems.Rendering;
+using Termule.Engine.Types.Vectors;
 
-namespace Termule.Tests.Components;
+namespace Termule.Tests.Components.Renderers;
 
 public class TestPositionalRenderer
 {
     private sealed class FakePositionalRenderer(Vector offset = default) : PositionalRenderer
     {
-        public FrameBuffer? CapturedFrame { get; private set; }
-        public VectorInt? CapturedOrigin { get; private set; }
-        public Vector? CapturedOffset { get; private set; }
+        public FrameBuffer CapturedFrame { get; private set; }
+        public VectorInt CapturedOrigin { get; private set; }
+        public Vector CapturedOffset { get; private set; }
         public int RenderCount { get; private set; }
         protected override Vector Offset { get; } = offset;
 

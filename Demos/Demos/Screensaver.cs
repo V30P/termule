@@ -4,12 +4,11 @@ using Termule.Engine.Components.Camera;
 using Termule.Engine.Components.Renderers;
 using Termule.Engine.Core;
 using Termule.Engine.Systems.Display;
-using Termule.Engine.Systems.ResourceLoader;
-using Termule.Engine.Types;
+using Termule.Engine.Systems.Resources;
 using Termule.Engine.Types.Content;
 using Termule.Engine.Types.Vectors;
 
-namespace Termule.Demos.Implementations;
+namespace Termule.Demos.Demos;
 
 internal class Screensaver : Demo
 {
@@ -68,7 +67,7 @@ internal class Screensaver : Demo
         private void OnTicked()
         {
             Transform transform = Get<Transform>();
-            VectorInt displaySize = Systems.Get<Display>().Size;
+            VectorInt displaySize = Systems.Get<DisplaySystem>().Size;
 
             if (transform.Pos.Y < 0 && Math.Abs(dir.Y - unsignedDir.Y) > 0.01f)
             {

@@ -1,5 +1,5 @@
 using Termule.Engine.Components.Camera;
-using Termule.Engine.Systems.RenderSystem;
+using Termule.Engine.Systems.Rendering;
 using Termule.Engine.Types.Vectors;
 
 namespace Termule.Engine.Systems.Display;
@@ -7,7 +7,7 @@ namespace Termule.Engine.Systems.Display;
 /// <summary>
 ///     Base system for displaying frames on the screen or another output target.
 /// </summary>
-public abstract class Display : Core.System, ICameraTarget
+public abstract class DisplaySystem : Core.System, ICameraTarget
 {
     private protected FrameBuffer Buffer = new(0, 0);
 
@@ -18,7 +18,7 @@ public abstract class Display : Core.System, ICameraTarget
 
     private protected FrameBuffer Screen { get; private set; } = new(0, 0);
 
-    internal Display()
+    internal DisplaySystem()
     {
     }
 

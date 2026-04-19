@@ -8,7 +8,7 @@ public class TestTransform
     [Fact]
     public void CachedLocalPos_ShouldBeApplied_WhenRegistered()
     {
-        IConfigurableGame? game = Game.Create();
+        IConfigurableGame game = Game.Create();
         Transform transform = new() { LocalPos = (1, 1) };
         GameObject gameObject = [transform];
         GameObject parentGameObject = [new Transform { Pos = (1, 1) }, gameObject];
@@ -21,7 +21,7 @@ public class TestTransform
     [Fact]
     public void CachedPos_ShouldBeApplied_WhenRegistered()
     {
-        IConfigurableGame? game = Game.Create();
+        IConfigurableGame game = Game.Create();
         Transform transform = new() { Pos = (1, 1) };
 
         game.Root.Add(transform);
@@ -32,7 +32,7 @@ public class TestTransform
     [Fact]
     public void MovingParent_ShouldMoveChild()
     {
-        IConfigurableGame? game = Game.Create();
+        IConfigurableGame game = Game.Create();
         Transform child = new() { LocalPos = (1, 1) };
         GameObject gameObject = [child];
 
@@ -49,7 +49,7 @@ public class TestTransform
     [Fact]
     public void NestedTransforms_ShouldApplyRecursively()
     {
-        IConfigurableGame? game = Game.Create();
+        IConfigurableGame game = Game.Create();
         Transform transform = new();
         GameObject gameObject = [transform];
 
@@ -78,7 +78,7 @@ public class TestTransform
     [Fact]
     public void SettingLocalPos_ShouldUpdatePos()
     {
-        IConfigurableGame? game = Game.Create();
+        IConfigurableGame game = Game.Create();
         Transform transform = new() { Pos = (1, 1) };
         GameObject gameObject = [transform];
         GameObject parentGameObject = [new Transform { Pos = (1, 1) }, gameObject];
@@ -92,7 +92,7 @@ public class TestTransform
     [Fact]
     public void SettingPos_ShouldUpdateLocalPos()
     {
-        IConfigurableGame? game = Game.Create();
+        IConfigurableGame game = Game.Create();
         Transform transform = new() { Pos = (1, 1) };
         GameObject gameObject = [transform];
         GameObject parentGameObject = [new Transform { Pos = (1, 1) }, gameObject];
