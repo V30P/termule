@@ -4,7 +4,7 @@ A micro game engine for creating responsive, real-time games in the terminal.
 
 ## Overview
 
-Termule is written in C# on .NET 10.0 and is built to bring a modern experience to terminal game development. Unlike many console-based libraries, Termule uses a traditional game loop rather than an event-driven model. This enables the creation of fast, fluid games rather than text-based experiences. Termule's API is designed with ease of use at the forefront and is built to be easily extensible, with a focus on clean, readable game code.
+Termule is written in C# on .NET 10.0 and is built to bring a modern experience to terminal game development. Unlike many console-based libraries, Termule uses a traditional game loop rather than an event-driven model. This enables the creation of fast, fluid games rather than simple text-based experiences. Termule's API is designed with ease of use at the forefront and is built to be easily extensible, with a focus on clean, readable game code.
 
 When I started work on Termule, I set out to explore the process of building a game engine and gain experience designing larger systems. An ongoing goal of mine is to implement the majority of engine functionality from scratch, minimizing external dependencies and keeping architectural decisions intentional. Over time, I hope to continue developing Termule with the goal of creating a complete game-making toolkit for the terminal.
 
@@ -41,14 +41,14 @@ Termule splits runtime behavior into two major types: `System`s and `Component`s
 
 ### Systems
 
-- Live inside the `Game`'s `SystemManager`  
+- Live inside the game's `SystemManager`  
 - Provide a home for global behavior and data  
 - Can only be installed, uninstalled, or swapped before the game runs  
 - Easily accessible by other systems or components 
 
 ### Components
 
-- Live inside the `Game`'s root `GameObject`  
+- Live inside the game's root `GameObject`  
 - Can be created, destroyed, and moved during runtime  
 - Grouped by game objects to enable collaborative behavior
 - Enforce composition over inheritance  
@@ -62,10 +62,11 @@ Game
  ├── SystemManager
  │    ├── RenderSystem
  │    ├── Display
- │    └── Controller
+ │    └── Keyboard
  └── Root GameObject
       ├── Player
       │    ├── Transform
+      │    ├── Camera
       │    └── ContentRenderer
       └── Enemy
            ├── Transform
@@ -94,7 +95,7 @@ game.Systems.Install(new MySystem());
 game.Root.Add(new MyComponent());
 ```
 
-For information about individual elements of the engine, hover over a Termule type or member to see its documentation.
+For information about an individual element of the engine, hover over a Termule type or member to see its documentation.
 
 ## License
 

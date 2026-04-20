@@ -44,9 +44,7 @@ public readonly record struct Color
     }
 
     [JsonConstructor]
-#pragma warning disable IDE0051
     private Color(FullColor? full, BasicColor basic)
-#pragma warning restore IDE0051
     {
         Full = full;
         Basic = basic;

@@ -99,12 +99,7 @@ internal class Lightning : Demo
             foreach (List<Vector> branch in branches)
             {
                 Add(
-                    new LineRenderer
-                    {
-                        Color = (255, 255, 255),
-                        TargetSpace = true,
-                        Points = branch
-                    });
+                    new LineRenderer { Color = (255, 255, 255), TargetSpace = true, Points = branch });
             }
         }
 

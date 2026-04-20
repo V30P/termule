@@ -9,23 +9,26 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Added
 - Tests for core types
 - Test for components
+- Test for systems
 - `--help`, `--interactive`, and `--stats` flags for the demo project
 - Setter for `gameObject` property of components for easy movement
 - `ICameraTarget` for rendering to non-display objects
 - Proper mouse tracking for the windows display implementation
 - `Keyboard` class for keyboard input (replacing old controller-based implementation)
+- `.editorconfig` with updated conventions
 
 ### Changed
 - System names and namespaces to be more consistent and avoid namespace/name collisions
-- Improved `DisplaySystem` performance by switching to double buffering
-- Improved `TerminalDisplaySystem` performance by reducing string allocations and unnecessary escape sequences
+- Improved display system performance by switching to double buffering
+- Improved terminal display system performance by reducing string allocations and unnecessary escape sequences
 - Renamed `Frame` to `FrameBuffer` and moved it to the display namespace
-- Improved `FrameBuffer` performance by removing unnecessary delegate allocations
+- Improved frameBuffer performance by removing unnecessary delegate allocations
 - Made game objects only add components to the tick list on the next frame after they are added to avoid snapshot allocation
-- Rename `TransformRenderer` to `PositionalRenderer` and update the API
+- Renamed `TransformRenderer` to `PositionalRenderer` and updated its API
 - Converted`Content` to the `IContent` interface (use `Image` for an easy implementation)
-- Improved `Text` implementation by reducing and optimizing recalculations 
-- Reworked RenderSystem and layer API
+- Improved text content implementation by reducing and optimizing recalculations 
+- Reworked render system API
+- Updated resource path configuration to be cleaner and easier to use
 
 
 ### Removed
@@ -35,10 +38,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Fixed
 - Improper layering of TPS indicator in debug builds of Demos
-- Transforms not properly clearing state when reparenting
-- Camera continuing to use a transform after it moves
+- Transforms not properly clearing state when re-parenting
+- Camera continuing to use old transform after it moves
 - GameElements occasionally getting duplicate ids
 - Terminal display system implementations not fully resetting configuration
+- Serializer failing to properly read empty 2D arrays
 
 ## [0.1.0] 
 

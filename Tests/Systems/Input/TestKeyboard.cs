@@ -7,10 +7,7 @@ public class TestKeyboard
     [Fact]
     public void Get_ShouldReturnValue_WhenBindExists()
     {
-        Keyboard keyboard = new()
-        {
-            Binds = new BindMap { ["Test"] = new FakeBind() }
-        };
+        Keyboard keyboard = new() { Binds = new BindMap { ["Test"] = new FakeBind() } };
 
         Assert.True(keyboard.Get<bool>("Test"));
     }
@@ -18,10 +15,7 @@ public class TestKeyboard
     [Fact]
     public void Get_ShouldThrow_WhenIncorrectValueTypeIsGiven()
     {
-        Keyboard keyboard = new()
-        {
-            Binds = new BindMap { ["Test"] = new FakeBind() }
-        };
+        Keyboard keyboard = new() { Binds = new BindMap { ["Test"] = new FakeBind() } };
 
         Assert.Throws<ArgumentException>(() => keyboard.Get<int>("Test"));
     }

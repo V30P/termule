@@ -48,11 +48,7 @@ internal class Shooter : Demo
             new Transform(),
             new Camera(),
             new Player(),
-            new ContentRenderer<Text>
-            {
-                Centered = true,
-                Layer = Program.UiLayer
-            });
+            new ContentRenderer<Text> { Centered = true, Layer = Program.UiLayer });
     }
 
     protected override void Tick()
@@ -153,11 +149,7 @@ internal class Shooter : Demo
         {
             Add(
                 new Transform(),
-                new ContentRenderer<Image>
-                {
-                    Centered = true,
-                    Content = characterSprite
-                });
+                new ContentRenderer<Image> { Centered = true, Content = characterSprite });
 
             Ticked += OnTicked;
         }
@@ -271,11 +263,12 @@ internal class Shooter : Demo
             sourceType = source.GetType();
             direction = (target - position).Normalized;
 
-            Add(new Transform { Pos = position }, new ContentRenderer<Image>
-            {
-                Centered = true,
-                Content = new Image(projectileSprite).WithColorSwapped(BasicColor.White, source.Color)
-            });
+            Add(new Transform { Pos = position },
+                new ContentRenderer<Image>
+                {
+                    Centered = true,
+                    Content = new Image(projectileSprite).WithColorSwapped(BasicColor.White, source.Color)
+                });
 
             Ticked += OnTicked;
         }

@@ -1,22 +1,23 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <OutputType>Library</OutputType>
-        <TargetFramework>net10.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <LangVersion>preview</LangVersion>
-        <AssemblyName>Termule.Engine</AssemblyName>
-        <RootNamespace>Termule.Engine</RootNamespace>
-    </PropertyGroup>
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <LangVersion>preview</LangVersion>
+    <AssemblyName>Termule.Engine</AssemblyName>
+    <RootNamespace>Termule.Engine</RootNamespace>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="SharpHook" Version="6.2.0"/>
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="SharpHook" Version="6.2.0"/>
+    <PackageReference Include="System.IO.Abstractions" Version="22.1.1"/>
+  </ItemGroup>
 
-    <ItemGroup>
-        <InternalsVisibleTo Include="Termule.Tests"/>
-    </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="Termule.Tests"/>
+  </ItemGroup>
 
 </Project>

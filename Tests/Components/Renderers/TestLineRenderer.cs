@@ -24,12 +24,7 @@ public class TestLineRenderer
     public void Render_ShouldDrawPolylineSegments()
     {
         FrameBuffer frame = new(4, 4);
-        LineRenderer renderer = new()
-        {
-            TargetSpace = true,
-            Color = TestColor,
-            Points = [(0, 0), (2, 0), (2, 2)]
-        };
+        LineRenderer renderer = new() { TargetSpace = true, Color = TestColor, Points = [(0, 0), (2, 0), (2, 2)] };
         _ = new GameObject(new Transform { Pos = (0, 0) }, renderer);
 
         renderer.Render(frame, (0, 0));
@@ -44,12 +39,7 @@ public class TestLineRenderer
     public void Render_ShouldDrawSingleSegment(Vector[] points, VectorInt[] expectedCells)
     {
         FrameBuffer frame = new(6, 6);
-        LineRenderer renderer = new()
-        {
-            TargetSpace = true,
-            Color = TestColor,
-            Points = points.ToList()
-        };
+        LineRenderer renderer = new() { TargetSpace = true, Color = TestColor, Points = [.. points] };
         _ = new GameObject(new Transform { Pos = (0, 0) }, renderer);
 
         renderer.Render(frame, (0, 0));
@@ -61,12 +51,7 @@ public class TestLineRenderer
     public void Render_ShouldNotDraw_WhenLessThanTwoPoints()
     {
         FrameBuffer frame = new(2, 2);
-        LineRenderer renderer = new()
-        {
-            TargetSpace = true,
-            Color = TestColor,
-            Points = [(1, 1)]
-        };
+        LineRenderer renderer = new() { TargetSpace = true, Color = TestColor, Points = [(1, 1)] };
         _ = new GameObject(new Transform { Pos = (0, 0) }, renderer);
 
         renderer.Render(frame, (0, 0));
@@ -78,12 +63,7 @@ public class TestLineRenderer
     public void Render_ShouldUseTransformPositionAsLineOrigin()
     {
         FrameBuffer frame = new(6, 4);
-        LineRenderer renderer = new()
-        {
-            TargetSpace = true,
-            Color = TestColor,
-            Points = [(0, 0), (2, 0)]
-        };
+        LineRenderer renderer = new() { TargetSpace = true, Color = TestColor, Points = [(0, 0), (2, 0)] };
         _ = new GameObject(new Transform { Pos = (2, 1) }, renderer);
 
         renderer.Render(frame, (0, 0));

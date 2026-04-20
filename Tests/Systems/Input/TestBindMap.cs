@@ -24,11 +24,7 @@ public class TestBindMap
         Bind bindA = new FakeBind();
         Bind bindB = new FakeBind();
 
-        BindMap bindMap = new()
-        {
-            ["A"] = bindA,
-            ["B"] = bindB
-        };
+        BindMap bindMap = new() { ["A"] = bindA, ["B"] = bindB };
 
         IEnumerator enumerator = bindMap.GetEnumerator();
         using ((IDisposable)enumerator)
@@ -45,10 +41,7 @@ public class TestBindMap
     [Fact]
     public void PollValues_ShouldUpdateValuesFromBinds()
     {
-        BindMap bindMap = new()
-        {
-            ["Test"] = new AlternatingBind()
-        };
+        BindMap bindMap = new() { ["Test"] = new AlternatingBind() };
 
         bindMap.PollValues();
         _ = bindMap.TryGetValue("Test", out object value);
@@ -71,10 +64,7 @@ public class TestBindMap
     [Fact]
     public void TryGetValue_ShouldReturnTrueAndOutputValue_WhenNameExists()
     {
-        BindMap bindMap = new()
-        {
-            ["Test"] = new FakeBind()
-        };
+        BindMap bindMap = new() { ["Test"] = new FakeBind() };
 
         Assert.True(bindMap.TryGetValue("Test", out object value));
         Assert.IsType<bool>(value);

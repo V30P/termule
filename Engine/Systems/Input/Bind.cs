@@ -1,13 +1,12 @@
 namespace Termule.Engine.Systems.Input;
 
 /// <summary>
-///     Base class for a <see cref="Keyboard"/> bind.
+///     Base class for a <see cref="Keyboard" /> bind.
 /// </summary>
 public abstract class Bind
 {
     internal Keyboard Keyboard
     {
-
         set
         {
             if (field != null)

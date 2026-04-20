@@ -49,7 +49,7 @@ public sealed class Keyboard : Core.System
     }
 
     /// <summary>
-    ///     Gets the value of the bind with given <paramref name="name"/>.
+    ///     Gets the value of the bind with given <paramref name="name" />.
     /// </summary>
     /// <typeparam name="TValue">The type of value to get.</typeparam>
     /// <param name="name">The name of the bind to get the value for.</param>
@@ -59,8 +59,9 @@ public sealed class Keyboard : Core.System
         return !Binds.TryGetValue(name, out object value)
             ? throw new ArgumentException($"No value exists for '{name}'.")
             : value is not TValue typedValue
-            ? throw new ArgumentException($"A bind named '{name}' exists, but it is not of type '{typeof(TValue)}'.")
-            : typedValue;
+                ? throw new ArgumentException(
+                    $"A bind named '{name}' exists, but it is not of type '{typeof(TValue)}'.")
+                : typedValue;
     }
 
 

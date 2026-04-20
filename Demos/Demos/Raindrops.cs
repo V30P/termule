@@ -51,11 +51,7 @@ internal class Raindrops : Demo
 
             Add(
                 new Transform(),
-                new CircleRenderer
-                {
-                    TargetSpace = true,
-                    DoubleWide = true
-                });
+                new CircleRenderer { TargetSpace = true, DoubleWide = true });
 
             Ticked += OnTicked;
         }
