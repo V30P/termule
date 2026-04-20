@@ -46,10 +46,10 @@ public sealed partial class WindowsDisplaySystem : TerminalDisplaySystem
         _ = ReadConsoleInput(handle, eventBuffer, (uint)eventBuffer.Length, out uint eventsCount);
         for (int i = (int)eventsCount - 1; i >= 0; i--)
         {
-            // ReSharper disable InconsistentNaming
+#pragma warning disable IDE1006 // Naming Styles
             const uint MOUSE_EVENT = 0x0002;
             const uint MOUSE_MOVED = 0x0001;
-            // ReSharper restore InconsistentNaming
+#pragma warning restore IDE1006 // Naming Styles
 
             if (eventBuffer[i].EventType == MOUSE_EVENT &&
                 (eventBuffer[i].Event.MouseEvent.dwEventFlags & MOUSE_MOVED) != 0)

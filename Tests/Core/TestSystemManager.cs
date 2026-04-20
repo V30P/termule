@@ -3,7 +3,6 @@ using Termule.Engine.Systems.Display;
 using Termule.Engine.Systems.Input;
 using Termule.Engine.Systems.Rendering;
 using Termule.Engine.Systems.Resources;
-using Termule.Tests.Core.Fakes;
 
 namespace Termule.Tests.Core;
 

@@ -1,7 +1,7 @@
 using Termule.Engine.Systems.Rendering;
 using Termule.Engine.Types.Vectors;
 
-namespace Termule.Engine.Components.Renderers;
+namespace Termule.Engine.Components;
 
 /// <summary>
 ///     Base component for renderers that render based on their local transform's position.

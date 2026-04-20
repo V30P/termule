@@ -12,11 +12,13 @@ public static class Utilities
         HashSet<VectorInt> actualCells = [];
 
         for (int x = 0; x < frame.Size.X; x++)
-        for (int y = 0; y < frame.Size.Y; y++)
         {
-            if (frame[x, y].Color == expectedColor)
+            for (int y = 0; y < frame.Size.Y; y++)
             {
-                actualCells.Add((x, y));
+                if (frame[x, y].Color == expectedColor)
+                {
+                    actualCells.Add((x, y));
+                }
             }
         }
 

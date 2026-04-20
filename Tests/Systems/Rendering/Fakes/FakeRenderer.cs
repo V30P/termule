@@ -2,7 +2,7 @@ using Termule.Engine.Components;
 using Termule.Engine.Systems.Rendering;
 using Termule.Engine.Types.Vectors;
 
-namespace Termule.Tests.Systems.Rendering.Fakes;
+namespace Termule.Tests.Systems.Rendering;
 
 public class FakeRenderer : Renderer
 {

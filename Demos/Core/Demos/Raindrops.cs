@@ -1,7 +1,5 @@
 using Termule.Demos.Core;
 using Termule.Engine.Components;
-using Termule.Engine.Components.Camera;
-using Termule.Engine.Components.Renderers;
 using Termule.Engine.Core;
 using Termule.Engine.Systems.Display;
 using Termule.Engine.Types.Content;
@@ -36,7 +34,7 @@ internal class Raindrops : Demo
         Raindrop raindrop = new((float)random.NextDouble(), (float)random.NextDouble());
         Root.Add(raindrop);
 
-        cooldown = (float)random.NextDouble() * (MaxCooldown - MinCooldown) + MinCooldown;
+        cooldown = ((float)random.NextDouble() * (MaxCooldown - MinCooldown)) + MinCooldown;
     }
 
     private class Raindrop : GameObject
@@ -73,7 +71,7 @@ internal class Raindrops : Demo
 
             CircleRenderer circleRenderer = Get<CircleRenderer>();
             circleRenderer.Radius = GetRadius(time);
-            circleRenderer.Color = (0, 0, (int)(255 * (1 - time / Lifespan)));
+            circleRenderer.Color = (0, 0, (int)(255 * (1 - (time / Lifespan))));
 
             VectorInt displaySize = Systems.Get<DisplaySystem>().Size;
             Get<Transform>().Pos = (pos.X * displaySize.X, pos.Y * displaySize.Y);
@@ -81,7 +79,7 @@ internal class Raindrops : Demo
 
         private float GetRadius(float t)
         {
-            return Systems.Get<DisplaySystem>().Size.Magnitude * 0.02f * MathF.Log2(t + 1) + 1;
+            return (Systems.Get<DisplaySystem>().Size.Magnitude * 0.02f * MathF.Log2(t + 1)) + 1;
         }
     }
 }

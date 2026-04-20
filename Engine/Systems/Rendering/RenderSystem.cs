@@ -35,9 +35,11 @@ public sealed class RenderSystem : Core.System
     internal void Render(Vector viewOrigin, FrameBuffer frame)
     {
         foreach (Layer layer in Layers)
-        foreach (Renderer renderer in layer)
         {
-            renderer.Render(frame, viewOrigin);
+            foreach (Renderer renderer in layer)
+            {
+                renderer.Render(frame, viewOrigin);
+            }
         }
     }
 }

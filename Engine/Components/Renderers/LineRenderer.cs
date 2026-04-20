@@ -1,7 +1,7 @@
 using Termule.Engine.Types.Content;
 using Termule.Engine.Types.Vectors;
 
-namespace Termule.Engine.Components.Renderers;
+namespace Termule.Engine.Components;
 
 /// <summary>
 ///     Renders a line or polyline relative to the local <see cref="Transform" />'s position.

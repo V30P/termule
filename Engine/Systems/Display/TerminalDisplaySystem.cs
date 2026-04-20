@@ -97,7 +97,7 @@ public abstract class TerminalDisplaySystem : DisplaySystem
         (
             Console.WindowTop != 0
             || Console.BufferWidth != Console.WindowWidth || Console.BufferHeight != Console.WindowHeight
-            || Buffer.Size != Screen?.Size
+            || buffer.Size != Screen?.Size
             || Console.WindowWidth != Size.X || Console.WindowHeight != Size.Y
         )
         {
@@ -110,50 +110,52 @@ public abstract class TerminalDisplaySystem : DisplaySystem
 
         bool skipping = true;
         for (int y = 0; y < Size.Y; y++)
-        for (int x = 0; x < Size.X; x++)
         {
-            if (!screenCleared && Screen!.EqualsAt(Buffer, (x, y)))
+            for (int x = 0; x < Size.X; x++)
             {
-                skipping = true;
-                continue;
-            }
-
-            // Go to position
-            if (skipping)
-            {
-                AppendMove(x, y);
-                skipping = false;
-            }
-
-            Cell cell = Buffer[x, y];
-
-            // Apply color changes if necessary
-            if (cell.Color != currentColor || cell.CharColor != currentCharColor)
-            {
-                builder.Append("\e[");
-
-                if (cell.Color != currentColor)
+                if (!screenCleared && Screen!.EqualsAt(buffer, (x, y)))
                 {
-                    AppendBackgroundColorCode(cell.Color);
-                    currentColor = cell.Color;
+                    skipping = true;
+                    continue;
                 }
 
-                if (cell.CharColor != currentCharColor)
+                // Go to position
+                if (skipping)
                 {
-                    builder.Append(';');
-                    AppendForegroundColorCode(cell.CharColor);
-                    currentCharColor = cell.CharColor;
+                    AppendMove(x, y);
+                    skipping = false;
                 }
 
-                builder.Append('m');
-            }
+                Cell cell = buffer[x, y];
 
-            // Write the character
-            builder.Append(cell.Char != '\0' ? cell.Char : ' ');
+                // Apply color changes if necessary
+                if (cell.Color != currentColor || cell.CharColor != currentCharColor)
+                {
+                    builder.Append("\e[");
 
-            if (builder.Length > FlushLimit)
-            {
-                FlushBuilder();
+                    if (cell.Color != currentColor)
+                    {
+                        AppendBackgroundColorCode(cell.Color);
+                        currentColor = cell.Color;
+                    }
+
+                    if (cell.CharColor != currentCharColor)
+                    {
+                        builder.Append(';');
+                        AppendForegroundColorCode(cell.CharColor);
+                        currentCharColor = cell.CharColor;
+                    }
+
+                    builder.Append('m');
+                }
+
+                // Write the character
+                builder.Append(cell.Char != '\0' ? cell.Char : ' ');
+
+                if (builder.Length > FlushLimit)
+                {
+                    FlushBuilder();
+                }
             }
         }
 

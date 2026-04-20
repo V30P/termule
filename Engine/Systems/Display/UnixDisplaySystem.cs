@@ -12,12 +12,14 @@ namespace Termule.Engine.Systems.Display;
 /// </summary>
 public sealed partial class UnixDisplaySystem : TerminalDisplaySystem
 {
+#pragma warning disable IDE1006 // Naming Styles
     private const int F_GETFL = 3;
     private const int F_SETFL = 4;
     private const int STDIN_FILENO = 0;
     private static readonly int O_NONBLOCK = OperatingSystem.IsMacOS() ? 0x0004 : 0x800;
+#pragma warning restore IDE1006 // Naming Styles
 
-    private static readonly ProcessStartInfo sttyStartInfo = new()
+    private static readonly ProcessStartInfo SttyStartInfo = new()
     {
         FileName = "stty",
         RedirectStandardOutput = true,
@@ -43,14 +45,14 @@ public sealed partial class UnixDisplaySystem : TerminalDisplaySystem
         _ = fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
 
         // Configure stty
-        sttyStartInfo.Arguments = "-g";
-        using (Process getCurrentConfigProcess = Process.Start(sttyStartInfo))
+        SttyStartInfo.Arguments = "-g";
+        using (Process getCurrentConfigProcess = Process.Start(SttyStartInfo))
         {
             initialSttyConfig = getCurrentConfigProcess?.StandardOutput.ReadLine();
         }
 
-        sttyStartInfo.Arguments = "-echo -icanon min 0 time 0";
-        Process.Start(sttyStartInfo)?.WaitForExit();
+        SttyStartInfo.Arguments = "-echo -icanon min 0 time 0";
+        Process.Start(SttyStartInfo)?.WaitForExit();
     }
 
     /// <inheritdoc />
@@ -62,8 +64,8 @@ public sealed partial class UnixDisplaySystem : TerminalDisplaySystem
         Console.Write("\e[?1006l"); // Disable SGR coordinates for mouse tracking
 
         // Reset stty config
-        sttyStartInfo.Arguments = initialSttyConfig;
-        Process.Start(sttyStartInfo)?.WaitForExit();
+        SttyStartInfo.Arguments = initialSttyConfig;
+        Process.Start(SttyStartInfo)?.WaitForExit();
     }
 
     /// <inheritdoc />

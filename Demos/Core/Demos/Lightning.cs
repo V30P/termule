@@ -1,7 +1,5 @@
 using Termule.Demos.Core;
 using Termule.Engine.Components;
-using Termule.Engine.Components.Camera;
-using Termule.Engine.Components.Renderers;
 using Termule.Engine.Core;
 using Termule.Engine.Systems.Display;
 using Termule.Engine.Types.Content;
@@ -34,7 +32,7 @@ internal class Lightning : Demo
         }
 
         Root.Add(new Bolt(random));
-        cooldown = (float)random.NextDouble() * (MaxCooldown - MinCooldown) + MinCooldown;
+        cooldown = ((float)random.NextDouble() * (MaxCooldown - MinCooldown)) + MinCooldown;
     }
 
     private class Bolt : GameObject
@@ -90,7 +88,7 @@ internal class Lightning : Demo
 
                         Vector GenerateDisplacedMidpoint()
                         {
-                            return midpoint + normal * ((float)random.NextDouble() * maxOffset * 2 - maxOffset);
+                            return midpoint + (normal * (((float)random.NextDouble() * maxOffset * 2) - maxOffset));
                         }
                     }
                 }

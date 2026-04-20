@@ -1,6 +1,5 @@
 using Termule.Demos.Core;
 using Termule.Engine.Components;
-using Termule.Engine.Components.Camera;
 using Termule.Engine.Systems.Rendering;
 using Termule.Engine.Types.Content;
 using Termule.Engine.Types.Vectors;
@@ -29,9 +28,11 @@ internal class Gradient : Demo
         protected override void Render(FrameBuffer frame, Vector viewOrigin)
         {
             for (int x = 0; x < frame.Size.X; x++)
-            for (int y = 0; y < frame.Size.Y; y++)
             {
-                frame.Draw((x, y), GetColor((float)x / frame.Size.X + time));
+                for (int y = 0; y < frame.Size.Y; y++)
+                {
+                    frame.Draw((x, y), GetColor(((float)x / frame.Size.X) + time));
+                }
             }
         }
 

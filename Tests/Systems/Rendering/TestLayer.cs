@@ -1,7 +1,6 @@
 using Termule.Engine.Components;
 using Termule.Engine.Systems.Rendering;
 using Termule.Engine.Types.Vectors;
-using Termule.Tests.Systems.Rendering.Fakes;
 
 namespace Termule.Tests.Systems.Rendering;
 
@@ -11,7 +10,7 @@ public class TestLayer
     {
         public bool OnAddedCalled { get; private set; }
         public bool OnRemovedCalled { get; private set; }
-        public bool IsDirty => Dirty;
+        public bool IsDirty => dirty;
 
         protected override void OnRendererAdded(Renderer renderer)
         {

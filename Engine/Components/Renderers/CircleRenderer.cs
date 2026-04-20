@@ -1,7 +1,7 @@
 using Termule.Engine.Types.Content;
 using Termule.Engine.Types.Vectors;
 
-namespace Termule.Engine.Components.Renderers;
+namespace Termule.Engine.Components;
 
 /// <summary>
 ///     Renders a circle at the local <see cref="Transform" />'s position.
@@ -57,7 +57,7 @@ public sealed class CircleRenderer : PositionalRenderer
                 FillHorizontals((x, y), context);
             }
 
-            p += 2 * (p < 0 ? 2 * x : x - --y) + 1;
+            p += (2 * (p < 0 ? 2 * x : x - --y)) + 1;
         }
     }
 

@@ -22,9 +22,11 @@ public class TestFrameBuffer
     private static void AssertAllCellsEqual(FrameBuffer frame, Cell expectedCell)
     {
         for (int x = 0; x < frame.Size.X; x++)
-        for (int y = 0; y < frame.Size.Y; y++)
         {
-            Assert.Equal(expectedCell, frame[x, y]);
+            for (int y = 0; y < frame.Size.Y; y++)
+            {
+                Assert.Equal(expectedCell, frame[x, y]);
+            }
         }
     }
 
@@ -69,9 +71,11 @@ public class TestFrameBuffer
     {
         FrameBuffer frame = new(10, 5);
         for (int x = 0; x < frame.Size.X; x++)
-        for (int y = 0; y < frame.Size.Y; y++)
         {
-            frame.Draw((x, y), TestCell.Color, TestCell.Char, TestCell.CharColor);
+            for (int y = 0; y < frame.Size.Y; y++)
+            {
+                frame.Draw((x, y), TestCell.Color, TestCell.Char, TestCell.CharColor);
+            }
         }
 
         frame.Reset();

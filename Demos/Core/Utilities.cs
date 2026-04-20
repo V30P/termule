@@ -17,14 +17,14 @@ internal static class Utilities
             return (0, 0);
         }
 
-        float factor = MathF.Sqrt((v.X * v.X + v.Y * 0.5f * v.Y * 0.5f)
-                                  / (v.X * v.X + v.Y * v.Y));
+        float factor = MathF.Sqrt(((v.X * v.X) + (v.Y * 0.5f * v.Y * 0.5f))
+                                  / ((v.X * v.X) + (v.Y * v.Y)));
         return v * factor;
     }
 
     public static Vector PointOnRectangle(Random random, Vector corner, Vector size)
     {
-        float dist = (float)random.NextDouble() * (size.X * 2 + size.Y * 2);
+        float dist = (float)random.NextDouble() * ((size.X * 2) + (size.Y * 2));
 
         if (dist < size.X)
         {
@@ -36,12 +36,12 @@ internal static class Utilities
             return (corner.X + size.X, corner.Y + (dist - size.X));
         }
 
-        if (dist < size.X * 2 + size.Y)
+        if (dist < (size.X * 2) + size.Y)
         {
             return (corner.X + size.X - (dist - size.X - size.Y), corner.Y + size.Y);
         }
 
-        return (corner.X, corner.Y + size.Y - (dist - 2 * size.X - size.Y));
+        return (corner.X, corner.Y + size.Y - (dist - (2 * size.X) - size.Y));
     }
 
     extension(Image image)
@@ -50,9 +50,11 @@ internal static class Utilities
         {
             Image flipped = new(image.Size.X, image.Size.Y);
             for (int x = 0; x < image.Size.X; x++)
-            for (int y = 0; y < image.Size.Y; y++)
             {
-                flipped[x, y] = image[image.Size.X - x - 1, y];
+                for (int y = 0; y < image.Size.Y; y++)
+                {
+                    flipped[x, y] = image[image.Size.X - x - 1, y];
+                }
             }
 
             return flipped;
@@ -62,9 +64,11 @@ internal static class Utilities
         {
             Image swapped = new(image.Size.X, image.Size.Y);
             for (int x = 0; x < image.Size.X; x++)
-            for (int y = 0; y < image.Size.Y; y++)
             {
-                swapped[x, y] = image[x, y].Color == target ? image[x, y] with { Color = value } : image[x, y];
+                for (int y = 0; y < image.Size.Y; y++)
+                {
+                    swapped[x, y] = image[x, y].Color == target ? image[x, y] with { Color = value } : image[x, y];
+                }
             }
 
             return swapped;

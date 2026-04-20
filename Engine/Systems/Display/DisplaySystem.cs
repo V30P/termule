@@ -1,4 +1,4 @@
-using Termule.Engine.Components.Camera;
+using Termule.Engine.Components;
 using Termule.Engine.Systems.Rendering;
 using Termule.Engine.Types.Vectors;
 
@@ -9,7 +9,7 @@ namespace Termule.Engine.Systems.Display;
 /// </summary>
 public abstract class DisplaySystem : Core.System, ICameraTarget
 {
-    private protected FrameBuffer Buffer = new(0, 0);
+    private protected FrameBuffer buffer = new(0, 0);
 
     /// <summary>
     ///     Gets the display-space position of the mouse (in cells).
@@ -31,7 +31,7 @@ public abstract class DisplaySystem : Core.System, ICameraTarget
 
         protected set
         {
-            Buffer = new FrameBuffer(value.X, value.Y);
+            buffer = new FrameBuffer(value.X, value.Y);
             Screen = new FrameBuffer(value.X, value.Y);
 
             field = value;
@@ -41,14 +41,14 @@ public abstract class DisplaySystem : Core.System, ICameraTarget
 
     FrameBuffer ICameraTarget.Buffer
     {
-        get => Buffer;
-        set => Buffer = value;
+        get => buffer;
+        set => buffer = value;
     }
 
     void ICameraTarget.Update()
     {
         PrintBuffer();
-        (Buffer, Screen) = (Screen, Buffer);
+        (buffer, Screen) = (Screen, buffer);
     }
 
     private protected abstract void PrintBuffer();

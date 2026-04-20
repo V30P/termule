@@ -1,7 +1,5 @@
 using Termule.Demos.Core;
 using Termule.Engine.Components;
-using Termule.Engine.Components.Camera;
-using Termule.Engine.Components.Renderers;
 using Termule.Engine.Core;
 using Termule.Engine.Systems.Display;
 using Termule.Engine.Systems.Input;
@@ -19,8 +17,8 @@ internal class Shooter : Demo
 
     private readonly Random random = new();
 
-    private static Image _characterSprite;
-    private static Image _projectileSprite;
+    private static Image characterSprite;
+    private static Image projectileSprite;
 
     private float gameOverTimeRemaining;
     private float gracePeriodTimeRemaining;
@@ -43,8 +41,8 @@ internal class Shooter : Demo
             { Binds.Fire, new ButtonBind(Button.Mouse1) }
         };
 
-        _characterSprite = Systems.Get<ResourceLoader>().Load<Image>("shooter/character");
-        _projectileSprite = Systems.Get<ResourceLoader>().Load<Image>("shooter/projectile");
+        characterSprite = Systems.Get<ResourceLoader>().Load<Image>("shooter/character");
+        projectileSprite = Systems.Get<ResourceLoader>().Load<Image>("shooter/projectile");
 
         Root.Add(
             new Transform(),
@@ -158,7 +156,7 @@ internal class Shooter : Demo
                 new ContentRenderer<Image>
                 {
                     Centered = true,
-                    Content = _characterSprite
+                    Content = characterSprite
                 });
 
             Ticked += OnTicked;
@@ -192,7 +190,7 @@ internal class Shooter : Demo
 
             hitColorTimeRemaining -= Game.DeltaTime;
             Get<ContentRenderer<Image>>().Content =
-                (Target.X > transform.Pos.X ? _characterSprite : _characterSprite.Flipped())
+                (Target.X > transform.Pos.X ? characterSprite : characterSprite.Flipped())
                 .WithColorSwapped(BasicColor.White, hitColorTimeRemaining < 0 ? Color : HitColor);
 
             shotCooldownTimeRemaining -= Game.DeltaTime;
@@ -276,7 +274,7 @@ internal class Shooter : Demo
             Add(new Transform { Pos = position }, new ContentRenderer<Image>
             {
                 Centered = true,
-                Content = new Image(_projectileSprite).WithColorSwapped(BasicColor.White, source.Color)
+                Content = new Image(projectileSprite).WithColorSwapped(BasicColor.White, source.Color)
             });
 
             Ticked += OnTicked;
@@ -297,9 +295,9 @@ internal class Shooter : Demo
                 Vector projectilePos = Get<Transform>().Pos;
 
                 if (MathF.Abs(characterPos.X - projectilePos.X) <
-                    (float)(_characterSprite.Size.X + _projectileSprite.Size.X) / 2
+                    (float)(characterSprite.Size.X + projectileSprite.Size.X) / 2
                     && MathF.Abs(characterPos.Y - projectilePos.Y) <
-                    (float)(_characterSprite.Size.Y + _projectileSprite.Size.Y) / 2)
+                    (float)(characterSprite.Size.Y + projectileSprite.Size.Y) / 2)
                 {
                     character.Hit();
                     Destroy();

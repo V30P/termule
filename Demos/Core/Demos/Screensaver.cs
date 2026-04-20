@@ -1,7 +1,5 @@
 using Termule.Demos.Core;
 using Termule.Engine.Components;
-using Termule.Engine.Components.Camera;
-using Termule.Engine.Components.Renderers;
 using Termule.Engine.Core;
 using Termule.Engine.Systems.Display;
 using Termule.Engine.Systems.Resources;

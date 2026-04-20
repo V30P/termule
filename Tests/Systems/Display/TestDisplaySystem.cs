@@ -1,4 +1,4 @@
-using Termule.Engine.Components.Camera;
+using Termule.Engine.Components;
 using Termule.Engine.Systems.Display;
 using Termule.Engine.Systems.Rendering;
 

@@ -12,7 +12,7 @@ public readonly record struct Vector(float X = 0, float Y = 0)
     /// <summary>
     ///     Gets the magnitude (length) of the vector.
     /// </summary>
-    public float Magnitude => MathF.Sqrt(X * X + Y * Y);
+    public float Magnitude => MathF.Sqrt((X * X) + (Y * Y));
 
     /// <summary>
     ///     Gets the normalized (unit-length) vector.

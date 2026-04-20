@@ -68,9 +68,11 @@ internal class Array2DConverterFactory : JsonConverterFactory
             // Convert to an actual array
             T[,] value = new T[array.Count, array[0]?.Count ?? 0];
             for (int x = 0; x < array.Count; x++)
-            for (int y = 0; y < array[0].Count; y++)
             {
-                value[x, y] = array[x][y];
+                for (int y = 0; y < array[0].Count; y++)
+                {
+                    value[x, y] = array[x][y];
+                }
             }
 
             return value;

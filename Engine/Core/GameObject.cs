@@ -117,12 +117,9 @@ public class GameObject : Component, IEnumerable<Component>
     /// <returns>The component if one is found or <c>null</c>.</returns>
     public TComponent Get<TComponent>()
     {
-        if (typesToComponents.TryGetValue(typeof(TComponent), out List<Component> matchingComponents))
-        {
-            return (TComponent)(object)matchingComponents.FirstOrDefault();
-        }
-
-        return default;
+        return typesToComponents.TryGetValue(typeof(TComponent), out List<Component> matchingComponents)
+            ? (TComponent)(object)matchingComponents.FirstOrDefault()
+            : default;
     }
 
     /// <summary>

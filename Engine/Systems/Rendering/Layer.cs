@@ -15,7 +15,7 @@ public abstract class Layer(IComparer<Renderer> comparer) : IEnumerable<Renderer
     ///     Gets or sets a value indicating whether a change has occurred that requires re-sorting.
     /// </summary>
     // ReSharper disable once MemberCanBePrivate.Global
-    protected bool Dirty;
+    protected bool dirty;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="Layer" /> class.
@@ -29,10 +29,10 @@ public abstract class Layer(IComparer<Renderer> comparer) : IEnumerable<Renderer
     /// <inheritdoc />
     public IEnumerator<Renderer> GetEnumerator()
     {
-        if (Dirty)
+        if (dirty)
         {
             renderers.Sort(comparer);
-            Dirty = false;
+            dirty = false;
         }
 
         return renderers.GetEnumerator();
@@ -61,7 +61,7 @@ public abstract class Layer(IComparer<Renderer> comparer) : IEnumerable<Renderer
     /// <param name="renderer">The renderer that was added.</param>
     protected virtual void OnRendererAdded(Renderer renderer)
     {
-        Dirty = true;
+        dirty = true;
     }
 
     /// <summary>
@@ -70,6 +70,6 @@ public abstract class Layer(IComparer<Renderer> comparer) : IEnumerable<Renderer
     /// <param name="renderer">The renderer that was removed.</param>
     protected virtual void OnRendererRemoved(Renderer renderer)
     {
-        Dirty = true;
+        dirty = true;
     }
 }

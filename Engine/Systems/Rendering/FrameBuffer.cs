@@ -52,9 +52,11 @@ public sealed class FrameBuffer : Image
     internal void Reset(Cell cell = default)
     {
         for (int x = 0; x < Size.X; x++)
-        for (int y = 0; y < Size.Y; y++)
         {
-            Cells[x, y] = cell;
+            for (int y = 0; y < Size.Y; y++)
+            {
+                Cells[x, y] = cell;
+            }
         }
     }
 }

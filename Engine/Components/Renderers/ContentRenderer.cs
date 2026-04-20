@@ -1,7 +1,7 @@
 using Termule.Engine.Types.Content;
 using Termule.Engine.Types.Vectors;
 
-namespace Termule.Engine.Components.Renderers;
+namespace Termule.Engine.Components;
 
 /// <summary>
 ///     Renders a <see cref="IContent" /> instance at the local <see cref="Transform" />'s position.
@@ -42,15 +42,17 @@ public sealed class ContentRenderer<TContent> : PositionalRenderer
     private protected override void RenderAtPosition(PositionalRenderContext context)
     {
         for (int x = 0; x < Content?.Size.X; x++)
-        for (int y = 0; y < Content.Size.Y; y++)
         {
-            Cell cell = Content[x, y];
-            VectorInt cellPos = context.Origin + (x, y);
-            context.Frame.Draw(
-                cellPos,
-                cell.Color != BasicColor.Default ? cell.Color : null,
-                cell.Char != '\0' ? cell.Char : null,
-                cell.CharColor != BasicColor.Default ? cell.CharColor : null);
+            for (int y = 0; y < Content.Size.Y; y++)
+            {
+                Cell cell = Content[x, y];
+                VectorInt cellPos = context.Origin + (x, y);
+                context.Frame.Draw(
+                    cellPos,
+                    cell.Color != BasicColor.Default ? cell.Color : null,
+                    cell.Char != '\0' ? cell.Char : null,
+                    cell.CharColor != BasicColor.Default ? cell.CharColor : null);
+            }
         }
     }
 }

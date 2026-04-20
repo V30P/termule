@@ -1,5 +1,4 @@
 using Termule.Engine.Components;
-using Termule.Engine.Components.Renderers;
 using Termule.Engine.Core;
 using Termule.Engine.Types.Content;
 

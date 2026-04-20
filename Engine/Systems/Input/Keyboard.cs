@@ -56,12 +56,9 @@ public sealed class Keyboard : Core.System
     /// <returns> The value of the specified bind. </returns>
     public TValue Get<TValue>(string name)
     {
-        if (!Binds.TryGetValue(name, out object value))
-        {
-            throw new ArgumentException($"No value exists for '{name}'.");
-        }
-
-        return value is not TValue typedValue
+        return !Binds.TryGetValue(name, out object value)
+            ? throw new ArgumentException($"No value exists for '{name}'.")
+            : value is not TValue typedValue
             ? throw new ArgumentException($"A bind named '{name}' exists, but it is not of type '{typeof(TValue)}'.")
             : typedValue;
     }

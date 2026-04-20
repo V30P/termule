@@ -5,6 +5,7 @@
 # Hidden files
 .*
 !.gitignore
+!.editorconfig
 
-# Editor settings
+# Editor-specific settings
 *.DotSettings.user

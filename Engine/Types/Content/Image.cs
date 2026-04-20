@@ -88,9 +88,11 @@ public class Image : IContent, IResource
 
         Cells = new Cell[width, height];
         for (int x = 0; x < Size.X; x++)
-        for (int y = 0; y < Size.Y; y++)
         {
-            Cells[x, y] = default;
+            for (int y = 0; y < Size.Y; y++)
+            {
+                Cells[x, y] = default;
+            }
         }
     }
 }

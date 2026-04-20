@@ -1,6 +1,5 @@
 using Termule.Engine.Core;
 using Termule.Engine.Exceptions;
-using Termule.Tests.Core.Fakes;
 
 namespace Termule.Tests.Core;
 
