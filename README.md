@@ -20,7 +20,13 @@ This repository contains the following projects:
    - Runtime resource loading
    - Fully documented API
 
-2. [Demos](Demos)
+2. [Tests](Tests)
+
+    - Comprehensive engine test suite
+    - Built on xUnit.net for broad compatibility
+    - 200+ individual unit tests
+   
+3. [Demos](Demos)
 
    - Five sample Termule programs
    - Single-file c# implementation for each demo
