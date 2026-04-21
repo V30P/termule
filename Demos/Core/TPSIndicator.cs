@@ -17,7 +17,8 @@ internal class TpsIndicator : GameObject
             new Transform(),
             new ContentRenderer<Text>
             {
-                TargetSpace = true, Content = new Text { Value = string.Format(TextTemplate, "N/A") }
+                TargetSpace = true,
+                Content = new Text { Value = string.Format(TextTemplate, "N/A") }
             });
 
         Ticked += OnTicked;

@@ -9,14 +9,6 @@ namespace Termule.Tests.Core;
 public class TestSystemManager
 {
     [Fact]
-    public void Get_WhenSystemMissing_ReturnsNull()
-    {
-        IConfigurableGame game = Game.Create();
-
-        Assert.Null(game.Systems.Get<FakeSystem>());
-    }
-
-    [Fact]
     public void Install_AddsSystem()
     {
         IConfigurableGame game = Game.Create();
@@ -48,20 +40,11 @@ public class TestSystemManager
     }
 
     [Fact]
-    public void InstalledSystem_FollowsLifecycle()
+    public void Get_WhenSystemMissing_ReturnsNull()
     {
         IConfigurableGame game = Game.Create();
-        FakeSystem system = new();
-        game.Systems.Install(system);
 
-        game.Start();
-        Assert.True(system.Started);
-
-        game.RunForFrames(5);
-        Assert.Equal(5, system.TickCount);
-
-        game.CleanUp();
-        Assert.True(system.Stopped);
+        Assert.Null(game.Systems.Get<FakeSystem>());
     }
 
     [Fact]
@@ -85,15 +68,25 @@ public class TestSystemManager
     }
 
     [Fact]
+    public void InstalledSystem_FollowsLifecycle()
+    {
+        IConfigurableGame game = Game.Create();
+        FakeSystem system = new();
+        game.Systems.Install(system);
+
+        game.Start();
+        Assert.True(system.Started);
+
+        game.RunForFrames(5);
+        Assert.Equal(5, system.TickCount);
+
+        game.CleanUp();
+        Assert.True(system.Stopped);
+    }
+
+    [Fact]
     public void UseDefaultsInstallsCoreSystems()
     {
-        // Headless test hosts may report invalid console dimensions (-1),
-        // which makes terminal display construction fail before defaults install.
-        if (Console.WindowWidth <= 0 || Console.WindowHeight <= 0)
-        {
-            return;
-        }
-
         IConfigurableGame game = Game.Create();
 
         game.Systems.UseDefaults();

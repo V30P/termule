@@ -14,6 +14,7 @@ public class TestText
         Assert.Equal(default, text.Color);
     }
 
+
     [Fact]
     public void SettingValue_ToSingleLine_RecalculatesSizeAndCells()
     {
@@ -25,6 +26,16 @@ public class TestText
         Assert.Equal('l', ((IContent)text)[2, 0].Char);
         Assert.Equal('l', ((IContent)text)[3, 0].Char);
         Assert.Equal('o', ((IContent)text)[4, 0].Char);
+    }
+
+    [Fact]
+    public void SettingValue_ToLongerLine_UpdatesWidth()
+    {
+        Text text = new() { Value = "Short" };
+        Assert.Equal(5, ((IContent)text).Size.X);
+
+        text.Value = "Much longer line";
+        Assert.Equal(16, ((IContent)text).Size.X);
     }
 
     [Fact]
@@ -43,14 +54,12 @@ public class TestText
     }
 
     [Fact]
-    public void SettingColor_AppliesColorToChars()
+    public void SettingValue_ToEmpty_ResetsCells()
     {
-        Text text = new() { Color = BasicColor.Red, Value = "Test" };
-
-        Assert.Equal(BasicColor.Red, ((IContent)text)[0, 0].CharColor);
-        Assert.Equal(BasicColor.Red, ((IContent)text)[1, 0].CharColor);
-        Assert.Equal(BasicColor.Red, ((IContent)text)[2, 0].CharColor);
-        Assert.Equal(BasicColor.Red, ((IContent)text)[3, 0].CharColor);
+        Text text = new() { Value = "Hello" };
+        text.Value = "";
+        Assert.Equal((0, 0), ((IContent)text).Size);
+        Assert.Equal("", text.Value);
     }
 
     [Fact]
@@ -65,14 +74,29 @@ public class TestText
     }
 
     [Fact]
-    public void SettingValue_ToEmpty_ResetsCells()
+    public void SettingValue_AfterColor_CreatesCellsWithColor()
     {
-        Text text = new() { Value = "Hello" };
-        text.Value = "";
-        Assert.Equal((0, 0), ((IContent)text).Size);
-        Assert.Equal("", text.Value);
+        Text text = new() { Color = BasicColor.Red, Value = "Test" };
+
+        Assert.Equal(BasicColor.Red, ((IContent)text)[0, 0].CharColor);
+        Assert.Equal(BasicColor.Red, ((IContent)text)[1, 0].CharColor);
+        Assert.Equal(BasicColor.Red, ((IContent)text)[2, 0].CharColor);
+        Assert.Equal(BasicColor.Red, ((IContent)text)[3, 0].CharColor);
     }
 
+    [Fact]
+    public void SettingColor_AfterValue_RecolorsExistingCells()
+    {
+        Text text = new() { Value = "Test" };
+        Assert.Equal(default, ((IContent)text)[0, 0].CharColor);
+
+        text.Color = BasicColor.Red;
+
+        Assert.Equal(BasicColor.Red, ((IContent)text)[0, 0].CharColor);
+        Assert.Equal(BasicColor.Red, ((IContent)text)[1, 0].CharColor);
+        Assert.Equal(BasicColor.Red, ((IContent)text)[2, 0].CharColor);
+        Assert.Equal(BasicColor.Red, ((IContent)text)[3, 0].CharColor);
+    }
 
     [Fact]
     public void GetIndexer_ReturnsCellValue()
@@ -81,13 +105,13 @@ public class TestText
 
         Assert.Equal(new Cell { Char = 'H' }, ((IContent)text)[0, 0]);
     }
-    
+
     [Fact]
     public void GetIndexer_ForFillerPositions_ReturnsDefaultCell()
     {
         Text text = new() { Value = "AB\nC" };
 
-        Assert.Equal(default, ((IContent)text)[1, 1]);   
+        Assert.Equal(default, ((IContent)text)[1, 1]);
     }
 
     [Fact]
@@ -97,25 +121,5 @@ public class TestText
 
         Assert.Throws<IndexOutOfRangeException>(() => ((IContent)text)[3, 0]);
         Assert.Throws<IndexOutOfRangeException>(() => ((IContent)text)[0, 1]);
-    }
-
-    [Fact]
-    public void SettingColor_AfterValueSet_RecolorsExistingCells()
-    {
-        Text text = new() { Value = "AB" };
-        Assert.Equal(default, ((IContent)text)[0, 0].CharColor);
-
-        text.Color = BasicColor.Red;
-        Assert.Equal(BasicColor.Red, ((IContent)text)[0, 0].CharColor);
-    }
-
-    [Fact]
-    public void SettingValue_ToLongerLine_UpdatesWidth()
-    {
-        Text text = new() { Value = "Short" };
-        Assert.Equal(5, ((IContent)text).Size.X);
-
-        text.Value = "Much longer line";
-        Assert.Equal(16, ((IContent)text).Size.X);
     }
 }

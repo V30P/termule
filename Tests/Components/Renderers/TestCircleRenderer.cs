@@ -8,8 +8,6 @@ namespace Termule.Tests.Components;
 
 public class TestCircleRenderer
 {
-    private static readonly Color TestColor = BasicColor.White;
-
     public static IEnumerable<object[]> OutlineCircleData =
     [
         [1f, new VectorInt[] { (2, 3), (3, 2), (3, 4), (4, 3) }],
@@ -71,30 +69,45 @@ public class TestCircleRenderer
         Assert.Equal("Radius", ex.ParamName);
     }
 
+    [Fact]
+    public void Render_WhenRadiusIsZero_DrawsSingleCenterCell()
+    {
+        FrameBuffer frame = new(1, 1);
+        CircleRenderer renderer = new() { Color = BasicColor.White, TargetSpace = true };
+        GameObject _ = [new Transform { Pos = (0, 0) }, renderer];
+
+        renderer.Render(frame, (0, 0));
+
+        AssertDrawnCells(frame, BasicColor.White, [
+            (0, 0)
+        ]);
+    }
+
     [Theory]
     [MemberData(nameof(OutlineCircleData))]
     public void Render_DrawsExpectedOutlineCells(float radius, VectorInt[] expectedCells)
     {
         FrameBuffer frame = new(7, 7);
-        CircleRenderer renderer = new() { Radius = radius, Color = TestColor, TargetSpace = true };
+        CircleRenderer renderer = new() { Radius = radius, Color = BasicColor.White, TargetSpace = true };
         _ = new GameObject(new Transform { Pos = (3, 3) }, renderer);
 
         renderer.Render(frame, (0, 0));
 
-        AssertDrawnCells(frame, TestColor, expectedCells);
+        AssertDrawnCells(frame, BasicColor.White, expectedCells);
     }
 
-    [Fact]
-    public void Render_WhenRadiusIsZero_DrawsSingleCenterCell()
+    [Theory]
+    [MemberData(nameof(ViewOriginData))]
+    public void Render_RespectsViewOrigin(Vector transformPos, Vector viewOrigin, VectorInt expectedCenter)
     {
-        FrameBuffer frame = new(1, 1);
-        CircleRenderer renderer = new() { Color = TestColor, TargetSpace = true };
-        GameObject _ = [new Transform { Pos = (0, 0) }, renderer];
+        FrameBuffer frame = new(3, 3);
+        CircleRenderer renderer = new() { Color = BasicColor.White, TargetSpace = true };
+        _ = new GameObject(new Transform { Pos = transformPos }, renderer);
 
-        renderer.Render(frame, (0, 0));
+        renderer.Render(frame, viewOrigin);
 
-        AssertDrawnCells(frame, TestColor, [
-            (0, 0)
+        AssertDrawnCells(frame, BasicColor.White, [
+            expectedCenter
         ]);
     }
 
@@ -102,13 +115,13 @@ public class TestCircleRenderer
     public void Render_WhenDoubleWideIsTrue_DuplicatesCellsHorizontally()
     {
         FrameBuffer frame = new(5, 3);
-        CircleRenderer renderer = new() { Radius = 1, Color = TestColor, TargetSpace = true, DoubleWide = true };
+        CircleRenderer renderer = new() { Radius = 1, Color = BasicColor.White, TargetSpace = true, DoubleWide = true };
 
         _ = new GameObject(new Transform { Pos = (1, 1) }, renderer);
 
         renderer.Render(frame, (0, 0));
 
-        AssertDrawnCells(frame, TestColor, [
+        AssertDrawnCells(frame, BasicColor.White, [
             (0, 0), (1, 0),
             (2, 1), (3, 1),
             (0, 2), (1, 2)
@@ -120,26 +133,11 @@ public class TestCircleRenderer
     public void Render_WhenFilledIsTrue_FillsInteriorCells(float radius, VectorInt[] expectedCells)
     {
         FrameBuffer frame = new(5, 5);
-        CircleRenderer renderer = new() { Radius = radius, Filled = true, Color = TestColor, TargetSpace = true };
+        CircleRenderer renderer = new() { Radius = radius, Filled = true, Color = BasicColor.White, TargetSpace = true };
         _ = new GameObject(new Transform { Pos = (2, 2) }, renderer);
 
         renderer.Render(frame, (0, 0));
 
-        AssertDrawnCells(frame, TestColor, expectedCells);
-    }
-
-    [Theory]
-    [MemberData(nameof(ViewOriginData))]
-    public void Render_RespectsViewOrigin(Vector transformPos, Vector viewOrigin, VectorInt expectedCenter)
-    {
-        FrameBuffer frame = new(3, 3);
-        CircleRenderer renderer = new() { Color = TestColor, TargetSpace = true };
-        _ = new GameObject(new Transform { Pos = transformPos }, renderer);
-
-        renderer.Render(frame, viewOrigin);
-
-        AssertDrawnCells(frame, TestColor, [
-            expectedCenter
-        ]);
+        AssertDrawnCells(frame, BasicColor.White, expectedCells);
     }
 }

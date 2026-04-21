@@ -14,22 +14,11 @@ public class TestColor
     }
 
     [Fact]
-    public void ImplicitOperatorFronTuple_CreatesColor()
+    public void BasicColorConstructor_SetsBasic()
     {
-        Color color = (255, 128, 64);
+        Color color = BasicColor.Blue;
 
-        Assert.NotNull(color.Full);
-        Assert.Equal(255, color.Full.Value.R);
-        Assert.Equal(128, color.Full.Value.G);
-        Assert.Equal(64, color.Full.Value.B);
-    }
-
-    [Fact]
-    public void ImplicitOperatorFromBasicColor_CreatesColor()
-    {
-        Color color = BasicColor.Red;
-
-        Assert.Equal(BasicColor.Red, color.Basic);
+        Assert.Equal(BasicColor.Blue, color.Basic);
         Assert.Null(color.Full);
     }
 
@@ -47,11 +36,22 @@ public class TestColor
     }
 
     [Fact]
-    public void BasicColorConstructor_SetsBasic()
+    public void ImplicitOperatorFromBasicColor_CreatesColor()
     {
-        Color color = BasicColor.Blue;
-        
-        Assert.Equal(BasicColor.Blue, color.Basic);
+        Color color = BasicColor.Red;
+
+        Assert.Equal(BasicColor.Red, color.Basic);
         Assert.Null(color.Full);
+    }
+
+    [Fact]
+    public void ImplicitOperatorFronTuple_CreatesColor()
+    {
+        Color color = (255, 128, 64);
+
+        Assert.NotNull(color.Full);
+        Assert.Equal(255, color.Full.Value.R);
+        Assert.Equal(128, color.Full.Value.G);
+        Assert.Equal(64, color.Full.Value.B);
     }
 }

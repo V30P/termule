@@ -78,12 +78,13 @@ public sealed class Text : IContent
             {
                 throw new IndexOutOfRangeException("X position falls outside of content.");
             }
+
             if (y < 0 || y >= size.Y)
             {
                 throw new IndexOutOfRangeException("Y position falls outside of content.");
             }
 
-            // Returns blanks spaces at the end of lines since content is rectangular
+            // Returns blank spaces at the end of lines since content is rectangular
             if (x >= lines[y].Length)
             {
                 return default;
@@ -91,6 +92,5 @@ public sealed class Text : IContent
 
             return lines[y][x];
         }
-
     }
 }

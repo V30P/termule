@@ -16,20 +16,32 @@ public class TestRenderSystem
     }
 
     [Fact]
-    public void DefaultLayer_IsTheFirstLayer()
-    {
-        Layer layer = new SimpleLayer();
-        RenderSystem renderSystem = new() { Layers = [layer, new SimpleLayer()] };
-        Assert.Same(layer, renderSystem.DefaultLayer);
-    }
-
-    [Fact]
     public void Layers_DefaultsToASimpleLayer()
     {
         RenderSystem renderSystem = new();
 
         Assert.Single(renderSystem.Layers);
         Assert.IsType<SimpleLayer>(renderSystem.Layers[0]);
+    }
+
+    [Fact]
+    public void SettingLayers_ToNullOrEmpty_Throws()
+    {
+        Assert.Throws<ArgumentException>(() =>
+            new RenderSystem { Layers = null }
+        );
+
+        Assert.Throws<ArgumentException>(() =>
+            new RenderSystem { Layers = [] }
+        );
+    }
+
+    [Fact]
+    public void DefaultLayer_IsTheFirstLayer()
+    {
+        Layer layer = new SimpleLayer();
+        RenderSystem renderSystem = new() { Layers = [layer, new SimpleLayer()] };
+        Assert.Same(layer, renderSystem.DefaultLayer);
     }
 
     [Fact]
@@ -65,17 +77,5 @@ public class TestRenderSystem
 
         Assert.Same(frame, renderer.CapturedFrame);
         Assert.Equal((10, 5), renderer.CapturedViewOrigin);
-    }
-
-    [Fact]
-    public void SettingLayers_ToNullOrEmpty_Throws()
-    {
-        Assert.Throws<ArgumentException>(() =>
-            new RenderSystem { Layers = null }
-        );
-
-        Assert.Throws<ArgumentException>(() =>
-            new RenderSystem { Layers = [] }
-        );
     }
 }

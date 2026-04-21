@@ -23,41 +23,6 @@ public class TestVector
     }
 
     [Fact]
-    public void Magnitude_ReturnsCorrectLength()
-    {
-        Vector v = new(3, 4);
-
-        Assert.Equal(5, v.Magnitude);
-    }
-
-    [Fact]
-    public void Magnitude_OfZeroVector_ReturnsZero()
-    {
-        Vector v = new(0, 0);
-
-        Assert.Equal(0, v.Magnitude);
-    }
-
-    [Fact]
-    public void Normalized_ReturnsUnitVector()
-    {
-        Vector v = new(3, 4);
-
-        Assert.Equal(1, v.Normalized.Magnitude, 0.0001f);
-        Assert.Equal(0.6f, v.Normalized.X, 0.0001f);
-        Assert.Equal(0.8f, v.Normalized.Y, 0.0001f);
-    }
-
-    [Fact]
-    public void Normalized_ZeroVector_ReturnsZeroVector()
-    {
-        Vector v = new(0, 0);
-
-        Assert.Equal(0, v.Normalized.X);
-        Assert.Equal(0, v.Normalized.Y);
-    }
-
-    [Fact]
     public void ImplicitOperatorFromTuple_CreatesVector()
     {
         Vector v = (1.5f, -2.5f);
@@ -74,6 +39,41 @@ public class TestVector
 
         Assert.Equal(3f, v.X);
         Assert.Equal(-4f, v.Y);
+    }
+
+    [Fact]
+    public void Magnitude_OfZeroVector_ReturnsZero()
+    {
+        Vector v = new(0);
+
+        Assert.Equal(0, v.Magnitude);
+    }
+
+    [Fact]
+    public void Magnitude_ReturnsCorrectLength()
+    {
+        Vector v = new(3, 4);
+
+        Assert.Equal(5, v.Magnitude);
+    }
+
+    [Fact]
+    public void Normalized_ReturnsUnitVector()
+    {
+        Vector v = new(3, 4);
+
+        Assert.Equal(1, v.Normalized.Magnitude, 0.0001f);
+        Assert.Equal(0.6f, v.Normalized.X, 0.0001f);
+        Assert.Equal(0.8f, v.Normalized.Y, 0.0001f);
+    }
+
+    [Fact]
+    public void Normalized_ZeroVector_ReturnsZeroVector()
+    {
+        Vector v = new(0);
+
+        Assert.Equal(0, v.Normalized.X);
+        Assert.Equal(0, v.Normalized.Y);
     }
 
     [Fact]
@@ -134,22 +134,31 @@ public class TestVector
     }
 
     [Fact]
+    public void Equality_WorksCorrectly()
+    {
+        Vector v1 = new(1, 2);
+        Vector v2 = new(1, 2);
+        Vector v3 = new(2, 1);
+
+        Assert.Equal(v1, v2);
+        Assert.NotEqual(v1, v3);
+    }
+
+    [Fact]
+    public void GetHashCode_IsConsistent()
+    {
+        Vector v1 = new(1, 2);
+        Vector v2 = new(1, 2);
+
+        Assert.Equal(v1.GetHashCode(), v2.GetHashCode());
+    }
+
+    [Fact]
     public void ToString_ReturnsFormattedString()
     {
         Vector v = new(1.5f, -2.5f);
 
         Assert.Equal("(1.5, -2.5)", v.ToString());
-    }
-
-    [Fact]
-    public void RoundToInt_ReturnsRoundedVectorInt()
-    {
-        Vector v = new(1.6f, -2.4f);
-
-        VectorInt result = v.RoundToInt();
-
-        Assert.Equal(2, result.X);
-        Assert.Equal(-2, result.Y);
     }
 
     [Fact]
@@ -164,22 +173,13 @@ public class TestVector
     }
 
     [Fact]
-    public void GetHashCode_IsConsistent()
+    public void RoundToInt_ReturnsRoundedVectorInt()
     {
-        Vector v1 = new(1, 2);
-        Vector v2 = new(1, 2);
+        Vector v = new(1.6f, -2.4f);
 
-        Assert.Equal(v1.GetHashCode(), v2.GetHashCode());
-    }
+        VectorInt result = v.RoundToInt();
 
-    [Fact]
-    public void Equality_WorksCorrectly()
-    {
-        Vector v1 = new(1, 2);
-        Vector v2 = new(1, 2);
-        Vector v3 = new(2, 1);
-        
-        Assert.Equal(v1, v2);
-        Assert.NotEqual(v1, v3);
+        Assert.Equal(2, result.X);
+        Assert.Equal(-2, result.Y);
     }
 }

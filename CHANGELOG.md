@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [0.2.0] 
 
 ### Added
+
 - Tests for core classes, components, systems, and types
 - `--help`, `--interactive`, and `--stats` flags for the demo project
 - Setter for `gameObject` property of components for easy movement
@@ -16,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - `.editorconfig` with updated conventions
 
 ### Changed
+
 - System names and their namespaces for consistency and to avoid namespace/name collisions
 - Improved display system performance by switching to double buffering
 - Improved terminal display system performance by reducing string allocations and unnecessary escape sequences
@@ -29,11 +31,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Updated resource path configuration for greater customization
 
 ### Removed
+
 - Renderer crediting and `GetOverlappers()` for abysmal performance (switch to manually implemented collision detection)
 - Size-related methods from `Camera`, will now always match target size
 - Base `Controller` and `Bind` classes, replaced by simpler keyboard-specific system
 
 ### Fixed
+
 - Improper layering of TPS indicator in debug builds of Demos
 - Transforms not properly clearing state when re-parenting
 - Camera continuing to use old transform after it moves
@@ -44,6 +48,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [0.1.0] 
 
 ### Added
+
 - Core architectural base classes
 - Components:
     - `Transform`

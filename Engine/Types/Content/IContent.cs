@@ -1,5 +1,3 @@
-using Termule.Engine.Types;
-
 namespace Termule.Engine.Types;
 
 /// <summary>

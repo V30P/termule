@@ -16,12 +16,16 @@ internal static class Program
 
     private static readonly Dictionary<char, Flag> FlagShortNames = new()
     {
-        ['h'] = Flag.Help, ['i'] = Flag.Interactive, ['s'] = Flag.Stats
+        ['h'] = Flag.Help,
+        ['i'] = Flag.Interactive,
+        ['s'] = Flag.Stats
     };
 
     private static readonly Dictionary<string, Flag> FlagLongNames = new()
     {
-        ["help"] = Flag.Help, ["interactive"] = Flag.Interactive, ["stats"] = Flag.Stats
+        ["help"] = Flag.Help,
+        ["interactive"] = Flag.Interactive,
+        ["stats"] = Flag.Stats
     };
 
     private enum Flag

@@ -53,20 +53,20 @@ public class TestBindMap
     }
 
     [Fact]
-    public void TryGetValue_WhenNameDoesNotExist_ReturnsFalseAndOutputsNull()
-    {
-        BindMap bindMap = new();
-
-        Assert.False(bindMap.TryGetValue("Test", out object value));
-        Assert.Null(value);
-    }
-
-    [Fact]
     public void TryGetValue_WhenNameExists_ReturnsTrueAndOutputsValue()
     {
         BindMap bindMap = new() { ["Test"] = new FakeBind() };
 
         Assert.True(bindMap.TryGetValue("Test", out object value));
         Assert.IsType<bool>(value);
+    }
+
+    [Fact]
+    public void TryGetValue_WhenNameDoesNotExist_ReturnsFalseAndOutputsNull()
+    {
+        BindMap bindMap = new();
+
+        Assert.False(bindMap.TryGetValue("Test", out object value));
+        Assert.Null(value);
     }
 }

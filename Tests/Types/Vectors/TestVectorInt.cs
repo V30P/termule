@@ -23,6 +23,15 @@ public class TestVectorInt
     }
 
     [Fact]
+    public void ImplicitOperatorFromTuple_CreatesVectorInt()
+    {
+        VectorInt v = (5, -3);
+
+        Assert.Equal(5, v.X);
+        Assert.Equal(-3, v.Y);
+    }
+
+    [Fact]
     public void Magnitude_ReturnsCorrectLength()
     {
         VectorInt v = new(3, 4);
@@ -43,19 +52,10 @@ public class TestVectorInt
     [Fact]
     public void Normalized_ZeroVector_ReturnsZeroVector()
     {
-        VectorInt v = new(0, 0);
+        VectorInt v = new(0);
 
         Assert.Equal(0, v.Normalized.X);
         Assert.Equal(0, v.Normalized.Y);
-    }
-
-    [Fact]
-    public void ImplicitOperatorFromTuple_CreatesVectorInt()
-    {
-        VectorInt v = (5, -3);
-
-        Assert.Equal(5, v.X);
-        Assert.Equal(-3, v.Y);
     }
 
     [Fact]
@@ -93,6 +93,7 @@ public class TestVectorInt
         Assert.Equal(7.5f, result.Y);
     }
 
+
     [Fact]
     public void DivideOperator_ScalesVector()
     {
@@ -115,12 +116,16 @@ public class TestVectorInt
         Assert.Equal(5, result.Y);
     }
 
-    [Fact]
-    public void ToString_ReturnsFormattedString()
-    {
-        VectorInt v = new(5, -3);
 
-        Assert.Equal("(5, -3)", v.ToString());
+    [Fact]
+    public void Equality_WorksCorrectly()
+    {
+        VectorInt v1 = new(1, 2);
+        VectorInt v2 = new(1, 2);
+        VectorInt v3 = new(2, 1);
+
+        Assert.Equal(v1, v2);
+        Assert.NotEqual(v1, v3);
     }
 
     [Fact]
@@ -133,13 +138,10 @@ public class TestVectorInt
     }
 
     [Fact]
-    public void Equality_WorksCorrectly()
+    public void ToString_ReturnsFormattedString()
     {
-        VectorInt v1 = new(1, 2);
-        VectorInt v2 = new(1, 2);
-        VectorInt v3 = new(2, 1);
-        
-        Assert.Equal(v1, v2);
-        Assert.NotEqual(v1, v3);
+        VectorInt v = new(5, -3);
+
+        Assert.Equal("(5, -3)", v.ToString());
     }
 }

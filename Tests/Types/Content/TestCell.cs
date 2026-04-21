@@ -1,6 +1,6 @@
 using Termule.Engine.Types;
 
-namespace Termule.Tests.Types.Content;
+namespace Termule.Tests.Types;
 
 public class TestCell
 {
@@ -64,22 +64,22 @@ public class TestCell
     }
 
     [Fact]
+    public void Equals_ComparesAllFields()
+    {
+        Cell c1 = new(BasicColor.Red, 'X', BasicColor.Blue);
+        Cell c2 = new(BasicColor.Red, 'X', BasicColor.Blue);
+        Cell c3 = new(BasicColor.Green, 'X', BasicColor.Blue);
+
+        Assert.True(c1.Equals(c2));
+        Assert.False(c1.Equals(c3));
+    }
+
+    [Fact]
     public void GetHashCode_IsConsistent()
     {
         Cell c1 = new(BasicColor.Red, 'X', BasicColor.Blue);
         Cell c2 = new(BasicColor.Red, 'X', BasicColor.Blue);
 
         Assert.Equal(c1.GetHashCode(), c2.GetHashCode());
-    }
-
-    [Fact]
-    public void Equals_ComparesAllFields()
-    {
-        Cell c1 = new(BasicColor.Red, 'X', BasicColor.Blue);
-        Cell c2 = new(BasicColor.Red, 'X', BasicColor.Blue);
-        Cell c3 = new(BasicColor.Green, 'X', BasicColor.Blue);
-        
-        Assert.True(c1.Equals(c2));
-        Assert.False(c1.Equals(c3));
     }
 }

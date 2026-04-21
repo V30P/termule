@@ -5,16 +5,17 @@ namespace Termule.Tests.Systems.Rendering;
 
 public class TestFrameBuffer
 {
-    private static readonly Color TestColor = BasicColor.White;
-    private static readonly Cell TestCell = new(TestColor, 'X', TestColor);
+    private static readonly Cell TestCell = new(BasicColor.White, 'X', BasicColor.White);
 
+    // Prevents XUnit from failing to convert BasicColor -> Color? on its own
+    private static readonly Color DrawColor = BasicColor.White;
     public static IEnumerable<object[]> DrawData =
     [
         [null, null, null, default(Cell)],
-        [TestColor, null, null, new Cell(TestColor)],
+        [DrawColor, null, null, new Cell(DrawColor)],
         [null, 'X', null, new Cell(default, 'X')],
-        [null, null, TestColor, new Cell(default, '\0', TestColor)],
-        [TestColor, 'X', TestColor, new Cell(TestColor, 'X', TestColor)]
+        [null, null, DrawColor, new Cell(default, '\0', DrawColor)],
+        [DrawColor, 'X', DrawColor, new Cell(DrawColor, 'X', DrawColor)]
     ];
 
     public static IEnumerable<object[]> DrawCoverData = [];
@@ -45,10 +46,10 @@ public class TestFrameBuffer
     public void Draw_IgnoresOutOfBoundsPositions()
     {
         FrameBuffer frame = new(10, 5);
-        frame.Draw((-1, 0), TestColor);
-        frame.Draw((0, -1), TestColor);
-        frame.Draw((10, 0), TestColor);
-        frame.Draw((0, 5), TestColor);
+        frame.Draw((-1, 0), BasicColor.White);
+        frame.Draw((0, -1), BasicColor.White);
+        frame.Draw((10, 0), BasicColor.White);
+        frame.Draw((0, 5), BasicColor.White);
 
         AssertAllCellsEqual(frame, default);
     }
@@ -67,7 +68,7 @@ public class TestFrameBuffer
     }
 
     [Fact]
-    public void Reset__WithNoCellProvided_FillsWithDefaultCell()
+    public void Reset_WithNoCellProvided_FillsWithDefaultCell()
     {
         FrameBuffer frame = new(10, 5);
         for (int x = 0; x < frame.Size.X; x++)
@@ -84,7 +85,7 @@ public class TestFrameBuffer
     }
 
     [Fact]
-    public void Reset_WithCell_FillsWithProvidedCell()
+    public void Reset_WithCellProvided_FillsWithProvidedCell()
     {
         FrameBuffer frame = new(10, 5);
 

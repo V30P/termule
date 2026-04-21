@@ -13,19 +13,19 @@ public class TestKeyboard
     }
 
     [Fact]
+    public void Get_WhenNoBindOfName_Throws()
+    {
+        Keyboard keyboard = new();
+
+        Assert.Throws<ArgumentException>(() => keyboard.Get<object>("Test"));
+    }
+
+    [Fact]
     public void Get_WithIncorrectValueType_Throws()
     {
         Keyboard keyboard = new() { Binds = new BindMap { ["Test"] = new FakeBind() } };
 
         Assert.Throws<ArgumentException>(() => keyboard.Get<int>("Test"));
-    }
-
-    [Fact]
-    public void Get_WhenKeyNoBindOfName_Throws()
-    {
-        Keyboard keyboard = new();
-
-        Assert.Throws<ArgumentException>(() => keyboard.Get<object>("Test"));
     }
 
     [Fact]

@@ -69,6 +69,19 @@ public class TestPositionalRenderer
         AssertVectorApproximately((-0.25f, -0.25f), renderer.CapturedOffset, PositionEpsilon);
     }
 
+    [Fact]
+    public void Render_InvokesDerivedRendererAndPassesFrame()
+    {
+        FrameBuffer frame = new(0, 0);
+        FakePositionalRenderer renderer = new();
+        GameObject _ = [new Transform { Pos = (0, 0) }, renderer];
+
+        renderer.Render(frame, (0, 0));
+
+        Assert.Equal(1, renderer.RenderCount);
+        Assert.Same(frame, renderer.CapturedFrame);
+    }
+
     [Theory]
     [MemberData(nameof(GameSpaceConversionData))]
     public void Render_WhenInGameSpace_CorrectlyAppliesPosition(
@@ -101,18 +114,5 @@ public class TestPositionalRenderer
 
         Assert.Equal(expectedOrigin, renderer.CapturedOrigin);
         AssertVectorApproximately(expectedOffset, renderer.CapturedOffset, PositionEpsilon);
-    }
-
-    [Fact]
-    public void Render_InvokesDerivedRendererAndPassesFrame()
-    {
-        FrameBuffer frame = new(0, 0);
-        FakePositionalRenderer renderer = new();
-        GameObject _ = [new Transform { Pos = (0, 0) }, renderer];
-
-        renderer.Render(frame, (0, 0));
-
-        Assert.Equal(1, renderer.RenderCount);
-        Assert.Same(frame, renderer.CapturedFrame);
     }
 }

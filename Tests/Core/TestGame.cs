@@ -50,20 +50,6 @@ public class TestGame
     }
 
     [Fact]
-    public void CleanUp_IsIdempotent()
-    {
-        IConfigurableGame game = Game.Create();
-        CountingSystem system = new();
-        game.Systems.Install(system);
-        game.Start();
-
-        game.CleanUp();
-        game.CleanUp();
-
-        Assert.Equal(1, system.StopCount);
-    }
-
-    [Fact]
     public void Create_InitializesSystemsAndRoot()
     {
         IConfigurableGame game = Game.Create();
@@ -73,24 +59,11 @@ public class TestGame
     }
 
     [Fact]
-    public void Register_ConfiguresElement()
-    {
-        Game game = (Game)Game.Create();
-        FakeGameElement element = new();
-
-        game.Register(element);
-
-        Assert.Equal(game, element.GameInstance);
-        Assert.True(element.RegisteredInvoked);
-    }
-
-    [Fact]
-    public void Run_WhenAlreadyPrepared_DoesNotPrepareAgain()
+    public void Run_PreparesAndCleansUp()
     {
         IConfigurableGame game = Game.Create();
         AutoStopSystem system = new();
         game.Systems.Install(system);
-        game.Start();
 
         game.Run();
 
@@ -100,11 +73,12 @@ public class TestGame
     }
 
     [Fact]
-    public void Run_WhenLifecycleNotManuallyStarted_PreparesAndCleansUp()
+    public void Run_WhenAlreadyPrepared_DoesNotPrepareAgain()
     {
         IConfigurableGame game = Game.Create();
         AutoStopSystem system = new();
         game.Systems.Install(system);
+        game.Start();
 
         game.Run();
 
@@ -138,6 +112,32 @@ public class TestGame
         game.RunForFrames(5);
 
         Assert.Equal(5, component.TickCount);
+    }
+
+    [Fact]
+    public void CleanUp_IsIdempotent()
+    {
+        IConfigurableGame game = Game.Create();
+        CountingSystem system = new();
+        game.Systems.Install(system);
+        game.Start();
+
+        game.CleanUp();
+        game.CleanUp();
+
+        Assert.Equal(1, system.StopCount);
+    }
+
+    [Fact]
+    public void Register_ConfiguresElement()
+    {
+        Game game = (Game)Game.Create();
+        FakeGameElement element = new();
+
+        game.Register(element);
+
+        Assert.Equal(game, element.GameInstance);
+        Assert.True(element.RegisteredInvoked);
     }
 
     [Fact]

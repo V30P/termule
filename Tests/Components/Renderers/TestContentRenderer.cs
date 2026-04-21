@@ -8,8 +8,6 @@ namespace Termule.Tests.Components;
 
 public class TestContentRenderer
 {
-    private static readonly Color TestColor = BasicColor.White;
-
     public static IEnumerable<object[]> ViewOriginData =>
     [
         [(1f, 1f), (0f, 0f), (1, 1)],
@@ -30,28 +28,11 @@ public class TestContentRenderer
     }
 
     [Fact]
-    public void Render_WhenCenteredIsTrue_OffsetsCells()
+    public void Content_WhenTypeHasParameterlessConstructor_ShouldBeInitialized()
     {
-        Cell cell = new(TestColor);
-        ContentRenderer<Image> renderer = new()
-        {
-            TargetSpace = true,
-            Content = new FakeContent(new[,]
-            {
-                { default, cell, default }, { cell, cell, cell }, { default, cell, default }
-            }),
-            Centered = true
-        };
-        _ = new GameObject(new Transform { Pos = (1, 1) }, renderer);
-        FrameBuffer frame = new(3, 3);
+        ContentRenderer<ParameterlessContent> renderer = new();
 
-        renderer.Render(frame, (0, 0));
-
-        AssertDrawnCells(frame, TestColor, [
-            (1, 0),
-            (0, 1), (1, 1), (2, 1),
-            (1, 2)
-        ]);
+        Assert.NotNull(renderer.Content);
     }
 
     [Fact]
@@ -60,14 +41,6 @@ public class TestContentRenderer
         ContentRenderer<NonParameterlessContent> renderer = new();
 
         Assert.Null(renderer.Content);
-    }
-
-    [Fact]
-    public void Content_WhenTypeHasParameterlessConstructor_ShouldBeInitialized()
-    {
-        ContentRenderer<ParameterlessContent> renderer = new();
-
-        Assert.NotNull(renderer.Content);
     }
 
     [Fact]
@@ -90,10 +63,70 @@ public class TestContentRenderer
         AssertDrawnCells(frame, BasicColor.Red, [(2, 1), (1, 2)]);
     }
 
+    [Theory]
+    [MemberData(nameof(ViewOriginData))]
+    public void Render_RespectsViewOrigin(Vector transformPos, Vector viewOrigin, VectorInt expectedCellPos)
+    {
+        ContentRenderer<Image> renderer = new()
+        {
+            TargetSpace = true,
+            Content = new FakeContent(new Cell[,] { { new(BasicColor.White) } })
+        };
+        _ = new GameObject(new Transform { Pos = transformPos }, renderer);
+        FrameBuffer frame = new(3, 3);
+
+        renderer.Render(frame, viewOrigin);
+
+        AssertDrawnCells(frame, BasicColor.White, [
+            expectedCellPos
+        ]);
+    }
+
+    [Fact]
+    public void Render_WhenNotInTargetSpace_AppliesViewOriginAndFlipsY()
+    {
+        ContentRenderer<Image> renderer = new()
+        {
+            TargetSpace = false,
+            Content = new FakeContent(new Cell[,] { { new(BasicColor.White) } })
+        };
+        _ = new GameObject(new Transform { Pos = (2, 0) }, renderer);
+        FrameBuffer frame = new(3, 3);
+
+        renderer.Render(frame, (1, 1));
+
+        AssertDrawnCells(frame, BasicColor.White, [(1, 1)]);
+    }
+
+    [Fact]
+    public void Render_WhenCenteredIsTrue_OffsetsCells()
+    {
+        Cell cell = new(BasicColor.White);
+        ContentRenderer<Image> renderer = new()
+        {
+            TargetSpace = true,
+            Content = new FakeContent(new[,]
+            {
+                { default, cell, default }, { cell, cell, cell }, { default, cell, default }
+            }),
+            Centered = true
+        };
+        _ = new GameObject(new Transform { Pos = (1, 1) }, renderer);
+        FrameBuffer frame = new(3, 3);
+
+        renderer.Render(frame, (0, 0));
+
+        AssertDrawnCells(frame, BasicColor.White, [
+            (1, 0),
+            (0, 1), (1, 1), (2, 1),
+            (1, 2)
+        ]);
+    }
+
     [Fact]
     public void Render_DoesNotContributeDefaultValues()
     {
-        Cell baseCell = new(TestColor, 'X', TestColor);
+        Cell baseCell = new(BasicColor.White, 'X', BasicColor.White);
         ContentRenderer<Image> baseRenderer = new()
         {
             TargetSpace = true,
@@ -116,45 +149,10 @@ public class TestContentRenderer
         Assert.Equal(baseCell, frame[0, 0]);
     }
 
-    [Theory]
-    [MemberData(nameof(ViewOriginData))]
-    public void Render_RespectsViewOrigin(Vector transformPos, Vector viewOrigin, VectorInt expectedCellPos)
-    {
-        ContentRenderer<Image> renderer = new()
-        {
-            TargetSpace = true,
-            Content = new FakeContent(new Cell[,] { { new(TestColor) } })
-        };
-        _ = new GameObject(new Transform { Pos = transformPos }, renderer);
-        FrameBuffer frame = new(3, 3);
-
-        renderer.Render(frame, viewOrigin);
-
-        AssertDrawnCells(frame, TestColor, [
-            expectedCellPos
-        ]);
-    }
-
-    [Fact]
-    public void Render_WhenNotInTargetSpace_AppliesViewOriginAndFlipsY()
-    {
-        ContentRenderer<Image> renderer = new()
-        {
-            TargetSpace = false,
-            Content = new FakeContent(new Cell[,] { { new(TestColor) } })
-        };
-        _ = new GameObject(new Transform { Pos = (2, 0) }, renderer);
-        FrameBuffer frame = new(3, 3);
-
-        renderer.Render(frame, (1, 1));
-
-        AssertDrawnCells(frame, TestColor, [(1, 1)]);
-    }
-
     [Fact]
     public void Render_WithNullContent_DoesNotMutateFrame()
     {
-        Cell baseCell = new(TestColor, 'X', TestColor);
+        Cell baseCell = new(BasicColor.White, 'X', BasicColor.White);
         ContentRenderer<Image> baseRenderer = new()
         {
             TargetSpace = true,

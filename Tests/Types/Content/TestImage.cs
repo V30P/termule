@@ -1,4 +1,3 @@
-using Termule.Engine.Systems.Resources;
 using Termule.Engine.Types;
 
 namespace Termule.Tests.Types.Content;
@@ -54,7 +53,7 @@ public class TestImage
         Cell cell = new(BasicColor.Green, 'Y', BasicColor.Cyan);
 
         image[2, 1] = cell;
-        
+
         Assert.Equal(cell, image[2, 1]);
     }
 }
