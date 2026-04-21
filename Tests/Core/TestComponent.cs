@@ -16,7 +16,7 @@ public class TestComponent
     }
 
     [Fact]
-    public void Destroy_ShouldRemoveFromGameObject()
+    public void Destroy_RemovesFromGameObject()
     {
         FakeComponent component = GetComponentOnGameObject();
         component.Destroy();
@@ -24,21 +24,21 @@ public class TestComponent
     }
 
     [Fact]
-    public void GetRequiredComponent_ShouldReturnExistingComponent()
+    public void GetRequiredComponent_ReturnsExistingComponent()
     {
         FakeComponent component = GetComponentOnGameObject();
         Assert.Equal(component, component.CallGetRequiredComponent<FakeComponent>());
     }
 
     [Fact]
-    public void GetRequiredComponent_ShouldThrow_WhenComponentMissing()
+    public void GetRequiredComponent_WhenComponentMissing_Throws()
     {
         FakeComponent component = GetComponentOnGameObject();
         Assert.Throws<MissingComponentException<Transform>>(component.CallGetRequiredComponent<Transform>);
     }
 
     [Fact]
-    public void SetGameObject_ShouldRemoveFromOldGameObjectThenAddToNewGameObject()
+    public void SettingGameObject_RemovesFromOldGameObjectAndAddsToNewGameObject()
     {
         FakeComponent component = new();
         GameObject oldGameObject = [component];

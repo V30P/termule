@@ -13,7 +13,7 @@ public class TestResourceLoader
     }
 
     [Fact]
-    public void Load_ShouldCacheValuesAndPullFromCache()
+    public void Load_CachesValuesAndPullFromCache()
     {
         MockFileSystem fileSystem = new(new Dictionary<string, MockFileData>
         {
@@ -29,7 +29,7 @@ public class TestResourceLoader
     }
 
     [Fact]
-    public void Load_ShouldRespectResourceDirFromConstructor()
+    public void Load_RespectsResourceDir()
     {
         MockFileSystem fileSystem = new(new Dictionary<string, MockFileData>
         {
@@ -44,7 +44,7 @@ public class TestResourceLoader
     }
 
     [Fact]
-    public void Load_ShouldReturnResource_WhenGivenFullPath()
+    public void Load_WithFullPath_ReturnsResource()
     {
         MockFileSystem fileSystem = new(new Dictionary<string, MockFileData>
         {
@@ -58,7 +58,7 @@ public class TestResourceLoader
     }
 
     [Fact]
-    public void Load_ShouldReturnResource_WhenGivenNestedPath()
+    public void Load_WithMultilevelPath_ReturnsResource()
     {
         MockFileSystem fileSystem = new(new Dictionary<string, MockFileData>
         {
@@ -72,7 +72,7 @@ public class TestResourceLoader
     }
 
     [Fact]
-    public void Load_ShouldReturnResource_WhenGivenPathWithoutExtension()
+    public void Load_GivenPathWithoutExtension_ReturnsResource()
     {
         MockFileSystem fileSystem = new(new Dictionary<string, MockFileData>
         {
@@ -86,7 +86,7 @@ public class TestResourceLoader
     }
 
     [Fact]
-    public void Load_ShouldThrow_WhenPathDoesNotExist()
+    public void Load_WhenPathDoesNotExist_Throws()
     {
         ResourceLoader resourceLoader = new(new MockFileSystem(), "/");
 

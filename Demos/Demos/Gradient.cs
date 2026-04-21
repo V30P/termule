@@ -1,8 +1,7 @@
 using Termule.Demos.Core;
 using Termule.Engine.Components;
 using Termule.Engine.Systems.Rendering;
-using Termule.Engine.Types.Content;
-using Termule.Engine.Types.Vectors;
+using Termule.Engine.Types;
 
 namespace Termule.Demos.Demos;
 

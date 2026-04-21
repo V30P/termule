@@ -5,17 +5,12 @@ namespace Termule.Tests.Core;
 
 public class TestGameElement
 {
-    private static void GetGameWithGameElement(out IConfigurableGame game, out FakeGameElement element)
-    {
-        game = Game.Create();
-        element = new FakeGameElement();
-        ((Game)game).Register(element);
-    }
-
     [Fact]
-    public void GetRequiredSystem_ShouldReturnInstalledSystem()
+    public void GetRequiredSystem_ReturnsInstalledSystem()
     {
-        GetGameWithGameElement(out IConfigurableGame game, out FakeGameElement element);
+        IConfigurableGame game = Game.Create();
+        FakeGameElement element = new();
+        ((Game)game).Register(element);
 
         FakeSystem system = new();
         game.Systems.Install(system);
@@ -24,9 +19,12 @@ public class TestGameElement
     }
 
     [Fact]
-    public void GetRequiredSystem_ShouldThrow_WhenSystemMissing()
+    public void GetRequiredSystem_WhenSystemMissing_Throws()
     {
-        GetGameWithGameElement(out _, out FakeGameElement element);
+        IConfigurableGame game = Game.Create();
+        FakeGameElement element = new();
+        ((Game)game).Register(element);
+
         Assert.Throws<MissingSystemException<FakeSystem>>(() => element.CallGetRequiredSystem<FakeSystem>());
     }
 }

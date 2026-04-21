@@ -1,8 +1,7 @@
 using Termule.Engine.Components;
 using Termule.Engine.Core;
 using Termule.Engine.Systems.Rendering;
-using Termule.Engine.Types.Content;
-using Termule.Engine.Types.Vectors;
+using Termule.Engine.Types;
 
 namespace Termule.Tests.Components;
 
@@ -40,7 +39,7 @@ public class TestCamera
     ];
 
     [Fact]
-    public void BackgroundCell_ShouldFillBuffer()
+    public void Tick_FillsTargetBufferWithBackgroundCell()
     {
         Cell background = new(BasicColor.White, 'T', BasicColor.Black);
         FakeTarget target = new((5, 5));
@@ -64,7 +63,7 @@ public class TestCamera
 
     [Theory]
     [MemberData(nameof(PositionConversionData))]
-    public void GameToTargetPos_ShouldMapCorrectly(VectorInt targetSize, VectorInt transformPos, VectorInt gamePos,
+    public void GameToTargetPos_MapsCorrectly(VectorInt targetSize, VectorInt transformPos, VectorInt gamePos,
         VectorInt targetPos)
     {
         FakeTarget target = new(targetSize);
@@ -78,7 +77,7 @@ public class TestCamera
 
     [Theory]
     [MemberData(nameof(PositionConversionData))]
-    public void TargetToGamePos_ShouldMapCorrectly(VectorInt targetSize, VectorInt transformPos, VectorInt gamePos,
+    public void TargetToGamePos_MapsCorrectly(VectorInt targetSize, VectorInt transformPos, VectorInt gamePos,
         VectorInt targetPos)
     {
         FakeTarget target = new(targetSize);
@@ -90,7 +89,7 @@ public class TestCamera
     }
 
     [Fact]
-    public void Tick_ShouldCallPrintOnTarget()
+    public void Tick_CallsPrintOnTarget()
     {
         FakeTarget target = new((0, 0));
         IConfigurableGame game = Game.Create();

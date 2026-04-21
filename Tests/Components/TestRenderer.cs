@@ -1,7 +1,7 @@
 using Termule.Engine.Components;
 using Termule.Engine.Core;
 using Termule.Engine.Systems.Rendering;
-using Termule.Engine.Types.Vectors;
+using Termule.Engine.Types;
 
 namespace Termule.Tests.Components;
 
@@ -31,7 +31,7 @@ public class TestRenderer
     }
 
     [Fact]
-    public void LayerSetter_ShouldMoveRendererBetweenLayers_WhenRegistered()
+    public void SettingLayer_WhenRegistered_MovesRendererBetweenLayers()
     {
         IConfigurableGame game = Game.Create();
         FakeLayer defaultLayer = new();
@@ -54,7 +54,7 @@ public class TestRenderer
     }
 
     [Fact]
-    public void LayerSetter_ShouldMoveRendererToDefaultLayer_WhenSetToNullWhileRegistered()
+    public void SettingLayer_ToNullWhenRegistered_MovesRendererToDefaultLayer()
     {
         IConfigurableGame game = Game.Create();
         FakeLayer defaultLayer = new();
@@ -73,7 +73,7 @@ public class TestRenderer
     }
 
     [Fact]
-    public void Register_ShouldUseConfiguredLayer_WhenLayerIsSetBeforeRegistration()
+    public void Register_WhenLayerIsSetBeforeRegistration_MovesToProvidedLayer()
     {
         IConfigurableGame game = Game.Create();
         FakeLayer defaultLayer = new();
@@ -92,7 +92,7 @@ public class TestRenderer
     }
 
     [Fact]
-    public void Register_ShouldUseDefaultLayer_WhenNoLayerSet()
+    public void Register_WhenNoLayerSet_MovesToDefaultLayer()
     {
         IConfigurableGame game = Game.Create();
         FakeLayer layer = new();
@@ -109,7 +109,7 @@ public class TestRenderer
     }
 
     [Fact]
-    public void Unregister_ShouldUnregisterFromCurrentLayer()
+    public void Unregister_RemovesFromCurrentLayer()
     {
         IConfigurableGame game = Game.Create();
         FakeLayer defaultLayer = new();

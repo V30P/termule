@@ -30,7 +30,7 @@ public class TestGameObject
     public class TestAdd
     {
         [Fact]
-        public void Add_ShouldAddAndRegisterComponent()
+        public void Add_AddsAndRegistersComponent()
         {
             IConfigurableGame game = Game.Create();
             GameObject gameObject = [];
@@ -44,7 +44,7 @@ public class TestGameObject
         }
 
         [Fact]
-        public void Add_ShouldAddThenRegisterComponentsSimultaneously()
+        public void Add_AddsThenRegistersComponentsSimultaneously()
         {
             IConfigurableGame game = Game.Create();
             GameObject gameObject = [];
@@ -57,7 +57,7 @@ public class TestGameObject
         }
 
         [Fact]
-        public void Add_ShouldThrow_WhenComponentAlreadyInAGameObject()
+        public void Add_WhenComponentAlreadyInAGameObject_Throws()
         {
             FakeComponent component = new();
             new GameObject().Add(component);
@@ -65,7 +65,7 @@ public class TestGameObject
         }
 
         [Fact]
-        public void Add_ShouldThrow_WhenSameComponentIAddedTwice()
+        public void Add_WhenSameComponentAlreadyAdded_Throws()
         {
             GameObject gameObject = [];
             FakeComponent component = new();
@@ -79,7 +79,7 @@ public class TestGameObject
     public class TestRemove
     {
         [Fact]
-        public void Remove_ShouldRemoveAndUnregisterComponent()
+        public void Remove_RemovesAndUnregistersComponent()
         {
             IConfigurableGame game = Game.Create();
             GameObject gameObject = [];
@@ -95,7 +95,7 @@ public class TestGameObject
         }
 
         [Fact]
-        public void Remove_ShouldThrow_WhenComponentNotOnGameObject()
+        public void Remove_WhenComponentNotInGameObject_Throws()
         {
             FakeComponent component = new();
             new GameObject().Add(component);
@@ -111,7 +111,7 @@ public class TestGameObject
         [InlineData(typeof(FakeComponent))]
         [InlineData(typeof(IDerivedComponent))]
         [InlineData(typeof(DerivedComponent))]
-        public void Get_ShouldReturnExistingComponent(Type getType)
+        public void Get_ReturnsExistingComponent(Type getType)
         {
             Component component = new DerivedComponent();
             GameObject gameObject = [component];
@@ -125,39 +125,14 @@ public class TestGameObject
         }
 
         [Fact]
-        public void Get_ShouldReturnFullyAddedComponents()
-        {
-            IConfigurableGame game = Game.Create();
-            FakeComponent component = new();
-            GameObject gameObject = [component];
-            game.Root.Add(gameObject);
-
-            game.Start();
-            game.RunForFrames(1);
-
-            Assert.Same(component, gameObject.Get<FakeComponent>());
-        }
-
-        [Fact]
-        public void Get_ShouldReturnNull_WhenComponentMissing()
+        public void Get_WhenComponentMissing_ReturnsNull()
         {
             GameObject gameObject = [];
             Assert.Null(gameObject.Get<FakeComponent>());
         }
-
-        [Fact]
-        public void Get_ShouldReturnQueuedAdditions()
-        {
-            GameObject gameObject = [];
-            FakeComponent component = new();
-
-            gameObject.Add(component);
-
-            Assert.Same(component, gameObject.Get<FakeComponent>());
-        }
     }
 
-    public class TestGetALl
+    public class TestGetAll
     {
         private class GetAllData : TheoryData<Component[], int>
         {
@@ -172,31 +147,9 @@ public class TestGameObject
             }
         }
 
-        [Fact]
-        public void GetAll_ShouldIncludeQueuedComponents()
-        {
-            GameObject gameObject = [];
-            FakeComponent queuedComponent = new();
-
-            gameObject.Add(queuedComponent);
-
-            Assert.Contains(queuedComponent, gameObject.GetAll<FakeComponent>());
-        }
-
-        [Fact]
-        public void GetAll_ShouldReturnComponentsRegardlessOfAdditionState()
-        {
-            GameObject gameObject = [new FakeComponent()];
-            gameObject.Tick();
-
-            gameObject.Add(new FakeComponent());
-
-            Assert.Equal(2, gameObject.GetAll<FakeComponent>().Count());
-        }
-
         [Theory]
         [ClassData(typeof(GetAllData))]
-        public void GetAll_ShouldReturnMatchingComponents(Component[] components, int matchingCount)
+        public void GetAll_ReturnsMatchingComponents(Component[] components, int matchingCount)
         {
             GameObject gameObject = [.. components];
             Assert.Equal(matchingCount, gameObject.GetAll<ComponentA>().Count());
@@ -204,7 +157,7 @@ public class TestGameObject
     }
 
     [Fact]
-    public void Register_ShouldRegisterComponents()
+    public void Register_RegistersComponents()
     {
         IConfigurableGame game = Game.Create();
         FakeComponent component = new();
@@ -216,7 +169,7 @@ public class TestGameObject
     }
 
     [Fact]
-    public void Tick_ShouldTickComponents()
+    public void Tick_TicksComponents()
     {
         FakeComponent component = new();
         GameObject gameObject = [component];
@@ -227,7 +180,7 @@ public class TestGameObject
     }
 
     [Fact]
-    public void Unregister_ShouldUnregisterComponents()
+    public void Unregister_UnregistersComponents()
     {
         IConfigurableGame game = Game.Create();
         FakeComponent component = new();

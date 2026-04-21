@@ -1,6 +1,6 @@
-using Termule.Engine.Types.Vectors;
+using Termule.Engine.Types;
 
-namespace Termule.Engine.Types.Content;
+namespace Termule.Engine.Types;
 
 /// <summary>
 ///     Rectangular collection of terminal cells.

@@ -97,10 +97,8 @@ public sealed partial class UnixDisplaySystem : TerminalDisplaySystem
 
     [GeneratedRegex(@"\x1b\[<\d+;(\d+);(\d+)[Mm]")]
     private static partial Regex sgrRegex();
-#pragma warning disable IDE1006 // Naming Styles
     private const int F_GETFL = 3;
     private const int F_SETFL = 4;
     private const int STDIN_FILENO = 0;
     private static readonly int O_NONBLOCK = OperatingSystem.IsMacOS() ? 0x0004 : 0x800;
-#pragma warning restore IDE1006 // Naming Styles
 }

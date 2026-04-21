@@ -5,7 +5,7 @@ namespace Termule.Tests.Systems.Input;
 public class TestKeyboard
 {
     [Fact]
-    public void Get_ShouldReturnValue_WhenBindExists()
+    public void Get_WhenBindExists_ReturnsValue()
     {
         Keyboard keyboard = new() { Binds = new BindMap { ["Test"] = new FakeBind() } };
 
@@ -13,7 +13,7 @@ public class TestKeyboard
     }
 
     [Fact]
-    public void Get_ShouldThrow_WhenIncorrectValueTypeIsGiven()
+    public void Get_WithIncorrectValueType_Throws()
     {
         Keyboard keyboard = new() { Binds = new BindMap { ["Test"] = new FakeBind() } };
 
@@ -21,7 +21,7 @@ public class TestKeyboard
     }
 
     [Fact]
-    public void Get_ShouldThrow_WhenKeyNoBindOfName()
+    public void Get_WhenKeyNoBindOfName_Throws()
     {
         Keyboard keyboard = new();
 
@@ -29,14 +29,14 @@ public class TestKeyboard
     }
 
     [Fact]
-    public void SettingBinds_ShouldThrow_WhenValueIsNull()
+    public void SettingBinds_ToNull_Throws()
     {
         Keyboard keyboard = new();
         Assert.Throws<ArgumentNullException>(() => keyboard.Binds = null);
     }
 
     [Fact]
-    public void Tick_ShouldCallUpdateOnBindMap()
+    public void Tick_CallsUpdateOnBindMap()
     {
         Keyboard keyboard = new();
         FakeBind bind = new();

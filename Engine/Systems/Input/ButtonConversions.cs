@@ -13,7 +13,6 @@ internal static class ButtonConversions
         { MouseButton.Button5, Button.Mouse5 }
     };
 
-#pragma warning disable SA1509 // Opening braces should not be preceded by blank line
     private static readonly Dictionary<KeyCode, Button> KeyCodeToButton = new()
     {
         { KeyCode.VcA, Button.A },
@@ -142,7 +141,6 @@ internal static class ButtonConversions
         { KeyCode.VcMediaPrevious, Button.MediaPrevious },
         { KeyCode.VcMediaSelect, Button.MediaSelect }
     };
-#pragma warning restore SA1509 // Opening braces should not be preceded by blank line
 
     internal static Button? ToButton(this MouseButton mouseButton)
     {

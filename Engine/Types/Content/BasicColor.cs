@@ -1,4 +1,4 @@
-namespace Termule.Engine.Types.Content;
+namespace Termule.Engine.Types;
 
 /// <summary>
 ///     Basic color values supported on older terminals.

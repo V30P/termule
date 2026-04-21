@@ -1,4 +1,4 @@
-namespace Termule.Engine.Types.Content;
+namespace Termule.Engine.Types;
 
 /// <summary>
 ///     Single cell on a terminal.
@@ -9,7 +9,6 @@ namespace Termule.Engine.Types.Content;
 /// <param name="color">The background color of the cell (or the default if none is provided).</param>
 /// <param name="character">The character in the cell (or the default if none is provided).</param>
 /// <param name="charColor">The color of the cell's character (or the default if none is provided).</param>
-#pragma warning disable SA1313
 public struct Cell(Color color = default, char character = '\0', Color charColor = default) : IEquatable<Cell>
 {
     /// <summary>
@@ -69,4 +68,3 @@ public struct Cell(Color color = default, char character = '\0', Color charColor
         return Color.Equals(other.Color) && Char == other.Char && CharColor.Equals(other.CharColor);
     }
 }
-#pragma warning restore SA1313

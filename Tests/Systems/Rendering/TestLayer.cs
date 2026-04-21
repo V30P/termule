@@ -1,6 +1,6 @@
 using Termule.Engine.Components;
 using Termule.Engine.Systems.Rendering;
-using Termule.Engine.Types.Vectors;
+using Termule.Engine.Types;
 
 namespace Termule.Tests.Systems.Rendering;
 
@@ -38,7 +38,7 @@ public class TestLayer
     }
 
     [Fact]
-    private void AddingAndRemovingRenderers_ShouldMakeDirty()
+    public void AddingAndRemovingRenderers_Dirties()
     {
         Renderer renderer = new FakeRenderer();
         FakeLayer layer = [renderer];
@@ -52,7 +52,7 @@ public class TestLayer
     }
 
     [Fact]
-    private void GetEnumerator_ShouldClearDirtiness()
+    public void GetEnumerator_ClearsDirtiness()
     {
         FakeLayer layer = [new FakeRenderer()];
 
@@ -63,7 +63,7 @@ public class TestLayer
 
 
     [Fact]
-    private void OnAddedAndOnRemoved_ShouldBeCalledAccordingly()
+    public void OnAddedAndOnRemoved_AreInvokedAccordingly()
     {
         Renderer renderer = new FakeRenderer();
         FakeLayer layer = [renderer];
@@ -74,7 +74,7 @@ public class TestLayer
     }
 
     [Fact]
-    private void Renderers_ShouldBeSorted()
+    public void Renderers_AreSorted()
     {
         PriorityRenderer rendererA = new(2);
         PriorityRenderer rendererB = new(1);

@@ -1,7 +1,7 @@
 using Termule.Engine.Components;
 using Termule.Engine.Core;
 using Termule.Engine.Systems.Rendering;
-using Termule.Engine.Types.Vectors;
+using Termule.Engine.Types;
 
 namespace Termule.Tests.Components;
 
@@ -58,7 +58,7 @@ public class TestPositionalRenderer
     }
 
     [Fact]
-    public void Offset_ShouldApplyCorrectly()
+    public void Render_AppliesOffset()
     {
         FakePositionalRenderer renderer = new((0.75f, 0.75f));
         GameObject _ = [new Transform { Pos = (0, 0) }, renderer];
@@ -71,7 +71,7 @@ public class TestPositionalRenderer
 
     [Theory]
     [MemberData(nameof(GameSpaceConversionData))]
-    public void Position_ShouldBeConvertedCorrectly_WhenInGameSpace(
+    public void Render_WhenInGameSpace_CorrectlyAppliesPosition(
         Vector transformPos,
         Vector viewOrigin,
         VectorInt expectedOrigin,
@@ -88,7 +88,7 @@ public class TestPositionalRenderer
 
     [Theory]
     [MemberData(nameof(TargetSpaceConversionData))]
-    public void Position_ShouldBeConvertedCorrectly_WhenInTargetSpace(
+    public void Render_WhenInTargetSpace_CorrectlyAppliesPosition(
         Vector transformPos,
         Vector viewOrigin,
         VectorInt expectedOrigin,
@@ -104,7 +104,7 @@ public class TestPositionalRenderer
     }
 
     [Fact]
-    public void Render_ShouldInvokeDerivedRendererOnce_AndPassFrameThrough()
+    public void Render_InvokesDerivedRendererAndPassesFrame()
     {
         FrameBuffer frame = new(0, 0);
         FakePositionalRenderer renderer = new();

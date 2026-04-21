@@ -1,8 +1,7 @@
 using System.Text.Json.Serialization;
 using Termule.Engine.Systems.Resources;
-using Termule.Engine.Types.Vectors;
 
-namespace Termule.Engine.Types.Content;
+namespace Termule.Engine.Types;
 
 /// <summary>
 ///     Content with methods for easy modification.

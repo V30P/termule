@@ -1,8 +1,7 @@
 using Termule.Engine.Components;
 using Termule.Engine.Core;
 using Termule.Engine.Systems.Rendering;
-using Termule.Engine.Types.Content;
-using Termule.Engine.Types.Vectors;
+using Termule.Engine.Types;
 using static Termule.Tests.Components.Utilities;
 
 namespace Termule.Tests.Components;
@@ -63,7 +62,7 @@ public class TestCircleRenderer
     ];
 
     [Fact]
-    public void Radius_ShouldThrow_WhenNegative()
+    public void SettingRadius_ToNegative_Throws()
     {
         CircleRenderer renderer = new();
 
@@ -74,7 +73,7 @@ public class TestCircleRenderer
 
     [Theory]
     [MemberData(nameof(OutlineCircleData))]
-    public void Render_ShouldDrawExpectedOutlineCells(float radius, VectorInt[] expectedCells)
+    public void Render_DrawsExpectedOutlineCells(float radius, VectorInt[] expectedCells)
     {
         FrameBuffer frame = new(7, 7);
         CircleRenderer renderer = new() { Radius = radius, Color = TestColor, TargetSpace = true };
@@ -86,7 +85,7 @@ public class TestCircleRenderer
     }
 
     [Fact]
-    public void Render_ShouldDrawSingleCenterCell_WhenRadiusIsZero()
+    public void Render_WhenRadiusIsZero_DrawsSingleCenterCell()
     {
         FrameBuffer frame = new(1, 1);
         CircleRenderer renderer = new() { Color = TestColor, TargetSpace = true };
@@ -100,7 +99,7 @@ public class TestCircleRenderer
     }
 
     [Fact]
-    public void Render_ShouldDuplicateHorizontally_WhenDoubleWideIsTrue()
+    public void Render_WhenDoubleWideIsTrue_DuplicatesCellsHorizontally()
     {
         FrameBuffer frame = new(5, 3);
         CircleRenderer renderer = new() { Radius = 1, Color = TestColor, TargetSpace = true, DoubleWide = true };
@@ -118,7 +117,7 @@ public class TestCircleRenderer
 
     [Theory]
     [MemberData(nameof(FilledCircleData))]
-    public void Render_ShouldFillInterior_WhenFilledIsTrue(float radius, VectorInt[] expectedCells)
+    public void Render_WhenFilledIsTrue_FillsInteriorCells(float radius, VectorInt[] expectedCells)
     {
         FrameBuffer frame = new(5, 5);
         CircleRenderer renderer = new() { Radius = radius, Filled = true, Color = TestColor, TargetSpace = true };
@@ -131,7 +130,7 @@ public class TestCircleRenderer
 
     [Theory]
     [MemberData(nameof(ViewOriginData))]
-    public void Render_ShouldRespectViewOrigin(Vector transformPos, Vector viewOrigin, VectorInt expectedCenter)
+    public void Render_RespectsViewOrigin(Vector transformPos, Vector viewOrigin, VectorInt expectedCenter)
     {
         FrameBuffer frame = new(3, 3);
         CircleRenderer renderer = new() { Color = TestColor, TargetSpace = true };

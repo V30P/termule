@@ -1,5 +1,5 @@
 using Termule.Engine.Systems.Rendering;
-using Termule.Engine.Types.Vectors;
+using Termule.Engine.Types;
 
 namespace Termule.Tests.Systems.Rendering;
 
@@ -16,7 +16,7 @@ public class TestRenderSystem
     }
 
     [Fact]
-    public void DefaultLayer_ShouldBeTheFirstLayer()
+    public void DefaultLayer_IsTheFirstLayer()
     {
         Layer layer = new SimpleLayer();
         RenderSystem renderSystem = new() { Layers = [layer, new SimpleLayer()] };
@@ -24,7 +24,7 @@ public class TestRenderSystem
     }
 
     [Fact]
-    public void Layers_ShouldDefaultToASimpleLayer()
+    public void Layers_DefaultsToASimpleLayer()
     {
         RenderSystem renderSystem = new();
 
@@ -33,7 +33,7 @@ public class TestRenderSystem
     }
 
     [Fact]
-    public void Render_ShouldCallRenderersInCorrectOrder()
+    public void Render_CallsRenderersInCorrectOrder()
     {
         List<OrderedRenderer> renderTracker = [];
 
@@ -54,7 +54,7 @@ public class TestRenderSystem
     }
 
     [Fact]
-    public void Render_ShouldPassArgumentsToRenderers()
+    public void Render_PassesArgumentsToRenderers()
     {
         FakeRenderer renderer = new();
         RenderSystem renderSystem = new();
@@ -68,7 +68,7 @@ public class TestRenderSystem
     }
 
     [Fact]
-    public void SettingLayers_ToNullOrEmpty_ShouldThrow()
+    public void SettingLayers_ToNullOrEmpty_Throws()
     {
         Assert.Throws<ArgumentException>(() =>
             new RenderSystem { Layers = null }

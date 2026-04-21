@@ -1,6 +1,6 @@
 using Termule.Engine.Components;
 using Termule.Engine.Core;
-using Termule.Engine.Types.Content;
+using Termule.Engine.Types;
 
 namespace Termule.Demos.Core;
 

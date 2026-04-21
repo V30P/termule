@@ -1,8 +1,7 @@
 using Termule.Engine.Components;
 using Termule.Engine.Core;
 using Termule.Engine.Systems.Rendering;
-using Termule.Engine.Types.Content;
-using Termule.Engine.Types.Vectors;
+using Termule.Engine.Types;
 using static Termule.Tests.Components.Utilities;
 
 namespace Termule.Tests.Components;
@@ -18,10 +17,8 @@ public class TestContentRenderer
         [(2.25f, 1.75f), (1f, 1f), (2, 2)]
     ];
 
-    // ReSharper disable once ClassNeverInstantiated.Local
     private class ParameterlessContent() : Image(0, 0);
 
-    // ReSharper disable once ClassNeverInstantiated.Local
     private class NonParameterlessContent(int width, int height) : Image(width, height);
 
     private class FakeContent : Image
@@ -33,7 +30,7 @@ public class TestContentRenderer
     }
 
     [Fact]
-    public void Centered_ShouldOffsetContent()
+    public void Render_WhenCenteredIsTrue_OffsetsCells()
     {
         Cell cell = new(TestColor);
         ContentRenderer<Image> renderer = new()
@@ -58,7 +55,7 @@ public class TestContentRenderer
     }
 
     [Fact]
-    public void ContentTypeWithoutParameterlessConstructor_ShouldNotBeInitialized()
+    public void Content_WhenTypeLacksParameterlessConstructor_ShouldBeUninitialized()
     {
         ContentRenderer<NonParameterlessContent> renderer = new();
 
@@ -66,7 +63,7 @@ public class TestContentRenderer
     }
 
     [Fact]
-    public void ContentTypeWithParameterlessConstructor_ShouldBeInitialized()
+    public void Content_WhenTypeHasParameterlessConstructor_ShouldBeInitialized()
     {
         ContentRenderer<ParameterlessContent> renderer = new();
 
@@ -74,7 +71,7 @@ public class TestContentRenderer
     }
 
     [Fact]
-    public void Render_ShouldDrawExpectedCells()
+    public void Render_DrawsExpectedCells()
     {
         ContentRenderer<Image> renderer = new()
         {
@@ -94,12 +91,13 @@ public class TestContentRenderer
     }
 
     [Fact]
-    public void Render_ShouldNotContributeDefaultValues()
+    public void Render_DoesNotContributeDefaultValues()
     {
         Cell baseCell = new(TestColor, 'X', TestColor);
         ContentRenderer<Image> baseRenderer = new()
         {
-            TargetSpace = true, Content = new FakeContent(new[,] { { baseCell } })
+            TargetSpace = true,
+            Content = new FakeContent(new[,] { { baseCell } })
         };
         _ = new GameObject(new Transform { Pos = (0, 0) }, baseRenderer);
         FrameBuffer frame = new(1, 1);
@@ -108,7 +106,8 @@ public class TestContentRenderer
 
         ContentRenderer<Image> defaultRenderer = new()
         {
-            TargetSpace = true, Content = new FakeContent(new Cell[,] { { new() } })
+            TargetSpace = true,
+            Content = new FakeContent(new Cell[,] { { new() } })
         };
         _ = new GameObject(new Transform { Pos = (0, 0) }, defaultRenderer);
 
@@ -119,11 +118,12 @@ public class TestContentRenderer
 
     [Theory]
     [MemberData(nameof(ViewOriginData))]
-    public void Render_ShouldRespectViewOrigin(Vector transformPos, Vector viewOrigin, VectorInt expectedCellPos)
+    public void Render_RespectsViewOrigin(Vector transformPos, Vector viewOrigin, VectorInt expectedCellPos)
     {
         ContentRenderer<Image> renderer = new()
         {
-            TargetSpace = true, Content = new FakeContent(new Cell[,] { { new(TestColor) } })
+            TargetSpace = true,
+            Content = new FakeContent(new Cell[,] { { new(TestColor) } })
         };
         _ = new GameObject(new Transform { Pos = transformPos }, renderer);
         FrameBuffer frame = new(3, 3);
@@ -136,11 +136,12 @@ public class TestContentRenderer
     }
 
     [Fact]
-    public void Render_WhenNotInTargetSpace_ShouldApplyViewOriginAndFlipY()
+    public void Render_WhenNotInTargetSpace_AppliesViewOriginAndFlipsY()
     {
         ContentRenderer<Image> renderer = new()
         {
-            TargetSpace = false, Content = new FakeContent(new Cell[,] { { new(TestColor) } })
+            TargetSpace = false,
+            Content = new FakeContent(new Cell[,] { { new(TestColor) } })
         };
         _ = new GameObject(new Transform { Pos = (2, 0) }, renderer);
         FrameBuffer frame = new(3, 3);
@@ -151,12 +152,13 @@ public class TestContentRenderer
     }
 
     [Fact]
-    public void Render_WithNullContent_ShouldNotMutateFrame()
+    public void Render_WithNullContent_DoesNotMutateFrame()
     {
         Cell baseCell = new(TestColor, 'X', TestColor);
         ContentRenderer<Image> baseRenderer = new()
         {
-            TargetSpace = true, Content = new FakeContent(new[,] { { baseCell } })
+            TargetSpace = true,
+            Content = new FakeContent(new[,] { { baseCell } })
         };
         _ = new GameObject(new Transform { Pos = (0, 0) }, baseRenderer);
         FrameBuffer frame = new(1, 1);

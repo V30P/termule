@@ -22,7 +22,7 @@ public class TestDisplaySystem
     }
 
     [Fact]
-    public void SettingSize_ShouldResizeBuffer()
+    public void SettingSize_ResizesBuffer()
     {
         FakeDisplaySystem displaySystem = new();
         displaySystem.SetSize(10, 5);
@@ -31,7 +31,7 @@ public class TestDisplaySystem
     }
 
     [Fact]
-    public void Update_ShouldCallPrint_AndSwapBuffers()
+    public void Update_CallsPrintAndSwapsBuffers()
     {
         FakeDisplaySystem displaySystem = new();
         ICameraTarget target = displaySystem;

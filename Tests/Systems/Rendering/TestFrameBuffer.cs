@@ -1,5 +1,5 @@
 using Termule.Engine.Systems.Rendering;
-using Termule.Engine.Types.Content;
+using Termule.Engine.Types;
 
 namespace Termule.Tests.Systems.Rendering;
 
@@ -32,7 +32,7 @@ public class TestFrameBuffer
 
     [Theory]
     [MemberData(nameof(DrawData))]
-    public void Draw_ShouldApplyValues(Color? color, char? character, Color? characterColor, Cell expectedCell)
+    public void Draw_AppliesProvidedValues(Color? color, char? character, Color? characterColor, Cell expectedCell)
     {
         FrameBuffer frame = new(1, 1);
 
@@ -42,7 +42,7 @@ public class TestFrameBuffer
     }
 
     [Fact]
-    public void Draw_ShouldIgnoreOutOfBoundsPositions()
+    public void Draw_IgnoresOutOfBoundsPositions()
     {
         FrameBuffer frame = new(10, 5);
         frame.Draw((-1, 0), TestColor);
@@ -54,7 +54,7 @@ public class TestFrameBuffer
     }
 
     [Fact]
-    public void Draw_ShouldProperlyCoverExistingValues()
+    public void Draw_ProperlyCoversExistingValues()
     {
         FrameBuffer frame = new(1, 1);
         frame.Draw((0, 0), TestCell.Color, TestCell.Char, TestCell.CharColor);
@@ -67,7 +67,7 @@ public class TestFrameBuffer
     }
 
     [Fact]
-    public void Reset_ShouldFillWithDefaultCell_WhenNoCellProvided()
+    public void Reset__WithNoCellProvided_FillsWithDefaultCell()
     {
         FrameBuffer frame = new(10, 5);
         for (int x = 0; x < frame.Size.X; x++)
@@ -84,7 +84,7 @@ public class TestFrameBuffer
     }
 
     [Fact]
-    public void Reset_ShouldFillWithProvidedCell()
+    public void Reset_WithCell_FillsWithProvidedCell()
     {
         FrameBuffer frame = new(10, 5);
 

@@ -1,19 +1,32 @@
-using Termule.Engine.Types.Vectors;
-
-namespace Termule.Engine.Types.Content;
+namespace Termule.Engine.Types;
 
 /// <summary>
 ///     Content that represents textual content.
 /// </summary>
 public sealed class Text : IContent
 {
-    private Cell[][] cells = [];
+    private Cell[][] lines = [];
     private VectorInt size = (0, 0);
 
     /// <summary>
     ///     Gets or sets the color of this text's characters.
     /// </summary>
-    public Color Color { get; set; }
+    public Color Color
+    {
+        get;
+
+        set
+        {
+            field = value;
+            foreach (Cell[] line in lines)
+            {
+                for (int i = 0; i < line.Length; i++)
+                {
+                    line[i].CharColor = field;
+                }
+            }
+        }
+    }
 
     /// <summary>
     ///     Gets or sets the string of characters for this text.
@@ -30,22 +43,22 @@ public sealed class Text : IContent
             }
 
             field = value;
-            if (field == null)
+            if (string.IsNullOrEmpty(field))
             {
-                cells = [];
+                lines = [];
                 size = (0, 0);
 
                 return;
             }
 
-            string[] lines = field.Split('\n');
-            size = size with { Y = lines.Length };
+            string[] stringLines = field.Split('\n');
+            size = size with { Y = stringLines.Length };
 
-            cells = new Cell[lines.Length][];
-            for (int i = 0; i < lines.Length; i++)
+            lines = new Cell[stringLines.Length][];
+            for (int i = 0; i < stringLines.Length; i++)
             {
-                string line = lines[i];
-                cells[i] = line.Select(c => new Cell(default, c, Color)).ToArray();
+                string line = stringLines[i];
+                lines[i] = line.Select(c => new Cell(default, c, Color)).ToArray();
 
                 if (line.Length > size.X)
                 {
@@ -57,5 +70,27 @@ public sealed class Text : IContent
 
     VectorInt IContent.Size => size;
 
-    Cell IContent.this[int x, int y] => cells[y].Length > x ? cells[y][x] : default;
+    Cell IContent.this[int x, int y]
+    {
+        get
+        {
+            if (x < 0 || x >= size.X)
+            {
+                throw new IndexOutOfRangeException("X position falls outside of content.");
+            }
+            if (y < 0 || y >= size.Y)
+            {
+                throw new IndexOutOfRangeException("Y position falls outside of content.");
+            }
+
+            // Returns blanks spaces at the end of lines since content is rectangular
+            if (x >= lines[y].Length)
+            {
+                return default;
+            }
+
+            return lines[y][x];
+        }
+
+    }
 }

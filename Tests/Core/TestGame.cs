@@ -1,4 +1,4 @@
-﻿using Termule.Engine.Core;
+using Termule.Engine.Core;
 
 namespace Termule.Tests.Core;
 
@@ -50,7 +50,7 @@ public class TestGame
     }
 
     [Fact]
-    public void CleanUp_ShouldBeIdempotent()
+    public void CleanUp_IsIdempotent()
     {
         IConfigurableGame game = Game.Create();
         CountingSystem system = new();
@@ -64,7 +64,7 @@ public class TestGame
     }
 
     [Fact]
-    public void Create_ShouldInitializeSystemsAndRoot()
+    public void Create_InitializesSystemsAndRoot()
     {
         IConfigurableGame game = Game.Create();
 
@@ -73,7 +73,7 @@ public class TestGame
     }
 
     [Fact]
-    public void Register_ShouldConfigureElement()
+    public void Register_ConfiguresElement()
     {
         Game game = (Game)Game.Create();
         FakeGameElement element = new();
@@ -85,7 +85,7 @@ public class TestGame
     }
 
     [Fact]
-    public void Run_ShouldNotPrepareTwice_WhenAlreadyPrepared()
+    public void Run_WhenAlreadyPrepared_DoesNotPrepareAgain()
     {
         IConfigurableGame game = Game.Create();
         AutoStopSystem system = new();
@@ -100,7 +100,7 @@ public class TestGame
     }
 
     [Fact]
-    public void Run_ShouldPrepareAndCleanUp_WhenLifecycleNotManuallyStarted()
+    public void Run_WhenLifecycleNotManuallyStarted_PreparesAndCleansUp()
     {
         IConfigurableGame game = Game.Create();
         AutoStopSystem system = new();
@@ -114,7 +114,7 @@ public class TestGame
     }
 
     [Fact]
-    public void RunForFrames_ShouldTickSystemsWithoutPreparing()
+    public void RunForFrames_TickSystemsWithoutPreparing()
     {
         IConfigurableGame game = Game.Create();
         CountingSystem system = new();
@@ -128,7 +128,7 @@ public class TestGame
     }
 
     [Fact]
-    public void RunFrame_ShouldTickComponents()
+    public void RunFrame_TicksComponents()
     {
         IConfigurableGame game = Game.Create();
         FakeComponent component = new();
@@ -141,7 +141,7 @@ public class TestGame
     }
 
     [Fact]
-    public void Unregister_ShouldClearElementConfiguration()
+    public void Unregister_ClearsElementProperties()
     {
         Game game = (Game)Game.Create();
         FakeGameElement element = new();

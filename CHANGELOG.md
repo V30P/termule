@@ -7,9 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [0.2.0] 
 
 ### Added
-- Tests for core types
-- Test for components
-- Test for systems
+- Tests for core classes, components, systems, and types
 - `--help`, `--interactive`, and `--stats` flags for the demo project
 - Setter for `gameObject` property of components for easy movement
 - `ICameraTarget` for rendering to non-display objects
@@ -18,18 +16,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - `.editorconfig` with updated conventions
 
 ### Changed
-- System names and namespaces to be more consistent and avoid namespace/name collisions
+- System names and their namespaces for consistency and to avoid namespace/name collisions
 - Improved display system performance by switching to double buffering
 - Improved terminal display system performance by reducing string allocations and unnecessary escape sequences
-- Renamed `Frame` to `FrameBuffer` and moved it to the display namespace
+- Renamed `Frame` to `FrameBuffer` and moved it to the `Systems.Display` namespace
 - Improved frameBuffer performance by removing unnecessary delegate allocations
-- Made game objects only add components to the tick list on the next frame after they are added to avoid snapshot allocation
+- Made game objects only add components to the tick list after a frame to avoid snapshot allocation
 - Renamed `TransformRenderer` to `PositionalRenderer` and updated its API
 - Converted`Content` to the `IContent` interface (use `Image` for an easy implementation)
 - Improved text content implementation by reducing and optimizing recalculations 
 - Reworked render system API
-- Updated resource path configuration to be cleaner and easier to use
-
+- Updated resource path configuration for greater customization
 
 ### Removed
 - Renderer crediting and `GetOverlappers()` for abysmal performance (switch to manually implemented collision detection)
@@ -62,13 +59,3 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Vector and content POCOs
 - Full XML doc comments for API
 - Basic demo collection
-
-0 - 0 - 0
-1 - 1 - 1
-...
-10 - A - 1010
-11 - B - 1011
-12 - C - 1100
-13 - D - 1101
-14 - E - 1110
-15 - F - 1111

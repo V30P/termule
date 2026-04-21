@@ -1,13 +1,11 @@
-namespace Termule.Engine.Types.Vectors;
+namespace Termule.Engine.Types;
 
 /// <summary>
 ///     Represents a two-dimensional vector.
 /// </summary>
 /// <param name="X">The X component of the vector.</param>
 /// <param name="Y">The Y component of the vector.</param>
-#pragma warning disable SA1313 // Parameter names should begin with lower-case letter
 public readonly record struct Vector(float X = 0, float Y = 0)
-#pragma warning restore SA1313 // Parameter names should begin with lower-case letter
 {
     /// <summary>
     ///     Gets the magnitude (length) of the vector.

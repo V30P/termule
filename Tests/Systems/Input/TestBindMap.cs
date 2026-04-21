@@ -39,7 +39,7 @@ public class TestBindMap
     }
 
     [Fact]
-    public void PollValues_ShouldUpdateValuesFromBinds()
+    public void PollValues_UpdatesValuesFromBinds()
     {
         BindMap bindMap = new() { ["Test"] = new AlternatingBind() };
 
@@ -53,7 +53,7 @@ public class TestBindMap
     }
 
     [Fact]
-    public void TryGetValue_ShouldReturnFalseAndOutputNull_WhenNameDoesNotExist()
+    public void TryGetValue_WhenNameDoesNotExist_ReturnsFalseAndOutputsNull()
     {
         BindMap bindMap = new();
 
@@ -62,7 +62,7 @@ public class TestBindMap
     }
 
     [Fact]
-    public void TryGetValue_ShouldReturnTrueAndOutputValue_WhenNameExists()
+    public void TryGetValue_WhenNameExists_ReturnsTrueAndOutputsValue()
     {
         BindMap bindMap = new() { ["Test"] = new FakeBind() };
 

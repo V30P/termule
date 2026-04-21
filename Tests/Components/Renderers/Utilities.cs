@@ -1,6 +1,5 @@
 using Termule.Engine.Systems.Rendering;
-using Termule.Engine.Types.Content;
-using Termule.Engine.Types.Vectors;
+using Termule.Engine.Types;
 
 namespace Termule.Tests.Components;
 

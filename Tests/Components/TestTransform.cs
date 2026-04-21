@@ -6,7 +6,7 @@ namespace Termule.Tests.Components;
 public class TestTransform
 {
     [Fact]
-    public void CachedLocalPos_ShouldBeApplied_WhenRegistered()
+    public void Register_AppliesCachedLocalPos()
     {
         IConfigurableGame game = Game.Create();
         Transform transform = new() { LocalPos = (1, 1) };
@@ -19,7 +19,7 @@ public class TestTransform
     }
 
     [Fact]
-    public void CachedPos_ShouldBeApplied_WhenRegistered()
+    public void Register_AppliesCachedPos()
     {
         IConfigurableGame game = Game.Create();
         Transform transform = new() { Pos = (1, 1) };
@@ -30,7 +30,7 @@ public class TestTransform
     }
 
     [Fact]
-    public void MovingParent_ShouldMoveChild()
+    public void MovingParent_MovesChild()
     {
         IConfigurableGame game = Game.Create();
         Transform child = new() { LocalPos = (1, 1) };
@@ -47,7 +47,7 @@ public class TestTransform
     }
 
     [Fact]
-    public void NestedTransforms_ShouldApplyRecursively()
+    public void NestedTransforms_ApplyPositioningRecursively()
     {
         IConfigurableGame game = Game.Create();
         Transform transform = new();
@@ -64,7 +64,7 @@ public class TestTransform
     }
 
     [Fact]
-    public void Pos_ShouldBeConstant_WhenParentChanges()
+    public void Pos_WhenParentChanges_IsConstant()
     {
         Transform transform = new() { Pos = (1, 1) };
         GameObject _ = [transform];
@@ -76,7 +76,7 @@ public class TestTransform
     }
 
     [Fact]
-    public void SettingLocalPos_ShouldUpdatePos()
+    public void SettingLocalPos_UpdatesPos()
     {
         IConfigurableGame game = Game.Create();
         Transform transform = new() { Pos = (1, 1) };
@@ -90,7 +90,7 @@ public class TestTransform
     }
 
     [Fact]
-    public void SettingPos_ShouldUpdateLocalPos()
+    public void SettingPos_UpdatesLocalPos()
     {
         IConfigurableGame game = Game.Create();
         Transform transform = new() { Pos = (1, 1) };

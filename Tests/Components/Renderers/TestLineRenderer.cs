@@ -1,8 +1,7 @@
 using Termule.Engine.Components;
 using Termule.Engine.Core;
 using Termule.Engine.Systems.Rendering;
-using Termule.Engine.Types.Content;
-using Termule.Engine.Types.Vectors;
+using Termule.Engine.Types;
 using static Termule.Tests.Components.Utilities;
 
 namespace Termule.Tests.Components;
@@ -21,7 +20,7 @@ public class TestLineRenderer
     ];
 
     [Fact]
-    public void Render_ShouldDrawPolylineSegments()
+    public void Render_DrawsPolylineSegments()
     {
         FrameBuffer frame = new(4, 4);
         LineRenderer renderer = new() { TargetSpace = true, Color = TestColor, Points = [(0, 0), (2, 0), (2, 2)] };
@@ -36,7 +35,7 @@ public class TestLineRenderer
 
     [Theory]
     [MemberData(nameof(SingleSegmentData))]
-    public void Render_ShouldDrawSingleSegment(Vector[] points, VectorInt[] expectedCells)
+    public void Render_DrawsSingleSegment(Vector[] points, VectorInt[] expectedCells)
     {
         FrameBuffer frame = new(6, 6);
         LineRenderer renderer = new() { TargetSpace = true, Color = TestColor, Points = [.. points] };
@@ -48,7 +47,7 @@ public class TestLineRenderer
     }
 
     [Fact]
-    public void Render_ShouldNotDraw_WhenLessThanTwoPoints()
+    public void Render_WhenLessThanTwoPoints_DoesNotDraw()
     {
         FrameBuffer frame = new(2, 2);
         LineRenderer renderer = new() { TargetSpace = true, Color = TestColor, Points = [(1, 1)] };
@@ -60,7 +59,7 @@ public class TestLineRenderer
     }
 
     [Fact]
-    public void Render_ShouldUseTransformPositionAsLineOrigin()
+    public void Render_UsesTransformPositionAsLineOrigin()
     {
         FrameBuffer frame = new(6, 4);
         LineRenderer renderer = new() { TargetSpace = true, Color = TestColor, Points = [(0, 0), (2, 0)] };

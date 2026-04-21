@@ -9,7 +9,7 @@ namespace Termule.Tests.Core;
 public class TestSystemManager
 {
     [Fact]
-    public void Get_ShouldReturnNull_WhenSystemMissing()
+    public void Get_WhenSystemMissing_ReturnsNull()
     {
         IConfigurableGame game = Game.Create();
 
@@ -17,7 +17,7 @@ public class TestSystemManager
     }
 
     [Fact]
-    public void Install_ShouldAddSystem()
+    public void Install_AddsSystem()
     {
         IConfigurableGame game = Game.Create();
         FakeSystem system = new();
@@ -27,7 +27,7 @@ public class TestSystemManager
     }
 
     [Fact]
-    public void Install_ShouldReplaceExistingSystem()
+    public void Install_ReplacesExistingSystem()
     {
         IConfigurableGame game = Game.Create();
         game.Systems.Install(new FakeSystem());
@@ -39,7 +39,7 @@ public class TestSystemManager
     }
 
     [Fact]
-    public void Install_ShouldThrow_WhenGameStarted()
+    public void Install_WhenGameAlreadyStarted_Throws()
     {
         IConfigurableGame game = Game.Create();
         game.Start();
@@ -48,7 +48,7 @@ public class TestSystemManager
     }
 
     [Fact]
-    public void InstalledSystem_ShouldFollowLifecycle()
+    public void InstalledSystem_FollowsLifecycle()
     {
         IConfigurableGame game = Game.Create();
         FakeSystem system = new();
@@ -65,7 +65,7 @@ public class TestSystemManager
     }
 
     [Fact]
-    public void Uninstall_ShouldRemoveSystem()
+    public void Uninstall_RemovesSystem()
     {
         IConfigurableGame game = Game.Create();
         game.Systems.Install(new FakeSystem());
@@ -76,7 +76,7 @@ public class TestSystemManager
     }
 
     [Fact]
-    public void Uninstall_ShouldThrow_WhenGameStarted()
+    public void Uninstall_WhenGameStarted_Throws()
     {
         IConfigurableGame game = Game.Create();
         game.Start();
@@ -85,7 +85,7 @@ public class TestSystemManager
     }
 
     [Fact]
-    public void UseDefaults_ShouldInstallCoreSystems()
+    public void UseDefaultsInstallsCoreSystems()
     {
         // Headless test hosts may report invalid console dimensions (-1),
         // which makes terminal display construction fail before defaults install.

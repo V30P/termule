@@ -7,7 +7,8 @@ public class TestArrayConverterFactory
 {
     private static readonly JsonSerializerOptions SerializerOptions = new()
     {
-        Converters = { new Array2DConverterFactory() }, WriteIndented = true
+        Converters = { new Array2DConverterFactory() },
+        WriteIndented = true
     };
 
     public static readonly IEnumerable<object[]> WriteData =
@@ -71,14 +72,14 @@ public class TestArrayConverterFactory
 
     [Theory]
     [MemberData(nameof(ReadData))]
-    public void Read_ShouldCorrectlyConvertJsonToArray(string json, string[,] expected)
+    public void Read_CorrectlyConvertsJsonToArray(string json, string[,] expected)
     {
         Assert.Equal(expected, JsonSerializer.Deserialize<string[,]>(json, SerializerOptions));
     }
 
     [Theory]
     [MemberData(nameof(WriteData))]
-    public void Write_ShouldCorrectlyConvertArrayToJson(string[,] array, string expected)
+    public void Write_CorrectlyConvertsArrayToJson(string[,] array, string expected)
     {
         Assert.Equal(expected, JsonSerializer.Serialize(array, SerializerOptions));
     }
