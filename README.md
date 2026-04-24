@@ -4,9 +4,9 @@ A micro game engine for creating responsive, real-time games in the terminal.
 
 ## Overview
 
-Termule is written in C# on .NET 10.0 and is built to bring a modern experience to terminal game development. Unlike many console-based libraries, Termule uses a traditional game loop rather than an event-driven model. This enables the creation of fast, fluid games rather than simple text-based experiences. Termule's API is designed with ease of use at the forefront and is built to be easily extensible, with a focus on clean, readable game code.
+Termule is written in C# on .NET 10.0 and is built from the ground up to bring a modern experience to terminal game development. The engine is primarily designed for the creation of fluid and vibrant realtime games, as opposed to the static, text-based experiences typical of the terminal. For an overview of the engine's functionality, see the ["Contents"](#contents) section below or take a look at the [changelog](CHANGELOG.md) to see what's new.
 
-When I started work on Termule, I set out to explore the process of building a game engine and gain experience designing larger systems. An ongoing goal of mine is to implement the majority of engine functionality from scratch, minimizing external dependencies and keeping architectural decisions intentional. Over time, I hope to continue developing Termule with the goal of creating a complete game-making toolkit for the terminal.
+As the sole developer of Termule, my main goal has always been to create something that is pleasant to both develop and work with. As such, I strive as much as possible to keep the engine low-dependency and easily extensible. Termule can be broadly classified as a component-based engine, but with an additional system type that helps alleviate some of the pains of this model (see the ["Architecture"](#architecture) section for more details).
 
 ## Contents
 
@@ -15,51 +15,66 @@ This repository contains the following projects:
 1. [Engine](Engine)
 
    - Extensible render system
-   - Performant terminal display via escape sequences
+   - Escape-sequence-based terminal display
    - Cross-platform keyboard and mouse input
    - Runtime resource loading
    - Fully documented API
 
 2. [Tests](Tests)
 
-    - Comprehensive engine test suite
+    - Comprehensive test suite for the main engine 
     - Built on xUnit.net for broad compatibility
-    - 200+ individual unit tests
+    - Includes tests for all core types and the majority of other behavior
    
 3. [Demos](Demos)
 
    - Five sample Termule programs
-   - Single-file c# implementation for each demo
-   - Easy-to-use CLI for configuration
-   - Sample GIF collection
+   - Single-file implementation for each demo
+   - Easy-to-use CLI
 
 ## Demos
 
-For examples of what’s possible with Termule, see the demo project [here](Demos).
+This repository includes a collection of self contained, single-file demo systems bundled into a single CLI. These demos serve both to demonstrate engine functionality and provide examples of using the API. For a demo's source code, look for the `.cs` file of the same name in [`Demos/Demos`](Demos/Demos/).
 
-![shooter demo](Demos/gifs/shooter.gif)
+![shooter demo](assets/shooter.gif "Shooter Demo")
 
-More GIFs can be found in the demo collection's [README](Demos/README.md).
+### Running the Demo Project
+
+After cloning the full repository, navigate to the [`Demos`](Demos) directory. The demo project can be run without installation
+via the .NET CLI:
+
+```bash
+# To learn more about the Demos CLI 
+dotnet run --help
+
+# To run a specific demo by name
+dotnet run --project DEMO
+```
 
 ## Architecture
 
-Termule splits runtime behavior into two major types: `System`s and `Component`s.
+In keeping with the model of a component-based game engine, Termule has typical implementations of components and game objects. This architecture is great because it favors composition over inheritance while still allowing the usual object-oriented patterns. However, it has a few issues:
+
+1. There is no obvious place for global behavior that needs to tie into the game loop.
+2. Having all behavior live on components results in a confusing, spaghetti-like mess at scale.
+
+To solve this, Termle splits runtime behavior into two major types: `System`s and `Component`s.
 
 ### Systems
 
 - Live inside the game's `SystemManager`  
 - Provide a home for global behavior and data  
 - Can only be installed, uninstalled, or swapped before the game runs  
-- Easily accessible by other systems or components 
+- Consist of a single instance easily accessed by other systems or components 
+- Allow complex behavior to be moved out of the component tree
 
 ### Components
 
 - Live inside the game's root `GameObject`  
+- Provide a home for modular behavior and data
 - Can be created, destroyed, and moved during runtime  
-- Grouped by game objects to enable collaborative behavior
-- Enforce composition over inheritance  
-
-This architecture allows for modular, maintainable code that takes full advantage of C#'s syntax. Separating systems and components increases organization and stops behavior from living directly on game objects.
+- Grouped by game objects to enable collaboration
+- Allow behavior to live close to data *when it makes sense*
 
 An example `Game` structure:
 
@@ -84,6 +99,8 @@ Game
 After adding Termule as a reference in your C# project, you can get started by constructing and running a basic game:
 
 ```csharp
+using Termule.Engine.Core;
+
 // Create a game instance
 var game = Game.Create();
 

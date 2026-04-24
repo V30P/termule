@@ -43,7 +43,7 @@ internal static class Program
                                        --interactive, -i  Run in interactive mode.
                                        --stats, -s        Enable TPS indicator.
 
-                                       Demos: 
+                                       Demos:
                                        {string.Join("\n", DemoNames)}
                                        """;
 

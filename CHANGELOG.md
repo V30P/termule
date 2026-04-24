@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Added
 
-- Tests for core classes, components, systems, and types
+- Tests for all core types, as well as the majority of components, systems, and POCOs
 - `--help`, `--interactive`, and `--stats` flags for the demo project
 - Setter for `gameObject` property of components for easy movement
 - `ICameraTarget` for rendering to non-display objects
@@ -38,7 +38,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Fixed
 
-- Improper layering of TPS indicator in debug builds of Demos
+- Improper layering of TPS indicator in Demos
 - Transforms not properly clearing state when re-parenting
 - Camera continuing to use old transform after it moves
 - GameElements occasionally getting duplicate ids
