@@ -4,63 +4,58 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.0] 
+## [0.2.0] - 2026-04-25
 
 ### Added
-
-- Tests for all core types, as well as the majority of components, systems, and POCOs
+- Comprehensive test coverage for core types and most components, systems, and POCOs
 - `--help`, `--interactive`, and `--stats` flags for the demo project
-- Setter for `gameObject` property of components for easy movement
-- `ICameraTarget` for rendering to non-display objects
-- Proper mouse tracking for the windows display implementation
-- `Keyboard` class for keyboard input (replacing old controller-based implementation)
-- `.editorconfig` with updated conventions
+- Setter for `GameObject` on components to simplify movement
+- `ICameraTarget` interface to support rendering to non-display targets
+- Mouse tracking for the Windows display implementation
+- `Keyboard` class for input handling, replacing the previous controller-based approach
+- `.editorconfig` with updated coding conventions
 
 ### Changed
-
-- System names and their namespaces for consistency and to avoid namespace/name collisions
-- Improved display system performance by switching to double buffering
-- Improved terminal display system performance by reducing string allocations and unnecessary escape sequences
+- Standardized system names and namespaces to improve consistency and avoid collisions
+- Improved display system performance via double buffering
+- Reduced terminal display overhead by minimizing string allocations and escape sequences
 - Renamed `Frame` to `FrameBuffer` and moved it to the `Systems.Display` namespace
-- Improved frameBuffer performance by removing unnecessary delegate allocations
-- Made game objects only add components to the tick list after a frame to avoid snapshot allocation
+- Improved `FrameBuffer` performance by reducing allocation overhead
+- Reduced per-frame allocations by deferring ticking new components until the next frame
 - Renamed `TransformRenderer` to `PositionalRenderer` and updated its API
-- Converted`Content` to the `IContent` interface (use `Image` for an easy implementation)
-- Improved text content implementation by reducing and optimizing recalculations 
-- Reworked render system API
-- Updated resource path configuration for greater customization
+- Replaced `Content` with the `IContent` interface (use `Image` as a default implementation)
+- Optimized text content rendering to reduce redundant recalculations
+- Reworked render system API for improved flexibility and clarity
+- Updated resource path configuration to allow greater customization
 
 ### Removed
-
-- Renderer crediting and `GetOverlappers()` for abysmal performance (switch to manually implemented collision detection)
-- Size-related methods from `Camera`, will now always match target size
-- Base `Controller` and `Bind` classes, replaced by simpler keyboard-specific system
+- Renderer crediting and `GetOverlappers()` due to significant performance costs (use custom collision detection instead)
+- Size-related methods from camera; it now always matches the target size
+- Base `Controller` and `Bind` classes, replaced by a simplified keyboard-specific system
 
 ### Fixed
+- Incorrect layering of TPS indicator in demos
+- Transforms not properly resetting state during re-parenting
+- Camera continuing to reference outdated transforms after movement
+- Occasional duplicate IDs in game elements
+- Terminal display implementations not fully resetting configuration
+- Serializer failing to correctly handle empty 2D arrays
 
-- Improper layering of TPS indicator in Demos
-- Transforms not properly clearing state when re-parenting
-- Camera continuing to use old transform after it moves
-- GameElements occasionally getting duplicate ids
-- Terminal display system implementations not fully resetting configuration
-- Serializer failing to properly read empty 2D arrays
-
-## [0.1.0] 
+## [0.1.0] - 2026-03-16
 
 ### Added
-
 - Core architectural base classes
 - Components:
-    - `Transform`
-    - `Camera`
-    - `ContentRenderer`
-    - `LineRenderer`
-    - `CircleRenderer`
+  - `Transform`
+  - `Camera`
+  - `ContentRenderer`
+  - `LineRenderer`
+  - `CircleRenderer`
 - Systems:
-    - `Controller`
-    - `Display`
-    - `RenderSystem`
-    - `ResourceLoader`
+  - `Controller`
+  - `Display`
+  - `RenderSystem`
+  - `ResourceLoader`
 - Vector and content POCOs
-- Full XML doc comments for API
-- Basic demo collection
+- Full XML documentation comments for the API
+- Initial demo collection
