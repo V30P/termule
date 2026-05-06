@@ -1,4 +1,6 @@
 using System.Diagnostics;
+using System.Security.Cryptography.X509Certificates;
+using Termule.Engine.Core.Messaging;
 
 namespace Termule.Engine.Core;
 
@@ -13,31 +15,30 @@ public sealed class Game : IConfigurableGame
 
     private bool stop;
 
+    internal bool Started { get; private set; }
+
     /// <summary>
     ///     Gets the system manager.
     /// </summary>
-    public SystemManager Systems { get; }
+    public SystemManager Systems { get; } = new SystemManager();
+
+    /// <summary>
+    ///     The root game object.
+    /// </summary>
+    public GameObject Root { get; } = [];
+
+    public MessageBus Bus { get; } = new MessageBus();
 
     /// <summary>
     ///     Gets the length of the last game loop iteration in seconds.
     /// </summary>
     public float DeltaTime { get; private set; }
 
-    internal bool Started { get; private set; }
-
     private Game()
     {
-        Root = [];
         Register(Root);
-
-        Systems = new SystemManager();
         Register(Systems);
     }
-
-    /// <summary>
-    ///     Gets the root game object.
-    /// </summary>
-    public GameObject Root { get; }
 
     IConfigurableSystemManager IConfigurableGame.Systems => Systems;
 

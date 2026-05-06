@@ -11,7 +11,7 @@ public interface ICameraTarget
     /// <summary>
     ///     Gets the size of the camera target (in cells).
     /// </summary>
-    VectorInt Size { get; }
+    public VectorInt Size { get; }
 
     internal FrameBuffer Buffer { get; private protected set; }
 

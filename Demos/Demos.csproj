@@ -19,8 +19,4 @@
     </Content>
   </ItemGroup>
 
-  <ItemGroup>
-    <EditorConfigFiles Remove=".editorconfig"/>
-  </ItemGroup>
-
 </Project>

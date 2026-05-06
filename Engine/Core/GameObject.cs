@@ -1,4 +1,5 @@
 using System.Collections;
+using Termule.Engine.Core.Messaging;
 
 namespace Termule.Engine.Core;
 
@@ -9,9 +10,11 @@ public class GameObject : Component, IEnumerable<Component>
 {
     private readonly List<Component> components = [];
     private readonly Dictionary<Type, List<Component>> typesToComponents = [];
-    private readonly List<Component> tickingComponents = [];
 
+    private readonly List<Component> tickingComponents = [];
     private bool tickingDirty;
+
+    public readonly LocalMessageBus Bus = new();
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="GameObject" /> class.

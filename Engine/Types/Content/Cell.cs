@@ -63,7 +63,7 @@ public struct Cell(Color color = default, char character = '\0', Color charColor
     }
 
     /// <inheritdoc />
-    public bool Equals(Cell other)
+    public readonly bool Equals(Cell other)
     {
         return Color.Equals(other.Color) && Char == other.Char && CharColor.Equals(other.CharColor);
     }

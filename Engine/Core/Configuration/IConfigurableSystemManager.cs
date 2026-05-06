@@ -11,14 +11,14 @@ public interface IConfigurableSystemManager
     /// </summary>
     /// <param name="system">The system instance to install.</param>
     /// <typeparam name="TSystem">The type of the system to install.</typeparam>
-    void Install<TSystem>(TSystem system)
+    public void Install<TSystem>(TSystem system)
         where TSystem : System;
 
     /// <summary>
     ///     Uninstalls a previously installed system of the specified type, if present.
     /// </summary>
     /// <typeparam name="TSystem">The type of system to uninstall.</typeparam>
-    void Uninstall<TSystem>()
+    public void Uninstall<TSystem>()
         where TSystem : System;
 
     /// <summary>
@@ -26,11 +26,11 @@ public interface IConfigurableSystemManager
     /// </summary>
     /// <typeparam name="TSystem">The type of system to look for.</typeparam>
     /// <returns>The installed system or <c>null</c>.</returns>
-    TSystem Get<TSystem>()
+    public TSystem Get<TSystem>()
         where TSystem : System;
 
     /// <summary>
     ///     Installs the default set of systems appropriate for the current operating system.
     /// </summary>
-    void UseDefaults();
+    public void UseDefaults();
 }

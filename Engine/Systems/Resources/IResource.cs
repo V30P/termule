@@ -8,5 +8,5 @@ public interface IResource : IResourceBase
     /// <summary>
     ///     Gets the file extension that will be appended to load paths if none is provided.
     /// </summary>
-    static abstract string FileExtension { get; }
+    public abstract static string FileExtension { get; }
 }

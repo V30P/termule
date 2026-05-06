@@ -1,3 +1,5 @@
+using Termule.Engine.Core.Messaging;
+
 namespace Termule.Engine.Core;
 
 /// <summary>
@@ -8,17 +10,19 @@ public interface IConfigurableGame
     /// <summary>
     ///     Gets the root game object.
     /// </summary>
-    GameObject Root { get; }
+    public GameObject Root { get; }
 
     /// <summary>
     ///     Gets the <see cref="SystemManager" /> in configurable form.
     /// </summary>
-    IConfigurableSystemManager Systems { get; }
+    public IConfigurableSystemManager Systems { get; }
+
+    public MessageBus Bus { get; }
 
     /// <summary>
     ///     Runs the game.
     /// </summary>
-    void Run();
+    public void Run();
 
     // Use these for manual lifecycle control
     internal void Start();
