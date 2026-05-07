@@ -1,76 +1,48 @@
 using Termule.Engine.Core;
+using Termule.Engine.Core.Messaging;
 
 namespace Termule.Tests.Core.Messaging;
 
 public class TestLocalMessageBus()
 {
+    [Theory]
+    [InlineData(Route.Downward, new bool[] { true, false, false })]
+    [InlineData(Route.Local, new bool[] { false, true, false })]
+    [InlineData(Route.Upward, new bool[] { false, false, true })]
+    [InlineData(Route.Downward | Route.Local, new bool[] { true, true, false })]
+    [InlineData(Route.Local | Route.Upward, new bool[] { false, true, true })]
+    [InlineData(Route.Upward | Route.Downward, new bool[] { true, false, true })]
+    [InlineData(Route.Local | Route.Upward | Route.Downward, new bool[] { true, true, true })]
+    public void Broadcast_RoutesCorrectly(Route route, bool[] values)
+    {
+        IConfigurableGame game = Game.Create();
+        GameObject child = [];
+        GameObject gameObject = [child];
+        GameObject parent = [gameObject];
+
+        game.Root.Add(parent);
+
+        FakeListener<bool> downwardListener = new();
+        FakeListener<bool> localListener = new();
+        FakeListener<bool> upwardListener = new();
+
+        child.Bus.Subscribe(downwardListener);
+        gameObject.Bus.Subscribe(localListener);
+        parent.Bus.Subscribe(upwardListener);
+
+        gameObject.Bus.Broadcast(true, route);
+
+        Assert.Equal(values[0], downwardListener.ReceivedMessage);
+        Assert.Equal(values[1], localListener.ReceivedMessage);
+        Assert.Equal(values[2], upwardListener.ReceivedMessage);
+    }
+
     [Fact]
     public void Broadcast_WhenUnregisteredAndRouteIsNonlocal_Throws()
     {
         GameObject gameObject = [];
 
-        Assert.Throws<InvalidOperationException>(() => gameObject.Bus.Broadcast(true, Route.Global));
-        Assert.Throws<InvalidOperationException>(() => gameObject.Bus.Broadcast(true, Route.Upwards));
-        Assert.Throws<InvalidOperationException>(() => gameObject.Bus.Broadcast(true, Route.Downwards));
-    }
-
-    [Fact]
-    public void Broadcast_WhenRouteIsLocal_NotifiesListenersOnGameObject()
-    {
-        GameObject gameObject = [];
-
-        FakeListener<bool> listener = new();
-        gameObject.Bus.Subscribe(listener);
-
-        gameObject.Bus.Broadcast(true);
-
-        Assert.True(listener.ReceivedMessage);
-    }
-
-    [Fact]
-    public void Broadcast_WhenRouteIsGlobal_NotifiesListenersOnTheGame()
-    {
-        IConfigurableGame game = Game.Create();
-        GameObject gameObject = [];
-        game.Root.Add(gameObject);
-
-        FakeListener<bool> listener = new();
-        game.Bus.Subscribe(listener);
-
-        gameObject.Bus.Broadcast(true, Route.Global);
-
-        Assert.True(listener.ReceivedMessage);
-    }
-
-    [Fact]
-    public void Broadcast_WhenRouteIsUpwards_NotifiesListenersOnAncestors()
-    {
-        IConfigurableGame game = Game.Create();
-        GameObject gameObject = [];
-        GameObject parent = [gameObject];
-        game.Root.Add(parent);
-
-        FakeListener<bool> listener = new();
-        parent.Bus.Subscribe(listener);
-
-        gameObject.Bus.Broadcast(true, Route.Upwards);
-
-        Assert.True(listener.ReceivedMessage);
-    }
-
-    [Fact]
-    public void Broadcast_WhenRouteIsDownwards_NotifiesListenersOnDescendants()
-    {
-        IConfigurableGame game = Game.Create();
-        GameObject child = [];
-        GameObject gameObject = [child];
-        game.Root.Add(gameObject);
-
-        FakeListener<bool> listener = new();
-        child.Bus.Subscribe(listener);
-
-        gameObject.Bus.Broadcast(true, Route.Downwards);
-
-        Assert.True(listener.ReceivedMessage);
+        Assert.Throws<InvalidOperationException>(() => gameObject.Bus.Broadcast(true, Route.Upward));
+        Assert.Throws<InvalidOperationException>(() => gameObject.Bus.Broadcast(true, Route.Downward));
     }
 }

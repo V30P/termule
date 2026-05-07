@@ -17,6 +17,9 @@ public interface IConfigurableGame
     /// </summary>
     public IConfigurableSystemManager Systems { get; }
 
+    /// <summary>
+    ///     Gets the global message bus.
+    /// </summary>
     public MessageBus Bus { get; }
 
     /// <summary>

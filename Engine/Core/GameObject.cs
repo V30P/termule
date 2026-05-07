@@ -14,7 +14,10 @@ public class GameObject : Component, IEnumerable<Component>
     private readonly List<Component> tickingComponents = [];
     private bool tickingDirty;
 
-    public readonly LocalMessageBus Bus = new();
+    /// <summary>
+    ///     The local message bus.
+    /// </summary>
+    public readonly LocalMessageBus Bus;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="GameObject" /> class.
@@ -24,6 +27,8 @@ public class GameObject : Component, IEnumerable<Component>
         Registered += OnRegistered;
         Ticked += OnTick;
         Unregistered += OnUnregistered;
+
+        Bus = new(this);
     }
 
     /// <summary>
@@ -156,6 +161,8 @@ public class GameObject : Component, IEnumerable<Component>
         {
             Game.Register(component);
         }
+
+        Game.Register(Bus);
     }
 
     private void OnTick()
@@ -190,5 +197,7 @@ public class GameObject : Component, IEnumerable<Component>
         {
             Game.Unregister(component);
         }
+
+        Game.Unregister(Bus);
     }
 }

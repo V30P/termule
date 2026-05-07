@@ -11,7 +11,7 @@ As the sole developer of Termule, my main goal has always been to create somethi
 This repository contains the following projects:
 
 1. [Engine](Engine)
-   - Extensible render system
+   - Extensible software renderer
    - Escape-sequence-based terminal display
    - Cross-platform keyboard and mouse input
    - Runtime resource loading

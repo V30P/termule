@@ -5,11 +5,54 @@ namespace Termule.Tests.Core.Messaging;
 public class TestMessageBus()
 {
     [Fact]
+    public void Subscribe_IsIdempotent()
+    {
+        MessageBus bus = new();
+        FakeListener<bool> listener = new();
+
+        bus.Subscribe(listener);
+        bus.Subscribe(listener);
+
+        bus.Broadcast(true);
+
+        Assert.True(listener.ReceivedMessage);
+        Assert.Equal(1, listener.MessageCount);
+    }
+
+    [Fact]
+    public void Unsubscribe_IsIdempotent()
+    {
+        MessageBus bus = new();
+        FakeListener<bool> listener = new();
+        bus.Subscribe(listener);
+
+        bus.Unsubscribe(listener);
+        bus.Unsubscribe(listener);
+
+        bus.Broadcast(true);
+
+        Assert.False(listener.ReceivedMessage);
+    }
+
+    [Fact]
+    public void Unsubscribe_UnsubscribesListener()
+    {
+        MessageBus bus = new();
+        FakeListener<bool> listener = new();
+        bus.Subscribe(listener);
+
+        bus.Unsubscribe(listener);
+
+        bus.Broadcast(true);
+        Assert.False(listener.ReceivedMessage);
+    }
+
+    [Fact]
     public void Broadcast_WithoutListeners_DoesNothing()
     {
         MessageBus bus = new();
 
-        bus.Broadcast(null);
+        bus.Broadcast(true);
     }
 
     [Fact]
@@ -46,21 +89,8 @@ public class TestMessageBus()
         FakeListener<bool> listener = new();
         bus.Subscribe(listener);
 
-        bus.Broadcast(true);
+        bus.Broadcast(1);
 
-        Assert.False(listener.ReceivedMessage);
-    }
-
-    [Fact]
-    public void Unsubscribe_UnsubscribesListeners()
-    {
-        MessageBus bus = new();
-        FakeListener<bool> listener = new();
-        bus.Subscribe(listener);
-
-        bus.Unsubscribe(listener);
-
-        bus.Broadcast(true);
-        Assert.False(listener.ReceivedMessage);
+        Assert.Equal(0, listener.MessageCount);
     }
 }

@@ -23,10 +23,13 @@ public sealed class Game : IConfigurableGame
     public SystemManager Systems { get; } = new SystemManager();
 
     /// <summary>
-    ///     The root game object.
+    ///     Gets the root game object.
     /// </summary>
     public GameObject Root { get; } = [];
 
+    /// <summary>
+    ///     Gets the global message bus.
+    /// </summary>
     public MessageBus Bus { get; } = new MessageBus();
 
     /// <summary>
@@ -38,6 +41,7 @@ public sealed class Game : IConfigurableGame
     {
         Register(Root);
         Register(Systems);
+        Register(Bus);
     }
 
     IConfigurableSystemManager IConfigurableGame.Systems => Systems;
