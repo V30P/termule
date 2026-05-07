@@ -11,11 +11,6 @@ public abstract class Component : GameElement
     private GameObject gameObject;
 
     /// <summary>
-    ///     Invoked every time the game loop runs.
-    /// </summary>
-    protected event Action Ticked;
-
-    /// <summary>
     ///     Gets the <see cref="GameObject" /> that this component is part of.
     /// </summary>
     public GameObject GameObject
@@ -37,6 +32,13 @@ public abstract class Component : GameElement
         GameObject?.Remove(this);
     }
 
+    /// <summary>
+    ///     Called once per frame.
+    /// </summary>
+    protected internal virtual void Tick()
+    {
+    }
+
     internal void SetGameObject(GameObject value)
     {
         gameObject = value;
@@ -52,10 +54,5 @@ public abstract class Component : GameElement
         where TComponent : Component
     {
         return GameObject.Get<TComponent>() ?? throw new MissingComponentException<TComponent>(this);
-    }
-
-    internal void Tick()
-    {
-        Ticked?.Invoke();
     }
 }

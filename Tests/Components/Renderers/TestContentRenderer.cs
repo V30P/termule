@@ -44,6 +44,30 @@ public class TestContentRenderer
     }
 
     [Fact]
+    public void Render_DoesNotContributeDefaultValues()
+    {
+        Cell baseCell = new(BasicColor.White, 'X', BasicColor.White);
+        ContentRenderer<Image> baseRenderer = new()
+        {
+            TargetSpace = true, Content = new FakeContent(new[,] { { baseCell } })
+        };
+        _ = new GameObject(new Transform { Pos = (0, 0) }, baseRenderer);
+        FrameBuffer frame = new(1, 1);
+
+        baseRenderer.Render(frame, (0, 0));
+
+        ContentRenderer<Image> defaultRenderer = new()
+        {
+            TargetSpace = true, Content = new FakeContent(new Cell[,] { { new() } })
+        };
+        _ = new GameObject(new Transform { Pos = (0, 0) }, defaultRenderer);
+
+        defaultRenderer.Render(frame, (0, 0));
+
+        Assert.Equal(baseCell, frame[0, 0]);
+    }
+
+    [Fact]
     public void Render_DrawsExpectedCells()
     {
         ContentRenderer<Image> renderer = new()
@@ -69,8 +93,7 @@ public class TestContentRenderer
     {
         ContentRenderer<Image> renderer = new()
         {
-            TargetSpace = true,
-            Content = new FakeContent(new Cell[,] { { new(BasicColor.White) } })
+            TargetSpace = true, Content = new FakeContent(new Cell[,] { { new(BasicColor.White) } })
         };
         _ = new GameObject(new Transform { Pos = transformPos }, renderer);
         FrameBuffer frame = new(3, 3);
@@ -80,22 +103,6 @@ public class TestContentRenderer
         AssertDrawnCells(frame, BasicColor.White, [
             expectedCellPos
         ]);
-    }
-
-    [Fact]
-    public void Render_WhenNotInTargetSpace_AppliesViewOriginAndFlipsY()
-    {
-        ContentRenderer<Image> renderer = new()
-        {
-            TargetSpace = false,
-            Content = new FakeContent(new Cell[,] { { new(BasicColor.White) } })
-        };
-        _ = new GameObject(new Transform { Pos = (2, 0) }, renderer);
-        FrameBuffer frame = new(3, 3);
-
-        renderer.Render(frame, (1, 1));
-
-        AssertDrawnCells(frame, BasicColor.White, [(1, 1)]);
     }
 
     [Fact]
@@ -124,29 +131,18 @@ public class TestContentRenderer
     }
 
     [Fact]
-    public void Render_DoesNotContributeDefaultValues()
+    public void Render_WhenNotInTargetSpace_AppliesViewOriginAndFlipsY()
     {
-        Cell baseCell = new(BasicColor.White, 'X', BasicColor.White);
-        ContentRenderer<Image> baseRenderer = new()
+        ContentRenderer<Image> renderer = new()
         {
-            TargetSpace = true,
-            Content = new FakeContent(new[,] { { baseCell } })
+            TargetSpace = false, Content = new FakeContent(new Cell[,] { { new(BasicColor.White) } })
         };
-        _ = new GameObject(new Transform { Pos = (0, 0) }, baseRenderer);
-        FrameBuffer frame = new(1, 1);
+        _ = new GameObject(new Transform { Pos = (2, 0) }, renderer);
+        FrameBuffer frame = new(3, 3);
 
-        baseRenderer.Render(frame, (0, 0));
+        renderer.Render(frame, (1, 1));
 
-        ContentRenderer<Image> defaultRenderer = new()
-        {
-            TargetSpace = true,
-            Content = new FakeContent(new Cell[,] { { new() } })
-        };
-        _ = new GameObject(new Transform { Pos = (0, 0) }, defaultRenderer);
-
-        defaultRenderer.Render(frame, (0, 0));
-
-        Assert.Equal(baseCell, frame[0, 0]);
+        AssertDrawnCells(frame, BasicColor.White, [(1, 1)]);
     }
 
     [Fact]
@@ -155,8 +151,7 @@ public class TestContentRenderer
         Cell baseCell = new(BasicColor.White, 'X', BasicColor.White);
         ContentRenderer<Image> baseRenderer = new()
         {
-            TargetSpace = true,
-            Content = new FakeContent(new[,] { { baseCell } })
+            TargetSpace = true, Content = new FakeContent(new[,] { { baseCell } })
         };
         _ = new GameObject(new Transform { Pos = (0, 0) }, baseRenderer);
         FrameBuffer frame = new(1, 1);

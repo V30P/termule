@@ -27,14 +27,6 @@ public sealed class Camera : Component
     private Vector TransformPos => GameObject.Get<Transform>()?.Pos ?? (0, 0);
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="Camera" /> class.
-    /// </summary>
-    public Camera()
-    {
-        Ticked += RenderToTarget;
-    }
-
-    /// <summary>
     ///     Converts a position from target-space to game-space relative to this camera.
     /// </summary>
     /// <param name="pos">The position in target-space.</param>
@@ -58,7 +50,8 @@ public sealed class Camera : Component
         return relativeTargetPos + ((Vector)Target.Size / 2f);
     }
 
-    private void RenderToTarget()
+    /// <inheritdoc/>
+    protected internal override void Tick()
     {
         Target.Buffer.Reset(BackgroundCell);
         GetRequiredSystem<RenderSystem>().Render(TargetToGamePos((0, 0)), Target.Buffer);

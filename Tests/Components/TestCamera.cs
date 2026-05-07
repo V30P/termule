@@ -38,11 +38,38 @@ public class TestCamera
         [(8, 6), (3, -2), (-2, 3), (5, 2)]
     ];
 
+
+    [Theory]
+    [MemberData(nameof(PositionConversionData))]
+    public void GameToTargetPos_MapsCorrectly(VectorInt targetSize, VectorInt transformPos, VectorInt gamePos,
+        VectorInt targetPos)
+    {
+        FakeTarget target = new(targetSize);
+        Game game = new();
+        Camera camera = new() { Target = target };
+        game.Root.Add(new Transform { Pos = transformPos }, camera);
+
+        Assert.Equal(targetPos, camera.GameToTargetPos(gamePos));
+    }
+
+    [Theory]
+    [MemberData(nameof(PositionConversionData))]
+    public void TargetToGamePos_MapsCorrectly(VectorInt targetSize, VectorInt transformPos, VectorInt gamePos,
+        VectorInt targetPos)
+    {
+        FakeTarget target = new(targetSize);
+        Game game = new();
+        Camera camera = new() { Target = target };
+        game.Root.Add(new Transform { Pos = transformPos }, camera);
+
+        Assert.Equal(gamePos, camera.TargetToGamePos(targetPos));
+    }
+
     [Fact]
     public void Tick_CallsPrintOnTarget()
     {
         FakeTarget target = new((0, 0));
-        IConfigurableGame game = Game.Create();
+        Game game = new();
         game.Root.Add(new Camera { Target = target });
 
         game.Systems.Install(new RenderSystem());
@@ -58,7 +85,7 @@ public class TestCamera
     {
         Cell background = new(BasicColor.White, 'T', BasicColor.Black);
         FakeTarget target = new((5, 5));
-        IConfigurableGame game = Game.Create();
+        Game game = new();
         game.Root.Add(
             new Camera { Target = target, BackgroundCell = background });
 
@@ -74,32 +101,5 @@ public class TestCamera
                 Assert.Equal(background, target.Buffer[x, y]);
             }
         }
-    }
-
-    [Theory]
-    [MemberData(nameof(PositionConversionData))]
-    public void TargetToGamePos_MapsCorrectly(VectorInt targetSize, VectorInt transformPos, VectorInt gamePos,
-        VectorInt targetPos)
-    {
-        FakeTarget target = new(targetSize);
-        IConfigurableGame game = Game.Create();
-        Camera camera = new() { Target = target };
-        game.Root.Add(new Transform { Pos = transformPos }, camera);
-
-        Assert.Equal(gamePos, camera.TargetToGamePos(targetPos));
-    }
-
-
-    [Theory]
-    [MemberData(nameof(PositionConversionData))]
-    public void GameToTargetPos_MapsCorrectly(VectorInt targetSize, VectorInt transformPos, VectorInt gamePos,
-        VectorInt targetPos)
-    {
-        FakeTarget target = new(targetSize);
-        IConfigurableGame game = Game.Create();
-        Camera camera = new() { Target = target };
-        game.Root.Add(new Transform { Pos = transformPos }, camera);
-
-        Assert.Equal(targetPos, camera.GameToTargetPos(gamePos));
     }
 }

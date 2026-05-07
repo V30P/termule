@@ -14,7 +14,7 @@ public abstract class System : GameElement
     }
 
     /// <summary>
-    ///     Behavior to execute every tick.
+    ///     Called once per frame.
     /// </summary>
     protected internal virtual void Tick()
     {

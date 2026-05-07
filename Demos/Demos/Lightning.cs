@@ -49,12 +49,9 @@ internal class Lightning : Demo
         {
             this.random = random;
             Add(new Transform());
-
-            Registered += OnRegistered;
-            Ticked += OnTicked;
         }
 
-        private void OnRegistered()
+        protected override void Activate()
         {
             Vector origin = ((float)random.NextDouble() * Systems.Get<DisplaySystem>().Size.X, 0);
             // ReSharper disable once PossibleLossOfFraction
@@ -102,8 +99,10 @@ internal class Lightning : Demo
             }
         }
 
-        private void OnTicked()
+        protected override void Tick()
         {
+            base.Tick();
+
             timeRemaining -= Game.DeltaTime;
             if (timeRemaining < 0)
             {

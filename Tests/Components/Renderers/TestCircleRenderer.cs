@@ -59,30 +59,6 @@ public class TestCircleRenderer
         [(2.25f, 1.75f), (1f, 1f), (2, 2)]
     ];
 
-    [Fact]
-    public void SettingRadius_ToNegative_Throws()
-    {
-        CircleRenderer renderer = new();
-
-        ArgumentOutOfRangeException ex = Assert.Throws<ArgumentOutOfRangeException>(() => renderer.Radius = -1);
-
-        Assert.Equal("Radius", ex.ParamName);
-    }
-
-    [Fact]
-    public void Render_WhenRadiusIsZero_DrawsSingleCenterCell()
-    {
-        FrameBuffer frame = new(1, 1);
-        CircleRenderer renderer = new() { Color = BasicColor.White, TargetSpace = true };
-        GameObject _ = [new Transform { Pos = (0, 0) }, renderer];
-
-        renderer.Render(frame, (0, 0));
-
-        AssertDrawnCells(frame, BasicColor.White, [
-            (0, 0)
-        ]);
-    }
-
     [Theory]
     [MemberData(nameof(OutlineCircleData))]
     public void Render_DrawsExpectedOutlineCells(float radius, VectorInt[] expectedCells)
@@ -133,11 +109,36 @@ public class TestCircleRenderer
     public void Render_WhenFilledIsTrue_FillsInteriorCells(float radius, VectorInt[] expectedCells)
     {
         FrameBuffer frame = new(5, 5);
-        CircleRenderer renderer = new() { Radius = radius, Filled = true, Color = BasicColor.White, TargetSpace = true };
+        CircleRenderer renderer =
+            new() { Radius = radius, Filled = true, Color = BasicColor.White, TargetSpace = true };
         _ = new GameObject(new Transform { Pos = (2, 2) }, renderer);
 
         renderer.Render(frame, (0, 0));
 
         AssertDrawnCells(frame, BasicColor.White, expectedCells);
+    }
+
+    [Fact]
+    public void Render_WhenRadiusIsZero_DrawsSingleCenterCell()
+    {
+        FrameBuffer frame = new(1, 1);
+        CircleRenderer renderer = new() { Color = BasicColor.White, TargetSpace = true };
+        GameObject _ = [new Transform { Pos = (0, 0) }, renderer];
+
+        renderer.Render(frame, (0, 0));
+
+        AssertDrawnCells(frame, BasicColor.White, [
+            (0, 0)
+        ]);
+    }
+
+    [Fact]
+    public void SettingRadius_ToNegative_Throws()
+    {
+        CircleRenderer renderer = new();
+
+        ArgumentOutOfRangeException ex = Assert.Throws<ArgumentOutOfRangeException>(() => renderer.Radius = -1);
+
+        Assert.Equal("Radius", ex.ParamName);
     }
 }

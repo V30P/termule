@@ -21,7 +21,7 @@ public abstract class Renderer : Component
 
         set
         {
-            if (!IsRegistered)
+            if (!Activated)
             {
                 layer = value;
                 return;
@@ -35,16 +35,6 @@ public abstract class Renderer : Component
         }
     }
 
-
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="Renderer" /> class.
-    /// </summary>
-    protected Renderer()
-    {
-        Registered += RegisterToLayer;
-        Unregistered += UnregisterFromLayer;
-    }
-
     /// <summary>
     ///     Renders to the provided <see cref="FrameBuffer" />.
     /// </summary>
@@ -52,13 +42,15 @@ public abstract class Renderer : Component
     /// <param name="viewOrigin">The origin of the view in game space.</param>
     protected internal abstract void Render(FrameBuffer frame, Vector viewOrigin);
 
-    private void RegisterToLayer()
+    /// <inheritdoc/>
+    protected override void Activate()
     {
         layer ??= GetRequiredSystem<RenderSystem>().DefaultLayer;
         layer.Add(this);
     }
 
-    private void UnregisterFromLayer()
+    /// <inheritdoc/>
+    protected override void Deactivate()
     {
         layer.Remove(this);
     }

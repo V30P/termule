@@ -8,9 +8,9 @@ public class TestGameElement
     [Fact]
     public void GetRequiredSystem_ReturnsInstalledSystem()
     {
-        IConfigurableGame game = Game.Create();
+        Game game = new();
         FakeGameElement element = new();
-        ((Game)game).Register(element);
+        game.Register(element);
 
         FakeSystem system = new();
         game.Systems.Install(system);
@@ -21,9 +21,9 @@ public class TestGameElement
     [Fact]
     public void GetRequiredSystem_WhenSystemMissing_Throws()
     {
-        IConfigurableGame game = Game.Create();
+        Game game = new();
         FakeGameElement element = new();
-        ((Game)game).Register(element);
+        game.Register(element);
 
         Assert.Throws<MissingSystemException<FakeSystem>>(() => element.CallGetRequiredSystem<FakeSystem>());
     }

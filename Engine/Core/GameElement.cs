@@ -7,17 +7,7 @@ namespace Termule.Engine.Core;
 /// </summary>
 public abstract class GameElement
 {
-    /// <summary>
-    ///     Invoked when this element is added to a <see cref="Game" />.
-    /// </summary>
-    protected event Action Registered;
-
-    /// <summary>
-    ///     Invoked when this element is removed from a <see cref="Game" />.
-    /// </summary>
-    protected event Action Unregistered;
-
-    internal uint ElementId { get; private set; }
+    internal uint ElementId { get; set; }
 
     /// <summary>
     ///     Gets the game that this element is a part of.
@@ -27,7 +17,7 @@ public abstract class GameElement
     /// <summary>
     ///     Gets a value indicating whether this element is part of a game.
     /// </summary>
-    protected bool IsRegistered => Game != null;
+    protected bool Activated => Game != null;
 
     /// <summary>
     ///     Gets the root of this element's game.
@@ -43,20 +33,32 @@ public abstract class GameElement
     {
     }
 
-    internal void SetGame(Game game)
+    /// <summary>
+    ///     Called when an element is added to a <see cref="Game"/>. 
+    /// </summary>
+    protected virtual void Activate()
     {
-        Game = game;
     }
 
-    internal void InvokeRegistered(uint elementId)
+    /// <summary>
+    ///     Called when an element is removed from its <see cref="Game"/>. 
+    /// </summary>
+    protected virtual void Deactivate()
     {
-        ElementId = elementId;
-        Registered?.Invoke();
     }
 
-    internal void InvokeUnregistered()
+    internal void SetGame(Game value)
     {
-        Unregistered?.Invoke();
+        if (value != null)
+        {
+            Game = value;
+            Activate();
+        }
+        else if (Game != null)
+        {
+            Deactivate();
+            Game = null;
+        }
     }
 
     /// <summary>

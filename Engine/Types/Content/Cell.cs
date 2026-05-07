@@ -51,13 +51,13 @@ public struct Cell(Color color = default, char character = '\0', Color charColor
     }
 
     /// <inheritdoc />
-    public readonly override bool Equals(object obj)
+    public override readonly bool Equals(object obj)
     {
         return obj is Cell cell && this == cell;
     }
 
     /// <inheritdoc />
-    public readonly override int GetHashCode()
+    public override readonly int GetHashCode()
     {
         return HashCode.Combine(Color, Char, CharColor);
     }

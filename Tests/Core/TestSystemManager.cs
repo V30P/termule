@@ -9,9 +9,17 @@ namespace Termule.Tests.Core;
 public class TestSystemManager
 {
     [Fact]
+    public void Get_WhenSystemMissing_ReturnsNull()
+    {
+        Game game = new();
+
+        Assert.Null(game.Systems.Get<FakeSystem>());
+    }
+
+    [Fact]
     public void Install_AddsSystem()
     {
-        IConfigurableGame game = Game.Create();
+        Game game = new();
         FakeSystem system = new();
 
         game.Systems.Install(system);
@@ -21,7 +29,7 @@ public class TestSystemManager
     [Fact]
     public void Install_ReplacesExistingSystem()
     {
-        IConfigurableGame game = Game.Create();
+        Game game = new();
         game.Systems.Install(new FakeSystem());
 
         FakeSystem system = new();
@@ -33,44 +41,16 @@ public class TestSystemManager
     [Fact]
     public void Install_WhenGameAlreadyStarted_Throws()
     {
-        IConfigurableGame game = Game.Create();
+        Game game = new();
         game.Start();
 
         Assert.Throws<InvalidOperationException>(() => game.Systems.Install(new FakeSystem()));
     }
 
     [Fact]
-    public void Get_WhenSystemMissing_ReturnsNull()
-    {
-        IConfigurableGame game = Game.Create();
-
-        Assert.Null(game.Systems.Get<FakeSystem>());
-    }
-
-    [Fact]
-    public void Uninstall_RemovesSystem()
-    {
-        IConfigurableGame game = Game.Create();
-        game.Systems.Install(new FakeSystem());
-
-        game.Systems.Uninstall<FakeSystem>();
-
-        Assert.Null(game.Systems.Get<FakeSystem>());
-    }
-
-    [Fact]
-    public void Uninstall_WhenGameStarted_Throws()
-    {
-        IConfigurableGame game = Game.Create();
-        game.Start();
-
-        Assert.Throws<InvalidOperationException>(() => game.Systems.Uninstall<FakeSystem>());
-    }
-
-    [Fact]
     public void InstalledSystem_FollowsLifecycle()
     {
-        IConfigurableGame game = Game.Create();
+        Game game = new();
         FakeSystem system = new();
         game.Systems.Install(system);
 
@@ -85,9 +65,29 @@ public class TestSystemManager
     }
 
     [Fact]
+    public void Uninstall_RemovesSystem()
+    {
+        Game game = new();
+        game.Systems.Install(new FakeSystem());
+
+        game.Systems.Uninstall<FakeSystem>();
+
+        Assert.Null(game.Systems.Get<FakeSystem>());
+    }
+
+    [Fact]
+    public void Uninstall_WhenGameStarted_Throws()
+    {
+        Game game = new();
+        game.Start();
+
+        Assert.Throws<InvalidOperationException>(() => game.Systems.Uninstall<FakeSystem>());
+    }
+
+    [Fact]
     public void UseDefaultsInstallsCoreSystems()
     {
-        IConfigurableGame game = Game.Create();
+        Game game = new();
 
         game.Systems.UseDefaults();
 

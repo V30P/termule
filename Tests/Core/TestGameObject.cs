@@ -10,12 +10,7 @@ public class TestGameObject
     {
         public bool HasDependency { get; private set; }
 
-        public DependentComponent()
-        {
-            Registered += CheckForDependency;
-        }
-
-        private void CheckForDependency()
+        protected override void Activate()
         {
             HasDependency = GameObject.Get<FakeComponent>() != null;
         }
@@ -40,7 +35,7 @@ public class TestGameObject
     [Fact]
     public void Add_AddsAndRegistersComponent()
     {
-        IConfigurableGame game = Game.Create();
+        Game game = new();
         GameObject gameObject = [];
         game.Root.Add(gameObject);
         FakeComponent component = new();
@@ -48,13 +43,13 @@ public class TestGameObject
         gameObject.Add(component);
 
         Assert.Equal(component, gameObject.Get<FakeComponent>());
-        Assert.Equal(1, component.RegisterCount);
+        Assert.Equal(1, component.ActivateCount);
     }
 
     [Fact]
     public void Add_AddsThenRegistersComponentsSimultaneously()
     {
-        IConfigurableGame game = Game.Create();
+        Game game = new();
         GameObject gameObject = [];
         game.Root.Add(gameObject);
         DependentComponent dependentComponent = new();
@@ -81,31 +76,6 @@ public class TestGameObject
         gameObject.Add(component);
 
         Assert.Throws<ArgumentException>(() => gameObject.Add(component));
-    }
-
-    [Fact]
-    public void Remove_RemovesAndUnregistersComponent()
-    {
-        IConfigurableGame game = Game.Create();
-        GameObject gameObject = [];
-        game.Root.Add(gameObject);
-
-        FakeComponent component = new();
-        gameObject.Add(component);
-
-        gameObject.Remove(component);
-
-        Assert.Null(gameObject.Get<FakeComponent>());
-        Assert.Equal(1, component.UnregisterCount);
-    }
-
-    [Fact]
-    public void Remove_WhenComponentNotInGameObject_Throws()
-    {
-        FakeComponent component = new();
-        new GameObject().Add(component);
-
-        Assert.Throws<InvalidOperationException>(() => new GameObject().Remove(component));
     }
 
     [Theory]
@@ -144,13 +114,38 @@ public class TestGameObject
     [Fact]
     public void Register_RegistersComponents()
     {
-        IConfigurableGame game = Game.Create();
+        Game game = new();
         FakeComponent component = new();
         GameObject gameObject = [component];
 
         game.Root.Add(gameObject);
 
-        Assert.Equal(1, component.RegisterCount);
+        Assert.Equal(1, component.ActivateCount);
+    }
+
+    [Fact]
+    public void Remove_RemovesAndUnregistersComponent()
+    {
+        Game game = new();
+        GameObject gameObject = [];
+        game.Root.Add(gameObject);
+
+        FakeComponent component = new();
+        gameObject.Add(component);
+
+        gameObject.Remove(component);
+
+        Assert.Null(gameObject.Get<FakeComponent>());
+        Assert.Equal(1, component.DeactivateCount);
+    }
+
+    [Fact]
+    public void Remove_WhenComponentNotInGameObject_Throws()
+    {
+        FakeComponent component = new();
+        new GameObject().Add(component);
+
+        Assert.Throws<InvalidOperationException>(() => new GameObject().Remove(component));
     }
 
     [Fact]
@@ -167,13 +162,13 @@ public class TestGameObject
     [Fact]
     public void Unregister_UnregistersComponents()
     {
-        IConfigurableGame game = Game.Create();
+        Game game = new();
         FakeComponent component = new();
         GameObject gameObject = [component];
         game.Root.Add(gameObject);
 
         game.Root.Remove(gameObject);
 
-        Assert.Equal(1, component.UnregisterCount);
+        Assert.Equal(1, component.DeactivateCount);
     }
 }

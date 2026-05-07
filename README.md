@@ -90,7 +90,7 @@ After adding Termule as a reference in your C# project, you can get started by c
 using Termule.Engine.Core;
 
 // Create a game instance
-var game = Game.Create();
+Game game = new();
 
 // Install the default systems for your platform
 game.Systems.UseDefaults();

@@ -51,12 +51,12 @@ internal class Raindrops : Demo
             Add(
                 new Transform(),
                 new CircleRenderer { TargetSpace = true, DoubleWide = true });
-
-            Ticked += OnTicked;
         }
 
-        private void OnTicked()
+        protected override void Tick()
         {
+            base.Tick();
+
             time += Game.DeltaTime;
             if (time > Lifespan)
             {

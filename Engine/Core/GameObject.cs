@@ -8,6 +8,11 @@ namespace Termule.Engine.Core;
 /// </summary>
 public class GameObject : Component, IEnumerable<Component>
 {
+    /// <summary>
+    ///     The local message bus.
+    /// </summary>
+    public readonly LocalMessageBus Bus;
+
     private readonly List<Component> components = [];
     private readonly Dictionary<Type, List<Component>> typesToComponents = [];
 
@@ -15,20 +20,11 @@ public class GameObject : Component, IEnumerable<Component>
     private bool tickingDirty;
 
     /// <summary>
-    ///     The local message bus.
-    /// </summary>
-    public readonly LocalMessageBus Bus;
-
-    /// <summary>
     ///     Initializes a new instance of the <see cref="GameObject" /> class.
     /// </summary>
     public GameObject()
     {
-        Registered += OnRegistered;
-        Ticked += OnTick;
-        Unregistered += OnUnregistered;
-
-        Bus = new(this);
+        Bus = new LocalMessageBus(this);
     }
 
     /// <summary>
@@ -155,7 +151,8 @@ public class GameObject : Component, IEnumerable<Component>
         return implementedTypes;
     }
 
-    private void OnRegistered()
+    /// <inheritdoc/>
+    protected override void Activate()
     {
         foreach (Component component in components)
         {
@@ -165,7 +162,19 @@ public class GameObject : Component, IEnumerable<Component>
         Game.Register(Bus);
     }
 
-    private void OnTick()
+    /// <inheritdoc/>
+    protected override void Deactivate()
+    {
+        foreach (Component component in components)
+        {
+            Game.Unregister(component);
+        }
+
+        Game.Unregister(Bus);
+    }
+
+    /// <inheritdoc/>
+    protected internal override void Tick()
     {
         // Rebuild the ticking list if necessary
         if (tickingDirty)
@@ -189,15 +198,5 @@ public class GameObject : Component, IEnumerable<Component>
 
             component.Tick();
         }
-    }
-
-    private void OnUnregistered()
-    {
-        foreach (Component component in components)
-        {
-            Game.Unregister(component);
-        }
-
-        Game.Unregister(Bus);
     }
 }

@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System.Security.Cryptography.X509Certificates;
 using Termule.Engine.Core.Messaging;
 
 namespace Termule.Engine.Core;
@@ -8,19 +7,18 @@ namespace Termule.Engine.Core;
 ///     Central environment that manages <see cref="Component" />s and <see cref="System" />s.
 ///     Also controls the main game loop.
 /// </summary>
-public sealed class Game : IConfigurableGame
+public sealed class Game
 {
     private readonly Stopwatch stopwatch = new();
-    private uint registerCount;
 
     private bool stop;
 
-    internal bool Started { get; private set; }
+    internal uint registerCount;
 
     /// <summary>
     ///     Gets the system manager.
     /// </summary>
-    public SystemManager Systems { get; } = new SystemManager();
+    public SystemManager Systems { get; } = new();
 
     /// <summary>
     ///     Gets the root game object.
@@ -30,23 +28,29 @@ public sealed class Game : IConfigurableGame
     /// <summary>
     ///     Gets the global message bus.
     /// </summary>
-    public MessageBus Bus { get; } = new MessageBus();
+    public MessageBus Bus { get; } = new();
 
     /// <summary>
     ///     Gets the length of the last game loop iteration in seconds.
     /// </summary>
     public float DeltaTime { get; private set; }
 
-    private Game()
+    internal bool Started { get; private set; }
+
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="Game" /> class.
+    /// </summary>
+    public Game()
     {
         Register(Root);
         Register(Systems);
         Register(Bus);
     }
 
-    IConfigurableSystemManager IConfigurableGame.Systems => Systems;
-
-    void IConfigurableGame.Run()
+    /// <summary>
+    ///     Run the game, blocking until it is stopped.
+    /// </summary>
+    public void Run()
     {
         if (!Started)
         {
@@ -72,39 +76,6 @@ public sealed class Game : IConfigurableGame
 #endif
     }
 
-    // Manual lifecycle control
-    void IConfigurableGame.Start()
-    {
-        Start();
-    }
-
-    void IConfigurableGame.RunFrame()
-    {
-        RunFrame();
-    }
-
-    void IConfigurableGame.RunForFrames(int frames)
-    {
-        for (int i = 0; i < frames; i++)
-        {
-            RunFrame();
-        }
-    }
-
-    void IConfigurableGame.CleanUp()
-    {
-        CleanUp();
-    }
-
-    /// <summary>
-    ///     Creates a configurable <see cref="Game" /> instance.
-    /// </summary>
-    /// <returns>A new <see cref="Game" /> open for configuration.</returns>
-    public static IConfigurableGame Create()
-    {
-        return new Game();
-    }
-
     /// <summary>
     ///     Request this game to stop the game loop and clean up.
     /// </summary>
@@ -115,17 +86,17 @@ public sealed class Game : IConfigurableGame
 
     internal void Register(GameElement element)
     {
+        element.ElementId = registerCount++;
         element.SetGame(this);
-        element.InvokeRegistered(registerCount++);
     }
 
     internal void Unregister(GameElement element)
     {
-        element.InvokeUnregistered();
         element.SetGame(null);
     }
 
-    private void Start()
+    // Manual lifecycle control
+    internal void Start()
     {
         if (Started)
         {
@@ -136,7 +107,7 @@ public sealed class Game : IConfigurableGame
         Started = true;
     }
 
-    private void RunFrame()
+    internal void RunFrame()
     {
         DeltaTime = (float)stopwatch.Elapsed.TotalSeconds;
         stopwatch.Restart();
@@ -145,7 +116,15 @@ public sealed class Game : IConfigurableGame
         Root.Tick();
     }
 
-    private void CleanUp()
+    internal void RunForFrames(int frames)
+    {
+        for (int i = 0; i < frames; i++)
+        {
+            RunFrame();
+        }
+    }
+
+    internal void CleanUp()
     {
         if (!Started)
         {

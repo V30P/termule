@@ -18,12 +18,12 @@ public sealed class Transform : Component
     /// </summary>
     public Vector Pos
     {
-        get => IsRegistered ? field
+        get => Activated ? field
             : cachedPositionIsLocal ? (0, 0) : cachedPosition;
 
         set
         {
-            if (IsRegistered)
+            if (Activated)
             {
                 Vector difference = value - Pos;
                 foreach (Transform child in children)
@@ -46,12 +46,12 @@ public sealed class Transform : Component
     /// </summary>
     public Vector LocalPos
     {
-        get => IsRegistered ? Pos - (parent?.Pos ?? (0, 0))
+        get => Activated ? Pos - (parent?.Pos ?? (0, 0))
             : cachedPositionIsLocal ? cachedPosition : (0, 0);
 
         set
         {
-            if (IsRegistered)
+            if (Activated)
             {
                 Pos = (parent?.Pos ?? (0, 0)) + value;
             }
@@ -63,16 +63,8 @@ public sealed class Transform : Component
         }
     }
 
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="Transform" /> class.
-    /// </summary>
-    public Transform()
-    {
-        Registered += OnRegistered;
-        Unregistered += OnUnregistered;
-    }
-
-    private void OnRegistered()
+    /// <inheritdoc/>
+    protected override void Activate()
     {
         parent = GameObject.GameObject?.Get<Transform>();
         parent?.children.Add(this);
@@ -80,9 +72,10 @@ public sealed class Transform : Component
         Pos = cachedPositionIsLocal ? (parent?.Pos ?? (0, 0)) + cachedPosition : cachedPosition;
     }
 
-    private void OnUnregistered()
+    /// <inheritdoc/>
+    protected override void Deactivate()
     {
-        // Cache the current position so it can be restored when re-registered.
+        // Cache the current position so it can be restored when re-activated.
         cachedPosition = Pos;
         cachedPositionIsLocal = false;
 

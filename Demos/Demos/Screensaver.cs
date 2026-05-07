@@ -46,13 +46,12 @@ internal class Screensaver : Demo
             Add(
                 new Transform(),
                 new ContentRenderer<Image> { TargetSpace = true });
-
-            Registered += OnRegistered;
-            Ticked += OnTicked;
         }
 
-        private void OnRegistered()
+        protected override void Activate()
         {
+            base.Activate();
+
             logo = Systems.Get<ResourceLoader>().Load<Image>("screensaver/logo");
             Get<ContentRenderer<Image>>().Content = logo;
 
@@ -61,8 +60,10 @@ internal class Screensaver : Demo
             RandomizeColor();
         }
 
-        private void OnTicked()
+        protected override void Tick()
         {
+            base.Tick();
+
             Transform transform = Get<Transform>();
             VectorInt displaySize = Systems.Get<DisplaySystem>().Size;
 

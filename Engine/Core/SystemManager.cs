@@ -9,24 +9,40 @@ namespace Termule.Engine.Core;
 ///     Manages systems and provides an interface to install, uninstall, and retrieve systems during <see cref="Game" />
 ///     configuration.
 /// </summary>
-public class SystemManager : GameElement, IConfigurableSystemManager
+public class SystemManager : GameElement
 {
     private readonly Dictionary<Type, System> systems = [];
 
-    void IConfigurableSystemManager.Install<TSystem>(TSystem system)
+    /// <summary>
+    ///     Installs the provided <paramref name="system"/>, replacing the existing instance of that
+    ///     system base class (if any).
+    /// </summary>
+    /// <typeparam name="TSystem">The type of system being installed.</typeparam>
+    /// <param name="system">The system to install.</param>
+    /// <exception cref="InvalidOperationException">
+    ///     Thrown when trying to install systems when the <see cref="Game"/> is already started.
+    /// </exception>
+    public void Install<TSystem>(TSystem system) where TSystem : System
     {
         if (Game.Started)
         {
             throw new InvalidOperationException("Cannot change systems once the game is started.");
         }
 
-        ((IConfigurableSystemManager)this).Uninstall<TSystem>();
+        Uninstall<TSystem>();
 
         systems[GetSystemType<TSystem>()] = system;
         Game.Register(system);
     }
 
-    void IConfigurableSystemManager.Uninstall<TSystem>()
+    /// <summary>
+    ///     Uninstalls the system of type <typeparamref name="TSystem"/> (if any).
+    /// </summary>
+    /// <typeparam name="TSystem">The type of system to uninstall.</typeparam>
+    /// <exception cref="InvalidOperationException">
+    ///     Thrown when trying to uninstall systems when the <see cref="Game"/> is already started.
+    /// </exception>
+    public void Uninstall<TSystem>() where TSystem : System
     {
         if (Game.Started)
         {
@@ -40,22 +56,24 @@ public class SystemManager : GameElement, IConfigurableSystemManager
         }
     }
 
-    void IConfigurableSystemManager.UseDefaults()
+    /// <summary>
+    /// Installs the system-specific default <see cref="Systems"/>s. 
+    /// </summary>
+    public void UseDefaults()
     {
-        IConfigurableSystemManager self = this;
-        self.Install(new Keyboard());
+        Install(new Keyboard());
 
         if (OperatingSystem.IsWindows())
         {
-            self.Install(new WindowsDisplaySystem());
+            Install(new WindowsDisplaySystem());
         }
         else if (OperatingSystem.IsMacOS() || OperatingSystem.IsLinux())
         {
-            self.Install(new UnixDisplaySystem());
+            Install(new UnixDisplaySystem());
         }
 
-        self.Install(new RenderSystem());
-        self.Install(new ResourceLoader());
+        Install(new RenderSystem());
+        Install(new ResourceLoader());
     }
 
     /// <summary>

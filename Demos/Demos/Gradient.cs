@@ -19,11 +19,6 @@ internal class Gradient : Demo
     {
         private float time;
 
-        internal GradientRenderer()
-        {
-            Ticked += OnTicked;
-        }
-
         protected override void Render(FrameBuffer frame, Vector viewOrigin)
         {
             for (int x = 0; x < frame.Size.X; x++)
@@ -53,7 +48,7 @@ internal class Gradient : Demo
             };
         }
 
-        private void OnTicked()
+        protected override void Tick()
         {
             time += Game.DeltaTime;
         }

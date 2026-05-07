@@ -50,18 +50,44 @@ public class TestGame
     }
 
     [Fact]
+    public void CleanUp_IsIdempotent()
+    {
+        Game game = new();
+        CountingSystem system = new();
+        game.Systems.Install(system);
+        game.Start();
+
+        game.CleanUp();
+        game.CleanUp();
+
+        Assert.Equal(1, system.StopCount);
+    }
+
+    [Fact]
     public void Create_InitializesSystemsAndRoot()
     {
-        IConfigurableGame game = Game.Create();
+        Game game = new();
 
         Assert.NotNull(game.Systems);
         Assert.NotNull(game.Root);
     }
 
     [Fact]
+    public void Register_ConfiguresElement()
+    {
+        Game game = new();
+        FakeGameElement element = new();
+
+        game.Register(element);
+
+        Assert.Equal(game, element.GameInstance);
+        Assert.True(element.HasBeenActivated);
+    }
+
+    [Fact]
     public void Run_PreparesAndCleansUp()
     {
-        IConfigurableGame game = Game.Create();
+        Game game = new();
         AutoStopSystem system = new();
         game.Systems.Install(system);
 
@@ -75,7 +101,7 @@ public class TestGame
     [Fact]
     public void Run_WhenAlreadyPrepared_DoesNotPrepareAgain()
     {
-        IConfigurableGame game = Game.Create();
+        Game game = new();
         AutoStopSystem system = new();
         game.Systems.Install(system);
         game.Start();
@@ -90,7 +116,7 @@ public class TestGame
     [Fact]
     public void RunForFrames_TickSystemsWithoutPreparing()
     {
-        IConfigurableGame game = Game.Create();
+        Game game = new();
         CountingSystem system = new();
         game.Systems.Install(system);
 
@@ -104,7 +130,7 @@ public class TestGame
     [Fact]
     public void RunFrame_TicksComponents()
     {
-        IConfigurableGame game = Game.Create();
+        Game game = new();
         FakeComponent component = new();
         game.Root.Add(component);
         game.Start();
@@ -115,41 +141,15 @@ public class TestGame
     }
 
     [Fact]
-    public void CleanUp_IsIdempotent()
-    {
-        IConfigurableGame game = Game.Create();
-        CountingSystem system = new();
-        game.Systems.Install(system);
-        game.Start();
-
-        game.CleanUp();
-        game.CleanUp();
-
-        Assert.Equal(1, system.StopCount);
-    }
-
-    [Fact]
-    public void Register_ConfiguresElement()
-    {
-        Game game = (Game)Game.Create();
-        FakeGameElement element = new();
-
-        game.Register(element);
-
-        Assert.Equal(game, element.GameInstance);
-        Assert.True(element.RegisteredInvoked);
-    }
-
-    [Fact]
     public void Unregister_ClearsElementProperties()
     {
-        Game game = (Game)Game.Create();
+        Game game = new();
         FakeGameElement element = new();
         game.Register(element);
 
         game.Unregister(element);
 
         Assert.Null(element.GameInstance);
-        Assert.True(element.UnregisteredInvoked);
+        Assert.True(element.HasBeenDeactivated);
     }
 }

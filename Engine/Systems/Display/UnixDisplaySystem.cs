@@ -18,10 +18,7 @@ public sealed partial class UnixDisplaySystem : TerminalDisplaySystem
 
     private static readonly ProcessStartInfo SttyStartInfo = new()
     {
-        FileName = "stty",
-        RedirectStandardOutput = true,
-        UseShellExecute = false,
-        CreateNoWindow = true
+        FileName = "stty", RedirectStandardOutput = true, UseShellExecute = false, CreateNoWindow = true
     };
 
     private readonly byte[] inputBuffer = new byte[1024];

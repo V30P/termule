@@ -5,21 +5,57 @@ namespace Termule.Tests.Types.Vectors;
 public class TestVector
 {
     [Fact]
-    public void ParameterlessConstructor_CreatesZeroVector()
+    public void AddOperator_AddsComponents()
     {
-        Vector v = new();
+        Vector v1 = new(1, 2);
+        Vector v2 = new(3, 4);
 
-        Assert.Equal(0, v.X);
-        Assert.Equal(0, v.Y);
+        Vector result = v1 + v2;
+
+        Assert.Equal(4, result.X);
+        Assert.Equal(6, result.Y);
     }
 
     [Fact]
-    public void ValueConstructor_SetsComponents()
+    public void DivideOperator_ScalesVector()
     {
-        Vector v = new(3.5f, -2.1f);
+        Vector v = new(6, 8);
 
-        Assert.Equal(3.5f, v.X);
-        Assert.Equal(-2.1f, v.Y);
+        Vector result = v / 2;
+
+        Assert.Equal(3, result.X);
+        Assert.Equal(4, result.Y);
+    }
+
+    [Fact]
+    public void Equality_WorksCorrectly()
+    {
+        Vector v1 = new(1, 2);
+        Vector v2 = new(1, 2);
+        Vector v3 = new(2, 1);
+
+        Assert.Equal(v1, v2);
+        Assert.NotEqual(v1, v3);
+    }
+
+    [Fact]
+    public void FloorToInt_ReturnsFlooredVectorInt()
+    {
+        Vector v = new(1.9f, -2.1f);
+
+        VectorInt result = v.FloorToInt();
+
+        Assert.Equal(1, result.X);
+        Assert.Equal(-3, result.Y);
+    }
+
+    [Fact]
+    public void GetHashCode_IsConsistent()
+    {
+        Vector v1 = new(1, 2);
+        Vector v2 = new(1, 2);
+
+        Assert.Equal(v1.GetHashCode(), v2.GetHashCode());
     }
 
     [Fact]
@@ -58,6 +94,28 @@ public class TestVector
     }
 
     [Fact]
+    public void MultiplyOperator_ScalesVector()
+    {
+        Vector v = new(2, 3);
+
+        Vector result = v * 2.5f;
+
+        Assert.Equal(5, result.X);
+        Assert.Equal(7.5f, result.Y);
+    }
+
+    [Fact]
+    public void NegateOperator_NegatesComponents()
+    {
+        Vector v = new(3, -5);
+
+        Vector result = -v;
+
+        Assert.Equal(-3, result.X);
+        Assert.Equal(5, result.Y);
+    }
+
+    [Fact]
     public void Normalized_ReturnsUnitVector()
     {
         Vector v = new(3, 4);
@@ -77,15 +135,23 @@ public class TestVector
     }
 
     [Fact]
-    public void AddOperator_AddsComponents()
+    public void ParameterlessConstructor_CreatesZeroVector()
     {
-        Vector v1 = new(1, 2);
-        Vector v2 = new(3, 4);
+        Vector v = new();
 
-        Vector result = v1 + v2;
+        Assert.Equal(0, v.X);
+        Assert.Equal(0, v.Y);
+    }
 
-        Assert.Equal(4, result.X);
-        Assert.Equal(6, result.Y);
+    [Fact]
+    public void RoundToInt_ReturnsRoundedVectorInt()
+    {
+        Vector v = new(1.6f, -2.4f);
+
+        VectorInt result = v.RoundToInt();
+
+        Assert.Equal(2, result.X);
+        Assert.Equal(-2, result.Y);
     }
 
     [Fact]
@@ -101,59 +167,6 @@ public class TestVector
     }
 
     [Fact]
-    public void MultiplyOperator_ScalesVector()
-    {
-        Vector v = new(2, 3);
-
-        Vector result = v * 2.5f;
-
-        Assert.Equal(5, result.X);
-        Assert.Equal(7.5f, result.Y);
-    }
-
-    [Fact]
-    public void DivideOperator_ScalesVector()
-    {
-        Vector v = new(6, 8);
-
-        Vector result = v / 2;
-
-        Assert.Equal(3, result.X);
-        Assert.Equal(4, result.Y);
-    }
-
-    [Fact]
-    public void NegateOperator_NegatesComponents()
-    {
-        Vector v = new(3, -5);
-
-        Vector result = -v;
-
-        Assert.Equal(-3, result.X);
-        Assert.Equal(5, result.Y);
-    }
-
-    [Fact]
-    public void Equality_WorksCorrectly()
-    {
-        Vector v1 = new(1, 2);
-        Vector v2 = new(1, 2);
-        Vector v3 = new(2, 1);
-
-        Assert.Equal(v1, v2);
-        Assert.NotEqual(v1, v3);
-    }
-
-    [Fact]
-    public void GetHashCode_IsConsistent()
-    {
-        Vector v1 = new(1, 2);
-        Vector v2 = new(1, 2);
-
-        Assert.Equal(v1.GetHashCode(), v2.GetHashCode());
-    }
-
-    [Fact]
     public void ToString_ReturnsFormattedString()
     {
         Vector v = new(1.5f, -2.5f);
@@ -162,24 +175,11 @@ public class TestVector
     }
 
     [Fact]
-    public void FloorToInt_ReturnsFlooredVectorInt()
+    public void ValueConstructor_SetsComponents()
     {
-        Vector v = new(1.9f, -2.1f);
+        Vector v = new(3.5f, -2.1f);
 
-        VectorInt result = v.FloorToInt();
-
-        Assert.Equal(1, result.X);
-        Assert.Equal(-3, result.Y);
-    }
-
-    [Fact]
-    public void RoundToInt_ReturnsRoundedVectorInt()
-    {
-        Vector v = new(1.6f, -2.4f);
-
-        VectorInt result = v.RoundToInt();
-
-        Assert.Equal(2, result.X);
-        Assert.Equal(-2, result.Y);
+        Assert.Equal(3.5f, v.X);
+        Assert.Equal(-2.1f, v.Y);
     }
 }

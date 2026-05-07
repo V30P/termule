@@ -3,19 +3,19 @@ using Termule.Engine.Core.Messaging;
 
 namespace Termule.Tests.Core.Messaging;
 
-public class TestLocalMessageBus()
+public class TestLocalMessageBus
 {
     [Theory]
-    [InlineData(Route.Downward, new bool[] { true, false, false })]
-    [InlineData(Route.Local, new bool[] { false, true, false })]
-    [InlineData(Route.Upward, new bool[] { false, false, true })]
-    [InlineData(Route.Downward | Route.Local, new bool[] { true, true, false })]
-    [InlineData(Route.Local | Route.Upward, new bool[] { false, true, true })]
-    [InlineData(Route.Upward | Route.Downward, new bool[] { true, false, true })]
-    [InlineData(Route.Local | Route.Upward | Route.Downward, new bool[] { true, true, true })]
+    [InlineData(Route.Downward, new[] { true, false, false })]
+    [InlineData(Route.Local, new[] { false, true, false })]
+    [InlineData(Route.Upward, new[] { false, false, true })]
+    [InlineData(Route.Downward | Route.Local, new[] { true, true, false })]
+    [InlineData(Route.Local | Route.Upward, new[] { false, true, true })]
+    [InlineData(Route.Upward | Route.Downward, new[] { true, false, true })]
+    [InlineData(Route.Local | Route.Upward | Route.Downward, new[] { true, true, true })]
     public void Broadcast_RoutesCorrectly(Route route, bool[] values)
     {
-        IConfigurableGame game = Game.Create();
+        Game game = new();
         GameObject child = [];
         GameObject gameObject = [child];
         GameObject parent = [gameObject];
@@ -38,7 +38,7 @@ public class TestLocalMessageBus()
     }
 
     [Fact]
-    public void Broadcast_WhenUnregisteredAndRouteIsNonlocal_Throws()
+    public void Broadcast_WhenNotActivatedAndRouteIsNonlocal_Throws()
     {
         GameObject gameObject = [];
 

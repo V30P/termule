@@ -148,9 +148,7 @@ internal class Shooter : Demo
         {
             Add(
                 new Transform(),
-                new ContentRenderer<Image> { Centered = true, Content = characterSprite });
-
-            Ticked += OnTicked;
+                new ContentRenderer<Image> { Centered = true });
         }
 
         internal void Hit()
@@ -174,8 +172,10 @@ internal class Shooter : Demo
             shotCooldownTimeRemaining = ShotCooldownLength;
         }
 
-        private void OnTicked()
+        protected override void Tick()
         {
+            base.Tick();
+
             Transform transform = Get<Transform>();
             transform.Pos += ScaleVelocity(MovementDir.Normalized * Speed) * Game.DeltaTime;
 
@@ -195,13 +195,10 @@ internal class Shooter : Demo
         protected override float Speed => 15;
         protected override float ShotCooldownLength => 0.5f;
 
-        public Player()
+        protected override void Tick()
         {
-            Ticked += OnTicked;
-        }
+            base.Tick();
 
-        private void OnTicked()
-        {
             MovementDir = Systems.Get<Keyboard>().Get<Vector>(Binds.Movement);
             Target = Root.Get<Camera>().TargetToGamePos(Systems.Get<DisplaySystem>().MousePos);
 
@@ -221,13 +218,10 @@ internal class Shooter : Demo
         protected override float Speed => 7.5f;
         protected override float ShotCooldownLength => 1;
 
-        public Enemy()
+        protected override void Tick()
         {
-            Ticked += OnTicked;
-        }
+            base.Tick();
 
-        private void OnTicked()
-        {
             if (Root.Get<Player>() is { } player)
             {
                 Vector pos = Get<Transform>().Pos;
@@ -268,12 +262,12 @@ internal class Shooter : Demo
                     Centered = true,
                     Content = new Image(projectileSprite).WithColorSwapped(BasicColor.White, source.Color)
                 });
-
-            Ticked += OnTicked;
         }
 
-        private void OnTicked()
+        protected override void Tick()
         {
+            base.Tick();
+
             Get<Transform>().Pos += ScaleVelocity(direction * Speed) * Game.DeltaTime;
 
             foreach (Character character in Root.GetAll<Character>())

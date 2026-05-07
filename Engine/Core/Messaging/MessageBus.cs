@@ -23,7 +23,7 @@ public class MessageBus : GameElement
     }
 
     /// <summary>
-    ///     Unregister the listener from receiving messages. 
+    ///     Unregister the listener from receiving messages.
     /// </summary>
     /// <typeparam name="TMessage">The type of message to unsubscribe from.</typeparam>
     /// <param name="listener">The listener to unsubscribe.</param>

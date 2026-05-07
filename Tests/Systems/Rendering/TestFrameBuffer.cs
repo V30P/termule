@@ -9,6 +9,7 @@ public class TestFrameBuffer
 
     // Prevents XUnit from failing to convert BasicColor -> Color? on its own
     private static readonly Color DrawColor = BasicColor.White;
+
     public static IEnumerable<object[]> DrawData =
     [
         [null, null, null, default(Cell)],
@@ -68,6 +69,16 @@ public class TestFrameBuffer
     }
 
     [Fact]
+    public void Reset_WithCellProvided_FillsWithProvidedCell()
+    {
+        FrameBuffer frame = new(10, 5);
+
+        frame.Reset(TestCell);
+
+        AssertAllCellsEqual(frame, TestCell);
+    }
+
+    [Fact]
     public void Reset_WithNoCellProvided_FillsWithDefaultCell()
     {
         FrameBuffer frame = new(10, 5);
@@ -82,15 +93,5 @@ public class TestFrameBuffer
         frame.Reset();
 
         AssertAllCellsEqual(frame, default);
-    }
-
-    [Fact]
-    public void Reset_WithCellProvided_FillsWithProvidedCell()
-    {
-        FrameBuffer frame = new(10, 5);
-
-        frame.Reset(TestCell);
-
-        AssertAllCellsEqual(frame, TestCell);
     }
 }

@@ -5,15 +5,6 @@ namespace Termule.Tests.Types.Content;
 public class TestColor
 {
     [Fact]
-    public void ParameterlessConstructor_CreatesDefaultColor()
-    {
-        Color color = new();
-
-        Assert.Equal(BasicColor.Default, color.Basic);
-        Assert.Null(color.Full);
-    }
-
-    [Fact]
     public void BasicColorConstructor_SetsBasic()
     {
         Color color = BasicColor.Blue;
@@ -53,5 +44,14 @@ public class TestColor
         Assert.Equal(255, color.Full.Value.R);
         Assert.Equal(128, color.Full.Value.G);
         Assert.Equal(64, color.Full.Value.B);
+    }
+
+    [Fact]
+    public void ParameterlessConstructor_CreatesDefaultColor()
+    {
+        Color color = new();
+
+        Assert.Equal(BasicColor.Default, color.Basic);
+        Assert.Null(color.Full);
     }
 }
