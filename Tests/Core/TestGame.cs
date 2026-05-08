@@ -1,4 +1,5 @@
 using Termule.Engine.Core;
+using Termule.Tests.Core.Messaging;
 
 namespace Termule.Tests.Core;
 
@@ -64,24 +65,17 @@ public class TestGame
     }
 
     [Fact]
-    public void Create_InitializesSystemsAndRoot()
+    public void Register_BroadcastsElementRegisteredMessage()
     {
         Game game = new();
-
-        Assert.NotNull(game.Systems);
-        Assert.NotNull(game.Root);
-    }
-
-    [Fact]
-    public void Register_ConfiguresElement()
-    {
-        Game game = new();
+        FakeListener<Game.ElementRegisteredMessage> listener = new();
+        game.Bus.Subscribe(listener);
         FakeGameElement element = new();
 
         game.Register(element);
 
-        Assert.Equal(game, element.GameInstance);
-        Assert.True(element.HasBeenActivated);
+        Assert.Equal(1, listener.MessageCount);
+        Assert.Equal(element, listener.ReceivedMessage.Element);
     }
 
     [Fact]
@@ -120,7 +114,7 @@ public class TestGame
         CountingSystem system = new();
         game.Systems.Install(system);
 
-        game.RunForFrames(3);
+        game.RunFrames(3);
 
         Assert.Equal(0, system.StartCount);
         Assert.Equal(3, system.TickCount);
@@ -135,9 +129,50 @@ public class TestGame
         game.Root.Add(component);
         game.Start();
 
-        game.RunForFrames(5);
+        game.RunFrames(5);
 
         Assert.Equal(5, component.TickCount);
+    }
+
+    [Fact]
+    public void StartingGame_BroadcastsStartedMessage()
+    {
+        Game game = new();
+        FakeListener<Game.StartedMessage> listener = new();
+        game.Bus.Subscribe(listener);
+
+        game.Start();
+
+        Assert.Equal(1, listener.MessageCount);
+    }
+
+    [Fact]
+    public void StoppingGame_BroadcastsStoppedMessage()
+    {
+        Game game = new();
+        FakeListener<Game.StoppedMessage> listener = new();
+        game.Bus.Subscribe(listener);
+        game.Start();
+
+        game.Stop();
+
+        Assert.Equal(1, listener.MessageCount);
+    }
+
+    [Fact]
+    public void Unregister_BroadcastsElementUnregisteredMessage()
+    {
+        Game game = new();
+        FakeListener<Game.ElementUnregisteredMessage> listener = new();
+        game.Bus.Subscribe(listener);
+
+        FakeGameElement element = new();
+        game.Register(element);
+
+        game.Unregister(element);
+
+        Assert.Equal(1, listener.MessageCount);
+        Assert.Equal(element, listener.ReceivedMessage.Element);
     }
 
     [Fact]

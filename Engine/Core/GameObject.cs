@@ -6,7 +6,7 @@ namespace Termule.Engine.Core;
 /// <summary>
 ///     Component that groups other components.
 /// </summary>
-public class GameObject : Component, IEnumerable<Component>
+public sealed class GameObject : Component, IEnumerable<Component>
 {
     /// <summary>
     ///     The local message bus.
@@ -151,10 +151,10 @@ public class GameObject : Component, IEnumerable<Component>
         return implementedTypes;
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void Activate()
     {
-        foreach (Component component in components)
+        foreach (Component component in components.ToArray())
         {
             Game.Register(component);
         }
@@ -162,10 +162,10 @@ public class GameObject : Component, IEnumerable<Component>
         Game.Register(Bus);
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void Deactivate()
     {
-        foreach (Component component in components)
+        foreach (Component component in components.ToArray())
         {
             Game.Unregister(component);
         }
@@ -173,7 +173,7 @@ public class GameObject : Component, IEnumerable<Component>
         Game.Unregister(Bus);
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected internal override void Tick()
     {
         // Rebuild the ticking list if necessary

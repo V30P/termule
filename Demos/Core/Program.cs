@@ -2,6 +2,7 @@ using System.Reflection;
 using Termule.Engine.Components;
 using Termule.Engine.Core;
 using Termule.Engine.Systems.Rendering;
+using Termule.Engine.Types;
 
 namespace Termule.Demos.Core;
 
@@ -12,7 +13,7 @@ internal static class Program
     private static readonly List<string> DemoNames = [];
     private static readonly Dictionary<string, Demo> Demos = [];
 
-    internal static readonly Layer UiLayer = new SimpleLayer();
+    internal static readonly Layer UILayer = new SimpleLayer();
 
     private static readonly Dictionary<char, Flag> FlagShortNames = new()
     {
@@ -164,14 +165,16 @@ internal static class Program
 
         Game game = new();
         game.Systems.UseDefaults();
-        game.Systems.Install(new RenderSystem { Layers = [new SimpleLayer(), UiLayer] });
+        game.Systems.Install(new RenderSystem { Layers = [new SimpleLayer(), UILayer] });
         game.Systems.Install(demo);
 
         if (showStats)
         {
-            TpsIndicator tpsIndicator = [];
-            game.Root.Add(tpsIndicator);
-            tpsIndicator.Get<Renderer>().Layer = UiLayer;
+            game.Root.Add(new GameObject(
+                new Transform(),
+                new ContentRenderer<Text> { TargetSpace = true, Layer = UILayer },
+                new TpsIndicator()
+            ));
         }
 
         game.Run();

@@ -75,7 +75,7 @@ public class TestCamera
         game.Systems.Install(new RenderSystem());
         game.Start();
 
-        game.RunForFrames(5);
+        game.RunFrames(5);
 
         Assert.Equal(5, target.PrintCount);
     }

@@ -4,6 +4,25 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- Core messaging functionality via `MessageBus` 
+- Routed messaging in the component tree via `LocalMessageBus`
+- Messages to existing behavior:
+  - When the game is started/stopped
+  - When a game element is registered/unregistered
+  - When the display's size changes or mouse moves
+  - When a transform's position changes
+
+### Changed
+- `GameObject` is now sealed
+
+### Removed
+- `Ticked` event from components, now replaced with a virtual method
+- `Registered` and `Unregistered` events from game elements, replaced with virtual methods
+- `IConfigurableGame` and `IConfigurableSystemManager` interfaces for the sake of simplicity
+
 ## [0.2.0] - 2026-04-25
 
 ### Added

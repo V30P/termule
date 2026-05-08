@@ -42,14 +42,14 @@ public abstract class Renderer : Component
     /// <param name="viewOrigin">The origin of the view in game space.</param>
     protected internal abstract void Render(FrameBuffer frame, Vector viewOrigin);
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void Activate()
     {
         layer ??= GetRequiredSystem<RenderSystem>().DefaultLayer;
         layer.Add(this);
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void Deactivate()
     {
         layer.Remove(this);

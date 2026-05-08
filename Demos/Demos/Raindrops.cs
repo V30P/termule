@@ -30,33 +30,27 @@ internal class Raindrops : Demo
             return;
         }
 
-        Raindrop raindrop = new((float)random.NextDouble(), (float)random.NextDouble());
-        Root.Add(raindrop);
-
+        SpawnRaindrop((float)random.NextDouble(), (float)random.NextDouble());
         cooldown = ((float)random.NextDouble() * (MaxCooldown - MinCooldown)) + MinCooldown;
     }
 
-    private class Raindrop : GameObject
+    private void SpawnRaindrop(float x, float y)
+    {
+        Root.Add(new GameObject(
+            new Transform(),
+            new CircleRenderer { TargetSpace = true, DoubleWide = true },
+            new RaindropController((x, y))
+        ));
+    }
+
+    private class RaindropController(Vector pos) : Component
     {
         private const float Lifespan = 2;
 
-        private readonly Vector pos;
-
         private float time;
-
-        internal Raindrop(float x, float y)
-        {
-            pos = (x, y);
-
-            Add(
-                new Transform(),
-                new CircleRenderer { TargetSpace = true, DoubleWide = true });
-        }
 
         protected override void Tick()
         {
-            base.Tick();
-
             time += Game.DeltaTime;
             if (time > Lifespan)
             {
@@ -64,12 +58,12 @@ internal class Raindrops : Demo
                 return;
             }
 
-            CircleRenderer circleRenderer = Get<CircleRenderer>();
+            CircleRenderer circleRenderer = GameObject.Get<CircleRenderer>();
             circleRenderer.Radius = GetRadius(time);
             circleRenderer.Color = (0, 0, (int)(255 * (1 - (time / Lifespan))));
 
             VectorInt displaySize = Systems.Get<DisplaySystem>().Size;
-            Get<Transform>().Pos = (pos.X * displaySize.X, pos.Y * displaySize.Y);
+            GameObject.Get<Transform>().Pos = (pos.X * displaySize.X, pos.Y * displaySize.Y);
         }
 
         private float GetRadius(float t)

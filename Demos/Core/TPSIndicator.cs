@@ -4,22 +4,12 @@ using Termule.Engine.Types;
 
 namespace Termule.Demos.Core;
 
-internal class TpsIndicator : GameObject
+internal class TpsIndicator : Component
 {
     private const string TextTemplate = " TPS: {0}";
 
     private int ticks;
     private float time;
-
-    internal TpsIndicator()
-    {
-        Add(
-            new Transform(),
-            new ContentRenderer<Text>
-            {
-                TargetSpace = true, Content = new Text { Value = string.Format(TextTemplate, "N/A") }
-            });
-    }
 
     protected override void Tick()
     {
@@ -27,13 +17,12 @@ internal class TpsIndicator : GameObject
 
         ticks++;
         time += Game.DeltaTime;
-
         if (time < 1)
         {
             return;
         }
 
-        Get<ContentRenderer<Text>>().Content.Value = string.Format(TextTemplate, (int)(ticks / time));
+        GameObject.Get<ContentRenderer<Text>>().Content.Value = string.Format(TextTemplate, (int)(ticks / time));
         time = ticks = 0;
     }
 }

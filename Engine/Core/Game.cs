@@ -9,6 +9,7 @@ namespace Termule.Engine.Core;
 /// </summary>
 public sealed class Game
 {
+    private readonly HashSet<GameElement> elements = [];
     private readonly Stopwatch stopwatch = new();
 
     private bool stop;
@@ -52,10 +53,7 @@ public sealed class Game
     /// </summary>
     public void Run()
     {
-        if (!Started)
-        {
-            Start();
-        }
+        Start();
 
 #if RELEASE
         try
@@ -81,18 +79,35 @@ public sealed class Game
     /// </summary>
     public void Stop()
     {
+        if (stop)
+        {
+            return;
+        }
+
         stop = true;
+        Bus.Broadcast(new StoppedMessage());
     }
 
     internal void Register(GameElement element)
     {
-        element.ElementId = registerCount++;
-        element.SetGame(this);
+        if (elements.Add(element))
+        {
+            element.ElementId = registerCount++;
+            element.SetGame(this);
+
+            Bus.Broadcast(new ElementRegisteredMessage(element));
+        }
     }
 
     internal void Unregister(GameElement element)
     {
-        element.SetGame(null);
+        if (elements.Remove(element))
+        {
+            element.ElementId = 0;
+            element.SetGame(null);
+
+            Bus.Broadcast(new ElementUnregisteredMessage(element));
+        }
     }
 
     // Manual lifecycle control
@@ -105,6 +120,7 @@ public sealed class Game
 
         Systems.Start();
         Started = true;
+        Bus.Broadcast(new StartedMessage());
     }
 
     internal void RunFrame()
@@ -116,9 +132,9 @@ public sealed class Game
         Root.Tick();
     }
 
-    internal void RunForFrames(int frames)
+    internal void RunFrames(int count)
     {
-        for (int i = 0; i < frames; i++)
+        for (int i = 0; i < count; i++)
         {
             RunFrame();
         }
@@ -134,4 +150,12 @@ public sealed class Game
         Systems.Stop();
         Started = false;
     }
+
+    internal record struct ElementRegisteredMessage(GameElement Element);
+
+    internal record struct ElementUnregisteredMessage(GameElement Element);
+
+    internal struct StartedMessage;
+
+    internal struct StoppedMessage;
 }

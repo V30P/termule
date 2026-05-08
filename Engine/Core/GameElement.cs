@@ -34,14 +34,14 @@ public abstract class GameElement
     }
 
     /// <summary>
-    ///     Called when an element is added to a <see cref="Game"/>. 
+    ///     Called when an element is added to a <see cref="Game" />.
     /// </summary>
     protected virtual void Activate()
     {
     }
 
     /// <summary>
-    ///     Called when an element is removed from its <see cref="Game"/>. 
+    ///     Called when an element is removed from its <see cref="Game" />.
     /// </summary>
     protected virtual void Deactivate()
     {

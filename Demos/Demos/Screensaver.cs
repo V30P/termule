@@ -14,10 +14,15 @@ internal class Screensaver : Demo
         Root.Add(
             new Transform(),
             new Camera(),
-            new Logo());
+            new GameObject(
+                new Transform(),
+                new ContentRenderer<Image> { TargetSpace = true },
+                new LogoController()
+            )
+        );
     }
 
-    private class Logo : GameObject
+    private class LogoController : Component
     {
         private const float Speed = 0.25f;
 
@@ -41,19 +46,10 @@ internal class Screensaver : Demo
         private Image logo;
         private Vector pos;
 
-        internal Logo()
-        {
-            Add(
-                new Transform(),
-                new ContentRenderer<Image> { TargetSpace = true });
-        }
-
         protected override void Activate()
         {
-            base.Activate();
-
             logo = Systems.Get<ResourceLoader>().Load<Image>("screensaver/logo");
-            Get<ContentRenderer<Image>>().Content = logo;
+            GameObject.Get<ContentRenderer<Image>>().Content = logo;
 
             dir = unsignedDir;
             currentColor = BasicColor.White;
@@ -62,9 +58,7 @@ internal class Screensaver : Demo
 
         protected override void Tick()
         {
-            base.Tick();
-
-            Transform transform = Get<Transform>();
+            Transform transform = GameObject.Get<Transform>();
             VectorInt displaySize = Systems.Get<DisplaySystem>().Size;
 
             if (transform.Pos.Y < 0 && Math.Abs(dir.Y - unsignedDir.Y) > 0.01f)
@@ -95,7 +89,7 @@ internal class Screensaver : Demo
 
         private void RandomizeColor()
         {
-            ContentRenderer<Image> imageRenderer = Get<ContentRenderer<Image>>();
+            ContentRenderer<Image> imageRenderer = GameObject.Get<ContentRenderer<Image>>();
             Color newColor = colors.Where(c => c != currentColor).ElementAt(random.Next(0, colors.Length - 1));
             imageRenderer.Content = imageRenderer.Content.WithColorSwapped(currentColor, newColor);
             currentColor = newColor;

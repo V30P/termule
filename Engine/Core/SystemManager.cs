@@ -14,13 +14,13 @@ public class SystemManager : GameElement
     private readonly Dictionary<Type, System> systems = [];
 
     /// <summary>
-    ///     Installs the provided <paramref name="system"/>, replacing the existing instance of that
+    ///     Installs the provided <paramref name="system" />, replacing the existing instance of that
     ///     system base class (if any).
     /// </summary>
     /// <typeparam name="TSystem">The type of system being installed.</typeparam>
     /// <param name="system">The system to install.</param>
     /// <exception cref="InvalidOperationException">
-    ///     Thrown when trying to install systems when the <see cref="Game"/> is already started.
+    ///     Thrown when trying to install systems when the <see cref="Game" /> is already started.
     /// </exception>
     public void Install<TSystem>(TSystem system) where TSystem : System
     {
@@ -36,11 +36,11 @@ public class SystemManager : GameElement
     }
 
     /// <summary>
-    ///     Uninstalls the system of type <typeparamref name="TSystem"/> (if any).
+    ///     Uninstalls the system of type <typeparamref name="TSystem" /> (if any).
     /// </summary>
     /// <typeparam name="TSystem">The type of system to uninstall.</typeparam>
     /// <exception cref="InvalidOperationException">
-    ///     Thrown when trying to uninstall systems when the <see cref="Game"/> is already started.
+    ///     Thrown when trying to uninstall systems when the <see cref="Game" /> is already started.
     /// </exception>
     public void Uninstall<TSystem>() where TSystem : System
     {
@@ -57,7 +57,7 @@ public class SystemManager : GameElement
     }
 
     /// <summary>
-    /// Installs the system-specific default <see cref="Systems"/>s. 
+    ///     Installs the system-specific default <see cref="Systems" />s.
     /// </summary>
     public void UseDefaults()
     {

@@ -30,31 +30,30 @@ internal class Lightning : Demo
             return;
         }
 
-        Root.Add(new Bolt(random));
+        SpawnBolt();
         cooldown = ((float)random.NextDouble() * (MaxCooldown - MinCooldown)) + MinCooldown;
     }
 
-    private class Bolt : GameObject
+    private void SpawnBolt()
+    {
+        Root.Add(new GameObject(
+            new Transform(),
+            new BoltController(random)
+        ));
+    }
+
+    private class BoltController(Random random) : Component
     {
         private const float Lifespan = 0.5f;
         private const float BendGenerations = 5;
         private const float BranchChance = 0.2f;
         private const float OffsetToDisplayRatio = 0.1f;
 
-        private readonly Random random;
-
         private float timeRemaining = Lifespan;
-
-        internal Bolt(Random random)
-        {
-            this.random = random;
-            Add(new Transform());
-        }
 
         protected override void Activate()
         {
             Vector origin = ((float)random.NextDouble() * Systems.Get<DisplaySystem>().Size.X, 0);
-            // ReSharper disable once PossibleLossOfFraction
             Vector target = (Systems.Get<DisplaySystem>().Size.X / 2, Systems.Get<DisplaySystem>().Size.Y);
 
             List<List<Vector>> branches = [[origin, target]];
@@ -94,19 +93,18 @@ internal class Lightning : Demo
 
             foreach (List<Vector> branch in branches)
             {
-                Add(
-                    new LineRenderer { Color = (255, 255, 255), TargetSpace = true, Points = branch });
+                GameObject.Add(
+                    new LineRenderer { Color = (255, 255, 255), TargetSpace = true, Points = branch }
+                );
             }
         }
 
         protected override void Tick()
         {
-            base.Tick();
-
             timeRemaining -= Game.DeltaTime;
             if (timeRemaining < 0)
             {
-                Destroy();
+                GameObject.Destroy();
             }
         }
     }

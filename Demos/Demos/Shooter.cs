@@ -1,6 +1,7 @@
 using Termule.Demos.Core;
 using Termule.Engine.Components;
 using Termule.Engine.Core;
+using Termule.Engine.Core.Messaging;
 using Termule.Engine.Systems.Display;
 using Termule.Engine.Systems.Input;
 using Termule.Engine.Systems.Resources;
@@ -9,7 +10,7 @@ using static Termule.Demos.Core.Utilities;
 
 namespace Termule.Demos.Demos;
 
-internal class Shooter : Demo
+internal class Shooter : Demo, IMessageListener<Shooter.CharacterController.DiedMessage>
 {
     private const float GracePeriodLength = 3;
     private const float GameOverLength = 5;
@@ -20,145 +21,128 @@ internal class Shooter : Demo
     private static Image projectileSprite;
 
     private float gameOverTimeRemaining;
-    private float gracePeriodTimeRemaining;
-    private int roundNumber;
+    private float gracePeriodTimeRemaining = GracePeriodLength;
 
-    private State state;
+    private int roundNumber = 1;
+    private int enemiesRemaining;
 
-    private enum State
+    void IMessageListener<CharacterController.DiedMessage>.OnMessage(CharacterController.DiedMessage message)
     {
-        GracePeriod,
-        Round,
-        GameOver
+        if (message.Type == typeof(PlayerController))
+        {
+            // Start game over when the player dies
+            gameOverTimeRemaining = GameOverLength;
+        }
+        else if (message.Type == typeof(EnemyController))
+        {
+            // Start grace period when the last enemy dies
+            enemiesRemaining--;
+            if (enemiesRemaining == 0)
+            {
+                gracePeriodTimeRemaining = GracePeriodLength;
+                roundNumber++;
+            }
+        }
     }
 
     protected override void Start()
     {
-        Systems.Get<Keyboard>().Binds = new BindMap
-        {
-            { Binds.Movement, new VectorBind(Button.W, Button.A, Button.S, Button.D) },
-            { Binds.Fire, new ButtonBind(Button.Mouse1) }
-        };
-
         characterSprite = Systems.Get<ResourceLoader>().Load<Image>("shooter/character");
         projectileSprite = Systems.Get<ResourceLoader>().Load<Image>("shooter/projectile");
+
+        Systems.Get<Keyboard>().Binds = new BindMap
+        {
+            { "Movement", new VectorBind(Button.W, Button.A, Button.S, Button.D) },
+            { "Fire", new ButtonBind(Button.Mouse1) }
+        };
 
         Root.Add(
             new Transform(),
             new Camera(),
-            new Player(),
-            new ContentRenderer<Text> { Centered = true, Layer = Program.UiLayer });
+            new ContentRenderer<Text> { Centered = true, Layer = Program.UILayer }
+        );
+
+        Game.Bus.Subscribe(this);
+
+        SpawnCharacter<PlayerController>((0, 0));
     }
 
     protected override void Tick()
     {
-        switch (state)
+        if (gameOverTimeRemaining > 0)
         {
-            case State.GracePeriod:
-                gracePeriodTimeRemaining -= Game.DeltaTime;
-                if (gracePeriodTimeRemaining <= 0)
-                {
-                    StartRound();
-                }
-
-                break;
-            case State.Round:
-                if (Root.Get<Player>() == null)
-                {
-                    StartGameOver();
-                }
-                else if (Root.Get<Enemy>() == null)
-                {
-                    StartGracePeriod();
-                }
-
-                break;
-            case State.GameOver:
-                gameOverTimeRemaining -= Game.DeltaTime;
-                if (gameOverTimeRemaining <= 0)
-                {
-                    Game.Stop();
-                }
-
-                break;
-        }
-    }
-
-    private void StartGracePeriod()
-    {
-        Root.Get<ContentRenderer<Text>>().Content.Value = $"ROUND {++roundNumber}";
-        gracePeriodTimeRemaining = GracePeriodLength;
-
-        state = State.GracePeriod;
-    }
-
-    private void StartRound()
-    {
-        Root.Get<ContentRenderer<Text>>().Content.Value = null;
-
-        for (int i = 0; i < roundNumber; i++)
-        {
-            Enemy enemy = [];
-            enemy.Get<Transform>().Pos = PointOnRectangle(
-                random,
-                -Systems.Get<DisplaySystem>().Size / 2,
-                Systems.Get<DisplaySystem>().Size);
-            Root.Add(enemy);
-        }
-
-        state = State.Round;
-    }
-
-    private void StartGameOver()
-    {
-        Root.Get<ContentRenderer<Text>>().Content.Value =
+            Root.Get<ContentRenderer<Text>>().Content.Value =
             $"""
-                     GAME OVER
-                 ROUNDS SURVIVED: {roundNumber - 1}
+                 GAME OVER
+             ROUNDS SURVIVED: {roundNumber - 1}
              """;
-        gameOverTimeRemaining = GameOverLength;
 
-        state = State.GameOver;
+            // Stop the game when the game over screen is finished
+            gameOverTimeRemaining -= Game.DeltaTime;
+            if (gameOverTimeRemaining <= 0)
+            {
+                Game.Stop();
+            }
+        }
+        else if (gracePeriodTimeRemaining > 0)
+        {
+            Root.Get<ContentRenderer<Text>>().Content.Value = $"ROUND {roundNumber}";
+
+            // Start next round when grace period is finished
+            gracePeriodTimeRemaining -= Game.DeltaTime;
+            if (gracePeriodTimeRemaining <= 0)
+            {
+                Root.Get<ContentRenderer<Text>>().Content.Value = null;
+                for (int i = 0; i < roundNumber; i++)
+                {
+                    SpawnCharacter<EnemyController>(PointOnRectangle(
+                        random,
+                        -Systems.Get<DisplaySystem>().Size / 2,
+                        Systems.Get<DisplaySystem>().Size)
+                    );
+
+                    enemiesRemaining++;
+                }
+            }
+        }
     }
 
-    private static class Binds
+    private void SpawnCharacter<TController>(Vector pos) where TController : CharacterController, new()
     {
-        internal const string Movement = "Movement";
-        internal const string Fire = "Fire";
+        Game.Root.Add(new GameObject(
+            new Transform { Pos = pos },
+            new ContentRenderer<Image> { Centered = true },
+            new TController()
+        ));
     }
 
-    private abstract class Character : GameObject
+    private abstract class CharacterController : Component
     {
         private const float HitColorLength = 0.05f;
 
-        private float hitColorTimeRemaining;
-
         private int hp = 3;
         private float shotCooldownTimeRemaining;
+        private float hitColorTimeRemaining;
 
         protected Vector MovementDir { get; set; }
         protected Vector Target { get; set; }
 
-        internal abstract Color Color { get; }
+        protected abstract Color Color { get; }
         protected abstract Color HitColor { get; }
         protected abstract float Speed { get; }
         protected abstract float ShotCooldownLength { get; }
 
-        protected Character()
+        protected override void Tick()
         {
-            Add(
-                new Transform(),
-                new ContentRenderer<Image> { Centered = true });
-        }
+            Transform transform = GameObject.Get<Transform>();
+            transform.Pos += ScaleVelocity(MovementDir.Normalized * Speed) * Game.DeltaTime;
 
-        internal void Hit()
-        {
-            hp--;
-            hitColorTimeRemaining = HitColorLength;
-            if (hp == 0)
-            {
-                Destroy();
-            }
+            hitColorTimeRemaining -= Game.DeltaTime;
+            GameObject.Get<ContentRenderer<Image>>().Content =
+                (Target.X > transform.Pos.X ? characterSprite : characterSprite.Flipped())
+                .WithColorSwapped(BasicColor.White, hitColorTimeRemaining < 0 ? Color : HitColor);
+
+            shotCooldownTimeRemaining -= Game.DeltaTime;
         }
 
         protected void ShootAtTarget()
@@ -168,29 +152,36 @@ internal class Shooter : Demo
                 return;
             }
 
-            Root.Add(new Projectile(this, Get<Transform>().Pos, Target));
+            Game.Root.Add(new GameObject(
+                new Transform { Pos = GameObject.Get<Transform>().Pos },
+                new ContentRenderer<Image>
+                {
+                    Centered = true,
+                    Content = new Image(projectileSprite).WithColorSwapped(BasicColor.White, Color)
+                },
+                new ProjectileController(GetType(), (Target - GameObject.Get<Transform>().Pos).Normalized)
+            ));
+
             shotCooldownTimeRemaining = ShotCooldownLength;
         }
 
-        protected override void Tick()
+        internal void Hit()
         {
-            base.Tick();
-
-            Transform transform = Get<Transform>();
-            transform.Pos += ScaleVelocity(MovementDir.Normalized * Speed) * Game.DeltaTime;
-
-            hitColorTimeRemaining -= Game.DeltaTime;
-            Get<ContentRenderer<Image>>().Content =
-                (Target.X > transform.Pos.X ? characterSprite : characterSprite.Flipped())
-                .WithColorSwapped(BasicColor.White, hitColorTimeRemaining < 0 ? Color : HitColor);
-
-            shotCooldownTimeRemaining -= Game.DeltaTime;
+            hp--;
+            hitColorTimeRemaining = HitColorLength;
+            if (hp == 0)
+            {
+                Game.Bus.Broadcast(new DiedMessage(GetType()));
+                GameObject.Destroy();
+            }
         }
+
+        internal record struct DiedMessage(Type Type);
     }
 
-    private class Player : Character
+    private class PlayerController : CharacterController
     {
-        internal override Color Color => BasicColor.Blue;
+        protected override Color Color => BasicColor.Blue;
         protected override Color HitColor => BasicColor.BrightBlue;
         protected override float Speed => 15;
         protected override float ShotCooldownLength => 0.5f;
@@ -199,21 +190,21 @@ internal class Shooter : Demo
         {
             base.Tick();
 
-            MovementDir = Systems.Get<Keyboard>().Get<Vector>(Binds.Movement);
+            MovementDir = Systems.Get<Keyboard>().Get<Vector>("Movement");
             Target = Root.Get<Camera>().TargetToGamePos(Systems.Get<DisplaySystem>().MousePos);
 
-            if (Systems.Get<Keyboard>().Get<bool>(Binds.Fire))
+            if (Systems.Get<Keyboard>().Get<bool>("Fire"))
             {
                 ShootAtTarget();
             }
         }
     }
 
-    private class Enemy : Character
+    private class EnemyController : CharacterController
     {
         private const float Range = 30;
 
-        internal override Color Color => BasicColor.Red;
+        protected override Color Color => BasicColor.Red;
         protected override Color HitColor => BasicColor.BrightRed;
         protected override float Speed => 7.5f;
         protected override float ShotCooldownLength => 1;
@@ -222,12 +213,14 @@ internal class Shooter : Demo
         {
             base.Tick();
 
-            if (Root.Get<Player>() is { } player)
+            if (Game.Root.GetAll<GameObject>()
+                    .FirstOrDefault(g => g.Get<PlayerController>() is not null) is { } player)
             {
-                Vector pos = Get<Transform>().Pos;
+                Vector pos = GameObject.Get<Transform>().Pos;
                 Target = player.Get<Transform>().Pos;
 
-                if ((pos - Target).Magnitude > Range)
+                Vector displacement = pos - Target;
+                if (displacement.Magnitude > Range)
                 {
                     MovementDir = Target - pos;
                 }
@@ -244,41 +237,20 @@ internal class Shooter : Demo
         }
     }
 
-    private class Projectile : GameObject
+    private class ProjectileController(Type sourceType, Vector direction) : Component
     {
         private const float Speed = 30;
 
-        private readonly Vector direction;
-        private readonly Type sourceType;
-
-        internal Projectile(Character source, Vector position, Vector target)
-        {
-            sourceType = source.GetType();
-            direction = (target - position).Normalized;
-
-            Add(new Transform { Pos = position },
-                new ContentRenderer<Image>
-                {
-                    Centered = true,
-                    Content = new Image(projectileSprite).WithColorSwapped(BasicColor.White, source.Color)
-                });
-        }
-
         protected override void Tick()
         {
-            base.Tick();
-
-            Get<Transform>().Pos += ScaleVelocity(direction * Speed) * Game.DeltaTime;
-
-            foreach (Character character in Root.GetAll<Character>())
+            GameObject.Get<Transform>().Pos += ScaleVelocity(direction * Speed) * Game.DeltaTime;
+            foreach (CharacterController character in Root.GetAll<GameObject>()
+                         .Select(g => g.Get<CharacterController>())
+                         .Where(c => c != null && c.GetType() != sourceType)
+                    )
             {
-                if (character.GetType() == sourceType)
-                {
-                    continue;
-                }
-
-                Vector characterPos = character.Get<Transform>().Pos;
-                Vector projectilePos = Get<Transform>().Pos;
+                Vector characterPos = character.GameObject.Get<Transform>().Pos;
+                Vector projectilePos = GameObject.Get<Transform>().Pos;
 
                 if (MathF.Abs(characterPos.X - projectilePos.X) <
                     (float)(characterSprite.Size.X + projectileSprite.Size.X) / 2
@@ -286,8 +258,8 @@ internal class Shooter : Demo
                     (float)(characterSprite.Size.Y + projectileSprite.Size.Y) / 2)
                 {
                     character.Hit();
-                    Destroy();
-                    return;
+                    GameObject.Destroy();
+                    break;
                 }
             }
         }

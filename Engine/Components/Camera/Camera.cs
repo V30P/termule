@@ -50,7 +50,7 @@ public sealed class Camera : Component
         return relativeTargetPos + ((Vector)Target.Size / 2f);
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected internal override void Tick()
     {
         Target.Buffer.Reset(BackgroundCell);

@@ -57,7 +57,7 @@ public class TestSystemManager
         game.Start();
         Assert.True(system.Started);
 
-        game.RunForFrames(5);
+        game.RunFrames(5);
         Assert.Equal(5, system.TickCount);
 
         game.CleanUp();

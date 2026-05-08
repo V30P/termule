@@ -7,7 +7,7 @@ namespace Termule.Engine.Core;
 public abstract class System : GameElement
 {
     /// <summary>
-    ///     Behavior to execute when the containing <see cref="Game" /> is run.
+    ///     Called when the <see cref="Game" /> is run.
     /// </summary>
     protected internal virtual void Start()
     {
@@ -21,7 +21,7 @@ public abstract class System : GameElement
     }
 
     /// <summary>
-    ///     Behavior to execute when the containing <see cref="Game" /> is stopped.
+    ///     Called when the <see cref="Game" /> is stopped.
     /// </summary>
     protected internal virtual void Stop()
     {

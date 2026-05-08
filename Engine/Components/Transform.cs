@@ -11,6 +11,7 @@ public sealed class Transform : Component
     private readonly List<Transform> children = [];
     private Vector cachedPosition;
     private bool cachedPositionIsLocal = true;
+
     private Transform parent;
 
     /// <summary>
@@ -23,6 +24,11 @@ public sealed class Transform : Component
 
         set
         {
+            if (value == field)
+            {
+                return;
+            }
+
             if (Activated)
             {
                 Vector difference = value - Pos;
@@ -32,6 +38,7 @@ public sealed class Transform : Component
                 }
 
                 field = value;
+                GameObject.Bus.Broadcast(new MovedMessage(value));
             }
             else
             {
@@ -63,7 +70,7 @@ public sealed class Transform : Component
         }
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void Activate()
     {
         parent = GameObject.GameObject?.Get<Transform>();
@@ -72,7 +79,7 @@ public sealed class Transform : Component
         Pos = cachedPositionIsLocal ? (parent?.Pos ?? (0, 0)) + cachedPosition : cachedPosition;
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     protected override void Deactivate()
     {
         // Cache the current position so it can be restored when re-activated.
@@ -82,4 +89,6 @@ public sealed class Transform : Component
         parent?.children.Remove(this);
         parent = null;
     }
+
+    internal record struct MovedMessage(Vector NewPosition);
 }

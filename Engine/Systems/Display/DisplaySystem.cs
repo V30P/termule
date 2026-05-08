@@ -14,7 +14,21 @@ public abstract class DisplaySystem : Core.System, ICameraTarget
     /// <summary>
     ///     Gets the display-space position of the mouse (in cells).
     /// </summary>
-    public VectorInt MousePos { get; private protected set; }
+    public VectorInt MousePos
+    {
+        get;
+
+        private protected set
+        {
+            if (field == value)
+            {
+                return;
+            }
+
+            field = value;
+            Game?.Bus.Broadcast(new MouseMovedMessage(field));
+        }
+    }
 
     private protected FrameBuffer Screen { get; private set; } = new(0, 0);
 
@@ -31,10 +45,16 @@ public abstract class DisplaySystem : Core.System, ICameraTarget
 
         protected set
         {
+            if (field == value)
+            {
+                return;
+            }
+
             buffer = new FrameBuffer(value.X, value.Y);
             Screen = new FrameBuffer(value.X, value.Y);
 
             field = value;
+            Game?.Bus.Broadcast(new ResizedMessage(field));
         }
     }
 
@@ -52,4 +72,16 @@ public abstract class DisplaySystem : Core.System, ICameraTarget
     }
 
     private protected abstract void PrintBuffer();
+
+    /// <summary>
+    ///     Broadcast when the display's size changes.
+    /// </summary>
+    /// <param name="NewSize">The display's size after resizing.</param>
+    public record struct ResizedMessage(VectorInt NewSize);
+
+    /// <summary>
+    ///     Broadcast when the mouse is moved.
+    /// </summary>
+    /// <param name="NewPosition">The position of the mouse after the movement.</param>
+    public record struct MouseMovedMessage(VectorInt NewPosition);
 }
