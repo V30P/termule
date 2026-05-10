@@ -72,10 +72,10 @@ internal class Shooter : Demo, IMessageListener<Shooter.CharacterController.Died
         if (gameOverTimeRemaining > 0)
         {
             Root.Get<ContentRenderer<Text>>().Content.Value =
-            $"""
-                 GAME OVER
-             ROUNDS SURVIVED: {roundNumber - 1}
-             """;
+                $"""
+                     GAME OVER
+                 ROUNDS SURVIVED: {roundNumber - 1}
+                 """;
 
             // Stop the game when the game over screen is finished
             gameOverTimeRemaining -= Game.DeltaTime;
@@ -156,8 +156,7 @@ internal class Shooter : Demo, IMessageListener<Shooter.CharacterController.Died
                 new Transform { Pos = GameObject.Get<Transform>().Pos },
                 new ContentRenderer<Image>
                 {
-                    Centered = true,
-                    Content = new Image(projectileSprite).WithColorSwapped(BasicColor.White, Color)
+                    Centered = true, Content = new Image(projectileSprite).WithColorSwapped(BasicColor.White, Color)
                 },
                 new ProjectileController(GetType(), (Target - GameObject.Get<Transform>().Pos).Normalized)
             ));
@@ -243,19 +242,19 @@ internal class Shooter : Demo, IMessageListener<Shooter.CharacterController.Died
 
         protected override void Tick()
         {
+            // Detect hits
             GameObject.Get<Transform>().Pos += ScaleVelocity(direction * Speed) * Game.DeltaTime;
             foreach (CharacterController character in Root.GetAll<GameObject>()
                          .Select(g => g.Get<CharacterController>())
-                         .Where(c => c != null && c.GetType() != sourceType)
-                    )
+                         .Where(c => c != null && c.GetType() != sourceType))
             {
                 Vector characterPos = character.GameObject.Get<Transform>().Pos;
                 Vector projectilePos = GameObject.Get<Transform>().Pos;
 
                 if (MathF.Abs(characterPos.X - projectilePos.X) <
-                    (float)(characterSprite.Size.X + projectileSprite.Size.X) / 2
+                    ((float) characterSprite.Size.X + projectileSprite.Size.X) / 2
                     && MathF.Abs(characterPos.Y - projectilePos.Y) <
-                    (float)(characterSprite.Size.Y + projectileSprite.Size.Y) / 2)
+                    ((float) characterSprite.Size.Y + projectileSprite.Size.Y) / 2)
                 {
                     character.Hit();
                     GameObject.Destroy();

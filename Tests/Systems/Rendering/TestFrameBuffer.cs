@@ -7,9 +7,8 @@ public class TestFrameBuffer
 {
     private static readonly Cell TestCell = new(BasicColor.White, 'X', BasicColor.White);
 
-    // Prevents XUnit from failing to convert BasicColor -> Color? on its own
+    // Prevents XUnit from failing to convert BasicColor to Color? at runtime
     private static readonly Color DrawColor = BasicColor.White;
-
     public static IEnumerable<object[]> DrawData =
     [
         [null, null, null, default(Cell)],
@@ -66,6 +65,44 @@ public class TestFrameBuffer
 
         frame.Draw((0, 0), TestCell.Color);
         Assert.Equal(new Cell(TestCell.Color), frame[0, 0]);
+    }
+
+    [Fact]
+    public void Draw_LayersMatchingBoxDrawingChars()
+    {
+        FrameBuffer frame = new(1, 1);
+
+        frame.Draw((0, 0), character: '─', characterColor: BasicColor.White);
+        frame.Draw((0, 0), character: '│', characterColor: BasicColor.White);
+
+        Assert.Equal('┼', frame[0, 0].Char);
+    }
+
+    [Fact]
+    public void Draw_DoesNotLayerNonMatchingBoxDrawingChars()
+    {
+        FrameBuffer frame = new(1, 1);
+
+        frame.Draw((0, 0), character: '─', characterColor: BasicColor.White);
+        frame.Draw((0, 0), character: '│', characterColor: BasicColor.Red);
+
+        Assert.Equal('│', frame[0, 0].Char);
+    }
+
+    [Fact]
+    public void Draw_WithLayerBoxDrawingCharactersFalse_DoesNotLayerBoxDrawingChars()
+    {
+        FrameBuffer frame = new(1, 1);
+
+        frame.Draw((0, 0), character: '─', characterColor: BasicColor.White);
+        frame.Draw(
+            (0, 0),
+            character: '│',
+            characterColor: BasicColor.White,
+            layerBoxDrawingChars: false
+        );
+
+        Assert.Equal('│', frame[0, 0].Char);
     }
 
     [Fact]

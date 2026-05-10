@@ -89,8 +89,9 @@ internal class Screensaver : Demo
 
         private void RandomizeColor()
         {
-            ContentRenderer<Image> imageRenderer = GameObject.Get<ContentRenderer<Image>>();
             Color newColor = colors.Where(c => c != currentColor).ElementAt(random.Next(0, colors.Length - 1));
+            ContentRenderer<Image> imageRenderer = GameObject.Get<ContentRenderer<Image>>();
+
             imageRenderer.Content = imageRenderer.Content.WithColorSwapped(currentColor, newColor);
             currentColor = newColor;
         }

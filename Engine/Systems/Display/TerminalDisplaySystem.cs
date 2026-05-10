@@ -64,7 +64,6 @@ public abstract class TerminalDisplaySystem : DisplaySystem
         Size = (Console.WindowWidth, Console.WindowHeight);
     }
 
-
     /// <summary>
     ///     Prepares the terminal environment for use.
     /// </summary>
@@ -141,7 +140,11 @@ public abstract class TerminalDisplaySystem : DisplaySystem
 
                     if (cell.CharColor != currentCharColor)
                     {
-                        builder.Append(';');
+                        if (builder[^1] != '[')
+                        {
+                            builder.Append(';');
+                        }
+
                         AppendForegroundColorCode(cell.CharColor);
                         currentCharColor = cell.CharColor;
                     }

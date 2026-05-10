@@ -8,8 +8,7 @@ namespace Termule.Tests.Components;
 
 public class TestLineRenderer
 {
-    public static IEnumerable<object[]> SingleSegmentData =>
-    [
+    public static IEnumerable<object[]> SingleSegmentData => [
         [new Vector[] { (0, 0), (3, 0) }, new VectorInt[] { (0, 0), (1, 0), (2, 0), (3, 0) }],
         [new Vector[] { (1, 0), (1, 3) }, new VectorInt[] { (1, 0), (1, 1), (1, 2), (1, 3) }],
         [new Vector[] { (0, 0), (3, 3) }, new VectorInt[] { (0, 0), (1, 1), (2, 2), (3, 3) }],
@@ -17,20 +16,43 @@ public class TestLineRenderer
         [new Vector[] { (0, 0), (1, 3) }, new VectorInt[] { (0, 0), (0, 1), (1, 2), (1, 3) }]
     ];
 
-    [Fact]
-    public void Render_DrawsPolylineSegments()
+    public static IEnumerable<object[]> BoxDrawingData = new object[][]
     {
-        FrameBuffer frame = new(4, 4);
-        LineRenderer renderer =
-            new() { TargetSpace = true, Color = BasicColor.White, Points = [(0, 0), (2, 0), (2, 2)] };
-        _ = new GameObject(new Transform { Pos = (0, 0) }, renderer);
-
-        renderer.Render(frame, (0, 0));
-
-        AssertDrawnCells(frame, BasicColor.White, [
-            (0, 0), (1, 0), (2, 0), (2, 1), (2, 2)
-        ]);
-    }
+        [
+            new VectorInt(0, 1),
+            new VectorInt(2, 1),
+            new Dictionary<VectorInt, char> { [(0,1)] = '╶', [(1,1)] = '─', [(2,1)] = '╴' }
+        ],
+        [
+            new VectorInt(1, 0),
+            new VectorInt(1, 2),
+            new Dictionary<VectorInt, char> { [(1,0)] = '╷', [(1,1)] = '│', [(1,2)] = '╵' }
+        ],
+        [
+            new VectorInt(0, 0),
+            new VectorInt(2, 2),
+            new Dictionary<VectorInt, char>
+            {
+                [(0,0)] = '╶',
+                [(1,0)] = '┐',
+                [(1,1)] = '└',
+                [(2,1)] = '┐',
+                [(2,2)] = '╵' 
+            }
+        ],
+        [
+            new VectorInt(0, 2),
+            new VectorInt(2, 0),
+            new Dictionary<VectorInt, char>
+            {
+                [(0,2)] = '╶',
+                [(1,2)] = '┘',
+                [(1,1)] = '┌',
+                [(2,1)] = '┘',
+                [(2,0)] = '╷'
+            }
+        ]
+    };
 
     [Theory]
     [MemberData(nameof(SingleSegmentData))]
@@ -42,7 +64,22 @@ public class TestLineRenderer
 
         renderer.Render(frame, (0, 0));
 
-        AssertDrawnCells(frame, BasicColor.White, expectedCells);
+        AssertDrawnColor(frame, BasicColor.White, expectedCells);
+    }
+
+    [Fact]
+    public void Render_DrawsPolylineSegments()
+    {
+        FrameBuffer frame = new(4, 4);
+        LineRenderer renderer =
+            new() { TargetSpace = true, Color = BasicColor.White, Points = [(0, 0), (2, 0), (2, 2)] };
+        _ = new GameObject(new Transform { Pos = (0, 0) }, renderer);
+
+        renderer.Render(frame, (0, 0));
+
+        AssertDrawnColor(frame, BasicColor.White, [
+            (0, 0), (1, 0), (2, 0), (2, 1), (2, 2)
+        ]);
     }
 
     [Fact]
@@ -54,7 +91,7 @@ public class TestLineRenderer
 
         renderer.Render(frame, (0, 0));
 
-        AssertDrawnCells(frame, BasicColor.White, [
+        AssertDrawnColor(frame, BasicColor.White, [
             (2, 1), (3, 1), (4, 1)
         ]);
     }
@@ -68,6 +105,29 @@ public class TestLineRenderer
 
         renderer.Render(frame, (0, 0));
 
-        AssertDrawnCells(frame, BasicColor.White, []);
+        AssertDrawnColor(frame, BasicColor.White, []);
+    }
+
+    [Theory]
+    [MemberData(nameof(BoxDrawingData))]
+    public void Render_WhenUseBoxDrawingCharsIsTrue_DrawsExpectedChars(
+        VectorInt start,
+        VectorInt end,
+        Dictionary<VectorInt, char> expectedChars
+    )
+    {
+        FrameBuffer frame = new(3, 3);
+        LineRenderer renderer = new()
+        {
+            TargetSpace = true,
+            Color = BasicColor.White,
+            Points = [start, end],
+            UseBoxDrawingCharacters = true
+        };
+        _ = new GameObject(new Transform { Pos = (0, 0) }, renderer);
+
+        renderer.Render(frame, (0, 0));
+
+        AssertDrawnChars(frame, expectedChars);
     }
 }

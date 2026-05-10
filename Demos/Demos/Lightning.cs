@@ -19,7 +19,8 @@ internal class Lightning : Demo
     {
         Root.Add(
             new Transform(),
-            new Camera { BackgroundCell = new Cell((0, 0, 0)) });
+            new Camera { BackgroundCell = new Cell((0, 0, 0)) }
+        );
     }
 
     protected override void Tick()
@@ -36,10 +37,12 @@ internal class Lightning : Demo
 
     private void SpawnBolt()
     {
-        Root.Add(new GameObject(
-            new Transform(),
-            new BoltController(random)
-        ));
+        Root.Add(
+            new GameObject(
+                new Transform(),
+                new BoltController(random)
+            )
+        );
     }
 
     private class BoltController(Random random) : Component
@@ -53,7 +56,7 @@ internal class Lightning : Demo
 
         protected override void Activate()
         {
-            Vector origin = ((float)random.NextDouble() * Systems.Get<DisplaySystem>().Size.X, 0);
+            Vector origin = ((float)random.NextDouble() * Systems.Get<DisplaySystem>().Size.X, -1);
             Vector target = (Systems.Get<DisplaySystem>().Size.X / 2, Systems.Get<DisplaySystem>().Size.Y);
 
             List<List<Vector>> branches = [[origin, target]];
@@ -71,17 +74,15 @@ internal class Lightning : Demo
                         Vector midpoint = (prev + next) / 2;
                         Vector normal = (next - prev).Normalized.Perpendicular();
 
-                        line.Insert(pointIndex + 1, GenerateDisplacedMidpoint());
+                        line.Insert(pointIndex + 1, GetDisplacedMidpoint());
 
                         // Create a new branch off of the previous point
                         if (random.NextDouble() > 1 - BranchChance)
                         {
-                            branches.Add([prev, GenerateDisplacedMidpoint()]);
+                            branches.Add([prev, GetDisplacedMidpoint()]);
                         }
 
-                        continue;
-
-                        Vector GenerateDisplacedMidpoint()
+                        Vector GetDisplacedMidpoint()
                         {
                             return midpoint + (normal * (((float)random.NextDouble() * maxOffset * 2) - maxOffset));
                         }
@@ -94,7 +95,13 @@ internal class Lightning : Demo
             foreach (List<Vector> branch in branches)
             {
                 GameObject.Add(
-                    new LineRenderer { Color = (255, 255, 255), TargetSpace = true, Points = branch }
+                    new LineRenderer
+                    {
+                        TargetSpace = true,
+                        Points = branch,
+                        Color = (255, 255, 255),
+                        UseBoxDrawingCharacters = true
+                    }
                 );
             }
         }

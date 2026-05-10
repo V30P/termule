@@ -1,14 +1,18 @@
+using System.Reflection;
 using Termule.Engine.Systems.Rendering;
 using Termule.Engine.Types;
+using Xunit.Sdk;
 
 namespace Termule.Tests.Components;
 
 public static class Utilities
 {
-    public static void AssertDrawnCells(FrameBuffer frame, Color expectedColor,
+    public static void AssertDrawnColor(
+        FrameBuffer frame,
+        Color expectedColor,
         IReadOnlyCollection<VectorInt> expectedCells)
     {
-        HashSet<VectorInt> actualCells = [];
+        List<VectorInt> actualCells = [];
 
         for (int x = 0; x < frame.Size.X; x++)
         {
@@ -21,9 +25,26 @@ public static class Utilities
             }
         }
 
-        VectorInt[] missing = expectedCells.Where(p => !actualCells.Contains(p)).ToArray();
-        Assert.True(
-            missing.Length == 0,
-            $"Expected Cells: {string.Join(", ", expectedCells)}; actual Cells: {string.Join(", ", actualCells)}; missing Cells: {string.Join(", ", missing)}");
+        Assert.True(expectedCells.ToHashSet().SetEquals(actualCells));
+    }
+
+    public static void AssertDrawnChars(
+        FrameBuffer frame,
+        IReadOnlyDictionary<VectorInt, char> expectedChars)
+    {
+        for (int x = 0; x < frame.Size.X; x++)
+        {
+            for (int y = 0; y < frame.Size.Y; y++)
+            {
+                if (expectedChars.ContainsKey((x, y)))
+                {
+                    Assert.Equal(expectedChars[(x, y)], frame[x, y].Char);
+                }
+                else
+                {
+                    Assert.Equal(default, frame[x, y].Char);
+                }
+            }
+        }
     }
 }

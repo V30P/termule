@@ -4,7 +4,7 @@ using Termule.Engine.Types;
 namespace Termule.Engine.Systems.Rendering;
 
 /// <summary>
-///     Content implementation that <see cref="Renderer" />s draw to during the render process.
+///     Content implementation that <see cref="Renderer"/>s draw to during the render process.
 /// </summary>
 public sealed class FrameBuffer : Image
 {
@@ -18,9 +18,19 @@ public sealed class FrameBuffer : Image
     /// <param name="pos">The position of the cell.</param>
     /// <param name="color">The color to set, or <c>null</c> to leave unchanged.</param>
     /// <param name="character">The character to set, or <c>null</c> to leave unchanged.</param>
-    /// <param name="characterColor">The character color to set, or <c>null</c> to leave unchanged.</param>
-    public void Draw(VectorInt pos, Color? color = null, char? character = null,
-        Color? characterColor = null)
+    /// <param name="characterColor">
+    ///     The character color to set, or <c>null</c> to leave unchanged.
+    /// </param>
+    /// <param name="layerBoxDrawingChars">
+    ///     Indicates that drawing unicode box-drawing characters over existing box-drawing
+    ///     characters of the same color should combine them.
+    /// </param>
+    public void Draw(
+        VectorInt pos,
+        Color? color = null,
+        char? character = null,
+        Color? characterColor = null,
+        bool layerBoxDrawingChars = true)
     {
         if (pos.X < 0 || pos.X >= Size.X || pos.Y < 0 || pos.Y >= Size.Y)
         {
@@ -29,22 +39,30 @@ public sealed class FrameBuffer : Image
 
         ref Cell cell = ref Cells[pos.X, pos.Y];
 
-        if (color is { } colorValue)
+        if (color != null)
         {
-            cell.Color = colorValue;
+            cell.Color = color.Value;
             cell.Char = '\0';
             cell.CharColor = default;
         }
 
-        if (character is { } characterValue)
+        if (character != null)
         {
-            cell.Char = characterValue;
+            if (layerBoxDrawingChars && characterColor == this[pos.X, pos.Y].CharColor)
+            {
+                Connections connections = Connections.FromChar(character.Value) |
+                                          Connections.FromChar(this[pos.X, pos.Y].Char);
+
+                character = connections.ToChar();
+            }
+
+            cell.Char = character.Value;
             cell.CharColor = default;
         }
 
-        if (characterColor is { } characterColorValue)
+        if (characterColor != null)
         {
-            cell.CharColor = characterColorValue;
+            cell.CharColor = characterColor.Value;
         }
     }
 

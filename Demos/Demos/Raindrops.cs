@@ -19,7 +19,8 @@ internal class Raindrops : Demo
     {
         Root.Add(
             new Transform(),
-            new Camera { BackgroundCell = new Cell((0, 0, 0)) });
+            new Camera { BackgroundCell = new Cell((0, 0, 0)) }
+        );
     }
 
     protected override void Tick()
@@ -36,17 +37,18 @@ internal class Raindrops : Demo
 
     private void SpawnRaindrop(float x, float y)
     {
-        Root.Add(new GameObject(
-            new Transform(),
-            new CircleRenderer { TargetSpace = true, DoubleWide = true },
-            new RaindropController((x, y))
-        ));
+        Root.Add(
+            new GameObject(
+                new Transform(),
+                new CircleRenderer { TargetSpace = true, DoubleWide = true },
+                new RaindropController((x, y))
+            )
+        );
     }
 
     private class RaindropController(Vector pos) : Component
     {
         private const float Lifespan = 2;
-
         private float time;
 
         protected override void Tick()

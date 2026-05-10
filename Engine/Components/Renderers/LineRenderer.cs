@@ -8,14 +8,25 @@ namespace Termule.Engine.Components;
 public sealed class LineRenderer : PositionalRenderer
 {
     /// <summary>
-    ///     Gets or sets the points defining the line or polyline relative to this renderer’s transform.
+    ///     The points defining the line or polyline relative to this renderer’s transform.
     /// </summary>
-    public List<Vector> Points { get; set; } = [];
+    public List<Vector> Points = [];
 
     /// <summary>
-    ///     Gets or sets the color used to draw the lines.
+    ///     The color used to draw the lines.
     /// </summary>
-    public Color Color { get; set; }
+    public Color Color;
+
+    /// <summary>
+    ///     indicates that lines should be drawn with unicode box-drawing characters.
+    /// </summary>
+    public bool UseBoxDrawingCharacters;
+
+    private enum Direction
+    {
+        Vertical,
+        Horizontal
+    }
 
     private protected override void RenderAtPosition(PositionalRenderContext context)
     {
@@ -25,41 +36,77 @@ public sealed class LineRenderer : PositionalRenderer
         }
     }
 
-    private void DrawLine(VectorInt start, VectorInt end, PositionalRenderContext context)
+    private void DrawLine(VectorInt p1, VectorInt p2, PositionalRenderContext context)
     {
-        // Bresenham's line algorithm
-        int x0 = start.X;
-        int y0 = start.Y;
-        int x1 = end.X;
-        int y1 = end.Y;
-
-        int dx = Math.Abs(x1 - x0);
-        int dy = Math.Abs(y1 - y0);
-        int sx = x0 < x1 ? 1 : -1;
-        int sy = y0 < y1 ? 1 : -1;
+        int dx = Math.Abs(p2.X - p1.X);
+        int dy = Math.Abs(p2.Y - p1.Y);
+        int sx = p1.X < p2.X ? 1 : -1;
+        int sy = p1.Y < p2.Y ? 1 : -1;
         int err = dx - dy;
 
-        while (true)
+        // Modified Bresenham's line algorithm
+        VectorInt? prev;
+        VectorInt? curr = null;
+        VectorInt? next = p1;
+        while (next != null)
         {
-            context.Frame.Draw((x0, y0) + context.Origin, Color);
-
-            if (x0 == x1 && y0 == y1)
-            {
-                break;
-            }
+            prev = curr;
+            curr = next;
+            next = null;
 
             int e2 = err * 2;
-            if (e2 > -dy)
+            if (curr != p2 && e2 > -dy)
             {
                 err -= dy;
-                x0 += sx;
+                next = curr.Value with { X = curr.Value.X + sx };
+
+                // When using box-drawing characters, steps must be orthogonal
+                if (UseBoxDrawingCharacters)
+                {
+                    DrawSegment();
+                    continue;
+                }
             }
 
-            if (e2 < dx)
+            if (curr != p2 && e2 < dx)
             {
                 err += dx;
-                y0 += sy;
+                next = (next ?? curr).Value with { Y = curr.Value.Y + sy };
             }
+
+            DrawSegment();
+        }
+
+        void DrawSegment()
+        {
+            if (UseBoxDrawingCharacters)
+            {
+                Connections connections =
+                    (prev != null ? GetConnection(prev.Value - curr.Value) : Connections.None) |
+                    (next != null ? GetConnection(next.Value - curr.Value) : Connections.None);
+
+                context.Frame.Draw(
+                    context.Origin + curr.Value,
+                    character: connections.ToChar(),
+                    characterColor: Color
+                );
+            }
+            else
+            {
+                context.Frame.Draw(context.Origin + curr.Value, Color);
+            }
+        }
+
+        static Connections GetConnection(VectorInt displacement)
+        {
+            return displacement switch
+            {
+                { X: > 0 } => Connections.Right,
+                { X: < 0 } => Connections.Left,
+                { Y: > 0 } => Connections.Down,
+                { Y: < 0 } => Connections.Up,
+                _ => Connections.None
+            };
         }
     }
 }

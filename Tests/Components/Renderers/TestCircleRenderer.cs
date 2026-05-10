@@ -69,7 +69,7 @@ public class TestCircleRenderer
 
         renderer.Render(frame, (0, 0));
 
-        AssertDrawnCells(frame, BasicColor.White, expectedCells);
+        AssertDrawnColor(frame, BasicColor.White, expectedCells);
     }
 
     [Theory]
@@ -82,7 +82,7 @@ public class TestCircleRenderer
 
         renderer.Render(frame, viewOrigin);
 
-        AssertDrawnCells(frame, BasicColor.White, [
+        AssertDrawnColor(frame, BasicColor.White, [
             expectedCenter
         ]);
     }
@@ -97,7 +97,7 @@ public class TestCircleRenderer
 
         renderer.Render(frame, (0, 0));
 
-        AssertDrawnCells(frame, BasicColor.White, [
+        AssertDrawnColor(frame, BasicColor.White, [
             (0, 0), (1, 0),
             (2, 1), (3, 1),
             (0, 2), (1, 2)
@@ -115,7 +115,7 @@ public class TestCircleRenderer
 
         renderer.Render(frame, (0, 0));
 
-        AssertDrawnCells(frame, BasicColor.White, expectedCells);
+        AssertDrawnColor(frame, BasicColor.White, expectedCells);
     }
 
     [Fact]
@@ -127,7 +127,7 @@ public class TestCircleRenderer
 
         renderer.Render(frame, (0, 0));
 
-        AssertDrawnCells(frame, BasicColor.White, [
+        AssertDrawnColor(frame, BasicColor.White, [
             (0, 0)
         ]);
     }

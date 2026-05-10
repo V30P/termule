@@ -14,14 +14,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - When a game element is registered/unregistered
   - When the display's size changes or mouse moves
   - When a transform's position changes
+- `Connections` flags and extension methods for easily creating box-drawing characters    
+- `connectBoxDrawingChars` param to frame buffer's `Draw()` for proper box-drawing character layering
+- `UseBoxDrawingCharacters` field to line renderer for extra-thin lines
 
 ### Changed
+- `Ticked` event from components to a virtual method
+- `Registered` and `Unregistered` events from game elements to virtual methods
 - `GameObject` is now sealed
+- "Lightning" demo to use box drawing characters
 
 ### Removed
-- `Ticked` event from components, now replaced with a virtual method
-- `Registered` and `Unregistered` events from game elements, replaced with virtual methods
-- `IConfigurableGame` and `IConfigurableSystemManager` interfaces for the sake of simplicity
+- `IConfigurableGame` and `IConfigurableSystemManager` interfaces to get rid of unnecessary complexity
+
+### Fixed
+- Terminal display always using default background when drawing a character without one
+- Rounding errors in "Shooter" demo collision detection 
 
 ## [0.2.0] - 2026-04-25
 

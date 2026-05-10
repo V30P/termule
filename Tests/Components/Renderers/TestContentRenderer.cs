@@ -83,8 +83,8 @@ public class TestContentRenderer
 
         renderer.Render(frame, (0, 0));
 
-        AssertDrawnCells(frame, BasicColor.White, [(1, 1), (2, 2)]);
-        AssertDrawnCells(frame, BasicColor.Red, [(2, 1), (1, 2)]);
+        AssertDrawnColor(frame, BasicColor.White, [(1, 1), (2, 2)]);
+        AssertDrawnColor(frame, BasicColor.Red, [(2, 1), (1, 2)]);
     }
 
     [Theory]
@@ -100,7 +100,7 @@ public class TestContentRenderer
 
         renderer.Render(frame, viewOrigin);
 
-        AssertDrawnCells(frame, BasicColor.White, [
+        AssertDrawnColor(frame, BasicColor.White, [
             expectedCellPos
         ]);
     }
@@ -123,7 +123,7 @@ public class TestContentRenderer
 
         renderer.Render(frame, (0, 0));
 
-        AssertDrawnCells(frame, BasicColor.White, [
+        AssertDrawnColor(frame, BasicColor.White, [
             (1, 0),
             (0, 1), (1, 1), (2, 1),
             (1, 2)
@@ -142,7 +142,7 @@ public class TestContentRenderer
 
         renderer.Render(frame, (1, 1));
 
-        AssertDrawnCells(frame, BasicColor.White, [(1, 1)]);
+        AssertDrawnColor(frame, BasicColor.White, [(1, 1)]);
     }
 
     [Fact]
