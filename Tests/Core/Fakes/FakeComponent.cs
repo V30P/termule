@@ -10,8 +10,7 @@ public class FakeComponent : Component
 
     public int DeactivateCount { get; private set; }
 
-    public TComponent CallGetRequiredComponent<TComponent>()
-        where TComponent : Component
+    public TComponent CallGetRequiredComponent<TComponent>() where TComponent : Component
     {
         return GetRequiredComponent<TComponent>();
     }

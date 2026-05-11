@@ -58,7 +58,7 @@ public sealed class Text : IContent
             for (int i = 0; i < stringLines.Length; i++)
             {
                 string line = stringLines[i];
-                lines[i] = line.Select(c => new Cell(default, c, Color)).ToArray();
+                lines[i] = [.. line.Select(c => new Cell(default, c, Color))];
 
                 if (line.Length > size.X)
                 {
@@ -85,12 +85,7 @@ public sealed class Text : IContent
             }
 
             // Returns blank spaces at the end of lines since content is rectangular
-            if (x >= lines[y].Length)
-            {
-                return default;
-            }
-
-            return lines[y][x];
+            return x >= lines[y].Length ? default : lines[y][x];
         }
     }
 }

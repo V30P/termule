@@ -16,7 +16,6 @@ public class TestVectorInt
         Assert.Equal(6, result.Y);
     }
 
-
     [Fact]
     public void DivideOperator_ScalesVector()
     {
@@ -27,7 +26,6 @@ public class TestVectorInt
         Assert.Equal(3, result.X);
         Assert.Equal(4, result.Y);
     }
-
 
     [Fact]
     public void Equality_WorksCorrectly()

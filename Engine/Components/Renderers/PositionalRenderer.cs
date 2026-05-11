@@ -9,9 +9,10 @@ namespace Termule.Engine.Components;
 public abstract class PositionalRenderer : Renderer
 {
     /// <summary>
-    ///     Gets or sets whether the <see cref="Transform" />'s position is interpreted as target-space during rendering.
+    ///     Indicates whether the <see cref="Transform" />'s position should be interpreted as
+    ///     target-space during rendering.
     /// </summary>
-    public bool TargetSpace { get; set; }
+    public bool TargetSpace;
 
     /// <summary>
     ///     Gets an offset applied to the transform position before rendering.
@@ -39,13 +40,21 @@ public abstract class PositionalRenderer : Renderer
         frameSpaceOrigin += Offset;
         VectorInt frameSpaceCellOrigin = frameSpaceOrigin.RoundToInt();
 
-        RenderAtPosition(new PositionalRenderContext(frame, frameSpaceCellOrigin,
-            frameSpaceOrigin - frameSpaceCellOrigin));
+        RenderAtPosition(
+            new PositionalRenderContext(
+                frame,
+                frameSpaceCellOrigin,
+                frameSpaceOrigin - frameSpaceCellOrigin
+            )
+        );
     }
 
     private protected abstract void RenderAtPosition(PositionalRenderContext context);
 
-    private protected class PositionalRenderContext(FrameBuffer frame, VectorInt origin, Vector offset)
+    private protected class PositionalRenderContext(
+        FrameBuffer frame,
+        VectorInt origin,
+        Vector offset)
     {
         public readonly FrameBuffer Frame = frame;
         public readonly VectorInt Origin = origin;

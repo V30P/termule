@@ -108,13 +108,13 @@ public class TestGame
     }
 
     [Fact]
-    public void RunForFrames_TickSystemsWithoutPreparing()
+    public void RunForTicks_TickSystemsWithoutPreparing()
     {
         Game game = new();
         CountingSystem system = new();
         game.Systems.Install(system);
 
-        game.RunFrames(3);
+        game.RunTicks(3);
 
         Assert.Equal(0, system.StartCount);
         Assert.Equal(3, system.TickCount);
@@ -122,14 +122,14 @@ public class TestGame
     }
 
     [Fact]
-    public void RunFrame_TicksComponents()
+    public void RunTick_TicksComponents()
     {
         Game game = new();
         FakeComponent component = new();
         game.Root.Add(component);
         game.Start();
 
-        game.RunFrames(5);
+        game.RunTicks(5);
 
         Assert.Equal(5, component.TickCount);
     }

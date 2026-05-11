@@ -6,16 +6,16 @@ using Termule.Engine.Systems.Resources;
 namespace Termule.Engine.Core;
 
 /// <summary>
-///     Manages systems and provides an interface to install, uninstall, and retrieve systems during <see cref="Game" />
-///     configuration.
+///     Manages systems and provides an interface to install, uninstall, and retrieve systems
+///     during <see cref="Game" /> configuration.
 /// </summary>
 public class SystemManager : GameElement
 {
     private readonly Dictionary<Type, System> systems = [];
 
     /// <summary>
-    ///     Installs the provided <paramref name="system" />, replacing the existing instance of that
-    ///     system base class (if any).
+    ///     Installs the provided <paramref name="system" />, replacing the existing instance of
+    ///     that system base class (if any).
     /// </summary>
     /// <typeparam name="TSystem">The type of system being installed.</typeparam>
     /// <param name="system">The system to install.</param>
@@ -77,14 +77,14 @@ public class SystemManager : GameElement
     }
 
     /// <summary>
-    ///     Gets the installed system of type <typeparamref name="TSystem" />, or <c>null</c> if none is installed.
+    ///     Gets the installed system of type <typeparamref name="TSystem" />, or <c>null</c> if
+    ///     none is installed.
     /// </summary>
     /// <typeparam name="TSystem">The type of system to retrieve.</typeparam>
     /// <returns>The installed system or <c>null</c>.</returns>
-    public TSystem Get<TSystem>()
-        where TSystem : System
+    public TSystem Get<TSystem>() where TSystem : System
     {
-        return (TSystem)systems.GetValueOrDefault(GetSystemType<TSystem>());
+        return (TSystem) systems.GetValueOrDefault(GetSystemType<TSystem>());
     }
 
     internal void Start()
@@ -111,8 +111,7 @@ public class SystemManager : GameElement
         }
     }
 
-    private static Type GetSystemType<TSystem>()
-        where TSystem : System
+    private static Type GetSystemType<TSystem>() where TSystem : System
     {
         Type type = typeof(TSystem);
         while (type!.BaseType != typeof(System))

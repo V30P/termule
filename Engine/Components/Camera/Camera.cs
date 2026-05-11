@@ -6,16 +6,19 @@ using Termule.Engine.Types;
 namespace Termule.Engine.Components;
 
 /// <summary>
-///     Component that uses the <see cref="RenderSystem" /> to render its view to the <see cref="DisplaySystem" />.
+///     Component that uses the <see cref="RenderSystem" /> to render its view to the
+///     <see cref="DisplaySystem" />.
 /// </summary>
 public sealed class Camera : Component
 {
     /// <summary>
-    ///     Gets or sets a cell that should make up the background of rendered <see cref="FrameBuffer" />s.
+    ///     Gets or sets a cell that should make up the background of rendered
+    ///     <see cref="FrameBuffer" />s.
     /// </summary>
     public Cell BackgroundCell { get; set; }
 
     /// <summary>
+    ///     Gets or sets the target that this camera should render to.
     /// </summary>
     public ICameraTarget Target
     {
@@ -33,7 +36,7 @@ public sealed class Camera : Component
     /// <returns>The corresponding position in game-space.</returns>
     public Vector TargetToGamePos(Vector pos)
     {
-        Vector relativeTargetPos = pos - ((Vector)Target.Size / 2f);
+        Vector relativeTargetPos = pos - ((Vector) Target.Size / 2f);
         Vector relativePos = (relativeTargetPos.X, -relativeTargetPos.Y);
         return relativePos - TransformPos;
     }
@@ -47,7 +50,7 @@ public sealed class Camera : Component
     {
         Vector relativePos = pos + TransformPos;
         Vector relativeTargetPos = (relativePos.X, -relativePos.Y);
-        return relativeTargetPos + ((Vector)Target.Size / 2f);
+        return relativeTargetPos + ((Vector) Target.Size / 2f);
     }
 
     /// <inheritdoc />

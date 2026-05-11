@@ -15,7 +15,7 @@ public readonly record struct VectorInt(int X = 0, int Y = 0)
     /// <summary>
     ///     Gets the normalized (unit-length) vector as a <see cref="Vector" />.
     /// </summary>
-    public Vector Normalized => Magnitude > 0 ? (Vector)this / Magnitude : (0, 0);
+    public Vector Normalized => Magnitude > 0 ? (Vector) this / Magnitude : (0, 0);
 
     /// <summary>
     ///     Creates a <see cref="VectorInt" /> from a tuple of integers.
@@ -67,9 +67,7 @@ public readonly record struct VectorInt(int X = 0, int Y = 0)
     /// <returns>The resulting vector.</returns>
     public static Vector operator /(VectorInt v, int f)
     {
-        // ReSharper disable PossibleLossOfFraction
-        return new Vector(v.X / f, v.Y / f);
-        // ReSharper restore PossibleLossOfFraction
+        return new Vector((float) v.X / f, (float) v.Y / f);
     }
 
     /// <summary>

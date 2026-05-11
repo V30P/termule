@@ -38,7 +38,11 @@ public readonly record struct FullColor
     {
         if (value is < 0 or > 255)
         {
-            throw new ArgumentOutOfRangeException(name, value, "Color RGB values must be between 0 and 255");
+            throw new ArgumentOutOfRangeException(
+                name,
+                value,
+                "Color RGB values must be between 0 and 255"
+            );
         }
     }
 }

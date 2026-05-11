@@ -3,8 +3,8 @@ namespace Termule.Engine.Types;
 /// <summary>
 ///     Flags representing the connections of a unicode box-drawing character.
 /// </summary>
-/// <remarks> 
-///     Use <see cref="ConnectionsExtensions"/> methods to convert to and from <see cref="char"/>s.
+/// <remarks>
+///     Use <see cref="ConnectionsExtensions" /> methods to convert to and from <see cref="char" />s.
 /// </remarks>
 [Flags]
 public enum Connections
@@ -19,7 +19,7 @@ public enum Connections
 }
 
 /// <summary>
-///     Extension methods for working with <see cref="Connections"/>
+///     Extension methods for working with <see cref="Connections" />.
 /// </summary>
 public static class ConnectionsExtensions
 {
@@ -48,7 +48,7 @@ public static class ConnectionsExtensions
     extension(Connections connections)
     {
         /// <summary>
-        ///     Gets the box-drawing character for this <see cref="Connections"/>.
+        ///     Gets the box-drawing character for this <see cref="Connections" />.
         /// </summary>
         /// <returns>The corresponding unicode box character.</returns>
         public char ToChar()
@@ -57,12 +57,12 @@ public static class ConnectionsExtensions
         }
 
         /// <summary>
-        ///     Finds the box-drawing <see cref="Connections"/> of the given 
-        ///     <paramref name="character"/>.
+        ///     Finds the box-drawing <see cref="Connections" /> of the given
+        ///     <paramref name="character" />.
         /// </summary>
-        /// <param name="character"></param>
+        /// <param name="character">The character to determine the connections of.</param>
         /// <returns>The connections of the character.</returns>
-        /// <remarks>This will be <see cref="Connections.None"/> for most characters.</remarks>
+        /// <remarks>This will be <see cref="Connections.None" /> for most characters.</remarks>
         public static Connections FromChar(char character)
         {
             return CharacterToConnections.GetValueOrDefault(character);

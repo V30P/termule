@@ -39,14 +39,17 @@ public class MessageBus : GameElement
     /// <param name="message">The message to send.</param>
     public void Broadcast<TMessage>(TMessage message)
     {
-        if (!subscribers.TryGetValue(typeof(TMessage), out HashSet<IMessageListenerBase> typedSubscribers))
+        bool hasSubscribers = subscribers.TryGetValue(
+            typeof(TMessage), out HashSet<IMessageListenerBase> typedSubscribers
+        );
+        if (!hasSubscribers)
         {
             return;
         }
 
         foreach (IMessageListenerBase listener in typedSubscribers)
         {
-            ((IMessageListener<TMessage>)listener).OnMessage(message);
+            ((IMessageListener<TMessage>) listener).OnMessage(message);
         }
     }
 }

@@ -34,7 +34,9 @@ public class TestComponent
     public void GetRequiredComponent_WhenComponentMissing_Throws()
     {
         FakeComponent component = GetComponentOnGameObject();
-        Assert.Throws<MissingComponentException<Transform>>(component.CallGetRequiredComponent<Transform>);
+        Assert.Throws<MissingComponentException<Transform>>(
+            component.CallGetRequiredComponent<Transform>
+        );
     }
 
     [Fact]

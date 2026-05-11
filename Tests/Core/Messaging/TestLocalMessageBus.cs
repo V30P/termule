@@ -42,7 +42,9 @@ public class TestLocalMessageBus
     {
         GameObject gameObject = [];
 
-        Assert.Throws<InvalidOperationException>(() => gameObject.Bus.Broadcast(true, Route.Upward));
-        Assert.Throws<InvalidOperationException>(() => gameObject.Bus.Broadcast(true, Route.Downward));
+        Assert.Throws<InvalidOperationException>(() => gameObject.Bus.Broadcast(true, Route.Upward)
+        );
+        Assert.Throws<InvalidOperationException>(() => gameObject.Bus.Broadcast(true, Route.Downward)
+        );
     }
 }

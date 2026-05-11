@@ -102,20 +102,22 @@ public readonly record struct Vector(float X = 0, float Y = 0)
     }
 
     /// <summary>
-    ///     Rounds this vector to a <see cref="VectorInt" /> by rounding each component to the nearest integer.
+    ///     Rounds this vector to a <see cref="VectorInt" /> by rounding each component to the
+    ///     nearest integer.
     /// </summary>
     /// <returns>The rounded <see cref="VectorInt" />.</returns>
     public VectorInt RoundToInt()
     {
-        return new VectorInt((int)MathF.Round(X), (int)MathF.Round(Y));
+        return new VectorInt((int) MathF.Round(X), (int) MathF.Round(Y));
     }
 
     /// <summary>
-    ///     Floors this vector to a <see cref="VectorInt" /> by applying <see cref="MathF.Floor" /> to each component.
+    ///     Floors this vector to a <see cref="VectorInt" /> by applying <see cref="MathF.Floor" />
+    ///     to each component.
     /// </summary>
     /// <returns>The floored <see cref="VectorInt" />.</returns>
     public VectorInt FloorToInt()
     {
-        return new VectorInt((int)MathF.Floor(X), (int)MathF.Floor(Y));
+        return new VectorInt((int) MathF.Floor(X), (int) MathF.Floor(Y));
     }
 }

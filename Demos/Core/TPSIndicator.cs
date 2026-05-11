@@ -22,7 +22,8 @@ internal class TpsIndicator : Component
             return;
         }
 
-        GameObject.Get<ContentRenderer<Text>>().Content.Value = string.Format(TextTemplate, (int)(ticks / time));
+        GameObject.Get<ContentRenderer<Text>>().Content.Value =
+            string.Format(TextTemplate, (int) (ticks / time));
         time = ticks = 0;
     }
 }

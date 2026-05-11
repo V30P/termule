@@ -12,8 +12,9 @@ internal class Array2DConverterFactory : JsonConverterFactory
 
     public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
     {
-        Type converterType = typeof(Array2DConverter<>).MakeGenericType(typeToConvert.GetElementType());
-        return (JsonConverter)Activator.CreateInstance(converterType);
+        Type converterType =
+            typeof(Array2DConverter<>).MakeGenericType(typeToConvert.GetElementType());
+        return (JsonConverter) Activator.CreateInstance(converterType);
     }
 
     private class Array2DConverter<T> : JsonConverter<T[,]>
@@ -37,7 +38,10 @@ internal class Array2DConverterFactory : JsonConverterFactory
             writer.WriteEndArray();
         }
 
-        public override T[,] Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override T[,] Read(
+            ref Utf8JsonReader reader,
+            Type typeToConvert,
+            JsonSerializerOptions options)
         {
             JsonConverter<T> converter = GetConverter(options);
 
@@ -57,7 +61,9 @@ internal class Array2DConverterFactory : JsonConverterFactory
 
                 while (reader.TokenType != JsonTokenType.EndArray)
                 {
-                    subarray.Add(converter.Read(ref reader, typeToConvert.GetElementType(), options));
+                    subarray.Add(
+                        converter.Read(ref reader, typeToConvert.GetElementType(), options)
+                    );
                     reader.Read();
                 }
 
@@ -85,7 +91,7 @@ internal class Array2DConverterFactory : JsonConverterFactory
 
         private static JsonConverter<T> GetConverter(JsonSerializerOptions options)
         {
-            return (JsonConverter<T>)options.GetConverter(typeof(T));
+            return (JsonConverter<T>) options.GetConverter(typeof(T));
         }
     }
 }

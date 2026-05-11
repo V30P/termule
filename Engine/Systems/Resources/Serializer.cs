@@ -6,7 +6,8 @@ internal static class Serializer
 {
     private static readonly JsonSerializerOptions SerializerOptions = new()
     {
-        Converters = { new Array2DConverterFactory() }, WriteIndented = true
+        Converters = { new Array2DConverterFactory() },
+        WriteIndented = true
     };
 
     internal static string Serialize(object value)

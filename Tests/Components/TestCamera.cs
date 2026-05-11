@@ -7,19 +7,6 @@ namespace Termule.Tests.Components;
 
 public class TestCamera
 {
-    private class FakeTarget(VectorInt size) : ICameraTarget
-    {
-        public int PrintCount { get; private set; }
-        public VectorInt Size { get; } = size;
-
-        public FrameBuffer Buffer { get; set; } = new(size.X, size.Y);
-
-        public void Update()
-        {
-            PrintCount++;
-        }
-    }
-
     public static readonly IEnumerable<object[]> PositionConversionData =
     [
         [(0, 0), (0, 0), (0, 0), (0, 0)],
@@ -38,10 +25,25 @@ public class TestCamera
         [(8, 6), (3, -2), (-2, 3), (5, 2)]
     ];
 
+    private class FakeTarget(VectorInt size) : ICameraTarget
+    {
+        public int PrintCount { get; private set; }
+        public VectorInt Size { get; } = size;
+
+        public FrameBuffer Buffer { get; set; } = new(size.X, size.Y);
+
+        public void Update()
+        {
+            PrintCount++;
+        }
+    }
 
     [Theory]
     [MemberData(nameof(PositionConversionData))]
-    public void GameToTargetPos_MapsCorrectly(VectorInt targetSize, VectorInt transformPos, VectorInt gamePos,
+    public void GameToTargetPos_MapsCorrectly(
+        VectorInt targetSize,
+        VectorInt transformPos,
+        VectorInt gamePos,
         VectorInt targetPos)
     {
         FakeTarget target = new(targetSize);
@@ -54,7 +56,10 @@ public class TestCamera
 
     [Theory]
     [MemberData(nameof(PositionConversionData))]
-    public void TargetToGamePos_MapsCorrectly(VectorInt targetSize, VectorInt transformPos, VectorInt gamePos,
+    public void TargetToGamePos_MapsCorrectly(
+        VectorInt targetSize,
+        VectorInt transformPos,
+        VectorInt gamePos,
         VectorInt targetPos)
     {
         FakeTarget target = new(targetSize);
@@ -75,7 +80,7 @@ public class TestCamera
         game.Systems.Install(new RenderSystem());
         game.Start();
 
-        game.RunFrames(5);
+        game.RunTicks(5);
 
         Assert.Equal(5, target.PrintCount);
     }
@@ -92,7 +97,7 @@ public class TestCamera
         game.Systems.Install(new RenderSystem());
         game.Start();
 
-        game.RunFrame();
+        game.RunTick();
 
         for (int x = 0; x < target.Size.X; x++)
         {

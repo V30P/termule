@@ -8,7 +8,8 @@ namespace Termule.Tests.Components;
 
 public class TestLineRenderer
 {
-    public static IEnumerable<object[]> SingleSegmentData => [
+    public static IEnumerable<object[]> SingleSegmentData =
+    [
         [new Vector[] { (0, 0), (3, 0) }, new VectorInt[] { (0, 0), (1, 0), (2, 0), (3, 0) }],
         [new Vector[] { (1, 0), (1, 3) }, new VectorInt[] { (1, 0), (1, 1), (1, 2), (1, 3) }],
         [new Vector[] { (0, 0), (3, 3) }, new VectorInt[] { (0, 0), (1, 1), (2, 2), (3, 3) }],
@@ -16,43 +17,60 @@ public class TestLineRenderer
         [new Vector[] { (0, 0), (1, 3) }, new VectorInt[] { (0, 0), (0, 1), (1, 2), (1, 3) }]
     ];
 
-    public static IEnumerable<object[]> BoxDrawingData = new object[][]
-    {
+    public static IEnumerable<object[]> BoxDrawingData =
+    [
         [
             new VectorInt(0, 1),
             new VectorInt(2, 1),
-            new Dictionary<VectorInt, char> { [(0,1)] = '╶', [(1,1)] = '─', [(2,1)] = '╴' }
+            new Dictionary<VectorInt, char> { [(0, 1)] = '╶', [(1, 1)] = '─', [(2, 1)] = '╴' }
         ],
         [
-            new VectorInt(1, 0),
+            new VectorInt(1),
             new VectorInt(1, 2),
-            new Dictionary<VectorInt, char> { [(1,0)] = '╷', [(1,1)] = '│', [(1,2)] = '╵' }
+            new Dictionary<VectorInt, char> { [(1, 0)] = '╷', [(1, 1)] = '│', [(1, 2)] = '╵' }
         ],
         [
-            new VectorInt(0, 0),
+            new VectorInt(0),
             new VectorInt(2, 2),
             new Dictionary<VectorInt, char>
             {
-                [(0,0)] = '╶',
-                [(1,0)] = '┐',
-                [(1,1)] = '└',
-                [(2,1)] = '┐',
-                [(2,2)] = '╵' 
+                [(0, 0)] = '╶',
+                [(1, 0)] = '┐',
+                [(1, 1)] = '└',
+                [(2, 1)] = '┐',
+                [(2, 2)] = '╵'
             }
         ],
         [
             new VectorInt(0, 2),
-            new VectorInt(2, 0),
+            new VectorInt(2),
             new Dictionary<VectorInt, char>
             {
-                [(0,2)] = '╶',
-                [(1,2)] = '┘',
-                [(1,1)] = '┌',
-                [(2,1)] = '┘',
-                [(2,0)] = '╷'
+                [(0, 2)] = '╶',
+                [(1, 2)] = '┘',
+                [(1, 1)] = '┌',
+                [(2, 1)] = '┘',
+                [(2, 0)] = '╷'
             }
         ]
-    };
+    ];
+
+    [Fact]
+    public void Render_DrawsPolylineSegments()
+    {
+        FrameBuffer frame = new(4, 4);
+        LineRenderer renderer = new()
+        {
+            TargetSpace = true,
+            Color = BasicColor.White,
+            Points = [(0, 0), (2, 0), (2, 2)]
+        };
+        _ = new GameObject(new Transform { Pos = (0, 0) }, renderer);
+
+        renderer.Render(frame, (0, 0));
+
+        AssertDrawnColor(frame, BasicColor.White, [(0, 0), (1, 0), (2, 0), (2, 1), (2, 2)]);
+    }
 
     [Theory]
     [MemberData(nameof(SingleSegmentData))]
@@ -68,21 +86,6 @@ public class TestLineRenderer
     }
 
     [Fact]
-    public void Render_DrawsPolylineSegments()
-    {
-        FrameBuffer frame = new(4, 4);
-        LineRenderer renderer =
-            new() { TargetSpace = true, Color = BasicColor.White, Points = [(0, 0), (2, 0), (2, 2)] };
-        _ = new GameObject(new Transform { Pos = (0, 0) }, renderer);
-
-        renderer.Render(frame, (0, 0));
-
-        AssertDrawnColor(frame, BasicColor.White, [
-            (0, 0), (1, 0), (2, 0), (2, 1), (2, 2)
-        ]);
-    }
-
-    [Fact]
     public void Render_UsesTransformPositionAsLineOrigin()
     {
         FrameBuffer frame = new(6, 4);
@@ -91,9 +94,7 @@ public class TestLineRenderer
 
         renderer.Render(frame, (0, 0));
 
-        AssertDrawnColor(frame, BasicColor.White, [
-            (2, 1), (3, 1), (4, 1)
-        ]);
+        AssertDrawnColor(frame, BasicColor.White, [(2, 1), (3, 1), (4, 1)]);
     }
 
     [Fact]

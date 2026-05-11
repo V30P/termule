@@ -17,14 +17,15 @@ public sealed class ResourceLoader : Core.System
     /// <summary>
     ///     Initializes a new instance of the <see cref="ResourceLoader" /> class.
     /// </summary>
-    /// <param name="fileSystem"> The file system to load from, defaults to the actual file system. </param>
+    /// <param name="fileSystem">
+    ///     The file system to load from, defaults to the actual file system.
+    /// </param>
     /// <param name="resourceDir">
-    ///     The directory to load resources from, defaults to "res". Use
-    ///     <paramref name="dirIsRelative" /> to
+    ///     The directory to load resources from, defaults to "res".
     /// </param>
     /// <param name="dirIsRelative">
-    ///     If <paramref name="resourceDir" /> should be treated as relative to the assembly location,
-    ///     defaults to true.
+    ///     If <paramref name="resourceDir" /> should be treated as relative to the assembly
+    ///     location, defaults to true.
     /// </param>
     public ResourceLoader(
         IFileSystem fileSystem = null,
@@ -33,20 +34,29 @@ public sealed class ResourceLoader : Core.System
     {
         this.fileSystem = fileSystem ?? new FileSystem();
 
-        string resourceDirBase =
-            dirIsRelative ? Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) : string.Empty;
+        string resourceDirBase = dirIsRelative
+            ? Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
+            : string.Empty;
         this.resourceDir = Path.Combine(resourceDirBase, resourceDir);
     }
 
     /// <summary>
-    ///     Loads the resource of provided type <typeparamref name="TResource" /> at <paramref name="path" />.
+    ///     Loads the resource of provided type <typeparamref name="TResource" /> at
+    ///     <paramref name="path" />.
     /// </summary>
     /// <typeparam name="TResource">The type of resource to load.</typeparam>
     /// <param name="path">The path to look for the resource at.</param>
     /// <returns>The loaded resource.</returns>
-    /// <exception cref="FileNotFoundException">Thrown if the resource does not exist at the provided path.</exception>
-    /// <exception cref="ResourceLoadException">Thrown if the resource is found but fails to load.</exception>
-    /// <remarks>If no extension is provided in the path, the default extension set by the resource will be used.</remarks>
+    /// <exception cref="FileNotFoundException">
+    ///     Thrown if the resource does not exist at the provided path.
+    /// </exception>
+    /// <exception cref="ResourceLoadException">
+    ///     Thrown if the resource is found but fails to load.
+    /// </exception>
+    /// <remarks>
+    ///     If no extension is provided in the path, the default extension set by the resource will
+    ///     be used.
+    /// </remarks>
     public TResource Load<TResource>(string path) where TResource : IResource
     {
         string extendedPath = fileSystem.Path.GetExtension(path) == TResource.FileExtension

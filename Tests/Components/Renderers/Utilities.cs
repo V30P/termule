@@ -1,7 +1,5 @@
-using System.Reflection;
 using Termule.Engine.Systems.Rendering;
 using Termule.Engine.Types;
-using Xunit.Sdk;
 
 namespace Termule.Tests.Components;
 

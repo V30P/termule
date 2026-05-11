@@ -7,25 +7,6 @@ namespace Termule.Tests.Components;
 
 public class TestPositionalRenderer
 {
-    private sealed class FakePositionalRenderer(Vector offset = default) : PositionalRenderer
-    {
-        public FrameBuffer CapturedFrame { get; private set; }
-        public VectorInt CapturedOrigin { get; private set; }
-        public Vector CapturedOffset { get; private set; }
-        public int RenderCount { get; private set; }
-        protected override Vector Offset { get; } = offset;
-
-        private protected override void RenderAtPosition(PositionalRenderContext context)
-        {
-            RenderCount++;
-            CapturedFrame = context.Frame;
-            CapturedOrigin = context.Origin;
-            CapturedOffset = context.Offset;
-        }
-    }
-
-    private const float PositionEpsilon = 0.0001f;
-
     public static IEnumerable<object[]> GameSpaceConversionData =
     [
         [(0f, 0f), (0f, 0f), (0, 0), (0f, 0f)],
@@ -50,6 +31,8 @@ public class TestPositionalRenderer
         [(4.8f, -3.2f), (-9.1f, 12.3f), (5, -3), (-0.2f, -0.2f)]
     ];
 
+    private const float PositionEpsilon = 0.0001f;
+
     private static void AssertVectorApproximately(Vector expected, Vector? actual, float epsilon)
     {
         Assert.NotNull(actual);
@@ -57,11 +40,28 @@ public class TestPositionalRenderer
         Assert.InRange(actual.Value.Y, expected.Y - epsilon, expected.Y + epsilon);
     }
 
+    private sealed class FakePositionalRenderer(Vector offset = default) : PositionalRenderer
+    {
+        public FrameBuffer CapturedFrame { get; private set; }
+        public VectorInt CapturedOrigin { get; private set; }
+        public Vector CapturedOffset { get; private set; }
+        public int RenderCount { get; private set; }
+        protected override Vector Offset { get; } = offset;
+
+        private protected override void RenderAtPosition(PositionalRenderContext context)
+        {
+            RenderCount++;
+            CapturedFrame = context.Frame;
+            CapturedOrigin = context.Origin;
+            CapturedOffset = context.Offset;
+        }
+    }
+
     [Fact]
     public void Render_AppliesOffset()
     {
         FakePositionalRenderer renderer = new((0.75f, 0.75f));
-        GameObject _ = [new Transform { Pos = (0, 0) }, renderer];
+        _ = new GameObject(new Transform { Pos = (0, 0) }, renderer);
 
         renderer.Render(new FrameBuffer(0, 0), (0, 0));
 
@@ -74,7 +74,7 @@ public class TestPositionalRenderer
     {
         FrameBuffer frame = new(0, 0);
         FakePositionalRenderer renderer = new();
-        GameObject _ = [new Transform { Pos = (0, 0) }, renderer];
+        _ = new GameObject(new Transform { Pos = (0, 0) }, renderer);
 
         renderer.Render(frame, (0, 0));
 
@@ -91,7 +91,7 @@ public class TestPositionalRenderer
         Vector expectedOffset)
     {
         FakePositionalRenderer renderer = new();
-        GameObject _ = [new Transform { Pos = transformPos }, renderer];
+        _ = new GameObject(new Transform { Pos = transformPos }, renderer);
 
         renderer.Render(new FrameBuffer(0, 0), viewOrigin);
 
@@ -108,7 +108,7 @@ public class TestPositionalRenderer
         Vector expectedOffset)
     {
         FakePositionalRenderer renderer = new() { TargetSpace = true };
-        GameObject _ = [new Transform { Pos = transformPos }, renderer];
+        _ = new GameObject(new Transform { Pos = transformPos }, renderer);
 
         renderer.Render(new FrameBuffer(0, 0), viewOrigin);
 

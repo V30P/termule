@@ -28,7 +28,8 @@ public sealed class GameObject : Component, IEnumerable<Component>
     }
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="GameObject" /> class with the provided components.
+    ///     Initializes a new instance of the <see cref="GameObject" /> class with the provided
+    ///     components.
     /// </summary>
     /// <param name="components"> The components that the GameObject should contain. </param>
     public GameObject(params Component[] components) : this()
@@ -59,7 +60,8 @@ public sealed class GameObject : Component, IEnumerable<Component>
             if (component.GameObject != null)
             {
                 throw new ArgumentException(
-                    $"Component '{component.GetType().Name}' is already part of a GameObject");
+                    $"Component '{component.GetType().Name}' is already part of a GameObject"
+                );
             }
 
             components.Add(component);
@@ -98,7 +100,9 @@ public sealed class GameObject : Component, IEnumerable<Component>
         if (component.GameObject != this)
         {
             throw new InvalidOperationException(
-                $"Cannot remove Component '{component.GetType().Name}' since it is not part of this GameObject");
+                $"Cannot remove Component '{component.GetType().Name}'"
+                + "since it is not part of this GameObject"
+            );
         }
 
         components.Remove(component);
@@ -107,8 +111,9 @@ public sealed class GameObject : Component, IEnumerable<Component>
 
         Game?.Unregister(component);
 
-        foreach (List<Component> componentList in
-                 GetImplementedTypes(component).Select(type => typesToComponents[type]))
+        IEnumerable<List<Component>> typedComponentLists = GetImplementedTypes(component)
+            .Select(type => typesToComponents[type]);
+        foreach (List<Component> componentList in typedComponentLists)
         {
             componentList.Remove(component);
         }
@@ -121,9 +126,12 @@ public sealed class GameObject : Component, IEnumerable<Component>
     /// <returns>The component if one is found or <c>null</c>.</returns>
     public TComponent Get<TComponent>()
     {
-        return typesToComponents.TryGetValue(typeof(TComponent), out List<Component> matchingComponents)
-            ? (TComponent)(object)matchingComponents.FirstOrDefault()
-            : default;
+        bool componentExists = typesToComponents.TryGetValue(
+            typeof(TComponent),
+            out List<Component> matchingComponents
+        );
+
+        return componentExists ? (TComponent) (object) matchingComponents.FirstOrDefault() : default;
     }
 
     /// <summary>
@@ -133,44 +141,12 @@ public sealed class GameObject : Component, IEnumerable<Component>
     /// <returns>The collection of all matching components.</returns>
     public IEnumerable<TComponent> GetAll<TComponent>()
     {
-        return typesToComponents.TryGetValue(typeof(TComponent), out List<Component> matchingComponents)
-            ? matchingComponents.Cast<TComponent>()
-            : [];
-    }
+        bool componentExists = typesToComponents.TryGetValue(
+            typeof(TComponent),
+            out List<Component> matchingComponents
+        );
 
-    private static List<Type> GetImplementedTypes(object o)
-    {
-        Type type = o.GetType();
-        List<Type> implementedTypes = [type, .. o.GetType().GetInterfaces()];
-
-        for (Type ancestor = type.BaseType; ancestor != null; ancestor = ancestor.BaseType)
-        {
-            implementedTypes.Add(ancestor);
-        }
-
-        return implementedTypes;
-    }
-
-    /// <inheritdoc />
-    protected override void Activate()
-    {
-        foreach (Component component in components.ToArray())
-        {
-            Game.Register(component);
-        }
-
-        Game.Register(Bus);
-    }
-
-    /// <inheritdoc />
-    protected override void Deactivate()
-    {
-        foreach (Component component in components.ToArray())
-        {
-            Game.Unregister(component);
-        }
-
-        Game.Unregister(Bus);
+        return componentExists ? matchingComponents.Cast<TComponent>() : [];
     }
 
     /// <inheritdoc />
@@ -198,5 +174,40 @@ public sealed class GameObject : Component, IEnumerable<Component>
 
             component.Tick();
         }
+    }
+
+    /// <inheritdoc />
+    protected override void Activate()
+    {
+        foreach (Component component in components.ToArray())
+        {
+            Game.Register(component);
+        }
+
+        Game.Register(Bus);
+    }
+
+    /// <inheritdoc />
+    protected override void Deactivate()
+    {
+        foreach (Component component in components.ToArray())
+        {
+            Game.Unregister(component);
+        }
+
+        Game.Unregister(Bus);
+    }
+
+    private static List<Type> GetImplementedTypes(object o)
+    {
+        Type type = o.GetType();
+        List<Type> implementedTypes = [type, .. o.GetType().GetInterfaces()];
+
+        for (Type ancestor = type.BaseType; ancestor != null; ancestor = ancestor.BaseType)
+        {
+            implementedTypes.Add(ancestor);
+        }
+
+        return implementedTypes;
     }
 }

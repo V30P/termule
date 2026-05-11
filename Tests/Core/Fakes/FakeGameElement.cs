@@ -10,8 +10,7 @@ public class FakeGameElement : GameElement
 
     public Game GameInstance => Game;
 
-    public TSystem CallGetRequiredSystem<TSystem>()
-        where TSystem : Engine.Core.System
+    public TSystem CallGetRequiredSystem<TSystem>() where TSystem : Engine.Core.System
     {
         return GetRequiredSystem<TSystem>();
     }

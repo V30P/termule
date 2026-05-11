@@ -55,7 +55,7 @@ public sealed class BindMap : IEnumerable<KeyValuePair<string, Bind>>
     /// <inheritdoc />
     public IEnumerator GetEnumerator()
     {
-        return ((IEnumerable<KeyValuePair<string, Bind>>)this).GetEnumerator();
+        return ((IEnumerable<KeyValuePair<string, Bind>>) this).GetEnumerator();
     }
 
     /// <summary>
@@ -73,7 +73,9 @@ public sealed class BindMap : IEnumerable<KeyValuePair<string, Bind>>
         if (binds.ContainsValue(bind))
         {
             string existingName = binds.Where(p => p.Value == bind).Select(p => p.Key).First();
-            throw new ArgumentException($"Bind '{bind}' is already added under the name '{existingName}'.");
+            throw new ArgumentException(
+                $"Bind '{bind}' is already added under the name '{existingName}'."
+            );
         }
 
         bind.Keyboard = Keyboard;

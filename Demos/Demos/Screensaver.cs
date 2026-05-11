@@ -66,7 +66,9 @@ internal class Screensaver : Demo
                 dir = dir with { Y = unsignedDir.Y };
                 RandomizeColor();
             }
-            else if (transform.Pos.Y + logo.Size.Y > displaySize.Y && Math.Abs(dir.Y - -unsignedDir.Y) > 0.01f)
+            else if (
+                transform.Pos.Y + logo.Size.Y > displaySize.Y
+                && Math.Abs(dir.Y - -unsignedDir.Y) > 0.01f)
             {
                 dir = dir with { Y = -unsignedDir.Y };
                 RandomizeColor();
@@ -77,7 +79,9 @@ internal class Screensaver : Demo
                 dir = dir with { X = unsignedDir.X };
                 RandomizeColor();
             }
-            else if (transform.Pos.X + logo.Size.X > displaySize.X && Math.Abs(dir.X - -unsignedDir.X) > 0.01f)
+            else if (
+                transform.Pos.X + logo.Size.X > displaySize.X
+                && Math.Abs(dir.X - -unsignedDir.X) > 0.01f)
             {
                 dir = dir with { X = -unsignedDir.X };
                 RandomizeColor();
@@ -89,7 +93,8 @@ internal class Screensaver : Demo
 
         private void RandomizeColor()
         {
-            Color newColor = colors.Where(c => c != currentColor).ElementAt(random.Next(0, colors.Length - 1));
+            Color newColor = colors
+                .Where(c => c != currentColor).ElementAt(random.Next(0, colors.Length - 1));
             ContentRenderer<Image> imageRenderer = GameObject.Get<ContentRenderer<Image>>();
 
             imageRenderer.Content = imageRenderer.Content.WithColorSwapped(currentColor, newColor);

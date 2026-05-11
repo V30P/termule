@@ -13,8 +13,7 @@ public class MissingSystemException<TMissing> : MissingGameElementException<TMis
     public override string Message =>
         $"'{Dependent.GetType().Name}' is missing required system '{MissingElementType.Name}'";
 
-    internal MissingSystemException(GameElement dependent)
-        : base(dependent)
+    internal MissingSystemException(GameElement dependent) : base(dependent)
     {
     }
 }

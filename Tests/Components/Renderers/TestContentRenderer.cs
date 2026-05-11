@@ -15,9 +15,13 @@ public class TestContentRenderer
         [(2.25f, 1.75f), (1f, 1f), (2, 2)]
     ];
 
-    private class ParameterlessContent() : Image(0, 0);
+    private class ParameterlessContent() : Image(0, 0)
+    {
+    }
 
-    private class NonParameterlessContent(int width, int height) : Image(width, height);
+    private class NonParameterlessContent(int width, int height) : Image(width, height)
+    {
+    }
 
     private class FakeContent : Image
     {
@@ -49,7 +53,8 @@ public class TestContentRenderer
         Cell baseCell = new(BasicColor.White, 'X', BasicColor.White);
         ContentRenderer<Image> baseRenderer = new()
         {
-            TargetSpace = true, Content = new FakeContent(new[,] { { baseCell } })
+            TargetSpace = true,
+            Content = new FakeContent(new[,] { { baseCell } })
         };
         _ = new GameObject(new Transform { Pos = (0, 0) }, baseRenderer);
         FrameBuffer frame = new(1, 1);
@@ -58,7 +63,8 @@ public class TestContentRenderer
 
         ContentRenderer<Image> defaultRenderer = new()
         {
-            TargetSpace = true, Content = new FakeContent(new Cell[,] { { new() } })
+            TargetSpace = true,
+            Content = new FakeContent(new Cell[,] { { new() } })
         };
         _ = new GameObject(new Transform { Pos = (0, 0) }, defaultRenderer);
 
@@ -89,20 +95,22 @@ public class TestContentRenderer
 
     [Theory]
     [MemberData(nameof(ViewOriginData))]
-    public void Render_RespectsViewOrigin(Vector transformPos, Vector viewOrigin, VectorInt expectedCellPos)
+    public void Render_RespectsViewOrigin(
+        Vector transformPos,
+        Vector viewOrigin,
+        VectorInt expectedCellPos)
     {
         ContentRenderer<Image> renderer = new()
         {
-            TargetSpace = true, Content = new FakeContent(new Cell[,] { { new(BasicColor.White) } })
+            TargetSpace = true,
+            Content = new FakeContent(new Cell[,] { { new(BasicColor.White) } })
         };
         _ = new GameObject(new Transform { Pos = transformPos }, renderer);
         FrameBuffer frame = new(3, 3);
 
         renderer.Render(frame, viewOrigin);
 
-        AssertDrawnColor(frame, BasicColor.White, [
-            expectedCellPos
-        ]);
+        AssertDrawnColor(frame, BasicColor.White, [expectedCellPos]);
     }
 
     [Fact]
@@ -123,11 +131,7 @@ public class TestContentRenderer
 
         renderer.Render(frame, (0, 0));
 
-        AssertDrawnColor(frame, BasicColor.White, [
-            (1, 0),
-            (0, 1), (1, 1), (2, 1),
-            (1, 2)
-        ]);
+        AssertDrawnColor(frame, BasicColor.White, [(1, 0), (0, 1), (1, 1), (2, 1), (1, 2)]);
     }
 
     [Fact]
@@ -135,7 +139,10 @@ public class TestContentRenderer
     {
         ContentRenderer<Image> renderer = new()
         {
-            TargetSpace = false, Content = new FakeContent(new Cell[,] { { new(BasicColor.White) } })
+            TargetSpace = false,
+            Content = new FakeContent(
+                new Cell[,] { { new(BasicColor.White) } }
+            )
         };
         _ = new GameObject(new Transform { Pos = (2, 0) }, renderer);
         FrameBuffer frame = new(3, 3);
@@ -151,7 +158,8 @@ public class TestContentRenderer
         Cell baseCell = new(BasicColor.White, 'X', BasicColor.White);
         ContentRenderer<Image> baseRenderer = new()
         {
-            TargetSpace = true, Content = new FakeContent(new[,] { { baseCell } })
+            TargetSpace = true,
+            Content = new FakeContent(new[,] { { baseCell } })
         };
         _ = new GameObject(new Transform { Pos = (0, 0) }, baseRenderer);
         FrameBuffer frame = new(1, 1);

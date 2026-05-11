@@ -5,11 +5,6 @@ namespace Termule.Tests.Systems.Resources;
 
 public class TestArrayConverterFactory
 {
-    private static readonly JsonSerializerOptions SerializerOptions = new()
-    {
-        Converters = { new Array2DConverterFactory() }, WriteIndented = true, IndentSize = 4
-    };
-
     public static readonly IEnumerable<object[]> WriteData =
     [
         [new string[0, 0], "[]"],
@@ -65,6 +60,13 @@ public class TestArrayConverterFactory
             """
         ]
     ];
+
+    private static readonly JsonSerializerOptions SerializerOptions = new()
+    {
+        Converters = { new Array2DConverterFactory() },
+        WriteIndented = true,
+        IndentSize = 4
+    };
 
     public static IEnumerable<object[]> ReadData =>
         WriteData.Select<object[], object[]>(o => [o[1], o[0]]);

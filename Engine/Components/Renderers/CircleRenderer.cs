@@ -18,7 +18,8 @@ public sealed class CircleRenderer : PositionalRenderer
     public bool Filled { get; set; }
 
     /// <summary>
-    ///     Gets or sets a value indicating whether all circle cells should be duplicated horizontally.
+    ///     Gets or sets a value indicating whether all circle cells should be duplicated
+    ///     horizontally.
     /// </summary>
     /// <remarks>
     ///     This is useful for making more round circles in the terminal.
@@ -36,7 +37,11 @@ public sealed class CircleRenderer : PositionalRenderer
         {
             if (value < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(Radius), value, "Radius cannot be negative");
+                throw new ArgumentOutOfRangeException(
+                    nameof(Radius),
+                    value,
+                    "Radius cannot be negative"
+                );
             }
 
             field = value;
@@ -46,8 +51,8 @@ public sealed class CircleRenderer : PositionalRenderer
     private protected override void RenderAtPosition(PositionalRenderContext context)
     {
         // Midpoint circle algorithm
-        int y = (int)Radius;
-        int p = (int)(1 - Radius);
+        int y = (int) Radius;
+        int p = (int) (1 - Radius);
         for (int x = 0; x <= y; x++)
         {
             DrawMidpointTransformations((x, y), context);

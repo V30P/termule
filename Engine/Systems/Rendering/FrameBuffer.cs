@@ -4,7 +4,7 @@ using Termule.Engine.Types;
 namespace Termule.Engine.Systems.Rendering;
 
 /// <summary>
-///     Content implementation that <see cref="Renderer"/>s draw to during the render process.
+///     Content implementation that <see cref="Renderer" />s draw to during the render process.
 /// </summary>
 public sealed class FrameBuffer : Image
 {
@@ -50,8 +50,8 @@ public sealed class FrameBuffer : Image
         {
             if (layerBoxDrawingChars && characterColor == this[pos.X, pos.Y].CharColor)
             {
-                Connections connections = Connections.FromChar(character.Value) |
-                                          Connections.FromChar(this[pos.X, pos.Y].Char);
+                Connections connections = Connections.FromChar(character.Value)
+                                          | Connections.FromChar(this[pos.X, pos.Y].Char);
 
                 character = connections.ToChar();
             }

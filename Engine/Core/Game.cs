@@ -9,27 +9,26 @@ namespace Termule.Engine.Core;
 /// </summary>
 public sealed class Game
 {
-    private readonly HashSet<GameElement> elements = [];
-    private readonly Stopwatch stopwatch = new();
-
-    private bool stop;
-
-    internal uint registerCount;
-
     /// <summary>
     ///     Gets the system manager.
     /// </summary>
-    public SystemManager Systems { get; } = new();
+    public readonly SystemManager Systems = new();
 
     /// <summary>
     ///     Gets the root game object.
     /// </summary>
-    public GameObject Root { get; } = [];
+    public readonly GameObject Root = [];
 
     /// <summary>
     ///     Gets the global message bus.
     /// </summary>
-    public MessageBus Bus { get; } = new();
+    public readonly MessageBus Bus = new();
+
+    private readonly HashSet<GameElement> elements = [];
+    private readonly Stopwatch stopwatch = new();
+
+    private bool stop;
+    private uint registerCount;
 
     /// <summary>
     ///     Gets the length of the last game loop iteration in seconds.
@@ -155,7 +154,11 @@ public sealed class Game
 
     internal record struct ElementUnregisteredMessage(GameElement Element);
 
-    internal struct StartedMessage;
+    internal struct StartedMessage
+    {
+    }
 
-    internal struct StoppedMessage;
+    internal struct StoppedMessage
+    {
+    }
 }

@@ -8,12 +8,12 @@ public sealed class ComboBind(HashSet<Button> buttons) : Bind
 {
     private readonly HashSet<Button> heldButtons = [];
 
-    private bool triggeredSinceLastFrame;
+    private bool triggeredSinceLastTick;
 
     internal override object GetValue()
     {
-        bool value = triggeredSinceLastFrame;
-        triggeredSinceLastFrame = false;
+        bool value = triggeredSinceLastTick;
+        triggeredSinceLastTick = false;
         return value;
     }
 
@@ -28,7 +28,7 @@ public sealed class ComboBind(HashSet<Button> buttons) : Bind
         heldButtons.Add(button);
         if (heldButtons.SetEquals(buttons))
         {
-            triggeredSinceLastFrame = true;
+            triggeredSinceLastTick = true;
         }
     }
 

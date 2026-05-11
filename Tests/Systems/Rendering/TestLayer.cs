@@ -10,7 +10,7 @@ public class TestLayer
     {
         public bool OnAddedCalled { get; private set; }
         public bool OnRemovedCalled { get; private set; }
-        public bool IsDirty => dirty;
+        public bool IsDirty => Dirty;
 
         protected override void OnRendererAdded(Renderer renderer)
         {
@@ -26,7 +26,9 @@ public class TestLayer
     }
 
     private class PriorityLayer()
-        : Layer((r1, r2) => ((PriorityRenderer)r1).Priority.CompareTo(((PriorityRenderer)r2).Priority));
+        : Layer((r1, r2) => ((PriorityRenderer) r1).Priority.CompareTo(((PriorityRenderer) r2).Priority))
+    {
+    }
 
     private class PriorityRenderer(int priority) : Renderer
     {
@@ -45,7 +47,7 @@ public class TestLayer
 
         Assert.True(layer.IsDirty);
 
-        using IEnumerator<Renderer> _ = layer.GetEnumerator();
+        using IEnumerator<Renderer> enumerator = layer.GetEnumerator();
         layer.Remove(renderer);
 
         Assert.True(layer.IsDirty);
@@ -56,11 +58,10 @@ public class TestLayer
     {
         FakeLayer layer = [new FakeRenderer()];
 
-        using IEnumerator<Renderer> _ = layer.GetEnumerator();
+        using IEnumerator<Renderer> enumerator = layer.GetEnumerator();
 
         Assert.False(layer.IsDirty);
     }
-
 
     [Fact]
     public void OnAddedAndOnRemoved_AreInvokedAccordingly()

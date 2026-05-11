@@ -12,19 +12,6 @@ namespace Termule.Engine.Systems.Display;
 /// </summary>
 public sealed partial class UnixDisplaySystem : TerminalDisplaySystem
 {
-    private const int F_GETFL = 3;
-    private const int F_SETFL = 4;
-    private const int STDIN_FILENO = 0;
-
-    private static readonly ProcessStartInfo SttyStartInfo = new()
-    {
-        FileName = "stty", RedirectStandardOutput = true, UseShellExecute = false, CreateNoWindow = true
-    };
-
-    private readonly byte[] inputBuffer = new byte[1024];
-    private readonly StringBuilder inputBuilder = new();
-    private static readonly int O_NONBLOCK = OperatingSystem.IsMacOS() ? 0x0004 : 0x800;
-
     private string initialSttyConfig;
 
     /// <inheritdoc />
@@ -102,4 +89,22 @@ public sealed partial class UnixDisplaySystem : TerminalDisplaySystem
 
     [GeneratedRegex(@"\x1b\[<\d+;(\d+);(\d+)[Mm]")]
     private static partial Regex sgrRegex();
+#pragma warning disable SA1310 // Field names should not contain underscore
+    private const int F_GETFL = 3;
+    private const int F_SETFL = 4;
+    private const int STDIN_FILENO = 0;
+
+    private static readonly ProcessStartInfo SttyStartInfo = new()
+    {
+        FileName = "stty",
+        RedirectStandardOutput = true,
+        UseShellExecute = false,
+        CreateNoWindow = true
+    };
+
+    private static readonly int O_NONBLOCK = OperatingSystem.IsMacOS() ? 0x0004 : 0x800;
+
+    private readonly byte[] inputBuffer = new byte[1024];
+    private readonly StringBuilder inputBuilder = new();
+#pragma warning restore SA1310 // Field names should not contain underscore
 }

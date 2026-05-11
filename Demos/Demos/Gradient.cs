@@ -12,12 +12,18 @@ internal class Gradient : Demo
         Root.Add(
             new Transform(),
             new Camera(),
-            new GradientRenderer());
+            new GradientRenderer()
+        );
     }
 
     private class GradientRenderer : Renderer
     {
         private float time;
+
+        protected override void Tick()
+        {
+            time += Game.DeltaTime;
+        }
 
         protected override void Render(FrameBuffer frame, Vector viewOrigin)
         {
@@ -25,7 +31,7 @@ internal class Gradient : Demo
             {
                 for (int y = 0; y < frame.Size.Y; y++)
                 {
-                    frame.Draw((x, y), GetColor(((float)x / frame.Size.X) + time));
+                    frame.Draw((x, y), GetColor(((float) x / frame.Size.X) + time));
                 }
             }
         }
@@ -33,10 +39,10 @@ internal class Gradient : Demo
         private static Color GetColor(float phase)
         {
             float segmentPosition = phase % 1 * 6f;
-            int segmentIndex = (int)segmentPosition;
+            int segmentIndex = (int) segmentPosition;
             float segmentProgress = segmentPosition - segmentIndex;
 
-            int intensity = (int)(segmentProgress * 255);
+            int intensity = (int) (segmentProgress * 255);
             return segmentIndex switch
             {
                 0 => (255, intensity, 0),
@@ -46,11 +52,6 @@ internal class Gradient : Demo
                 4 => (intensity, 0, 255),
                 _ => (255, 0, 255 - intensity)
             };
-        }
-
-        protected override void Tick()
-        {
-            time += Game.DeltaTime;
         }
     }
 }

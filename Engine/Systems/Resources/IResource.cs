@@ -6,7 +6,9 @@ namespace Termule.Engine.Systems.Resources;
 /// <remarks>
 ///     Do not implement this directly, instead implement <see cref="IResource" />.
 /// </remarks>
-public interface IResourceBase;
+public interface IResourceBase
+{
+}
 
 /// <summary>
 ///     Denotes a resource that can be loaded by the <see cref="ResourceLoader" />.

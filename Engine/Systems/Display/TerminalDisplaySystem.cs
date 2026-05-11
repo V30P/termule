@@ -92,13 +92,12 @@ public abstract class TerminalDisplaySystem : DisplaySystem
     {
         // Handle window resizing
         bool screenCleared = false;
-        if
-        (
+        if (
             Console.WindowTop != 0
-            || Console.BufferWidth != Console.WindowWidth || Console.BufferHeight != Console.WindowHeight
+            || Console.BufferWidth != Console.WindowWidth
+            || Console.BufferHeight != Console.WindowHeight
             || buffer.Size != Screen?.Size
-            || Console.WindowWidth != Size.X || Console.WindowHeight != Size.Y
-        )
+            || Console.WindowWidth != Size.X || Console.WindowHeight != Size.Y)
         {
             Console.ResetColor();
             Console.Clear();

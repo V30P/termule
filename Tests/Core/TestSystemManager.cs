@@ -57,7 +57,7 @@ public class TestSystemManager
         game.Start();
         Assert.True(system.Started);
 
-        game.RunFrames(5);
+        game.RunTicks(5);
         Assert.Equal(5, system.TickCount);
 
         game.CleanUp();
@@ -81,7 +81,7 @@ public class TestSystemManager
         Game game = new();
         game.Start();
 
-        Assert.Throws<InvalidOperationException>(() => game.Systems.Uninstall<FakeSystem>());
+        Assert.Throws<InvalidOperationException>(game.Systems.Uninstall<FakeSystem>);
     }
 
     [Fact]

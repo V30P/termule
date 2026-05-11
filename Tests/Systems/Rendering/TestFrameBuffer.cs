@@ -5,11 +5,12 @@ namespace Termule.Tests.Systems.Rendering;
 
 public class TestFrameBuffer
 {
+    // Prevents XUnit from failing to convert BasicColor to Color? at runtime
     private static readonly Cell TestCell = new(BasicColor.White, 'X', BasicColor.White);
 
-    // Prevents XUnit from failing to convert BasicColor to Color? at runtime
     private static readonly Color DrawColor = BasicColor.White;
-    public static IEnumerable<object[]> DrawData =
+
+    public static IEnumerable<object[]> DrawData =>
     [
         [null, null, null, default(Cell)],
         [DrawColor, null, null, new Cell(DrawColor)],
@@ -17,8 +18,6 @@ public class TestFrameBuffer
         [null, null, DrawColor, new Cell(default, '\0', DrawColor)],
         [DrawColor, 'X', DrawColor, new Cell(DrawColor, 'X', DrawColor)]
     ];
-
-    public static IEnumerable<object[]> DrawCoverData = [];
 
     private static void AssertAllCellsEqual(FrameBuffer frame, Cell expectedCell)
     {
@@ -33,13 +32,28 @@ public class TestFrameBuffer
 
     [Theory]
     [MemberData(nameof(DrawData))]
-    public void Draw_AppliesProvidedValues(Color? color, char? character, Color? characterColor, Cell expectedCell)
+    public void Draw_AppliesProvidedValues(
+        Color? color,
+        char? character,
+        Color? characterColor,
+        Cell expectedCell)
     {
         FrameBuffer frame = new(1, 1);
 
         frame.Draw((0, 0), color, character, characterColor);
 
         Assert.Equal(expectedCell, frame[0, 0]);
+    }
+
+    [Fact]
+    public void Draw_DoesNotLayerNonMatchingBoxDrawingChars()
+    {
+        FrameBuffer frame = new(1, 1);
+
+        frame.Draw((0, 0), character: '─', characterColor: BasicColor.White);
+        frame.Draw((0, 0), character: '│', characterColor: BasicColor.Red);
+
+        Assert.Equal('│', frame[0, 0].Char);
     }
 
     [Fact]
@@ -55,19 +69,6 @@ public class TestFrameBuffer
     }
 
     [Fact]
-    public void Draw_ProperlyCoversExistingValues()
-    {
-        FrameBuffer frame = new(1, 1);
-        frame.Draw((0, 0), TestCell.Color, TestCell.Char, TestCell.CharColor);
-
-        frame.Draw((0, 0), null, TestCell.Char);
-        Assert.Equal(new Cell(TestCell.Color, TestCell.Char), frame[0, 0]);
-
-        frame.Draw((0, 0), TestCell.Color);
-        Assert.Equal(new Cell(TestCell.Color), frame[0, 0]);
-    }
-
-    [Fact]
     public void Draw_LayersMatchingBoxDrawingChars()
     {
         FrameBuffer frame = new(1, 1);
@@ -79,14 +80,16 @@ public class TestFrameBuffer
     }
 
     [Fact]
-    public void Draw_DoesNotLayerNonMatchingBoxDrawingChars()
+    public void Draw_ProperlyCoversExistingValues()
     {
         FrameBuffer frame = new(1, 1);
+        frame.Draw((0, 0), TestCell.Color, TestCell.Char, TestCell.CharColor);
 
-        frame.Draw((0, 0), character: '─', characterColor: BasicColor.White);
-        frame.Draw((0, 0), character: '│', characterColor: BasicColor.Red);
+        frame.Draw((0, 0), null, TestCell.Char);
+        Assert.Equal(new Cell(TestCell.Color, TestCell.Char), frame[0, 0]);
 
-        Assert.Equal('│', frame[0, 0].Char);
+        frame.Draw((0, 0), TestCell.Color);
+        Assert.Equal(new Cell(TestCell.Color), frame[0, 0]);
     }
 
     [Fact]

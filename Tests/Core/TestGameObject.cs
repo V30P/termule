@@ -4,7 +4,15 @@ namespace Termule.Tests.Core;
 
 public class TestGameObject
 {
-    private interface IDerivedComponent;
+    public static readonly IEnumerable<object[]> GetAllData =
+    [
+        [Array.Empty<Component>(), 0],
+        [new Component[] { new ComponentB() }, 0],
+        [new Component[] { new ComponentA() }, 1],
+        [new Component[] { new ComponentA(), new ComponentB() }, 1],
+        [new Component[] { new ComponentA(), new ComponentA() }, 2],
+        [new Component[] { new ComponentA(), new ComponentA(), new ComponentA() }, 3]
+    ];
 
     private class DependentComponent : Component
     {
@@ -16,21 +24,21 @@ public class TestGameObject
         }
     }
 
-    private class DerivedComponent : FakeComponent, IDerivedComponent;
+    private interface IDerivedComponent
+    {
+    }
 
-    private class ComponentA : Component;
+    private class DerivedComponent : FakeComponent, IDerivedComponent
+    {
+    }
 
-    private class ComponentB : Component;
+    private class ComponentA : Component
+    {
+    }
 
-    public static readonly IEnumerable<object[]> GetAllData =
-    [
-        [Array.Empty<Component>(), 0],
-        [new Component[] { new ComponentB() }, 0],
-        [new Component[] { new ComponentA() }, 1],
-        [new Component[] { new ComponentA(), new ComponentB() }, 1],
-        [new Component[] { new ComponentA(), new ComponentA() }, 2],
-        [new Component[] { new ComponentA(), new ComponentA(), new ComponentA() }, 3]
-    ];
+    private class ComponentB : Component
+    {
+    }
 
     [Fact]
     public void Add_AddsAndRegistersComponent()
@@ -88,7 +96,7 @@ public class TestGameObject
         Component component = new DerivedComponent();
         GameObject gameObject = [component];
 
-        Component result = (Component)typeof(GameObject)
+        Component result = (Component) typeof(GameObject)
             .GetMethod(nameof(GameObject.Get))!
             .MakeGenericMethod(getType)
             .Invoke(gameObject, null);

@@ -19,7 +19,6 @@ public class TestTransform
         Assert.Equal((2, 2), transform.Pos);
     }
 
-
     [Fact]
     public void CachedPos_IsAppliedOnActivation()
     {
@@ -64,7 +63,6 @@ public class TestTransform
         Assert.Equal(child.LocalPos, (1, 1));
     }
 
-
     [Fact]
     public void NestedTransforms_ApplyPositioningRecursively()
     {
@@ -82,19 +80,17 @@ public class TestTransform
         Assert.Equal((10, 10), transform.Pos);
     }
 
-
     [Fact]
     public void Pos_WhenParentChanges_IsConstant()
     {
         Transform transform = new() { Pos = (1, 1) };
-        GameObject _ = [transform];
-        GameObject newGameObject = new();
+        _ = new GameObject(transform);
+        GameObject newGameObject = [];
 
         transform.GameObject = newGameObject;
 
         Assert.Equal((1, 1), transform.Pos);
     }
-
 
     [Fact]
     public void SettingLocalPos_UpdatesPos()
@@ -109,7 +105,6 @@ public class TestTransform
 
         Assert.Equal((0, 0), transform.Pos);
     }
-
 
     [Fact]
     public void SettingPos_UpdatesLocalPos()

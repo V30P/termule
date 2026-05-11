@@ -30,7 +30,7 @@ public class Image : IContent, IResource
     /// <param name="i">The image whose cells should be duplicated.</param>
     public Image(Image i)
     {
-        Cells = (Cell[,])i.Cells.Clone();
+        Cells = (Cell[,]) i.Cells.Clone();
     }
 
     [JsonConstructor]
@@ -82,7 +82,11 @@ public class Image : IContent, IResource
 
         if (height < 0)
         {
-            throw new ArgumentOutOfRangeException(nameof(height), height, "Height cannot be negative");
+            throw new ArgumentOutOfRangeException(
+                nameof(height),
+                height,
+                "Height cannot be negative"
+            );
         }
 
         Cells = new Cell[width, height];

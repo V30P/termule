@@ -7,6 +7,13 @@ namespace Termule.Tests.Components;
 
 public class TestRenderer
 {
+    private class FakeRenderer : Renderer
+    {
+        protected internal override void Render(FrameBuffer frame, Vector viewOrigin)
+        {
+        }
+    }
+
     private class FakeLayer() : Layer((r1, r2) => r1.ElementId.CompareTo(r2.ElementId))
     {
         public int RegisterCount { get; private set; }
@@ -22,14 +29,6 @@ public class TestRenderer
             UnregisterCount++;
         }
     }
-
-    private class FakeRenderer : Renderer
-    {
-        protected internal override void Render(FrameBuffer frame, Vector viewOrigin)
-        {
-        }
-    }
-
 
     [Fact]
     public void Register_WhenLayerIsSet_MovesToProvidedLayer()
@@ -50,7 +49,6 @@ public class TestRenderer
         Assert.Equal(0, defaultLayer.RegisterCount);
     }
 
-
     [Fact]
     public void Register_WhenNoLayerSet_MovesToDefaultLayer()
     {
@@ -67,7 +65,6 @@ public class TestRenderer
         Assert.Equal(1, layer.RegisterCount);
         Assert.Equal(0, layer.UnregisterCount);
     }
-
 
     [Fact]
     public void SettingLayer_ToNullWhenRegistered_MovesRendererToDefaultLayer()
@@ -87,7 +84,6 @@ public class TestRenderer
         Assert.Equal(1, customLayer.UnregisterCount);
         Assert.Equal(1, defaultLayer.RegisterCount);
     }
-
 
     [Fact]
     public void SettingLayer_WhenRegistered_MovesRendererBetweenLayers()
@@ -111,7 +107,6 @@ public class TestRenderer
         Assert.Equal(1, customLayer.RegisterCount);
         Assert.Equal(0, customLayer.UnregisterCount);
     }
-
 
     [Fact]
     public void Unregister_RemovesFromCurrentLayer()

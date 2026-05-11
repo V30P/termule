@@ -5,18 +5,18 @@ namespace Termule.Engine.Systems.Input;
 /// </summary>
 public sealed class TypingBind : Bind
 {
-    private string textSinceLastFrame = string.Empty;
+    private string textSinceLastTick = string.Empty;
 
     internal override object GetValue()
     {
-        string value = textSinceLastFrame;
-        textSinceLastFrame = string.Empty;
+        string value = textSinceLastTick;
+        textSinceLastTick = string.Empty;
         return value;
     }
 
     /// <inheritdoc />
     protected override void OnCharacterTyped(char character)
     {
-        textSinceLastFrame += character;
+        textSinceLastTick += character;
     }
 }

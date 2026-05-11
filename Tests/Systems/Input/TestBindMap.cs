@@ -27,7 +27,7 @@ public class TestBindMap
         BindMap bindMap = new() { ["A"] = bindA, ["B"] = bindB };
 
         IEnumerator enumerator = bindMap.GetEnumerator();
-        using ((IDisposable)enumerator)
+        using ((IDisposable) enumerator)
         {
             Assert.IsType<IEnumerator<KeyValuePair<string, Bind>>>(enumerator, false);
 
@@ -45,17 +45,17 @@ public class TestBindMap
 
         bindMap.PollValues();
         _ = bindMap.TryGetValue("Test", out object value);
-        Assert.False((bool)value);
+        Assert.False((bool) value);
 
         bindMap.PollValues();
         _ = bindMap.TryGetValue("Test", out value);
-        Assert.True((bool)value);
+        Assert.True((bool) value);
     }
 
     [Fact]
     public void TryGetValue_WhenNameDoesNotExist_ReturnsFalseAndOutputsNull()
     {
-        BindMap bindMap = new();
+        BindMap bindMap = [];
 
         Assert.False(bindMap.TryGetValue("Test", out object value));
         Assert.Null(value);

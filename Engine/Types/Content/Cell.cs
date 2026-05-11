@@ -6,10 +6,17 @@ namespace Termule.Engine.Types;
 /// <remarks>
 ///     Initializes a new instance of the <see cref="Cell" /> struct.
 /// </remarks>
-/// <param name="color">The background color of the cell (or the default if none is provided).</param>
+/// <param name="color">
+///     The background color of the cell (or the default if none is provided).
+/// </param>
 /// <param name="character">The character in the cell (or the default if none is provided).</param>
-/// <param name="charColor">The color of the cell's character (or the default if none is provided).</param>
-public struct Cell(Color color = default, char character = '\0', Color charColor = default) : IEquatable<Cell>
+/// <param name="charColor">
+///     The color of the cell's character (or the default if none is provided).
+/// </param>
+public struct Cell(
+    Color color = default,
+    char character = '\0',
+    Color charColor = default) : IEquatable<Cell>
 {
     /// <summary>
     ///     Gets or sets the background color of the cell.

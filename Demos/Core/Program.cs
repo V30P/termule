@@ -9,21 +9,36 @@ namespace Termule.Demos.Core;
 internal static class Program
 {
     private const string ErrorTemplate = "Error: {0}.\n";
+    internal static readonly Layer UiLayer = new SimpleLayer();
 
     private static readonly List<string> DemoNames = [];
     private static readonly Dictionary<string, Demo> Demos = [];
 
-    internal static readonly Layer UILayer = new SimpleLayer();
-
     private static readonly Dictionary<char, Flag> FlagShortNames = new()
     {
-        ['h'] = Flag.Help, ['i'] = Flag.Interactive, ['s'] = Flag.Stats
+        ['h'] = Flag.Help,
+        ['i'] = Flag.Interactive,
+        ['s'] = Flag.Stats
     };
 
     private static readonly Dictionary<string, Flag> FlagLongNames = new()
     {
-        ["help"] = Flag.Help, ["interactive"] = Flag.Interactive, ["stats"] = Flag.Stats
+        ["help"] = Flag.Help,
+        ["interactive"] = Flag.Interactive,
+        ["stats"] = Flag.Stats
     };
+
+    private static readonly string HelpText = $"""
+                                               Usage: [OPTIONS] DEMO
+
+                                               Options:
+                                               --help, -h         Show this message and exit.
+                                               --interactive, -i  Run in interactive mode.
+                                               --stats, -s        Enable TPS indicator.
+
+                                               Demos:
+                                               {string.Join("\n", DemoNames)}
+                                               """;
 
     private enum Flag
     {
@@ -32,28 +47,15 @@ internal static class Program
         Stats
     }
 
-    private static string HelpText => $"""
-                                       Usage: [OPTIONS] DEMO
-
-                                       Options:
-                                       --help, -h         Show this message and exit.
-                                       --interactive, -i  Run in interactive mode.
-                                       --stats, -s        Enable TPS indicator.
-
-                                       Demos:
-                                       {string.Join("\n", DemoNames)}
-                                       """;
-
     static Program()
     {
-        foreach
-        (
-            Type demoType in Assembly.GetExecutingAssembly()
-                .GetTypes()
-                .Where(t => !t.IsAbstract && t.IsAssignableTo(typeof(Demo))))
+        IEnumerable<Type> demoTypes = Assembly.GetExecutingAssembly()
+            .GetTypes()
+            .Where(t => !t.IsAbstract && t.IsAssignableTo(typeof(Demo)));
+        foreach (Type demoType in demoTypes)
         {
             DemoNames.Add(demoType.Name);
-            Demos.Add(demoType.Name.ToLower(), (Demo)Activator.CreateInstance(demoType));
+            Demos.Add(demoType.Name.ToLower(), (Demo) Activator.CreateInstance(demoType));
         }
     }
 
@@ -105,7 +107,10 @@ internal static class Program
         }
     }
 
-    private static void ParseArgs(string[] args, out HashSet<Flag> flags, out List<string> arguments)
+    private static void ParseArgs(
+        string[] args,
+        out HashSet<Flag> flags,
+        out List<string> arguments)
     {
         flags = [];
         arguments = [];
@@ -165,16 +170,18 @@ internal static class Program
 
         Game game = new();
         game.Systems.UseDefaults();
-        game.Systems.Install(new RenderSystem { Layers = [new SimpleLayer(), UILayer] });
+        game.Systems.Install(new RenderSystem { Layers = [new SimpleLayer(), UiLayer] });
         game.Systems.Install(demo);
 
         if (showStats)
         {
-            game.Root.Add(new GameObject(
-                new Transform(),
-                new ContentRenderer<Text> { TargetSpace = true, Layer = UILayer },
-                new TpsIndicator()
-            ));
+            game.Root.Add(
+                new GameObject(
+                    new Transform(),
+                    new ContentRenderer<Text> { TargetSpace = true, Layer = UiLayer },
+                    new TpsIndicator()
+                )
+            );
         }
 
         game.Run();

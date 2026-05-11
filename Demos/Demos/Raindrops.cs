@@ -31,8 +31,8 @@ internal class Raindrops : Demo
             return;
         }
 
-        SpawnRaindrop((float)random.NextDouble(), (float)random.NextDouble());
-        cooldown = ((float)random.NextDouble() * (MaxCooldown - MinCooldown)) + MinCooldown;
+        SpawnRaindrop((float) random.NextDouble(), (float) random.NextDouble());
+        cooldown = ((float) random.NextDouble() * (MaxCooldown - MinCooldown)) + MinCooldown;
     }
 
     private void SpawnRaindrop(float x, float y)
@@ -62,7 +62,7 @@ internal class Raindrops : Demo
 
             CircleRenderer circleRenderer = GameObject.Get<CircleRenderer>();
             circleRenderer.Radius = GetRadius(time);
-            circleRenderer.Color = (0, 0, (int)(255 * (1 - (time / Lifespan))));
+            circleRenderer.Color = (0, 0, (int) (255 * (1 - (time / Lifespan))));
 
             VectorInt displaySize = Systems.Get<DisplaySystem>().Size;
             GameObject.Get<Transform>().Pos = (pos.X * displaySize.X, pos.Y * displaySize.Y);

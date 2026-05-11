@@ -26,7 +26,8 @@ internal class Shooter : Demo, IMessageListener<Shooter.CharacterController.Died
     private int roundNumber = 1;
     private int enemiesRemaining;
 
-    void IMessageListener<CharacterController.DiedMessage>.OnMessage(CharacterController.DiedMessage message)
+    void IMessageListener<CharacterController.DiedMessage>.OnMessage(
+        CharacterController.DiedMessage message)
     {
         if (message.Type == typeof(PlayerController))
         {
@@ -59,7 +60,7 @@ internal class Shooter : Demo, IMessageListener<Shooter.CharacterController.Died
         Root.Add(
             new Transform(),
             new Camera(),
-            new ContentRenderer<Text> { Centered = true, Layer = Program.UILayer }
+            new ContentRenderer<Text> { Centered = true, Layer = Program.UiLayer }
         );
 
         Game.Bus.Subscribe(this);
@@ -107,7 +108,8 @@ internal class Shooter : Demo, IMessageListener<Shooter.CharacterController.Died
         }
     }
 
-    private void SpawnCharacter<TController>(Vector pos) where TController : CharacterController, new()
+    private void SpawnCharacter<TController>(Vector pos)
+        where TController : CharacterController, new()
     {
         Game.Root.Add(new GameObject(
             new Transform { Pos = pos },
@@ -131,6 +133,17 @@ internal class Shooter : Demo, IMessageListener<Shooter.CharacterController.Died
         protected abstract Color HitColor { get; }
         protected abstract float Speed { get; }
         protected abstract float ShotCooldownLength { get; }
+
+        internal void Hit()
+        {
+            hp--;
+            hitColorTimeRemaining = HitColorLength;
+            if (hp == 0)
+            {
+                Game.Bus.Broadcast(new DiedMessage(GetType()));
+                GameObject.Destroy();
+            }
+        }
 
         protected override void Tick()
         {
@@ -156,23 +169,16 @@ internal class Shooter : Demo, IMessageListener<Shooter.CharacterController.Died
                 new Transform { Pos = GameObject.Get<Transform>().Pos },
                 new ContentRenderer<Image>
                 {
-                    Centered = true, Content = new Image(projectileSprite).WithColorSwapped(BasicColor.White, Color)
+                    Centered = true,
+                    Content = new Image(projectileSprite).WithColorSwapped(BasicColor.White, Color)
                 },
-                new ProjectileController(GetType(), (Target - GameObject.Get<Transform>().Pos).Normalized)
+                new ProjectileController(
+                    GetType(),
+                    (Target - GameObject.Get<Transform>().Pos).Normalized
+                )
             ));
 
             shotCooldownTimeRemaining = ShotCooldownLength;
-        }
-
-        internal void Hit()
-        {
-            hp--;
-            hitColorTimeRemaining = HitColorLength;
-            if (hp == 0)
-            {
-                Game.Bus.Broadcast(new DiedMessage(GetType()));
-                GameObject.Destroy();
-            }
         }
 
         internal record struct DiedMessage(Type Type);
@@ -242,21 +248,24 @@ internal class Shooter : Demo, IMessageListener<Shooter.CharacterController.Died
 
         protected override void Tick()
         {
-            // Detect hits
             GameObject.Get<Transform>().Pos += ScaleVelocity(direction * Speed) * Game.DeltaTime;
-            foreach (CharacterController character in Root.GetAll<GameObject>()
-                         .Select(g => g.Get<CharacterController>())
-                         .Where(c => c != null && c.GetType() != sourceType))
+
+            // Detect hits
+            IEnumerable<CharacterController> targets = Root.GetAll<GameObject>()
+                .Select(g => g.Get<CharacterController>())
+                .Where(c => c != null && c.GetType() != sourceType);
+            foreach (CharacterController target in targets)
             {
-                Vector characterPos = character.GameObject.Get<Transform>().Pos;
+                Vector targetPos = target.GameObject.Get<Transform>().Pos;
                 Vector projectilePos = GameObject.Get<Transform>().Pos;
 
-                if (MathF.Abs(characterPos.X - projectilePos.X) <
-                    ((float) characterSprite.Size.X + projectileSprite.Size.X) / 2
-                    && MathF.Abs(characterPos.Y - projectilePos.Y) <
-                    ((float) characterSprite.Size.Y + projectileSprite.Size.Y) / 2)
+                bool overlappingHorizontally = MathF.Abs(targetPos.X - projectilePos.X)
+                                               < ((float) characterSprite.Size.X + projectileSprite.Size.X) / 2;
+                bool overlappingVertically = MathF.Abs(targetPos.Y - projectilePos.Y)
+                                             < ((float) characterSprite.Size.Y + projectileSprite.Size.Y) / 2;
+                if (overlappingHorizontally && overlappingVertically)
                 {
-                    character.Hit();
+                    target.Hit();
                     GameObject.Destroy();
                     break;
                 }

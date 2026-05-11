@@ -32,7 +32,7 @@ internal class Lightning : Demo
         }
 
         SpawnBolt();
-        cooldown = ((float)random.NextDouble() * (MaxCooldown - MinCooldown)) + MinCooldown;
+        cooldown = ((float) random.NextDouble() * (MaxCooldown - MinCooldown)) + MinCooldown;
     }
 
     private void SpawnBolt()
@@ -56,8 +56,9 @@ internal class Lightning : Demo
 
         protected override void Activate()
         {
-            Vector origin = ((float)random.NextDouble() * Systems.Get<DisplaySystem>().Size.X, -1);
-            Vector target = (Systems.Get<DisplaySystem>().Size.X / 2, Systems.Get<DisplaySystem>().Size.Y);
+            Vector origin = ((float) random.NextDouble() * Systems.Get<DisplaySystem>().Size.X, -1);
+            Vector target =
+                ((float) Systems.Get<DisplaySystem>().Size.X / 2, Systems.Get<DisplaySystem>().Size.Y);
 
             List<List<Vector>> branches = [[origin, target]];
             float maxOffset = Systems.Get<DisplaySystem>().Size.X * OffsetToDisplayRatio;
@@ -84,7 +85,8 @@ internal class Lightning : Demo
 
                         Vector GetDisplacedMidpoint()
                         {
-                            return midpoint + (normal * (((float)random.NextDouble() * maxOffset * 2) - maxOffset));
+                            float offset = ((float) random.NextDouble() * maxOffset * 2) - maxOffset;
+                            return midpoint + (normal * offset);
                         }
                     }
                 }
@@ -109,7 +111,7 @@ internal class Lightning : Demo
         protected override void Tick()
         {
             timeRemaining -= Game.DeltaTime;
-            if (timeRemaining < 0)
+            if (timeRemaining <= 0)
             {
                 GameObject.Destroy();
             }

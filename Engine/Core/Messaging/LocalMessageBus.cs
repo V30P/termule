@@ -12,12 +12,16 @@ public class LocalMessageBus(GameObject gameObject) : MessageBus
     /// <typeparam name="TMessage">The type of message being sent.</typeparam>
     /// <param name="message">The message to send.</param>
     /// <param name="route">The path along which the message should be sent.</param>
-    /// <exception cref="InvalidOperationException">Thrown when trying to send a nonlocal message before registration.</exception>
+    /// <exception cref="InvalidOperationException">
+    ///     Thrown when trying to send a nonlocal message before registration.
+    /// </exception>
     public void Broadcast<TMessage>(TMessage message, Route route)
     {
-        if ((int)route > 1 && !Activated)
+        if ((int) route > 1 && !Activated)
         {
-            throw new InvalidOperationException("Cannot send nonlocal messages before the GameObject is activated.");
+            throw new InvalidOperationException(
+                "Cannot send nonlocal messages before the GameObject is activated."
+            );
         }
 
         if (route.HasFlag(Route.Local))
@@ -38,7 +42,10 @@ public class LocalMessageBus(GameObject gameObject) : MessageBus
 
     private void BroadcastInAncestors<TMessage>(TMessage message)
     {
-        for (GameObject ancestor = gameObject.GameObject; ancestor != null; ancestor = ancestor.GameObject)
+        for (
+            GameObject ancestor = gameObject.GameObject;
+            ancestor != null;
+            ancestor = ancestor.GameObject)
         {
             ancestor.Bus.Broadcast(message);
         }

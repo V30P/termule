@@ -27,7 +27,7 @@ public class TestDisplaySystem
         FakeDisplaySystem displaySystem = new();
         displaySystem.SetSize(10, 5);
 
-        Assert.Equal((10, 5), ((ICameraTarget)displaySystem).Buffer.Size);
+        Assert.Equal((10, 5), ((ICameraTarget) displaySystem).Buffer.Size);
     }
 
     [Fact]

@@ -37,7 +37,7 @@ public abstract class DisplaySystem : Core.System, ICameraTarget
     }
 
     /// <summary>
-    ///     Gets the size of the display (in cells).
+    ///     Gets or sets the size of the display (in cells).
     /// </summary>
     public VectorInt Size
     {
@@ -57,7 +57,6 @@ public abstract class DisplaySystem : Core.System, ICameraTarget
             Game?.Bus.Broadcast(new ResizedMessage(field));
         }
     }
-
 
     FrameBuffer ICameraTarget.Buffer
     {

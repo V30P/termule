@@ -43,8 +43,8 @@ public sealed partial class WindowsDisplaySystem : TerminalDisplaySystem
             return;
         }
 
-        _ = ReadConsoleInput(handle, eventBuffer, (uint)eventBuffer.Length, out uint eventsCount);
-        for (int i = (int)eventsCount - 1; i >= 0; i--)
+        _ = ReadConsoleInput(handle, eventBuffer, (uint) eventBuffer.Length, out uint eventsCount);
+        for (int i = (int) eventsCount - 1; i >= 0; i--)
         {
 #pragma warning disable IDE1006 // Naming Styles
             const uint MOUSE_EVENT = 0x0002;
@@ -75,7 +75,9 @@ public sealed partial class WindowsDisplaySystem : TerminalDisplaySystem
 
     [LibraryImport("kernel32.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
-    private static partial bool GetNumberOfConsoleInputEvents(IntPtr hConsoleHandle, out uint lpcNumberOfEvents);
+    private static partial bool GetNumberOfConsoleInputEvents(
+        IntPtr hConsoleHandle,
+        out uint lpcNumberOfEvents);
 
     [LibraryImport("kernel32.dll", EntryPoint = "ReadConsoleInputW", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
@@ -85,7 +87,6 @@ public sealed partial class WindowsDisplaySystem : TerminalDisplaySystem
         uint nLength,
         out uint lpNumberOfEventsRead);
 
-    // ReSharper disable InconsistentNaming
     [StructLayout(LayoutKind.Sequential)]
     private readonly struct INPUT_RECORD
     {
@@ -102,16 +103,18 @@ public sealed partial class WindowsDisplaySystem : TerminalDisplaySystem
     [StructLayout(LayoutKind.Sequential)]
     private readonly struct MOUSE_EVENT_RECORD
     {
+#pragma warning disable SA1307 // Accessible fields should begin with upper-case letter
         public readonly COORD dwMousePosition;
         public readonly uint dwButtonState;
         public readonly uint dwControlKeyState;
         public readonly uint dwEventFlags;
+#pragma warning restore SA1307 // Accessible fields should begin with upper-case letter
 
         [StructLayout(LayoutKind.Sequential)]
         public readonly struct COORD
         {
-            public readonly short X, Y;
+            public readonly short X;
+            public readonly short Y;
         }
     }
-    // ReSharper restore InconsistentNaming
 }

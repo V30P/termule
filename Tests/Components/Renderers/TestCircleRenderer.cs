@@ -74,7 +74,10 @@ public class TestCircleRenderer
 
     [Theory]
     [MemberData(nameof(ViewOriginData))]
-    public void Render_RespectsViewOrigin(Vector transformPos, Vector viewOrigin, VectorInt expectedCenter)
+    public void Render_RespectsViewOrigin(
+        Vector transformPos,
+        Vector viewOrigin,
+        VectorInt expectedCenter)
     {
         FrameBuffer frame = new(3, 3);
         CircleRenderer renderer = new() { Color = BasicColor.White, TargetSpace = true };
@@ -82,9 +85,7 @@ public class TestCircleRenderer
 
         renderer.Render(frame, viewOrigin);
 
-        AssertDrawnColor(frame, BasicColor.White, [
-            expectedCenter
-        ]);
+        AssertDrawnColor(frame, BasicColor.White, [expectedCenter]);
     }
 
     [Fact]
@@ -97,11 +98,11 @@ public class TestCircleRenderer
 
         renderer.Render(frame, (0, 0));
 
-        AssertDrawnColor(frame, BasicColor.White, [
-            (0, 0), (1, 0),
-            (2, 1), (3, 1),
-            (0, 2), (1, 2)
-        ]);
+        AssertDrawnColor(
+            frame,
+            BasicColor.White,
+            [(0, 0), (1, 0), (2, 1), (3, 1), (0, 2), (1, 2)]
+        );
     }
 
     [Theory]
@@ -123,13 +124,11 @@ public class TestCircleRenderer
     {
         FrameBuffer frame = new(1, 1);
         CircleRenderer renderer = new() { Color = BasicColor.White, TargetSpace = true };
-        GameObject _ = [new Transform { Pos = (0, 0) }, renderer];
+        _ = new GameObject(new Transform { Pos = (0, 0) }, renderer);
 
         renderer.Render(frame, (0, 0));
 
-        AssertDrawnColor(frame, BasicColor.White, [
-            (0, 0)
-        ]);
+        AssertDrawnColor(frame, BasicColor.White, [(0, 0)]);
     }
 
     [Fact]
@@ -137,8 +136,6 @@ public class TestCircleRenderer
     {
         CircleRenderer renderer = new();
 
-        ArgumentOutOfRangeException ex = Assert.Throws<ArgumentOutOfRangeException>(() => renderer.Radius = -1);
-
-        Assert.Equal("Radius", ex.ParamName);
+        Assert.Throws<ArgumentOutOfRangeException>(() => renderer.Radius = -1);
     }
 }

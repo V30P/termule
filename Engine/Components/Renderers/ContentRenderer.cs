@@ -9,19 +9,17 @@ namespace Termule.Engine.Components;
 ///     The type of content to render.
 ///     An instance will be created automatically if a parameterless constructor exists.
 /// </typeparam>
-public sealed class ContentRenderer<TContent> : PositionalRenderer
-    where TContent : IContent
+public sealed class ContentRenderer<TContent> : PositionalRenderer where TContent : IContent
 {
     /// <summary>
-    ///     Gets or sets the <typeparamref name="TContent" /> to render.
+    ///     The <typeparamref name="TContent" /> to render.
     /// </summary>
-    public TContent Content { get; set; }
+    public TContent Content;
 
     /// <summary>
-    ///     Gets or sets a value indicating whether the content should be rendered centered on its transform.
+    ///     Indicates whether the content should be rendered centered on its transform.
     /// </summary>
-    public bool Centered { get; set; }
-
+    public bool Centered;
 
     /// <inheritdoc />
     protected override Vector Offset =>
@@ -34,7 +32,7 @@ public sealed class ContentRenderer<TContent> : PositionalRenderer
     {
         if (typeof(TContent).GetConstructor(Type.EmptyTypes) is { } parameterlessConstructor)
         {
-            Content = (TContent)parameterlessConstructor.Invoke([]);
+            Content = (TContent) parameterlessConstructor.Invoke([]);
         }
     }
 

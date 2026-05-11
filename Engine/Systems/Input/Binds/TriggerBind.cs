@@ -6,12 +6,12 @@ namespace Termule.Engine.Systems.Input;
 /// <param name="button">The target button.</param>
 public sealed class TriggerBind(Button button) : Bind
 {
-    private bool triggeredSinceLastFrame;
+    private bool triggeredSinceLastTick;
 
     internal override object GetValue()
     {
-        bool value = triggeredSinceLastFrame;
-        triggeredSinceLastFrame = false;
+        bool value = triggeredSinceLastTick;
+        triggeredSinceLastTick = false;
         return value;
     }
 
@@ -20,7 +20,7 @@ public sealed class TriggerBind(Button button) : Bind
     {
         if (downButton == button)
         {
-            triggeredSinceLastFrame = true;
+            triggeredSinceLastTick = true;
         }
     }
 }

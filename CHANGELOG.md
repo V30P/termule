@@ -7,14 +7,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [Unreleased]
 
 ### Added
-- Core messaging functionality via `MessageBus` 
+- Core messaging functionality via `MessageBus`
 - Routed messaging in the component tree via `LocalMessageBus`
 - Messages to existing behavior:
   - When the game is started/stopped
   - When a game element is registered/unregistered
   - When the display's size changes or mouse moves
   - When a transform's position changes
-- `Connections` flags and extension methods for easily creating box-drawing characters    
+- `Connections` flags and extension methods for easily creating box-drawing characters
 - `connectBoxDrawingChars` param to frame buffer's `Draw()` for proper box-drawing character layering
 - `UseBoxDrawingCharacters` field to line renderer for extra-thin lines
 
@@ -29,7 +29,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Fixed
 - Terminal display always using default background when drawing a character without one
-- Rounding errors in "Shooter" demo collision detection 
+- Rounding errors in "Shooter" demo collision detection
 
 ## [0.2.0] - 2026-04-25
 
@@ -48,7 +48,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Reduced terminal display overhead by minimizing string allocations and escape sequences
 - Renamed `Frame` to `FrameBuffer` and moved it to the `Systems.Display` namespace
 - Improved `FrameBuffer` performance by reducing allocation overhead
-- Reduced per-frame allocations by deferring ticking new components until the next frame
+- Reduced per-tick allocations by deferring ticking new components until the next tick
 - Renamed `TransformRenderer` to `PositionalRenderer` and updated its API
 - Replaced `Content` with the `IContent` interface (use `Image` as a default implementation)
 - Optimized text content rendering to reduce redundant recalculations

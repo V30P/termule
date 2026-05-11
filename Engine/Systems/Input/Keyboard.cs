@@ -16,7 +16,7 @@ public sealed class Keyboard : Core.System
     internal event Action<char> CharacterTyped;
 
     /// <summary>
-    ///     Sets the bind map that this keyboard should use.
+    ///     Gets or sets the bind map that this keyboard should use.
     /// </summary>
     public BindMap Binds
     {
@@ -63,7 +63,6 @@ public sealed class Keyboard : Core.System
                     $"A bind named '{name}' exists, but it is not of type '{typeof(TValue)}'.")
                 : typedValue;
     }
-
 
     /// <inheritdoc />
     protected internal override void Tick()

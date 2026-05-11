@@ -22,12 +22,6 @@ public sealed class LineRenderer : PositionalRenderer
     /// </summary>
     public bool UseBoxDrawingCharacters;
 
-    private enum Direction
-    {
-        Vertical,
-        Horizontal
-    }
-
     private protected override void RenderAtPosition(PositionalRenderContext context)
     {
         for (int i = 1; i < Points.Count; i++)
