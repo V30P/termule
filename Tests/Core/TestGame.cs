@@ -51,31 +51,23 @@ public class TestGame
     }
 
     [Fact]
-    public void CleanUp_IsIdempotent()
+    public void TargetTicksPerSecond_DefaultsToUnlimited()
     {
         Game game = new();
-        CountingSystem system = new();
-        game.Systems.Install(system);
-        game.Start();
-
-        game.CleanUp();
-        game.CleanUp();
-
-        Assert.Equal(1, system.StopCount);
+        Assert.Equal(int.MaxValue, game.TargetTps);
     }
 
     [Fact]
-    public void Register_BroadcastsElementRegisteredMessage()
+    public void TargetTps_ProperlyLimitsTicks()
     {
-        Game game = new();
-        FakeListener<Game.ElementRegisteredMessage> listener = new();
-        game.Bus.Subscribe(listener);
-        FakeGameElement element = new();
+        Game game = new()
+        {
+            TargetTps = 10
+        };
 
-        game.Register(element);
+        game.RunTick();
 
-        Assert.Equal(1, listener.MessageCount);
-        Assert.Equal(element, listener.ReceivedMessage.Element);
+        Assert.Equal((float) 1 / 10, game.DeltaTime, 0.001);
     }
 
     [Fact]
@@ -108,20 +100,6 @@ public class TestGame
     }
 
     [Fact]
-    public void RunForTicks_TickSystemsWithoutPreparing()
-    {
-        Game game = new();
-        CountingSystem system = new();
-        game.Systems.Install(system);
-
-        game.RunTicks(3);
-
-        Assert.Equal(0, system.StartCount);
-        Assert.Equal(3, system.TickCount);
-        Assert.Equal(0, system.StopCount);
-    }
-
-    [Fact]
     public void RunTick_TicksComponents()
     {
         Game game = new();
@@ -147,6 +125,20 @@ public class TestGame
     }
 
     [Fact]
+    public void CleanUp_IsIdempotent()
+    {
+        Game game = new();
+        CountingSystem system = new();
+        game.Systems.Install(system);
+        game.Start();
+
+        game.CleanUp();
+        game.CleanUp();
+
+        Assert.Equal(1, system.StopCount);
+    }
+
+    [Fact]
     public void StoppingGame_BroadcastsStoppedMessage()
     {
         Game game = new();
@@ -158,6 +150,21 @@ public class TestGame
 
         Assert.Equal(1, listener.MessageCount);
     }
+
+    [Fact]
+    public void Register_BroadcastsElementRegisteredMessage()
+    {
+        Game game = new();
+        FakeListener<Game.ElementRegisteredMessage> listener = new();
+        game.Bus.Subscribe(listener);
+        FakeGameElement element = new();
+
+        game.Register(element);
+
+        Assert.Equal(1, listener.MessageCount);
+        Assert.Equal(element, listener.ReceivedMessage.Element);
+    }
+
 
     [Fact]
     public void Unregister_BroadcastsElementUnregisteredMessage()

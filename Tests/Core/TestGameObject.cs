@@ -14,32 +14,6 @@ public class TestGameObject
         [new Component[] { new ComponentA(), new ComponentA(), new ComponentA() }, 3]
     ];
 
-    private class DependentComponent : Component
-    {
-        public bool HasDependency { get; private set; }
-
-        protected override void Activate()
-        {
-            HasDependency = GameObject.Get<FakeComponent>() != null;
-        }
-    }
-
-    private interface IDerivedComponent
-    {
-    }
-
-    private class DerivedComponent : FakeComponent, IDerivedComponent
-    {
-    }
-
-    private class ComponentA : Component
-    {
-    }
-
-    private class ComponentB : Component
-    {
-    }
-
     [Fact]
     public void Add_AddsAndRegistersComponent()
     {
@@ -178,5 +152,31 @@ public class TestGameObject
         game.Root.Remove(gameObject);
 
         Assert.Equal(1, component.DeactivateCount);
+    }
+
+    private interface IDerivedComponent
+    {
+    }
+
+    private class DerivedComponent : FakeComponent, IDerivedComponent
+    {
+    }
+
+    private class ComponentA : Component
+    {
+    }
+
+    private class ComponentB : Component
+    {
+    }
+
+    private class DependentComponent : Component
+    {
+        public bool HasDependency { get; private set; }
+
+        protected override void Activate()
+        {
+            HasDependency = GameObject.Get<FakeComponent>() != null;
+        }
     }
 }

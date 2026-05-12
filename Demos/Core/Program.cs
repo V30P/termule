@@ -28,25 +28,6 @@ internal static class Program
         ["stats"] = Flag.Stats
     };
 
-    private static readonly string HelpText = $"""
-                                               Usage: [OPTIONS] DEMO
-
-                                               Options:
-                                               --help, -h         Show this message and exit.
-                                               --interactive, -i  Run in interactive mode.
-                                               --stats, -s        Enable TPS indicator.
-
-                                               Demos:
-                                               {string.Join("\n", DemoNames)}
-                                               """;
-
-    private enum Flag
-    {
-        Help,
-        Interactive,
-        Stats
-    }
-
     static Program()
     {
         IEnumerable<Type> demoTypes = Assembly.GetExecutingAssembly()
@@ -58,6 +39,18 @@ internal static class Program
             Demos.Add(demoType.Name.ToLower(), (Demo) Activator.CreateInstance(demoType));
         }
     }
+
+    private static string HelpText => $"""
+                                       Usage: [OPTIONS] DEMO
+
+                                       Options:
+                                       --help, -h         Show this message and exit.
+                                       --interactive, -i  Run in interactive mode.
+                                       --stats, -s        Enable TPS indicator.
+
+                                       Demos:
+                                       {string.Join("\n", DemoNames)}
+                                       """;
 
     public static void Main(string[] args)
     {
@@ -185,5 +178,12 @@ internal static class Program
         }
 
         game.Run();
+    }
+
+    private enum Flag
+    {
+        Help,
+        Interactive,
+        Stats
     }
 }

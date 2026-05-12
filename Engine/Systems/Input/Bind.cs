@@ -5,6 +5,10 @@ namespace Termule.Engine.Systems.Input;
 /// </summary>
 public abstract class Bind
 {
+    internal Bind()
+    {
+    }
+
     internal Keyboard Keyboard
     {
         set
@@ -25,10 +29,6 @@ public abstract class Bind
                 field.CharacterTyped += OnCharacterTyped;
             }
         }
-    }
-
-    internal Bind()
-    {
     }
 
     internal abstract object GetValue();

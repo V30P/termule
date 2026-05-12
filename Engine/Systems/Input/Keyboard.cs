@@ -9,6 +9,25 @@ public sealed class Keyboard : Core.System
 {
     private static readonly TaskPoolGlobalHook SharpHook;
 
+    static Keyboard()
+    {
+        SharpHook = new TaskPoolGlobalHook(runAsyncOnBackgroundThread: true);
+        SharpHook.RunAsync();
+    }
+
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="Keyboard" /> class.
+    /// </summary>
+    internal Keyboard()
+    {
+        SharpHook.MousePressed += (_, e) => OnButtonPressed(e.Data.Button.ToButton());
+        SharpHook.MouseReleased += (_, e) => OnButtonReleased(e.Data.Button.ToButton());
+
+        SharpHook.KeyPressed += (_, e) => OnButtonPressed(e.Data.KeyCode.ToButton());
+        SharpHook.KeyReleased += (_, e) => OnButtonReleased(e.Data.KeyCode.ToButton());
+        SharpHook.KeyTyped += (_, e) => CharacterTyped?.Invoke(e.Data.KeyChar);
+    }
+
     private readonly HashSet<Button> pressedButtons = [];
 
     internal event Action<Button> ButtonDown;
@@ -28,25 +47,6 @@ public sealed class Keyboard : Core.System
             field.Keyboard = this;
         }
     } = [];
-
-    static Keyboard()
-    {
-        SharpHook = new TaskPoolGlobalHook(runAsyncOnBackgroundThread: true);
-        SharpHook.RunAsync();
-    }
-
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="Keyboard" /> class.
-    /// </summary>
-    internal Keyboard()
-    {
-        SharpHook.MousePressed += (_, e) => OnButtonPressed(e.Data.Button.ToButton());
-        SharpHook.MouseReleased += (_, e) => OnButtonReleased(e.Data.Button.ToButton());
-
-        SharpHook.KeyPressed += (_, e) => OnButtonPressed(e.Data.KeyCode.ToButton());
-        SharpHook.KeyReleased += (_, e) => OnButtonReleased(e.Data.KeyCode.ToButton());
-        SharpHook.KeyTyped += (_, e) => CharacterTyped?.Invoke(e.Data.KeyChar);
-    }
 
     /// <summary>
     ///     Gets the value of the bind with given <paramref name="name" />.

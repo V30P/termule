@@ -11,6 +11,10 @@ public abstract class DisplaySystem : Core.System, ICameraTarget
 {
     private protected FrameBuffer buffer = new(0, 0);
 
+    internal DisplaySystem()
+    {
+    }
+
     /// <summary>
     ///     Gets the display-space position of the mouse (in cells).
     /// </summary>
@@ -31,10 +35,6 @@ public abstract class DisplaySystem : Core.System, ICameraTarget
     }
 
     private protected FrameBuffer Screen { get; private set; } = new(0, 0);
-
-    internal DisplaySystem()
-    {
-    }
 
     /// <summary>
     ///     Gets or sets the size of the display (in cells).

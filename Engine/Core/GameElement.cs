@@ -7,6 +7,10 @@ namespace Termule.Engine.Core;
 /// </summary>
 public abstract class GameElement
 {
+    internal GameElement()
+    {
+    }
+
     internal uint ElementId;
 
     /// <summary>
@@ -28,10 +32,6 @@ public abstract class GameElement
     ///     Gets the <see cref="SystemManager" /> of this element's game.
     /// </summary>
     protected SystemManager Systems => Game?.Systems;
-
-    internal GameElement()
-    {
-    }
 
     internal void SetGame(Game value)
     {
