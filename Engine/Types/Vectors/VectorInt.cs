@@ -5,6 +5,7 @@ namespace Termule.Engine.Types;
 /// </summary>
 /// <param name="x">The X component of the vector.</param>
 /// <param name="y">The Y component of the vector.</param>
+[Serializable]
 public readonly struct VectorInt(int x = 0, int y = 0)
 {
     /// <summary>

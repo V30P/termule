@@ -8,7 +8,7 @@ public static class Utilities
     public static void AssertDrawnColor(
         FrameBuffer frame,
         Color expectedColor,
-        IReadOnlyCollection<VectorInt> expectedCells)
+        IEnumerable<VectorInt> expectedCells)
     {
         List<VectorInt> actualCells = [];
 

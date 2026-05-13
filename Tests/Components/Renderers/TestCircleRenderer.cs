@@ -8,62 +8,65 @@ namespace Termule.Tests.Components;
 
 public class TestCircleRenderer
 {
-    public static readonly IEnumerable<object[]> OutlineCircleData =
-    [
-        [1f, new VectorInt[] { (2, 3), (3, 2), (3, 4), (4, 3) }],
-        [
+    public static readonly TheoryData<float, int[][]> OutlineCircleData = new()
+    {
+        { 1f, [[2, 3], [3, 2], [3, 4], [4, 3]] },
+        {
             2f,
-            new VectorInt[]
-            {
-                (3, 5), (3, 1), (5, 3), (1, 3), (4, 5), (4, 1), (5, 2), (1, 2), (2, 1), (2, 5),
-                (1, 4), (5, 4)
-            }
-        ],
-        [
+            [
+                [3, 5], [3, 1], [5, 3], [1, 3], [4, 5], [4, 1], [5, 2], [1, 2], [2, 1], [2, 5],
+                [1, 4], [5, 4]
+            ]
+        },
+        {
             3f,
-            new VectorInt[]
-            {
-                (3, 6), (3, 0), (6, 3), (0, 3), (4, 6), (4, 0), (6, 2), (0, 2), (2, 0), (2, 6),
-                (0, 4), (6, 4), (5, 6), (5, 0), (6, 1), (0, 1), (1, 0), (1, 6), (0, 5), (6, 5)
-            }
-        ]
-    ];
+            [
+                [3, 6], [3, 0], [6, 3], [0, 3], [4, 6], [4, 0], [6, 2], [0, 2], [2, 0], [2, 6],
+                [0, 4], [6, 4], [5, 6], [5, 0], [6, 1], [0, 1], [1, 0], [1, 6], [0, 5], [6, 5]
+            ]
+        }
+    };
 
-    public static readonly IEnumerable<object[]> FilledCircleData =
-    [
-        [
-            1f, new VectorInt[] { (1, 2), (2, 1), (2, 2), (2, 3), (3, 2) }
-        ],
-        [
+    public static readonly TheoryData<float, int[][]> FilledCircleData = new()
+    {
+        {
+            1f,
+            [
+                [1, 2], [2, 1], [2, 2], [2, 3], [3, 2]
+            ]
+        },
+        {
             2f,
-            new VectorInt[]
-            {
-                (1, 4), (2, 4), (3, 4), (1, 3), (2, 3), (3, 3), (0, 2), (1, 2), (2, 2), (3, 2),
-                (4, 2), (0, 1), (1, 1), (2, 1), (3, 1), (4, 1), (1, 0), (2, 0), (3, 0), (0, 3),
-                (4, 3)
-            }
-        ],
-        [
+            [
+                [1, 4], [2, 4], [3, 4], [1, 3], [2, 3],
+                [3, 3], [0, 2], [1, 2], [2, 2], [3, 2],
+                [4, 2], [0, 1], [1, 1], [2, 1], [3, 1],
+                [4, 1], [1, 0], [2, 0], [3, 0], [0, 3],
+                [4, 3]
+            ]
+        },
+        {
             3f,
-            new VectorInt[]
-            {
-                (0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (0, 1), (1, 1), (2, 1), (3, 1), (4, 1),
-                (0, 2), (1, 2), (2, 2), (3, 2), (4, 2), (0, 3), (1, 3), (2, 3), (3, 3), (4, 3),
-                (0, 4), (1, 4), (2, 4), (3, 4), (4, 4)
-            }
-        ]
-    ];
+            [
+                [0, 0], [1, 0], [2, 0], [3, 0], [4, 0],
+                [0, 1], [1, 1], [2, 1], [3, 1], [4, 1],
+                [0, 2], [1, 2], [2, 2], [3, 2], [4, 2],
+                [0, 3], [1, 3], [2, 3], [3, 3], [4, 3],
+                [0, 4], [1, 4], [2, 4], [3, 4], [4, 4]
+            ]
+        }
+    };
 
-    public static readonly IEnumerable<object[]> ViewOriginData =
-    [
-        [(1f, 1f), (0f, 0f), (1, 1)],
-        [(1f, 1f), (2f, 2f), (1, 1)],
-        [(2.25f, 1.75f), (1f, 1f), (2, 2)]
-    ];
+    public static readonly TheoryData<float[], float[], int[]> ViewOriginData = new()
+    {
+        { [1f, 1f], [0f, 0f], [1, 1] },
+        { [1f, 1f], [2f, 2f], [1, 1] },
+        { [2.25f, 1.75f], [1f, 1f], [2, 2] }
+    };
 
     [Theory]
     [MemberData(nameof(OutlineCircleData))]
-    public void Render_DrawsExpectedOutlineCells(float radius, VectorInt[] expectedCells)
+    public void Render_DrawsExpectedOutlineCells(float radius, int[][] expectedCells)
     {
         FrameBuffer frame = new(7, 7);
         CircleRenderer renderer = new()
@@ -76,23 +79,32 @@ public class TestCircleRenderer
 
         renderer.Render(frame, (0, 0));
 
-        AssertDrawnColor(frame, BasicColor.White, expectedCells);
+        AssertDrawnColor(
+            frame,
+            BasicColor.White,
+            expectedCells.Select(t => new VectorInt(t[0], t[1]))
+        );
     }
 
     [Theory]
     [MemberData(nameof(ViewOriginData))]
     public void Render_RespectsViewOrigin(
-        Vector transformPos,
-        Vector viewOrigin,
-        VectorInt expectedCenter)
+        float[] transformPos,
+        float[] viewOrigin,
+        int[] expectedCenter)
     {
         FrameBuffer frame = new(3, 3);
         CircleRenderer renderer = new() { Color = BasicColor.White, TargetSpace = true };
-        _ = new GameObject(new Transform { Pos = transformPos }, renderer);
+        _ = new GameObject(
+            new Transform { Pos = (transformPos[0], transformPos[1]) },
+            renderer);
 
-        renderer.Render(frame, viewOrigin);
+        renderer.Render(frame, (viewOrigin[0], viewOrigin[1]));
 
-        AssertDrawnColor(frame, BasicColor.White, [expectedCenter]);
+        AssertDrawnColor(
+            frame,
+            BasicColor.White,
+            [(expectedCenter[0], expectedCenter[1])]);
     }
 
     [Fact]
@@ -120,7 +132,7 @@ public class TestCircleRenderer
 
     [Theory]
     [MemberData(nameof(FilledCircleData))]
-    public void Render_WhenFilledIsTrue_FillsInteriorCells(float radius, VectorInt[] expectedCells)
+    public void Render_WhenFilledIsTrue_FillsInteriorCells(float radius, int[][] expectedCells)
     {
         FrameBuffer frame = new(5, 5);
         CircleRenderer renderer =
@@ -129,7 +141,10 @@ public class TestCircleRenderer
 
         renderer.Render(frame, (0, 0));
 
-        AssertDrawnColor(frame, BasicColor.White, expectedCells);
+        AssertDrawnColor(
+            frame,
+            BasicColor.White,
+            expectedCells.Select(t => new VectorInt(t[0], t[1])));
     }
 
     [Fact]

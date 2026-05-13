@@ -7,29 +7,28 @@ namespace Termule.Tests.Components;
 
 public class TestPositionalRenderer
 {
-    public static readonly IEnumerable<object[]> GameSpaceConversionData =
-    [
-        [(0f, 0f), (0f, 0f), (0, 0), (0f, 0f)],
-        [(1f, 1f), (0f, 0f), (1, -1), (0f, 0f)],
-        [(-1f, -1f), (0f, 0f), (-1, 1), (0f, 0f)],
+    public static readonly TheoryData<float[], float[], int[], float[]>
+        GameSpaceConversionData = new()
+    {
+        { [0f, 0f], [0f, 0f], [0, 0], [0f, 0f] },
+        { [1f, 1f], [0f, 0f], [1, -1], [0f, 0f] },
+        { [-1f, -1f], [0f, 0f], [-1, 1], [0f, 0f] },
+        { [0.25f, 0.25f], [0f, 0f], [0, 0], [0.25f, -0.25f] },
+        { [0.75f, 0.75f], [0f, 0f], [1, -1], [-0.25f, 0.25f] },
+        { [10.25f, 5f], [5f, 5f], [5, 0], [0.25f, 0f] },
+        { [3f, 2f], [0.75f, 0.25f], [2, -2], [0.25f, 0.25f] },
+        { [-3f, -2f], [-0.75f, -0.25f], [-2, 2], [-0.25f, -0.25f] }
+    };
 
-        [(0.25f, 0.25f), (0f, 0f), (0, 0), (0.25f, -0.25f)],
-        [(0.75f, 0.75f), (0f, 0f), (1, -1), (-0.25f, 0.25f)],
-
-        [(10.25f, 5f), (5f, 5f), (5, 0), (0.25f, 0f)],
-        [(3f, 2f), (0.75f, 0.25f), (2, -2), (0.25f, 0.25f)],
-        [(-3f, -2f), (-0.75f, -0.25f), (-2, 2), (-0.25f, -0.25f)]
-    ];
-
-    public static readonly IEnumerable<object[]> TargetSpaceConversionData =
-    [
-        [(0f, 0f), (1f, 2f), (0, 0), (0f, 0f)],
-        [(1f, 5f), (3f, 4f), (1, 5), (0f, 0f)],
-        [(10.25f, 5f), (5f, 5f), (10, 5), (0.25f, 0f)],
-
-        [(-1.25f, 2.5f), (100f, -50f), (-1, 2), (-0.25f, 0.5f)],
-        [(4.8f, -3.2f), (-9.1f, 12.3f), (5, -3), (-0.2f, -0.2f)]
-    ];
+    public static readonly TheoryData<float[], float[], int[], float[]>
+        TargetSpaceConversionData = new()
+    {
+        { [0f, 0f], [1f, 2f], [0, 0], [0f, 0f] },
+        { [1f, 5f], [3f, 4f], [1, 5], [0f, 0f] },
+        { [10.25f, 5f], [5f, 5f], [10, 5], [0.25f, 0f] },
+        { [-1.25f, 2.5f], [100f, -50f], [-1, 2], [-0.25f, 0.5f] },
+        { [4.8f, -3.2f], [-9.1f, 12.3f], [5, -3], [-0.2f, -0.2f] }
+    };
 
     private const float PositionEpsilon = 0.0001f;
 
@@ -61,35 +60,53 @@ public class TestPositionalRenderer
     [Theory]
     [MemberData(nameof(GameSpaceConversionData))]
     public void Render_WhenInGameSpace_CorrectlyAppliesPosition(
-        Vector transformPos,
-        Vector viewOrigin,
-        VectorInt expectedOrigin,
-        Vector expectedOffset)
+        float[] transformPos,
+        float[] viewOrigin,
+        int[] expectedOrigin,
+        float[] expectedOffset)
     {
         FakePositionalRenderer renderer = new();
-        _ = new GameObject(new Transform { Pos = transformPos }, renderer);
+        _ = new GameObject(
+            new Transform { Pos = (transformPos[0], transformPos[1]) },
+            renderer);
 
-        renderer.Render(new FrameBuffer(0, 0), viewOrigin);
+        renderer.Render(new FrameBuffer(0, 0), (viewOrigin[0], viewOrigin[1]));
 
-        Assert.Equal(expectedOrigin, renderer.CapturedOrigin);
-        AssertVectorApproximately(expectedOffset, renderer.CapturedOffset, PositionEpsilon);
+        Assert.Equal(
+            (expectedOrigin[0], expectedOrigin[1]),
+            renderer.CapturedOrigin
+        );
+        AssertVectorApproximately(
+            (expectedOffset[0], expectedOffset[1]),
+            renderer.CapturedOffset,
+            PositionEpsilon
+        );
     }
 
     [Theory]
     [MemberData(nameof(TargetSpaceConversionData))]
     public void Render_WhenInTargetSpace_CorrectlyAppliesPosition(
-        Vector transformPos,
-        Vector viewOrigin,
-        VectorInt expectedOrigin,
-        Vector expectedOffset)
+        float[] transformPos,
+        float[] viewOrigin,
+        int[] expectedOrigin,
+        float[] expectedOffset)
     {
         FakePositionalRenderer renderer = new() { TargetSpace = true };
-        _ = new GameObject(new Transform { Pos = transformPos }, renderer);
+        _ = new GameObject(
+            new Transform { Pos = (transformPos[0], transformPos[1]) },
+            renderer);
 
-        renderer.Render(new FrameBuffer(0, 0), viewOrigin);
+        renderer.Render(new FrameBuffer(0, 0), (viewOrigin[0], viewOrigin[1]));
 
-        Assert.Equal(expectedOrigin, renderer.CapturedOrigin);
-        AssertVectorApproximately(expectedOffset, renderer.CapturedOffset, PositionEpsilon);
+        Assert.Equal(
+            (expectedOrigin[0], expectedOrigin[1]),
+            renderer.CapturedOrigin
+        );
+        AssertVectorApproximately(
+            (expectedOffset[0], expectedOffset[1]),
+            renderer.CapturedOffset,
+            PositionEpsilon
+        );
     }
 
     private static void AssertVectorApproximately(Vector expected, Vector? actual, float epsilon)
@@ -114,6 +131,7 @@ public class TestPositionalRenderer
         private protected override void RenderAtPosition(PositionalRenderContext context)
         {
             RenderCount++;
+
             CapturedFrame = context.Frame;
             CapturedOrigin = context.Origin;
             CapturedOffset = context.Offset;

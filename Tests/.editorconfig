@@ -1,9 +1,6 @@
-# xUnit-specific config
+# Test-specific config
 
 [*.cs]
 
 # Identifiers can contain underscores
 dotnet_diagnostic.CA1707.severity = none
-
-# MemberData can returns untyped data rows
-dotnet_diagnostic.xUnit1042.severity = none

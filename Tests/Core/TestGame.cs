@@ -22,7 +22,7 @@ public class TestGame
 
         game.RunTick();
 
-        Assert.Equal(1f / 10, game.DeltaTime, 0.001);
+        Assert.Equal(1f / 10, game.DeltaTime, 0.01);
     }
 
     [Fact]

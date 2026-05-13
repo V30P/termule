@@ -4,15 +4,15 @@ namespace Termule.Tests.Core;
 
 public class TestGameObject
 {
-    public static readonly IEnumerable<object[]> GetAllData =
-    [
-        [Array.Empty<Component>(), 0],
-        [new Component[] { new ComponentB() }, 0],
-        [new Component[] { new ComponentA() }, 1],
-        [new Component[] { new ComponentA(), new ComponentB() }, 1],
-        [new Component[] { new ComponentA(), new ComponentA() }, 2],
-        [new Component[] { new ComponentA(), new ComponentA(), new ComponentA() }, 3]
-    ];
+    public static readonly TheoryData<Type[], int> GetAllData = new()
+    {
+        { Array.Empty<Type>(), 0 },
+        { new[] { typeof(ComponentB) }, 0 },
+        { new[] { typeof(ComponentA) }, 1 },
+        { new[] { typeof(ComponentA), typeof(ComponentB) }, 1 },
+        { new[] { typeof(ComponentA), typeof(ComponentA) }, 2 },
+        { new[] { typeof(ComponentA), typeof(ComponentA), typeof(ComponentA) }, 3 }
+    };
 
     private interface IDerivedComponent
     {
@@ -91,8 +91,14 @@ public class TestGameObject
 
     [Theory]
     [MemberData(nameof(GetAllData))]
-    public void GetAll_ReturnsMatchingComponents(Component[] components, int matchingCount)
+    public void GetAll_ReturnsMatchingComponents(Type[] componentTypes, int matchingCount)
     {
+        Component[] components = new Component[componentTypes.Length];
+        for (int i = 0; i < componentTypes.Length; i++)
+        {
+            components[i] = (Component) Activator.CreateInstance(componentTypes[i]);
+        }
+
         GameObject gameObject = [.. components];
         Assert.Equal(matchingCount, gameObject.GetAll<ComponentA>().Count());
     }

@@ -8,12 +8,12 @@ namespace Termule.Tests.Components;
 
 public class TestContentRenderer
 {
-    public static IEnumerable<object[]> ViewOriginData =>
-    [
-        [(1f, 1f), (0f, 0f), (1, 1)],
-        [(1f, 1f), (2f, 2f), (1, 1)],
-        [(2.25f, 1.75f), (1f, 1f), (2, 2)]
-    ];
+    public static readonly TheoryData<float[], float[], int[]> ViewOriginData = new()
+    {
+        { [1f, 1f], [0f, 0f], [1, 1] },
+        { [1f, 1f], [2f, 2f], [1, 1] },
+        { [2.25f, 1.75f], [1f, 1f], [2, 2] }
+    };
 
     [Fact]
     public void Content_WhenTypeHasParameterlessConstructor_ShouldBeInitialized()
@@ -80,21 +80,26 @@ public class TestContentRenderer
     [Theory]
     [MemberData(nameof(ViewOriginData))]
     public void Render_RespectsViewOrigin(
-        Vector transformPos,
-        Vector viewOrigin,
-        VectorInt expectedCellPos)
+        float[] transformPos,
+        float[] viewOrigin,
+        int[] expectedCellPos)
     {
         ContentRenderer<Image> renderer = new()
         {
             TargetSpace = true,
             Content = new FakeContent(new Cell[,] { { new(BasicColor.White) } })
         };
-        _ = new GameObject(new Transform { Pos = transformPos }, renderer);
+        _ = new GameObject(
+            new Transform { Pos = (transformPos[0], transformPos[1]) },
+            renderer);
         FrameBuffer frame = new(3, 3);
 
-        renderer.Render(frame, viewOrigin);
+        renderer.Render(frame, (viewOrigin[0], viewOrigin[1]));
 
-        AssertDrawnColor(frame, BasicColor.White, [expectedCellPos]);
+        AssertDrawnColor(
+            frame,
+            BasicColor.White,
+            [(expectedCellPos[0], expectedCellPos[1])]);
     }
 
     [Fact]

@@ -5,10 +5,10 @@ namespace Termule.Tests.Systems.Resources;
 
 public class TestArrayConverterFactory
 {
-    public static readonly IEnumerable<object[]> WriteData =
-    [
-        [new string[0, 0], "[]"],
-        [
+    public static readonly TheoryData<string[,], string> WriteData = new()
+    {
+        { new string[0, 0], "[]" },
+        {
             new[,] { { "Test" } },
             """
             [
@@ -17,8 +17,8 @@ public class TestArrayConverterFactory
                 ]
             ]
             """
-        ],
-        [
+        },
+        {
             new[,] { { "A", "B" } },
             """
             [
@@ -28,8 +28,8 @@ public class TestArrayConverterFactory
                 ]
             ]
             """
-        ],
-        [
+        },
+        {
             new[,] { { "A" }, { "B" } },
             """
             [
@@ -41,8 +41,8 @@ public class TestArrayConverterFactory
                 ]
             ]
             """
-        ],
-        [
+        },
+        {
             new[,] { { "A", "B", "C" }, { "D", "E", "F" } },
             """
             [
@@ -58,8 +58,64 @@ public class TestArrayConverterFactory
                 ]
             ]
             """
-        ]
-    ];
+        }
+    };
+
+    public static readonly TheoryData<string, string[,]> ReadData = new()
+    {
+        { "[]", new string[0, 0] },
+        {
+            """
+            [
+                [
+                    "Test"
+                ]
+            ]
+            """,
+            new[,] { { "Test" } }
+        },
+        {
+            """
+            [
+                [
+                    "A",
+                    "B"
+                ]
+            ]
+            """,
+            new[,] { { "A", "B" } }
+        },
+        {
+            """
+            [
+                [
+                    "A"
+                ],
+                [
+                    "B"
+                ]
+            ]
+            """,
+            new[,] { { "A" }, { "B" } }
+        },
+        {
+            """
+            [
+                [
+                    "A",
+                    "B",
+                    "C"
+                ],
+                [
+                    "D",
+                    "E",
+                    "F"
+                ]
+            ]
+            """,
+            new[,] { { "A", "B", "C" }, { "D", "E", "F" } }
+        }
+    };
 
     private static readonly JsonSerializerOptions SerializerOptions = new()
     {
@@ -68,20 +124,17 @@ public class TestArrayConverterFactory
         IndentSize = 4
     };
 
-    public static IEnumerable<object[]> ReadData =>
-        WriteData.Select<object[], object[]>(o => [o[1], o[0]]);
+    [Theory]
+    [MemberData(nameof(WriteData))]
+    public void Write_CorrectlyConvertsArrayToJson(string[,] array, string expected)
+    {
+        Assert.Equal(expected, JsonSerializer.Serialize(array, SerializerOptions));
+    }
 
     [Theory]
     [MemberData(nameof(ReadData))]
     public void Read_CorrectlyConvertsJsonToArray(string json, string[,] expected)
     {
         Assert.Equal(expected, JsonSerializer.Deserialize<string[,]>(json, SerializerOptions));
-    }
-
-    [Theory]
-    [MemberData(nameof(WriteData))]
-    public void Write_CorrectlyConvertsArrayToJson(string[,] array, string expected)
-    {
-        Assert.Equal(expected, JsonSerializer.Serialize(array, SerializerOptions));
     }
 }

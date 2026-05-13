@@ -5,29 +5,27 @@ namespace Termule.Tests.Systems.Rendering;
 
 public class TestFrameBuffer
 {
-    // Prevents XUnit from failing to convert BasicColor to Color? at runtime
-    private static readonly Cell TestCell = new(BasicColor.White, 'X', BasicColor.White);
-
-    private static readonly Color DrawColor = BasicColor.White;
-
-    public static IEnumerable<object[]> DrawData =>
-    [
-        [null, null, null, default(Cell)],
-        [DrawColor, null, null, new Cell(DrawColor)],
-        [null, 'X', null, new Cell(default, 'X')],
-        [null, null, DrawColor, new Cell(default, '\0', DrawColor)],
-        [DrawColor, 'X', DrawColor, new Cell(DrawColor, 'X', DrawColor)]
-    ];
+    public static readonly TheoryData<BasicColor?, char?, BasicColor?> DrawData = new()
+    {
+        { null, null, null },
+        { BasicColor.White, null, null },
+        { null, 'X', null },
+        { null, null, BasicColor.White },
+        { BasicColor.White, 'X', BasicColor.White }
+    };
 
     [Theory]
     [MemberData(nameof(DrawData))]
     public void Draw_AppliesProvidedValues(
-        Color? color,
+        BasicColor? color,
         char? character,
-        Color? characterColor,
-        Cell expectedCell)
+        BasicColor? characterColor)
     {
         FrameBuffer frame = new(1, 1);
+        Cell expectedCell = new(
+            color ?? default,
+            character ?? '\0',
+            characterColor ?? default);
 
         frame.Draw((0, 0), color, character, characterColor);
 
@@ -72,13 +70,13 @@ public class TestFrameBuffer
     public void Draw_ProperlyCoversExistingValues()
     {
         FrameBuffer frame = new(1, 1);
-        frame.Draw((0, 0), TestCell.Color, TestCell.Character, TestCell.CharColor);
+        frame.Draw((0, 0), BasicColor.White, 'X', BasicColor.White);
 
-        frame.Draw((0, 0), null, TestCell.Character);
-        Assert.Equal(new Cell(TestCell.Color, TestCell.Character), frame[0, 0]);
+        frame.Draw((0, 0), null, 'X');
+        Assert.Equal(new Cell(BasicColor.White, 'X'), frame[0, 0]);
 
-        frame.Draw((0, 0), TestCell.Color);
-        Assert.Equal(new Cell(TestCell.Color), frame[0, 0]);
+        frame.Draw((0, 0), BasicColor.White);
+        Assert.Equal(new Cell(BasicColor.White), frame[0, 0]);
     }
 
     [Fact]
@@ -102,9 +100,9 @@ public class TestFrameBuffer
     {
         FrameBuffer frame = new(10, 5);
 
-        frame.Reset(TestCell);
+        frame.Reset(new(BasicColor.White, 'X', BasicColor.White));
 
-        AssertAllCellsEqual(frame, TestCell);
+        AssertAllCellsEqual(frame, new(BasicColor.White, 'X', BasicColor.White));
     }
 
     [Fact]
@@ -115,7 +113,7 @@ public class TestFrameBuffer
         {
             for (int y = 0; y < frame.Size.Y; y++)
             {
-                frame.Draw((x, y), TestCell.Color, TestCell.Character, TestCell.CharColor);
+                frame.Draw((x, y), BasicColor.White, 'X', BasicColor.White);
             }
         }
 
