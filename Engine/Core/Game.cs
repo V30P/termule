@@ -9,6 +9,12 @@ namespace Termule.Engine.Core;
 /// </summary>
 public sealed class Game
 {
+    private readonly HashSet<GameElement> elements = [];
+    private readonly Stopwatch stopwatch = new();
+
+    private bool stop;
+    private uint registerCount;
+
     /// <summary>
     ///     Initializes a new instance of the <see cref="Game" /> class.
     /// </summary>
@@ -22,26 +28,20 @@ public sealed class Game
     /// <summary>
     ///     Gets the system manager.
     /// </summary>
-    public readonly SystemManager Systems = new();
+    public SystemManager Systems { get; } = new();
 
     /// <summary>
     ///     Gets the root game object.
     /// </summary>
-    public readonly GameObject Root = [];
+    public GameObject Root { get; } = [];
 
     /// <summary>
     ///     Gets the global message bus.
     /// </summary>
-    public readonly MessageBus Bus = new();
-
-    private readonly HashSet<GameElement> elements = [];
-    private readonly Stopwatch stopwatch = new();
-
-    private bool stop;
-    private uint registerCount;
+    public MessageBus Bus { get; } = new();
 
     /// <summary>
-    ///     Gets the length of the last game loop iteration in seconds.
+    ///     Gets the length of the last tick in seconds.
     /// </summary>
     public float DeltaTime { get; private set; }
 
@@ -129,7 +129,7 @@ public sealed class Game
         Root.Tick();
 
         // Cap tickrate
-        int requiredDelay = (int) ((float) 1 / TargetTps * 1000)
+        int requiredDelay = (int) (1f / TargetTps * 1000)
                             - (int) stopwatch.ElapsedMilliseconds;
         if (requiredDelay > 0)
         {
@@ -180,9 +180,15 @@ public sealed class Game
         }
     }
 
-    internal record struct ElementRegisteredMessage(GameElement Element);
+    internal readonly struct ElementRegisteredMessage(GameElement element)
+    {
+        internal readonly GameElement Element = element;
+    }
 
-    internal record struct ElementUnregisteredMessage(GameElement Element);
+    internal readonly struct ElementUnregisteredMessage(GameElement element)
+    {
+        internal readonly GameElement Element = element;
+    }
 
     internal struct StartedMessage
     {

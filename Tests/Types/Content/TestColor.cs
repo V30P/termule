@@ -20,7 +20,7 @@ public class TestColor
 
         Color color = (full.R, full.G, full.B);
 
-        Assert.NotNull(color.Full);
+        _ = Assert.NotNull(color.Full);
         Assert.Equal(100, color.Full.Value.R);
         Assert.Equal(150, color.Full.Value.G);
         Assert.Equal(200, color.Full.Value.B);
@@ -40,7 +40,7 @@ public class TestColor
     {
         Color color = (255, 128, 64);
 
-        Assert.NotNull(color.Full);
+        _ = Assert.NotNull(color.Full);
         Assert.Equal(255, color.Full.Value.R);
         Assert.Equal(128, color.Full.Value.G);
         Assert.Equal(64, color.Full.Value.B);

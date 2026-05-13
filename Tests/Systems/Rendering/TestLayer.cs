@@ -6,39 +6,6 @@ namespace Termule.Tests.Systems.Rendering;
 
 public class TestLayer
 {
-    private class FakeLayer() : Layer((_, _) => 0)
-    {
-        public bool OnAddedCalled { get; private set; }
-        public bool OnRemovedCalled { get; private set; }
-        public bool IsDirty => Dirty;
-
-        protected override void OnRendererAdded(Renderer renderer)
-        {
-            base.OnRendererAdded(renderer);
-            OnAddedCalled = true;
-        }
-
-        protected override void OnRendererRemoved(Renderer renderer)
-        {
-            base.OnRendererRemoved(renderer);
-            OnRemovedCalled = true;
-        }
-    }
-
-    private class PriorityLayer()
-        : Layer((r1, r2) => ((PriorityRenderer) r1).Priority.CompareTo(((PriorityRenderer) r2).Priority))
-    {
-    }
-
-    private class PriorityRenderer(int priority) : Renderer
-    {
-        public readonly int Priority = priority;
-
-        protected internal override void Render(FrameBuffer frame, Vector viewOrigin)
-        {
-        }
-    }
-
     [Fact]
     public void AddingAndRemovingRenderers_Dirties()
     {
@@ -83,5 +50,42 @@ public class TestLayer
         PriorityLayer layer = [rendererB, rendererA, rendererC];
 
         Assert.Equal([rendererB, rendererA, rendererC], layer);
+    }
+
+    private sealed class FakeLayer() : Layer((_, _) => 0)
+    {
+        public bool OnAddedCalled { get; private set; }
+
+        public bool OnRemovedCalled { get; private set; }
+
+        public bool IsDirty => Dirty;
+
+        protected override void OnRendererAdded(Renderer renderer)
+        {
+            base.OnRendererAdded(renderer);
+            OnAddedCalled = true;
+        }
+
+        protected override void OnRendererRemoved(Renderer renderer)
+        {
+            base.OnRendererRemoved(renderer);
+            OnRemovedCalled = true;
+        }
+    }
+
+    private sealed class PriorityLayer()
+        : Layer(
+            (r1, r2) => ((PriorityRenderer) r1).Priority.CompareTo(((PriorityRenderer) r2).Priority)
+        )
+    {
+    }
+
+    private sealed class PriorityRenderer(int priority) : Renderer
+    {
+        public int Priority { get; } = priority;
+
+        protected internal override void Render(FrameBuffer frame, Vector viewOrigin)
+        {
+        }
     }
 }

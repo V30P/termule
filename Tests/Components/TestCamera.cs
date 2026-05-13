@@ -25,19 +25,6 @@ public class TestCamera
         [(8, 6), (3, -2), (-2, 3), (5, 2)]
     ];
 
-    private class FakeTarget(VectorInt size) : ICameraTarget
-    {
-        public int PrintCount { get; private set; }
-        public VectorInt Size { get; } = size;
-
-        public FrameBuffer Buffer { get; set; } = new(size.X, size.Y);
-
-        public void Update()
-        {
-            PrintCount++;
-        }
-    }
-
     [Theory]
     [MemberData(nameof(PositionConversionData))]
     public void GameToTargetPos_MapsCorrectly(
@@ -105,6 +92,20 @@ public class TestCamera
             {
                 Assert.Equal(background, target.Buffer[x, y]);
             }
+        }
+    }
+
+    private sealed class FakeTarget(VectorInt size) : ICameraTarget
+    {
+        public int PrintCount { get; private set; }
+
+        public VectorInt Size { get; } = size;
+
+        public FrameBuffer Buffer { get; set; } = new(size.X, size.Y);
+
+        public void Update()
+        {
+            PrintCount++;
         }
     }
 }

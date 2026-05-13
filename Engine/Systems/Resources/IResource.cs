@@ -4,7 +4,7 @@ namespace Termule.Engine.Systems.Resources;
 ///     Base interface for types that represent loadable resources.
 /// </summary>
 /// <remarks>
-///     Do not implement this directly, instead implement <see cref="IResource" />.
+///     Do not implement this interface directly; implement <see cref="IResource" /> instead.
 /// </remarks>
 public interface IResourceBase
 {

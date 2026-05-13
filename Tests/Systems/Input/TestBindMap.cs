@@ -5,19 +5,6 @@ namespace Termule.Tests.Systems.Input;
 
 public class TestBindMap
 {
-    private class AlternatingBind : FakeBind
-    {
-        private bool currentValue;
-
-        internal override object GetValue()
-        {
-            base.GetValue();
-
-            currentValue = !currentValue;
-            return currentValue;
-        }
-    }
-
     [Fact]
     public void Enumerating_EnumeratesBindsAsKeyValuePairs()
     {
@@ -29,11 +16,11 @@ public class TestBindMap
         IEnumerator enumerator = bindMap.GetEnumerator();
         using ((IDisposable) enumerator)
         {
-            Assert.IsType<IEnumerator<KeyValuePair<string, Bind>>>(enumerator, false);
+            _ = Assert.IsType<IEnumerator<KeyValuePair<string, Bind>>>(enumerator, false);
 
-            enumerator.MoveNext();
+            _ = enumerator.MoveNext();
             Assert.Equal(new KeyValuePair<string, Bind>("A", bindA), enumerator.Current);
-            enumerator.MoveNext();
+            _ = enumerator.MoveNext();
             Assert.Equal(new KeyValuePair<string, Bind>("B", bindB), enumerator.Current);
         }
     }
@@ -67,6 +54,19 @@ public class TestBindMap
         BindMap bindMap = new() { ["Test"] = new FakeBind() };
 
         Assert.True(bindMap.TryGetValue("Test", out object value));
-        Assert.IsType<bool>(value);
+        _ = Assert.IsType<bool>(value);
+    }
+
+    private sealed class AlternatingBind : FakeBind
+    {
+        private bool currentValue;
+
+        internal override object GetValue()
+        {
+            _ = base.GetValue();
+
+            currentValue = !currentValue;
+            return currentValue;
+        }
     }
 }

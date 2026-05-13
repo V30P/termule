@@ -6,13 +6,9 @@ namespace Termule.Engine.Types;
 /// <remarks>
 ///     Initializes a new instance of the <see cref="Cell" /> struct.
 /// </remarks>
-/// <param name="color">
-///     The background color of the cell (or the default if none is provided).
-/// </param>
-/// <param name="character">The character in the cell (or the default if none is provided).</param>
-/// <param name="charColor">
-///     The color of the cell's character (or the default if none is provided).
-/// </param>
+/// <param name="color">The background color of the cell.</param>
+/// <param name="character">The character in the cell.</param>
+/// <param name="charColor">The color of the cell's character.</param>
 public struct Cell(
     Color color = default,
     char character = '\0',
@@ -26,7 +22,7 @@ public struct Cell(
     /// <summary>
     ///     Gets or sets the character in the cell.
     /// </summary>
-    public char Char { get; set; } = character;
+    public char Character { get; set; } = character;
 
     /// <summary>
     ///     Gets or sets the color of the cell's character.
@@ -42,7 +38,7 @@ public struct Cell(
     public static bool operator ==(Cell c1, Cell c2)
     {
         return c1.Color == c2.Color
-               && c1.Char == c2.Char
+               && c1.Character == c2.Character
                && c1.CharColor == c2.CharColor;
     }
 
@@ -66,12 +62,12 @@ public struct Cell(
     /// <inheritdoc />
     public override readonly int GetHashCode()
     {
-        return HashCode.Combine(Color, Char, CharColor);
+        return HashCode.Combine(Color, Character, CharColor);
     }
 
     /// <inheritdoc />
     public readonly bool Equals(Cell other)
     {
-        return Color.Equals(other.Color) && Char == other.Char && CharColor.Equals(other.CharColor);
+        return Color.Equals(other.Color) && Character == other.Character && CharColor.Equals(other.CharColor);
     }
 }

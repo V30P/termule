@@ -6,7 +6,7 @@ using Termule.Engine.Types;
 
 namespace Termule.Demos.Demos;
 
-internal class Raindrops : Demo
+internal sealed class Raindrops : Demo
 {
     private const float MinCooldown = 0.1f;
     private const float MaxCooldown = 0.5f;
@@ -46,7 +46,7 @@ internal class Raindrops : Demo
         );
     }
 
-    private class RaindropController(Vector pos) : Component
+    private sealed class RaindropController(Vector pos) : Component
     {
         private const float Lifespan = 2;
         private float time;

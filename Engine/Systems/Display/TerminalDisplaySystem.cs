@@ -64,9 +64,7 @@ public abstract class TerminalDisplaySystem : DisplaySystem
         Size = (Console.WindowWidth, Console.WindowHeight);
     }
 
-    /// <summary>
-    ///     Prepares the terminal environment for use.
-    /// </summary>
+    /// <inheritdoc/>
     protected internal override void Start()
     {
         Console.CursorVisible = false;
@@ -79,10 +77,8 @@ public abstract class TerminalDisplaySystem : DisplaySystem
         };
     }
 
-    /// <summary>
-    ///     Cleans and resets the terminal environment.
-    /// </summary>
-    protected internal override void Stop()
+    /// <inheritdoc/>
+    protected internal override void CleanUp()
     {
         Console.Write("\e[?1049l"); // Disable alternate buffer
         Console.CursorVisible = true;
@@ -96,7 +92,7 @@ public abstract class TerminalDisplaySystem : DisplaySystem
             Console.WindowTop != 0
             || Console.BufferWidth != Console.WindowWidth
             || Console.BufferHeight != Console.WindowHeight
-            || buffer.Size != Screen?.Size
+            || Buffer.Size != Screen?.Size
             || Console.WindowWidth != Size.X || Console.WindowHeight != Size.Y)
         {
             Console.ResetColor();
@@ -111,7 +107,7 @@ public abstract class TerminalDisplaySystem : DisplaySystem
         {
             for (int x = 0; x < Size.X; x++)
             {
-                if (!screenCleared && Screen!.EqualsAt(buffer, (x, y)))
+                if (!screenCleared && Screen.EqualsAt(Buffer, (x, y)))
                 {
                     skipping = true;
                     continue;
@@ -124,12 +120,12 @@ public abstract class TerminalDisplaySystem : DisplaySystem
                     skipping = false;
                 }
 
-                Cell cell = buffer[x, y];
+                Cell cell = Buffer[x, y];
 
                 // Apply color changes if necessary
                 if (cell.Color != currentColor || cell.CharColor != currentCharColor)
                 {
-                    builder.Append("\e[");
+                    _ = builder.Append("\e[");
 
                     if (cell.Color != currentColor)
                     {
@@ -141,18 +137,18 @@ public abstract class TerminalDisplaySystem : DisplaySystem
                     {
                         if (builder[^1] != '[')
                         {
-                            builder.Append(';');
+                            _ = builder.Append(';');
                         }
 
                         AppendForegroundColorCode(cell.CharColor);
                         currentCharColor = cell.CharColor;
                     }
 
-                    builder.Append('m');
+                    _ = builder.Append('m');
                 }
 
                 // Write the character
-                builder.Append(cell.Char != '\0' ? cell.Char : ' ');
+                _ = builder.Append(cell.Character != '\0' ? cell.Character : ' ');
 
                 if (builder.Length > FlushLimit)
                 {
@@ -171,32 +167,32 @@ public abstract class TerminalDisplaySystem : DisplaySystem
             Console.Write(chunk);
         }
 
-        builder.Clear();
+        _ = builder.Clear();
     }
 
     private void AppendMove(int x, int y)
     {
-        builder.Append("\e[");
-        builder.Append(y + 1);
-        builder.Append(';');
-        builder.Append(x + 1);
-        builder.Append('H');
+        _ = builder.Append("\e[");
+        _ = builder.Append(y + 1);
+        _ = builder.Append(';');
+        _ = builder.Append(x + 1);
+        _ = builder.Append('H');
     }
 
     private void AppendBackgroundColorCode(Color color)
     {
         if (color.Full is { } fullColor)
         {
-            builder.Append("48;2;");
-            builder.Append(fullColor.R);
-            builder.Append(';');
-            builder.Append(fullColor.G);
-            builder.Append(';');
-            builder.Append(fullColor.B);
+            _ = builder.Append("48;2;");
+            _ = builder.Append(fullColor.R);
+            _ = builder.Append(';');
+            _ = builder.Append(fullColor.G);
+            _ = builder.Append(';');
+            _ = builder.Append(fullColor.B);
         }
         else
         {
-            builder.Append(BackgroundColorCodes[color.Basic]);
+            _ = builder.Append(BackgroundColorCodes[color.Basic]);
         }
     }
 
@@ -204,16 +200,16 @@ public abstract class TerminalDisplaySystem : DisplaySystem
     {
         if (color.Full is { } fullColor)
         {
-            builder.Append("38;2;");
-            builder.Append(fullColor.R);
-            builder.Append(';');
-            builder.Append(fullColor.G);
-            builder.Append(';');
-            builder.Append(fullColor.B);
+            _ = builder.Append("38;2;");
+            _ = builder.Append(fullColor.R);
+            _ = builder.Append(';');
+            _ = builder.Append(fullColor.G);
+            _ = builder.Append(';');
+            _ = builder.Append(fullColor.B);
         }
         else
         {
-            builder.Append(ForegroundColorCodes[color.Basic]);
+            _ = builder.Append(ForegroundColorCodes[color.Basic]);
         }
     }
 }

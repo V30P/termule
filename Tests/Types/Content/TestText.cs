@@ -17,8 +17,8 @@ public class TestText
     {
         Text text = new() { Value = "Hi" };
 
-        Assert.Throws<IndexOutOfRangeException>(() => ((IContent) text)[3, 0]);
-        Assert.Throws<IndexOutOfRangeException>(() => ((IContent) text)[0, 1]);
+        _ = Assert.Throws<ArgumentOutOfRangeException>(() => ((IContent) text)[3, 0]);
+        _ = Assert.Throws<ArgumentOutOfRangeException>(() => ((IContent) text)[0, 1]);
     }
 
     [Fact]
@@ -26,7 +26,7 @@ public class TestText
     {
         Text text = new() { Value = "Hi" };
 
-        Assert.Equal(new Cell { Char = 'H' }, ((IContent) text)[0, 0]);
+        Assert.Equal(new Cell { Character = 'H' }, ((IContent) text)[0, 0]);
     }
 
     [Fact]
@@ -89,13 +89,13 @@ public class TestText
         Text text = new() { Value = "Hi\nWorld" };
 
         Assert.Equal((5, 2), ((IContent) text).Size);
-        Assert.Equal('H', ((IContent) text)[0, 0].Char);
-        Assert.Equal('i', ((IContent) text)[1, 0].Char);
-        Assert.Equal('W', ((IContent) text)[0, 1].Char);
-        Assert.Equal('o', ((IContent) text)[1, 1].Char);
-        Assert.Equal('r', ((IContent) text)[2, 1].Char);
-        Assert.Equal('l', ((IContent) text)[3, 1].Char);
-        Assert.Equal('d', ((IContent) text)[4, 1].Char);
+        Assert.Equal('H', ((IContent) text)[0, 0].Character);
+        Assert.Equal('i', ((IContent) text)[1, 0].Character);
+        Assert.Equal('W', ((IContent) text)[0, 1].Character);
+        Assert.Equal('o', ((IContent) text)[1, 1].Character);
+        Assert.Equal('r', ((IContent) text)[2, 1].Character);
+        Assert.Equal('l', ((IContent) text)[3, 1].Character);
+        Assert.Equal('d', ((IContent) text)[4, 1].Character);
     }
 
     [Fact]
@@ -115,10 +115,10 @@ public class TestText
         Text text = new() { Value = "Hello" };
 
         Assert.Equal((5, 1), ((IContent) text).Size);
-        Assert.Equal('H', ((IContent) text)[0, 0].Char);
-        Assert.Equal('e', ((IContent) text)[1, 0].Char);
-        Assert.Equal('l', ((IContent) text)[2, 0].Char);
-        Assert.Equal('l', ((IContent) text)[3, 0].Char);
-        Assert.Equal('o', ((IContent) text)[4, 0].Char);
+        Assert.Equal('H', ((IContent) text)[0, 0].Character);
+        Assert.Equal('e', ((IContent) text)[1, 0].Character);
+        Assert.Equal('l', ((IContent) text)[2, 0].Character);
+        Assert.Equal('l', ((IContent) text)[3, 0].Character);
+        Assert.Equal('o', ((IContent) text)[4, 0].Character);
     }
 }

@@ -3,7 +3,7 @@ using System.Collections;
 namespace Termule.Engine.Systems.Input;
 
 /// <summary>
-///     Collection to manage <see cref="Bind" />s for a <see cref="Systems.Input.Keyboard" />.
+///     Manages <see cref="Bind" /> instances for a <see cref="Keyboard" />.
 /// </summary>
 public sealed class BindMap : IEnumerable<KeyValuePair<string, Bind>>
 {
@@ -59,7 +59,7 @@ public sealed class BindMap : IEnumerable<KeyValuePair<string, Bind>>
     }
 
     /// <summary>
-    ///     Add a bind with provided <paramref name="name" />.
+    ///     Adds a bind with the provided <paramref name="name" />.
     /// </summary>
     /// <param name="name">The name to add the bind under.</param>
     /// <param name="bind">The bind to add.</param>
@@ -84,13 +84,13 @@ public sealed class BindMap : IEnumerable<KeyValuePair<string, Bind>>
     }
 
     /// <summary>
-    ///     Remove the bind with provided <paramref name="name" />.
+    ///     Removes the bind with the provided <paramref name="name" />.
     /// </summary>
     /// <param name="name">The name to remove the bind for.</param>
     public void Remove(string name)
     {
         Bind bind = binds[name];
-        binds.Remove(name);
+        _ = binds.Remove(name);
         bind.Keyboard = null;
     }
 

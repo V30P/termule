@@ -8,18 +8,18 @@ namespace Termule.Engine.Components;
 public sealed class CircleRenderer : PositionalRenderer
 {
     /// <summary>
-    ///     Gets or sets the color to render the circle with.
+    ///     Gets or sets the color to draw the circle in.
     /// </summary>
     public Color Color { get; set; }
 
     /// <summary>
-    ///     Gets or sets a value indicating whether all cells inside the circle should be filled.
+    ///     Gets or sets a value indicating whether the interior cells of the
+    ///     circle should be filled.
     /// </summary>
     public bool Filled { get; set; }
 
     /// <summary>
-    ///     Gets or sets a value indicating whether all circle cells should be duplicated
-    ///     horizontally.
+    ///     Gets or sets a value indicating whether circle cells should be duplicated horizontally.
     /// </summary>
     /// <remarks>
     ///     This is useful for making more round circles in the terminal.
@@ -61,7 +61,15 @@ public sealed class CircleRenderer : PositionalRenderer
                 FillHorizontals((x, y), context);
             }
 
-            p += (2 * (p < 0 ? 2 * x : x - --y)) + 1;
+            if (p < 0)
+            {
+                p += (2 * x) + 1;
+            }
+            else
+            {
+                y--;
+                p = p + (2 * (x - y)) + 1;
+            }
         }
     }
 

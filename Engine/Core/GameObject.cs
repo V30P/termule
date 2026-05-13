@@ -4,15 +4,10 @@ using Termule.Engine.Core.Messaging;
 namespace Termule.Engine.Core;
 
 /// <summary>
-///     Component that groups other components.
+///     A component that groups together child components.
 /// </summary>
 public sealed class GameObject : Component, IEnumerable<Component>
 {
-    /// <summary>
-    ///     The local message bus.
-    /// </summary>
-    public readonly LocalMessageBus Bus;
-
     private readonly List<Component> components = [];
     private readonly Dictionary<Type, List<Component>> typesToComponents = [];
 
@@ -31,11 +26,16 @@ public sealed class GameObject : Component, IEnumerable<Component>
     ///     Initializes a new instance of the <see cref="GameObject" /> class with the provided
     ///     components.
     /// </summary>
-    /// <param name="components"> The components that the GameObject should contain. </param>
+    /// <param name="components">The components that the GameObject should contain.</param>
     public GameObject(params Component[] components) : this()
     {
         Add(components);
     }
+
+    /// <summary>
+    ///     Gets the local message bus.
+    /// </summary>
+    public LocalMessageBus Bus { get; }
 
     /// <inheritdoc />
     public IEnumerator<Component> GetEnumerator()
@@ -105,7 +105,7 @@ public sealed class GameObject : Component, IEnumerable<Component>
             );
         }
 
-        components.Remove(component);
+        _ = components.Remove(component);
         component.SetGameObject(null);
         tickingDirty = true;
 
@@ -115,7 +115,7 @@ public sealed class GameObject : Component, IEnumerable<Component>
             .Select(type => typesToComponents[type]);
         foreach (List<Component> componentList in typedComponentLists)
         {
-            componentList.Remove(component);
+            _ = componentList.Remove(component);
         }
     }
 
@@ -123,7 +123,7 @@ public sealed class GameObject : Component, IEnumerable<Component>
     ///     Gets a component of type <typeparamref name="TComponent" />.
     /// </summary>
     /// <typeparam name="TComponent">The type of component to look for.</typeparam>
-    /// <returns>The component if one is found or <c>null</c>.</returns>
+    /// <returns>The component if one is found or <see langword="null"/>.</returns>
     public TComponent Get<TComponent>()
     {
         bool componentExists = typesToComponents.TryGetValue(

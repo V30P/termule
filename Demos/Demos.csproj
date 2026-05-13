@@ -19,4 +19,9 @@
     </Content>
   </ItemGroup>
 
+  <!-- Stop StyleCop from requiring documentation -->
+  <PropertyGroup>
+    <NoWarn>$(NoWarn);SA0001</NoWarn>
+  </PropertyGroup>
+
 </Project>

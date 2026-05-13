@@ -17,7 +17,7 @@ public class TestKeyboard
     {
         Keyboard keyboard = new();
 
-        Assert.Throws<ArgumentException>(() => keyboard.Get<object>("Test"));
+        _ = Assert.Throws<ArgumentException>(() => keyboard.Get<object>("Test"));
     }
 
     [Fact]
@@ -25,14 +25,14 @@ public class TestKeyboard
     {
         Keyboard keyboard = new() { Binds = new BindMap { ["Test"] = new FakeBind() } };
 
-        Assert.Throws<ArgumentException>(() => keyboard.Get<int>("Test"));
+        _ = Assert.Throws<ArgumentException>(() => keyboard.Get<int>("Test"));
     }
 
     [Fact]
     public void SettingBinds_ToNull_Throws()
     {
         Keyboard keyboard = new();
-        Assert.Throws<ArgumentNullException>(() => keyboard.Binds = null);
+        _ = Assert.Throws<ArgumentNullException>(() => keyboard.Binds = null);
     }
 
     [Fact]

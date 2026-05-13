@@ -5,7 +5,7 @@ using Termule.Engine.Types;
 
 namespace Termule.Demos.Demos;
 
-internal class Gradient : Demo
+internal sealed class Gradient : Demo
 {
     protected override void Start()
     {
@@ -16,7 +16,7 @@ internal class Gradient : Demo
         );
     }
 
-    private class GradientRenderer : Renderer
+    private sealed class GradientRenderer : Renderer
     {
         private float time;
 

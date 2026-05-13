@@ -8,7 +8,7 @@ namespace Termule.Tests.Components;
 
 public class TestLineRenderer
 {
-    public static IEnumerable<object[]> SingleSegmentData =
+    public static readonly IEnumerable<object[]> SingleSegmentData =
     [
         [new Vector[] { (0, 0), (3, 0) }, new VectorInt[] { (0, 0), (1, 0), (2, 0), (3, 0) }],
         [new Vector[] { (1, 0), (1, 3) }, new VectorInt[] { (1, 0), (1, 1), (1, 2), (1, 3) }],
@@ -17,7 +17,7 @@ public class TestLineRenderer
         [new Vector[] { (0, 0), (1, 3) }, new VectorInt[] { (0, 0), (0, 1), (1, 2), (1, 3) }]
     ];
 
-    public static IEnumerable<object[]> BoxDrawingData =
+    public static readonly IEnumerable<object[]> BoxDrawingData =
     [
         [
             new VectorInt(0, 1),

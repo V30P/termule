@@ -8,7 +8,7 @@ public class MessageBus : GameElement
     private readonly Dictionary<Type, HashSet<IMessageListenerBase>> subscribers = [];
 
     /// <summary>
-    ///     Sign the listener up to receive messages.
+    ///     REgister the listener to receive messages.
     /// </summary>
     /// <typeparam name="TMessage">The type of message to subscribe to.</typeparam>
     /// <param name="listener">The listener to subscribe.</param>
@@ -19,7 +19,7 @@ public class MessageBus : GameElement
             subscribers.Add(typeof(TMessage), []);
         }
 
-        subscribers[typeof(TMessage)].Add(listener);
+        _ = subscribers[typeof(TMessage)].Add(listener);
     }
 
     /// <summary>
@@ -29,7 +29,7 @@ public class MessageBus : GameElement
     /// <param name="listener">The listener to unsubscribe.</param>
     public void Unsubscribe<TMessage>(IMessageListener<TMessage> listener)
     {
-        subscribers[typeof(TMessage)]?.Remove(listener);
+        _ = subscribers[typeof(TMessage)]?.Remove(listener);
     }
 
     /// <summary>

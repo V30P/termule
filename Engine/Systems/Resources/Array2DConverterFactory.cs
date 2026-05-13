@@ -50,13 +50,13 @@ internal class Array2DConverterFactory : JsonConverterFactory
                 throw new JsonException($"Expected an array, but found a {reader.TokenType}");
             }
 
-            reader.Read();
+            _ = reader.Read();
 
             // Read the array as a list of lists
             List<List<T>> array = [];
             while (reader.TokenType != JsonTokenType.EndArray)
             {
-                reader.Read();
+                _ = reader.Read();
                 List<T> subarray = [];
 
                 while (reader.TokenType != JsonTokenType.EndArray)
@@ -64,10 +64,10 @@ internal class Array2DConverterFactory : JsonConverterFactory
                     subarray.Add(
                         converter.Read(ref reader, typeToConvert.GetElementType(), options)
                     );
-                    reader.Read();
+                    _ = reader.Read();
                 }
 
-                reader.Read();
+                _ = reader.Read();
                 array.Add(subarray);
             }
 

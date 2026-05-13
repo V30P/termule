@@ -6,6 +6,7 @@ namespace Termule.Engine.Systems.Input;
 /// <param name="button">The target button.</param>
 public sealed class TriggerBind(Button button) : Bind
 {
+    private readonly Button button = button;
     private bool triggeredSinceLastTick;
 
     internal override object GetValue()
@@ -16,9 +17,9 @@ public sealed class TriggerBind(Button button) : Bind
     }
 
     /// <inheritdoc />
-    protected override void OnButtonDown(Button downButton)
+    protected override void OnButtonDown(Button button)
     {
-        if (downButton == button)
+        if (button == this.button)
         {
             triggeredSinceLastTick = true;
         }

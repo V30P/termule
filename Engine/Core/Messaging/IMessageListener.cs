@@ -13,12 +13,12 @@ public interface IMessageListenerBase
 /// <summary>
 ///     Marks a class as able to subscribe to a type of message from <see cref="MessageBus" />ses.
 /// </summary>
-/// <typeparam name="TMessage"> The type of message to subscribe to. </typeparam>
+/// <typeparam name="TMessage">The type of message to subscribe to.</typeparam>
 public interface IMessageListener<TMessage> : IMessageListenerBase
 {
     /// <summary>
     ///     The behavior executed when the message is received.
     /// </summary>
-    /// <param name="message"> The received message. </param>
+    /// <param name="message">The received message.</param>
     public void OnMessage(TMessage message);
 }

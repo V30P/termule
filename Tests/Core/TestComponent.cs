@@ -6,15 +6,6 @@ namespace Termule.Tests.Core;
 
 public class TestComponent
 {
-    private static FakeComponent GetComponentOnGameObject()
-    {
-        GameObject gameObject = [];
-        FakeComponent component = new();
-        gameObject.Add(component);
-
-        return component;
-    }
-
     [Fact]
     public void Destroy_RemovesFromGameObject()
     {
@@ -34,7 +25,7 @@ public class TestComponent
     public void GetRequiredComponent_WhenComponentMissing_Throws()
     {
         FakeComponent component = GetComponentOnGameObject();
-        Assert.Throws<MissingComponentException<Transform>>(
+        _ = Assert.Throws<MissingComponentException<Transform>>(
             component.CallGetRequiredComponent<Transform>
         );
     }
@@ -50,5 +41,14 @@ public class TestComponent
 
         Assert.Null(oldGameObject.Get<FakeComponent>());
         Assert.Equal(newGameObject.Get<FakeComponent>(), component);
+    }
+
+    private static FakeComponent GetComponentOnGameObject()
+    {
+        GameObject gameObject = [];
+        FakeComponent component = new();
+        gameObject.Add(component);
+
+        return component;
     }
 }

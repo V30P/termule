@@ -7,29 +7,6 @@ namespace Termule.Tests.Components;
 
 public class TestRenderer
 {
-    private class FakeRenderer : Renderer
-    {
-        protected internal override void Render(FrameBuffer frame, Vector viewOrigin)
-        {
-        }
-    }
-
-    private class FakeLayer() : Layer((r1, r2) => r1.ElementId.CompareTo(r2.ElementId))
-    {
-        public int RegisterCount { get; private set; }
-        public int UnregisterCount { get; private set; }
-
-        protected override void OnRendererAdded(Renderer renderer)
-        {
-            RegisterCount++;
-        }
-
-        protected override void OnRendererRemoved(Renderer renderer)
-        {
-            UnregisterCount++;
-        }
-    }
-
     [Fact]
     public void Register_WhenLayerIsSet_MovesToProvidedLayer()
     {
@@ -118,5 +95,29 @@ public class TestRenderer
 
         FakeRenderer renderer = new();
         game.Root.Add(renderer);
+    }
+
+    private sealed class FakeRenderer : Renderer
+    {
+        protected internal override void Render(FrameBuffer frame, Vector viewOrigin)
+        {
+        }
+    }
+
+    private sealed class FakeLayer() : Layer((r1, r2) => r1.ElementId.CompareTo(r2.ElementId))
+    {
+        public int RegisterCount { get; private set; }
+
+        public int UnregisterCount { get; private set; }
+
+        protected override void OnRendererAdded(Renderer renderer)
+        {
+            RegisterCount++;
+        }
+
+        protected override void OnRendererRemoved(Renderer renderer)
+        {
+            UnregisterCount++;
+        }
     }
 }

@@ -12,20 +12,6 @@ namespace Termule.Engine.Components;
 public sealed class ContentRenderer<TContent> : PositionalRenderer where TContent : IContent
 {
     /// <summary>
-    ///     The <typeparamref name="TContent" /> to render.
-    /// </summary>
-    public TContent Content;
-
-    /// <summary>
-    ///     Indicates whether the content should be rendered centered on its transform.
-    /// </summary>
-    public bool Centered;
-
-    /// <inheritdoc />
-    protected override Vector Offset =>
-        Centered && Content != null ? -Content.Size / 2 : (0, 0);
-
-    /// <summary>
     ///     Initializes a new instance of the <see cref="ContentRenderer{TContent}" /> class.
     /// </summary>
     public ContentRenderer()
@@ -35,6 +21,21 @@ public sealed class ContentRenderer<TContent> : PositionalRenderer where TConten
             Content = (TContent) parameterlessConstructor.Invoke([]);
         }
     }
+
+    /// <summary>
+    ///     Gets or sets the content to render.
+    /// </summary>
+    public TContent Content { get; set; }
+
+    /// <summary>
+    ///     Gets or sets a value indicating whether the content should be rendered centered on the transform's
+    ///     position.
+    /// </summary>
+    public bool Centered { get; set; }
+
+    /// <inheritdoc />
+    protected override Vector Offset =>
+        Centered && Content != null ? -Content.Size / 2 : (0, 0);
 
     private protected override void RenderAtPosition(PositionalRenderContext context)
     {
@@ -47,7 +48,7 @@ public sealed class ContentRenderer<TContent> : PositionalRenderer where TConten
                 context.Frame.Draw(
                     cellPos,
                     cell.Color != BasicColor.Default ? cell.Color : null,
-                    cell.Char != '\0' ? cell.Char : null,
+                    cell.Character != '\0' ? cell.Character : null,
                     cell.CharColor != BasicColor.Default ? cell.CharColor : null);
             }
         }

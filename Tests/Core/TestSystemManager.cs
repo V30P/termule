@@ -44,7 +44,7 @@ public class TestSystemManager
         Game game = new();
         game.Start();
 
-        Assert.Throws<InvalidOperationException>(() => game.Systems.Install(new FakeSystem()));
+        _ = Assert.Throws<InvalidOperationException>(() => game.Systems.Install(new FakeSystem()));
     }
 
     [Fact]
@@ -81,7 +81,7 @@ public class TestSystemManager
         Game game = new();
         game.Start();
 
-        Assert.Throws<InvalidOperationException>(game.Systems.Uninstall<FakeSystem>);
+        _ = Assert.Throws<InvalidOperationException>(game.Systems.Uninstall<FakeSystem>);
     }
 
     [Fact]

@@ -6,7 +6,7 @@ using Termule.Engine.Types;
 
 namespace Termule.Demos.Demos;
 
-internal class Lightning : Demo
+internal sealed class Lightning : Demo
 {
     private const float MinCooldown = 0.25f;
     private const float MaxCooldown = 1;
@@ -45,7 +45,7 @@ internal class Lightning : Demo
         );
     }
 
-    private class BoltController(Random random) : Component
+    private sealed class BoltController(Random random) : Component
     {
         private const float Lifespan = 0.5f;
         private const float BendGenerations = 5;

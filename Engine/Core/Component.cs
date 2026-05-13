@@ -3,15 +3,15 @@ using Termule.Engine.Exceptions;
 namespace Termule.Engine.Core;
 
 /// <summary>
-///     Game element that can be added to <see cref="GameObject" />s to provide behavior every tick.
-///     Components can be added, moved, and removed at runtime.
+///     Game element that can be added to <see cref="GameObject" />s to provide local behavior or
+///     data. Components can be added, moved, and removed at runtime.
 /// </summary>
 public abstract class Component : GameElement
 {
     private GameObject gameObject;
 
     /// <summary>
-    ///     Gets or sets the <see cref="GameObject" /> that this component is part of.
+    ///     Gets or sets the game object that this component is part of.
     /// </summary>
     public GameObject GameObject
     {
@@ -25,7 +25,7 @@ public abstract class Component : GameElement
     }
 
     /// <summary>
-    ///     Removes this component from its GameObject.
+    ///     Removes this component from its <see cref="GameObject"/> .
     /// </summary>
     public void Destroy()
     {
@@ -46,7 +46,7 @@ public abstract class Component : GameElement
 
     /// <summary>
     ///     Tries to get a component of type <typeparamref name="TComponent" /> from the containing
-    ///     game object.
+    ///     game object, throwing if it cannot be found.
     /// </summary>
     /// <typeparam name="TComponent">The type of component to look for.</typeparam>
     /// <returns>The game object's instance of <typeparamref name="TComponent" />.</returns>

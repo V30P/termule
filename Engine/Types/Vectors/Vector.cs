@@ -5,8 +5,18 @@ namespace Termule.Engine.Types;
 /// </summary>
 /// <param name="X">The X component of the vector.</param>
 /// <param name="Y">The Y component of the vector.</param>
-public readonly record struct Vector(float X = 0, float Y = 0)
+public readonly struct Vector(float X = 0, float Y = 0)
 {
+    /// <summary>
+    ///     Gets the X component of the vector.
+    /// </summary>
+    public readonly float X { get; } = X;
+
+    /// <summary>
+    ///     Gets the y component of the vector.
+    /// </summary>
+    public readonly float Y { get; } = Y;
+
     /// <summary>
     ///     Gets the magnitude (length) of the vector.
     /// </summary>
@@ -87,6 +97,34 @@ public readonly record struct Vector(float X = 0, float Y = 0)
     public static Vector operator -(Vector v)
     {
         return v * -1;
+    }
+
+    /// <summary>
+    ///     Determines whether two Vector instances are equal.
+    /// </summary>
+    /// <param name="v1">The first Vector to compare.</param>
+    /// <param name="v2">The second Vector to compare.</param>
+    /// <returns>true if the vectors are equal; otherwise, false.</returns>
+    public static bool operator ==(Vector v1, Vector v2)
+    {
+        return v1.X == v2.X && v1.Y == v2.Y;
+    }
+
+    /// <summary>
+    ///     Determines whether two Vector instances are not equal.
+    /// </summary>
+    /// <param name="v1">The first Vector to compare.</param>
+    /// <param name="v2">The second Vector to compare.</param>
+    /// <returns>true if the vectors are not equal; otherwise, false.</returns>
+    public static bool operator !=(Vector v1, Vector v2)
+    {
+        return !(v1 == v2);
+    }
+
+    /// <inheritdoc />
+    public override bool Equals(object obj)
+    {
+        return obj is Vector vector && this == vector;
     }
 
     /// <inheritdoc />

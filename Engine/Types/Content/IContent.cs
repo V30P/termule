@@ -6,5 +6,6 @@ namespace Termule.Engine.Types;
 public interface IContent
 {
     internal VectorInt Size { get; }
+
     internal Cell this[int x, int y] { get; }
 }

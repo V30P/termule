@@ -1,7 +1,7 @@
 namespace Termule.Engine.Systems.Rendering;
 
 /// <summary>
-///     Basic layer implementation that provides registration-order-based sorting.
+///     Basic layer implementation that provides activation-order-based sorting.
 /// </summary>
 public sealed class SimpleLayer : Layer
 {

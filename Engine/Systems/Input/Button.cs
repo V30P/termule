@@ -39,6 +39,7 @@ public enum Button
     Y,
     Z,
 
+#pragma warning disable CA1707 // Identifiers should not contain underscores
     _0,
     _1,
     _2,
@@ -49,6 +50,7 @@ public enum Button
     _7,
     _8,
     _9,
+#pragma warning restore CA1707 // Identifiers should not contain underscores
 
     F1,
     F2,

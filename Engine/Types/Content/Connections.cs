@@ -1,10 +1,11 @@
 namespace Termule.Engine.Types;
 
 /// <summary>
-///     Flags representing the connections of a unicode box-drawing character.
+///     Flags representing the connections of a Unicode box-drawing character.
 /// </summary>
 /// <remarks>
-///     Use <see cref="ConnectionsExtensions" /> methods to convert to and from <see cref="char" />s.
+///     Use <see cref="ConnectionsExtensions" /> methods to convert between
+///     <see cref="Connections" /> values and <see cref="char" />s.
 /// </remarks>
 [Flags]
 public enum Connections
@@ -45,27 +46,25 @@ public static class ConnectionsExtensions
     private static readonly Dictionary<char, Connections> CharacterToConnections =
         ConnectionsToCharacter.Select(p => KeyValuePair.Create(p.Value, p.Key)).ToDictionary();
 
-    extension(Connections connections)
+    /// <summary>
+    ///     Gets the box-drawing character for this <see cref="Connections" />.
+    /// </summary>
+    /// <param name="connections">The connections to convert.</param>
+    /// <returns>The corresponding unicode box character.</returns>
+    public static char ToChar(this Connections connections)
     {
-        /// <summary>
-        ///     Gets the box-drawing character for this <see cref="Connections" />.
-        /// </summary>
-        /// <returns>The corresponding unicode box character.</returns>
-        public char ToChar()
-        {
-            return ConnectionsToCharacter.GetValueOrDefault(connections);
-        }
+        return ConnectionsToCharacter.GetValueOrDefault(connections);
+    }
 
-        /// <summary>
-        ///     Finds the box-drawing <see cref="Connections" /> of the given
-        ///     <paramref name="character" />.
-        /// </summary>
-        /// <param name="character">The character to determine the connections of.</param>
-        /// <returns>The connections of the character.</returns>
-        /// <remarks>This will be <see cref="Connections.None" /> for most characters.</remarks>
-        public static Connections FromChar(char character)
-        {
-            return CharacterToConnections.GetValueOrDefault(character);
-        }
+    /// <summary>
+    ///     Finds the box-drawing <see cref="Connections" /> of the given
+    ///     <paramref name="character" />.
+    /// </summary>
+    /// <param name="character">The character to determine the connections of.</param>
+    /// <returns>The connections of the character.</returns>
+    /// <remarks>This will be <see cref="Connections.None" /> for most characters.</remarks>
+    public static Connections FromChar(char character)
+    {
+        return CharacterToConnections.GetValueOrDefault(character);
     }
 }

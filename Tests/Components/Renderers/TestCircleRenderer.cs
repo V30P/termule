@@ -8,27 +8,28 @@ namespace Termule.Tests.Components;
 
 public class TestCircleRenderer
 {
-    public static IEnumerable<object[]> OutlineCircleData =
+    public static readonly IEnumerable<object[]> OutlineCircleData =
     [
         [1f, new VectorInt[] { (2, 3), (3, 2), (3, 4), (4, 3) }],
         [
             2f,
             new VectorInt[]
             {
-                (3, 5), (3, 1), (5, 3), (1, 3), (4, 5), (4, 1), (5, 2), (1, 2), (2, 1), (2, 5), (1, 4), (5, 4)
+                (3, 5), (3, 1), (5, 3), (1, 3), (4, 5), (4, 1), (5, 2), (1, 2), (2, 1), (2, 5),
+                (1, 4), (5, 4)
             }
         ],
         [
             3f,
             new VectorInt[]
             {
-                (3, 6), (3, 0), (6, 3), (0, 3), (4, 6), (4, 0), (6, 2), (0, 2), (2, 0), (2, 6), (0, 4), (6, 4),
-                (5, 6), (5, 0), (6, 1), (0, 1), (1, 0), (1, 6), (0, 5), (6, 5)
+                (3, 6), (3, 0), (6, 3), (0, 3), (4, 6), (4, 0), (6, 2), (0, 2), (2, 0), (2, 6),
+                (0, 4), (6, 4), (5, 6), (5, 0), (6, 1), (0, 1), (1, 0), (1, 6), (0, 5), (6, 5)
             }
         ]
     ];
 
-    public static IEnumerable<object[]> FilledCircleData =
+    public static readonly IEnumerable<object[]> FilledCircleData =
     [
         [
             1f, new VectorInt[] { (1, 2), (2, 1), (2, 2), (2, 3), (3, 2) }
@@ -37,22 +38,23 @@ public class TestCircleRenderer
             2f,
             new VectorInt[]
             {
-                (1, 4), (2, 4), (3, 4), (1, 3), (2, 3), (3, 3), (0, 2), (1, 2), (2, 2), (3, 2), (4, 2), (0, 1),
-                (1, 1), (2, 1), (3, 1), (4, 1), (1, 0), (2, 0), (3, 0), (0, 3), (4, 3)
+                (1, 4), (2, 4), (3, 4), (1, 3), (2, 3), (3, 3), (0, 2), (1, 2), (2, 2), (3, 2),
+                (4, 2), (0, 1), (1, 1), (2, 1), (3, 1), (4, 1), (1, 0), (2, 0), (3, 0), (0, 3),
+                (4, 3)
             }
         ],
         [
             3f,
             new VectorInt[]
             {
-                (0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (0, 1), (1, 1), (2, 1), (3, 1), (4, 1), (0, 2), (1, 2),
-                (2, 2), (3, 2), (4, 2), (0, 3), (1, 3), (2, 3), (3, 3), (4, 3), (0, 4), (1, 4), (2, 4), (3, 4),
-                (4, 4)
+                (0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (0, 1), (1, 1), (2, 1), (3, 1), (4, 1),
+                (0, 2), (1, 2), (2, 2), (3, 2), (4, 2), (0, 3), (1, 3), (2, 3), (3, 3), (4, 3),
+                (0, 4), (1, 4), (2, 4), (3, 4), (4, 4)
             }
         ]
     ];
 
-    public static IEnumerable<object[]> ViewOriginData =
+    public static readonly IEnumerable<object[]> ViewOriginData =
     [
         [(1f, 1f), (0f, 0f), (1, 1)],
         [(1f, 1f), (2f, 2f), (1, 1)],
@@ -64,7 +66,12 @@ public class TestCircleRenderer
     public void Render_DrawsExpectedOutlineCells(float radius, VectorInt[] expectedCells)
     {
         FrameBuffer frame = new(7, 7);
-        CircleRenderer renderer = new() { Radius = radius, Color = BasicColor.White, TargetSpace = true };
+        CircleRenderer renderer = new()
+        {
+            Radius = radius,
+            Color = BasicColor.White,
+            TargetSpace = true
+        };
         _ = new GameObject(new Transform { Pos = (3, 3) }, renderer);
 
         renderer.Render(frame, (0, 0));
@@ -92,7 +99,13 @@ public class TestCircleRenderer
     public void Render_WhenDoubleWideIsTrue_DuplicatesCellsHorizontally()
     {
         FrameBuffer frame = new(5, 3);
-        CircleRenderer renderer = new() { Radius = 1, Color = BasicColor.White, TargetSpace = true, DoubleWide = true };
+        CircleRenderer renderer = new()
+        {
+            Radius = 1,
+            Color = BasicColor.White,
+            TargetSpace = true,
+            DoubleWide = true
+        };
 
         _ = new GameObject(new Transform { Pos = (1, 1) }, renderer);
 
@@ -136,6 +149,6 @@ public class TestCircleRenderer
     {
         CircleRenderer renderer = new();
 
-        Assert.Throws<ArgumentOutOfRangeException>(() => renderer.Radius = -1);
+        _ = Assert.Throws<ArgumentOutOfRangeException>(() => renderer.Radius = -1);
     }
 }

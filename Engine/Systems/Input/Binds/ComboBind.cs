@@ -25,7 +25,7 @@ public sealed class ComboBind(HashSet<Button> buttons) : Bind
             return;
         }
 
-        heldButtons.Add(button);
+        _ = heldButtons.Add(button);
         if (heldButtons.SetEquals(buttons))
         {
             triggeredSinceLastTick = true;
@@ -35,6 +35,6 @@ public sealed class ComboBind(HashSet<Button> buttons) : Bind
     /// <inheritdoc />
     protected override void OnButtonUp(Button button)
     {
-        heldButtons.Remove(button);
+        _ = heldButtons.Remove(button);
     }
 }

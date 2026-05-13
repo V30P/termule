@@ -7,7 +7,7 @@ using Termule.Engine.Types;
 
 namespace Termule.Demos.Demos;
 
-internal class Screensaver : Demo
+internal sealed class Screensaver : Demo
 {
     protected override void Start()
     {
@@ -22,7 +22,7 @@ internal class Screensaver : Demo
         );
     }
 
-    private class LogoController : Component
+    private sealed class LogoController : Component
     {
         private const float Speed = 0.25f;
 
@@ -63,27 +63,27 @@ internal class Screensaver : Demo
 
             if (transform.Pos.Y < 0 && Math.Abs(dir.Y - unsignedDir.Y) > 0.01f)
             {
-                dir = dir with { Y = unsignedDir.Y };
+                dir = new Vector(dir.X, unsignedDir.Y);
                 RandomizeColor();
             }
             else if (
                 transform.Pos.Y + logo.Size.Y > displaySize.Y
                 && Math.Abs(dir.Y - -unsignedDir.Y) > 0.01f)
             {
-                dir = dir with { Y = -unsignedDir.Y };
+                dir = new Vector(dir.X, -unsignedDir.Y);
                 RandomizeColor();
             }
 
             if (transform.Pos.X < 0 && Math.Abs(dir.X - unsignedDir.X) > 0.01f)
             {
-                dir = dir with { X = unsignedDir.X };
+                dir = new Vector(unsignedDir.X, dir.Y);
                 RandomizeColor();
             }
             else if (
                 transform.Pos.X + logo.Size.X > displaySize.X
                 && Math.Abs(dir.X - -unsignedDir.X) > 0.01f)
             {
-                dir = dir with { X = -unsignedDir.X };
+                dir = new Vector(-unsignedDir.X, dir.Y);
                 RandomizeColor();
             }
 

@@ -6,6 +6,7 @@ namespace Termule.Engine.Systems.Input;
 /// <param name="button">The target button.</param>
 public sealed class ButtonBind(Button button) : Bind
 {
+    private readonly Button button = button;
     private bool pressed;
 
     internal override object GetValue()
@@ -14,18 +15,18 @@ public sealed class ButtonBind(Button button) : Bind
     }
 
     /// <inheritdoc />
-    protected override void OnButtonDown(Button downButton)
+    protected override void OnButtonDown(Button button)
     {
-        if (downButton == button)
+        if (button == this.button)
         {
             pressed = true;
         }
     }
 
     /// <inheritdoc />
-    protected override void OnButtonUp(Button upBotton)
+    protected override void OnButtonUp(Button button)
     {
-        if (upBotton == button)
+        if (button == this.button)
         {
             pressed = false;
         }

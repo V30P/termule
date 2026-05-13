@@ -1,6 +1,7 @@
 // ReSharper disable InconsistentNaming
 
 using System.Diagnostics;
+using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -12,6 +13,25 @@ namespace Termule.Engine.Systems.Display;
 /// </summary>
 public sealed partial class UnixDisplaySystem : TerminalDisplaySystem
 {
+#pragma warning disable SA1310 // Field names should not contain underscore
+    private const int F_GETFL = 3;
+    private const int F_SETFL = 4;
+    private const int STDIN_FILENO = 0;
+
+    private static readonly int O_NONBLOCK = OperatingSystem.IsMacOS() ? 0x0004 : 0x800;
+#pragma warning restore SA1310 // Field names should not contain underscore
+
+    private static readonly ProcessStartInfo SttyStartInfo = new()
+    {
+        FileName = "stty",
+        RedirectStandardOutput = true,
+        UseShellExecute = false,
+        CreateNoWindow = true
+    };
+
+    private readonly byte[] inputBuffer = new byte[1024];
+    private readonly StringBuilder inputBuilder = new();
+
     private string initialSttyConfig;
 
     /// <inheritdoc />
@@ -38,9 +58,9 @@ public sealed partial class UnixDisplaySystem : TerminalDisplaySystem
     }
 
     /// <inheritdoc />
-    protected internal override void Stop()
+    protected internal override void CleanUp()
     {
-        base.Stop();
+        base.CleanUp();
 
         Console.Write("\e[?1003l"); // Disable any-motion mouse tracking
         Console.Write("\e[?1006l"); // Disable SGR coordinates for mouse tracking
@@ -54,7 +74,7 @@ public sealed partial class UnixDisplaySystem : TerminalDisplaySystem
     protected internal override void Tick()
     {
         // Get everything in STDIN
-        inputBuilder.Clear();
+        _ = inputBuilder.Clear();
         while (true)
         {
             int bytes = read(STDIN_FILENO, inputBuffer, inputBuffer.Length);
@@ -63,7 +83,7 @@ public sealed partial class UnixDisplaySystem : TerminalDisplaySystem
                 break;
             }
 
-            inputBuilder.Append(Encoding.UTF8.GetChars(inputBuffer, 0, bytes));
+            _ = inputBuilder.Append(Encoding.UTF8.GetChars(inputBuffer, 0, bytes));
         }
 
         // Parse out SGR events
@@ -76,8 +96,8 @@ public sealed partial class UnixDisplaySystem : TerminalDisplaySystem
         Match lastSGREvent = sgrEvents[^1];
         MousePos =
         (
-            int.Parse(lastSGREvent.Groups[1].Value) - 1,
-            int.Parse(lastSGREvent.Groups[2].Value) - 1
+            int.Parse(lastSGREvent.Groups[1].Value, CultureInfo.CurrentCulture) - 1,
+            int.Parse(lastSGREvent.Groups[2].Value, CultureInfo.CurrentCulture) - 1
         );
     }
 
@@ -89,22 +109,4 @@ public sealed partial class UnixDisplaySystem : TerminalDisplaySystem
 
     [GeneratedRegex(@"\x1b\[<\d+;(\d+);(\d+)[Mm]")]
     private static partial Regex sgrRegex();
-#pragma warning disable SA1310 // Field names should not contain underscore
-    private const int F_GETFL = 3;
-    private const int F_SETFL = 4;
-    private const int STDIN_FILENO = 0;
-
-    private static readonly ProcessStartInfo SttyStartInfo = new()
-    {
-        FileName = "stty",
-        RedirectStandardOutput = true,
-        UseShellExecute = false,
-        CreateNoWindow = true
-    };
-
-    private static readonly int O_NONBLOCK = OperatingSystem.IsMacOS() ? 0x0004 : 0x800;
-
-    private readonly byte[] inputBuffer = new byte[1024];
-    private readonly StringBuilder inputBuilder = new();
-#pragma warning restore SA1310 // Field names should not contain underscore
 }

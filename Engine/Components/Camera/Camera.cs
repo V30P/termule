@@ -6,13 +6,12 @@ using Termule.Engine.Types;
 namespace Termule.Engine.Components;
 
 /// <summary>
-///     Component that uses the <see cref="RenderSystem" /> to render its view to the
-///     <see cref="DisplaySystem" />.
+///     Component that renders its surroundings to an <see cref="ICameraTarget"/>.
 /// </summary>
 public sealed class Camera : Component
 {
     /// <summary>
-    ///     Gets or sets a cell that should make up the background of rendered
+    ///     Gets or sets a cell that will fill the background of rendered
     ///     <see cref="FrameBuffer" />s.
     /// </summary>
     public Cell BackgroundCell { get; set; }

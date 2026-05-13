@@ -3,10 +3,20 @@ namespace Termule.Engine.Types;
 /// <summary>
 ///     Two-dimensional integer vector.
 /// </summary>
-/// <param name="X">The X component of the vector.</param>
-/// <param name="Y">The Y component of the vector.</param>
-public readonly record struct VectorInt(int X = 0, int Y = 0)
+/// <param name="x">The X component of the vector.</param>
+/// <param name="y">The Y component of the vector.</param>
+public readonly struct VectorInt(int x = 0, int y = 0)
 {
+    /// <summary>
+    ///     Gets the X component of the vector.
+    /// </summary>
+    public int X { get; } = x;
+
+    /// <summary>
+    ///     Gets the Y component of the vector.
+    /// </summary>
+    public int Y { get; } = y;
+
     /// <summary>
     ///     Gets the magnitude (length) of the vector.
     /// </summary>
@@ -78,6 +88,34 @@ public readonly record struct VectorInt(int X = 0, int Y = 0)
     public static VectorInt operator -(VectorInt v)
     {
         return (v.X * -1, v.Y * -1);
+    }
+
+    /// <summary>
+    ///     Determines whether two VectorInt instances are equal.
+    /// </summary>
+    /// <param name="v1">The first VectorInt to compare.</param>
+    /// <param name="v2">The second VectorInt to compare.</param>
+    /// <returns>true if the vectors are equal; otherwise, false.</returns>
+    public static bool operator ==(VectorInt v1, VectorInt v2)
+    {
+        return v1.X == v2.X && v1.Y == v2.Y;
+    }
+
+    /// <summary>
+    ///     Determines whether two VectorInt instances are not equal.
+    /// </summary>
+    /// <param name="v1">The first VectorInt to compare.</param>
+    /// <param name="v2">The second VectorInt to compare.</param>
+    /// <returns>true if the vectors are not equal; otherwise, false.</returns>
+    public static bool operator !=(VectorInt v1, VectorInt v2)
+    {
+        return !(v1 == v2);
+    }
+
+    /// <inheritdoc />
+    public override bool Equals(object obj)
+    {
+        return obj is VectorInt vectorInt && this == vectorInt;
     }
 
     /// <inheritdoc />

@@ -24,13 +24,13 @@ public sealed partial class WindowsDisplaySystem : TerminalDisplaySystem
         mode &= ~0x0040u; // Disable quick edit mode
         mode |= 0x0010; // Enable mouse input
 
-        SetConsoleMode(handle, mode);
+        _ = SetConsoleMode(handle, mode);
     }
 
     /// <inheritdoc />
-    protected internal override void Stop()
+    protected internal override void CleanUp()
     {
-        base.Stop();
+        base.CleanUp();
 
         _ = SetConsoleMode(handle, initialMode);
     }
@@ -46,10 +46,8 @@ public sealed partial class WindowsDisplaySystem : TerminalDisplaySystem
         _ = ReadConsoleInput(handle, eventBuffer, (uint) eventBuffer.Length, out uint eventsCount);
         for (int i = (int) eventsCount - 1; i >= 0; i--)
         {
-#pragma warning disable IDE1006 // Naming Styles
             const uint MOUSE_EVENT = 0x0002;
             const uint MOUSE_MOVED = 0x0001;
-#pragma warning restore IDE1006 // Naming Styles
 
             if (eventBuffer[i].EventType == MOUSE_EVENT &&
                 (eventBuffer[i].Event.MouseEvent.dwEventFlags & MOUSE_MOVED) != 0)
@@ -97,7 +95,8 @@ public sealed partial class WindowsDisplaySystem : TerminalDisplaySystem
     [StructLayout(LayoutKind.Explicit)]
     private readonly struct EVENT
     {
-        [FieldOffset(0)] public readonly MOUSE_EVENT_RECORD MouseEvent;
+        [FieldOffset(0)]
+        public readonly MOUSE_EVENT_RECORD MouseEvent;
     }
 
     [StructLayout(LayoutKind.Sequential)]

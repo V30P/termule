@@ -4,7 +4,7 @@ using Termule.Engine.Types;
 namespace Termule.Engine.Components;
 
 /// <summary>
-///     Component that stores a position and handles local positioning relative to parent.
+///     Component that stores a position and handles local positioning relative to its parent.
 /// </summary>
 public sealed class Transform : Component
 {
@@ -86,9 +86,12 @@ public sealed class Transform : Component
         cachedPosition = Pos;
         cachedPositionIsLocal = false;
 
-        parent?.children.Remove(this);
+        _ = parent?.children.Remove(this);
         parent = null;
     }
 
-    internal record struct MovedMessage(Vector NewPosition);
+    internal readonly struct MovedMessage(Vector newPosition)
+    {
+        internal readonly Vector NewPosition = newPosition;
+    }
 }

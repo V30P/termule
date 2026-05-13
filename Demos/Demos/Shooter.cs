@@ -10,15 +10,15 @@ using static Termule.Demos.Core.Utilities;
 
 namespace Termule.Demos.Demos;
 
-internal class Shooter : Demo, IMessageListener<Shooter.CharacterController.DiedMessage>
+internal sealed class Shooter : Demo, IMessageListener<Shooter.CharacterController.DiedMessage>
 {
     private const float GracePeriodLength = 3;
     private const float GameOverLength = 5;
 
-    private readonly Random random = new();
-
     private static Image characterSprite;
     private static Image projectileSprite;
+
+    private readonly Random random = new();
 
     private float gameOverTimeRemaining;
     private float gracePeriodTimeRemaining = GracePeriodLength;
@@ -127,11 +127,15 @@ internal class Shooter : Demo, IMessageListener<Shooter.CharacterController.Died
         private float hitColorTimeRemaining;
 
         protected Vector MovementDir { get; set; }
+
         protected Vector Target { get; set; }
 
         protected abstract Color Color { get; }
+
         protected abstract Color HitColor { get; }
+
         protected abstract float Speed { get; }
+
         protected abstract float ShotCooldownLength { get; }
 
         internal void Hit()
@@ -181,14 +185,20 @@ internal class Shooter : Demo, IMessageListener<Shooter.CharacterController.Died
             shotCooldownTimeRemaining = ShotCooldownLength;
         }
 
-        internal record struct DiedMessage(Type Type);
+        internal readonly struct DiedMessage(Type type)
+        {
+            public readonly Type Type = type;
+        }
     }
 
-    private class PlayerController : CharacterController
+    private sealed class PlayerController : CharacterController
     {
         protected override Color Color => BasicColor.Blue;
+
         protected override Color HitColor => BasicColor.BrightBlue;
+
         protected override float Speed => 15;
+
         protected override float ShotCooldownLength => 0.5f;
 
         protected override void Tick()
@@ -205,13 +215,16 @@ internal class Shooter : Demo, IMessageListener<Shooter.CharacterController.Died
         }
     }
 
-    private class EnemyController : CharacterController
+    private sealed class EnemyController : CharacterController
     {
         private const float Range = 30;
 
         protected override Color Color => BasicColor.Red;
+
         protected override Color HitColor => BasicColor.BrightRed;
+
         protected override float Speed => 7.5f;
+
         protected override float ShotCooldownLength => 1;
 
         protected override void Tick()
@@ -242,7 +255,7 @@ internal class Shooter : Demo, IMessageListener<Shooter.CharacterController.Died
         }
     }
 
-    private class ProjectileController(Type sourceType, Vector direction) : Component
+    private sealed class ProjectileController(Type sourceType, Vector direction) : Component
     {
         private const float Speed = 30;
 

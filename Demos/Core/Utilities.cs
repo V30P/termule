@@ -43,36 +43,33 @@ internal static class Utilities
         return (corner.X, corner.Y + size.Y - (dist - (2 * size.X) - size.Y));
     }
 
-    extension(Image image)
+    public static Image Flipped(this Image image)
     {
-        public Image Flipped()
+        Image flipped = new(image.Size.X, image.Size.Y);
+        for (int x = 0; x < image.Size.X; x++)
         {
-            Image flipped = new(image.Size.X, image.Size.Y);
-            for (int x = 0; x < image.Size.X; x++)
+            for (int y = 0; y < image.Size.Y; y++)
             {
-                for (int y = 0; y < image.Size.Y; y++)
-                {
-                    flipped[x, y] = image[image.Size.X - x - 1, y];
-                }
+                flipped[x, y] = image[image.Size.X - x - 1, y];
             }
-
-            return flipped;
         }
 
-        public Image WithColorSwapped(Color target, Color value)
-        {
-            Image swapped = new(image.Size.X, image.Size.Y);
-            for (int x = 0; x < image.Size.X; x++)
-            {
-                for (int y = 0; y < image.Size.Y; y++)
-                {
-                    swapped[x, y] = image[x, y].Color == target
-                        ? image[x, y] with { Color = value }
-                        : image[x, y];
-                }
-            }
+        return flipped;
+    }
 
-            return swapped;
+    public static Image WithColorSwapped(this Image image, Color target, Color value)
+    {
+        Image swapped = new(image.Size.X, image.Size.Y);
+        for (int x = 0; x < image.Size.X; x++)
+        {
+            for (int y = 0; y < image.Size.Y; y++)
+            {
+                swapped[x, y] = image[x, y].Color == target
+                    ? image[x, y] with { Color = value }
+                    : image[x, y];
+            }
         }
+
+        return swapped;
     }
 }

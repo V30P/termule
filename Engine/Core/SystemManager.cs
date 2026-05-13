@@ -57,7 +57,7 @@ public class SystemManager : GameElement
     }
 
     /// <summary>
-    ///     Installs the system-specific default <see cref="Systems" />s.
+    ///     Installs the operating-system-specific default <see cref="Systems" />s.
     /// </summary>
     public void UseDefaults()
     {
@@ -107,14 +107,14 @@ public class SystemManager : GameElement
     {
         foreach (System system in systems.Values)
         {
-            system.Stop();
+            system.CleanUp();
         }
     }
 
     private static Type GetSystemType<TSystem>() where TSystem : System
     {
         Type type = typeof(TSystem);
-        while (type!.BaseType != typeof(System))
+        while (type.BaseType != typeof(System))
         {
             type = type.BaseType;
         }

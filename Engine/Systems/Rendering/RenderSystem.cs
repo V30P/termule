@@ -5,7 +5,8 @@ using Termule.Engine.Types;
 namespace Termule.Engine.Systems.Rendering;
 
 /// <summary>
-///     Base system responsible for building frameBuffers from renderers according to layer order.
+///     System responsible for building <see cref="FrameBuffer"/>s from <see cref="Renderer"/>s
+///     in <see cref="Layer"/> > order.
 /// </summary>
 public sealed class RenderSystem : Core.System
 {

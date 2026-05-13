@@ -19,17 +19,6 @@ public class TestFrameBuffer
         [DrawColor, 'X', DrawColor, new Cell(DrawColor, 'X', DrawColor)]
     ];
 
-    private static void AssertAllCellsEqual(FrameBuffer frame, Cell expectedCell)
-    {
-        for (int x = 0; x < frame.Size.X; x++)
-        {
-            for (int y = 0; y < frame.Size.Y; y++)
-            {
-                Assert.Equal(expectedCell, frame[x, y]);
-            }
-        }
-    }
-
     [Theory]
     [MemberData(nameof(DrawData))]
     public void Draw_AppliesProvidedValues(
@@ -53,7 +42,7 @@ public class TestFrameBuffer
         frame.Draw((0, 0), character: '─', characterColor: BasicColor.White);
         frame.Draw((0, 0), character: '│', characterColor: BasicColor.Red);
 
-        Assert.Equal('│', frame[0, 0].Char);
+        Assert.Equal('│', frame[0, 0].Character);
     }
 
     [Fact]
@@ -76,17 +65,17 @@ public class TestFrameBuffer
         frame.Draw((0, 0), character: '─', characterColor: BasicColor.White);
         frame.Draw((0, 0), character: '│', characterColor: BasicColor.White);
 
-        Assert.Equal('┼', frame[0, 0].Char);
+        Assert.Equal('┼', frame[0, 0].Character);
     }
 
     [Fact]
     public void Draw_ProperlyCoversExistingValues()
     {
         FrameBuffer frame = new(1, 1);
-        frame.Draw((0, 0), TestCell.Color, TestCell.Char, TestCell.CharColor);
+        frame.Draw((0, 0), TestCell.Color, TestCell.Character, TestCell.CharColor);
 
-        frame.Draw((0, 0), null, TestCell.Char);
-        Assert.Equal(new Cell(TestCell.Color, TestCell.Char), frame[0, 0]);
+        frame.Draw((0, 0), null, TestCell.Character);
+        Assert.Equal(new Cell(TestCell.Color, TestCell.Character), frame[0, 0]);
 
         frame.Draw((0, 0), TestCell.Color);
         Assert.Equal(new Cell(TestCell.Color), frame[0, 0]);
@@ -105,7 +94,7 @@ public class TestFrameBuffer
             layerBoxDrawingChars: false
         );
 
-        Assert.Equal('│', frame[0, 0].Char);
+        Assert.Equal('│', frame[0, 0].Character);
     }
 
     [Fact]
@@ -126,12 +115,23 @@ public class TestFrameBuffer
         {
             for (int y = 0; y < frame.Size.Y; y++)
             {
-                frame.Draw((x, y), TestCell.Color, TestCell.Char, TestCell.CharColor);
+                frame.Draw((x, y), TestCell.Color, TestCell.Character, TestCell.CharColor);
             }
         }
 
         frame.Reset();
 
         AssertAllCellsEqual(frame, default);
+    }
+
+    private static void AssertAllCellsEqual(FrameBuffer frame, Cell expectedCell)
+    {
+        for (int x = 0; x < frame.Size.X; x++)
+        {
+            for (int y = 0; y < frame.Size.Y; y++)
+            {
+                Assert.Equal(expectedCell, frame[x, y]);
+            }
+        }
     }
 }

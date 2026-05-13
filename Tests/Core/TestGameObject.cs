@@ -14,6 +14,10 @@ public class TestGameObject
         [new Component[] { new ComponentA(), new ComponentA(), new ComponentA() }, 3]
     ];
 
+    private interface IDerivedComponent
+    {
+    }
+
     [Fact]
     public void Add_AddsAndRegistersComponent()
     {
@@ -46,7 +50,7 @@ public class TestGameObject
     {
         FakeComponent component = new();
         new GameObject().Add(component);
-        Assert.Throws<ArgumentException>(() => new GameObject().Add(component));
+        _ = Assert.Throws<ArgumentException>(() => new GameObject().Add(component));
     }
 
     [Fact]
@@ -57,7 +61,7 @@ public class TestGameObject
 
         gameObject.Add(component);
 
-        Assert.Throws<ArgumentException>(() => gameObject.Add(component));
+        _ = Assert.Throws<ArgumentException>(() => gameObject.Add(component));
     }
 
     [Theory]
@@ -71,7 +75,7 @@ public class TestGameObject
         GameObject gameObject = [component];
 
         Component result = (Component) typeof(GameObject)
-            .GetMethod(nameof(GameObject.Get))!
+            .GetMethod(nameof(GameObject.Get))
             .MakeGenericMethod(getType)
             .Invoke(gameObject, null);
 
@@ -127,7 +131,7 @@ public class TestGameObject
         FakeComponent component = new();
         new GameObject().Add(component);
 
-        Assert.Throws<InvalidOperationException>(() => new GameObject().Remove(component));
+        _ = Assert.Throws<InvalidOperationException>(() => new GameObject().Remove(component));
     }
 
     [Fact]
@@ -154,23 +158,19 @@ public class TestGameObject
         Assert.Equal(1, component.DeactivateCount);
     }
 
-    private interface IDerivedComponent
+    private sealed class DerivedComponent : FakeComponent, IDerivedComponent
     {
     }
 
-    private class DerivedComponent : FakeComponent, IDerivedComponent
+    private sealed class ComponentA : Component
     {
     }
 
-    private class ComponentA : Component
+    private sealed class ComponentB : Component
     {
     }
 
-    private class ComponentB : Component
-    {
-    }
-
-    private class DependentComponent : Component
+    private sealed class DependentComponent : Component
     {
         public bool HasDependency { get; private set; }
 

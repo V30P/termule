@@ -9,12 +9,11 @@ namespace Termule.Engine.Exceptions;
 public class MissingComponentException<TMissing> : MissingGameElementException<TMissing>
     where TMissing : Component
 {
+    internal MissingComponentException(GameElement dependent) : base(dependent)
+    {
+    }
+
     /// <inheritdoc />
     public override string Message =>
         $"'{Dependent.GetType().Name}' is missing required component '{MissingElementType.Name}'";
-
-    internal MissingComponentException(GameElement dependent)
-        : base(dependent)
-    {
-    }
 }

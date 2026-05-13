@@ -36,11 +36,11 @@ public static class Utilities
             {
                 if (expectedChars.ContainsKey((x, y)))
                 {
-                    Assert.Equal(expectedChars[(x, y)], frame[x, y].Char);
+                    Assert.Equal(expectedChars[(x, y)], frame[x, y].Character);
                 }
                 else
                 {
-                    Assert.Equal(default, frame[x, y].Char);
+                    Assert.Equal(default, frame[x, y].Character);
                 }
             }
         }

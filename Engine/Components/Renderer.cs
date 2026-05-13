@@ -5,15 +5,15 @@ using Termule.Engine.Types;
 namespace Termule.Engine.Components;
 
 /// <summary>
-///     Base component class for contributing to frames produced by the render system.
+///     Base component for rendering into frames produced by the render system.
 /// </summary>
 public abstract class Renderer : Component
 {
     private Layer layer;
 
     /// <summary>
-    ///     Gets or sets the render <see cref="Layer" />.
-    ///     If set to <c>null</c>, the default <see cref="Layer" /> will be used.
+    ///     Gets or sets this renderer's layer. If set to <see langword="null"/>, the
+    ///     <see cref="RenderSystem"/>'s default layer will used.
     /// </summary>
     public Layer Layer
     {

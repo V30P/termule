@@ -1,7 +1,7 @@
 namespace Termule.Engine.Types;
 
 /// <summary>
-///     Content that represents textual content.
+///     Content implementation that represents text.
 /// </summary>
 public sealed class Text : IContent
 {
@@ -52,7 +52,7 @@ public sealed class Text : IContent
             }
 
             string[] stringLines = field.Split('\n');
-            size = size with { Y = stringLines.Length };
+            size = new(size.X, stringLines.Length);
 
             lines = new Cell[stringLines.Length][];
             for (int i = 0; i < stringLines.Length; i++)
@@ -62,7 +62,7 @@ public sealed class Text : IContent
 
                 if (line.Length > size.X)
                 {
-                    size = size with { X = line.Length };
+                    size = new(line.Length, size.Y);
                 }
             }
         }
@@ -76,12 +76,12 @@ public sealed class Text : IContent
         {
             if (x < 0 || x >= size.X)
             {
-                throw new IndexOutOfRangeException("X position falls outside of content.");
+                throw new ArgumentOutOfRangeException(nameof(x));
             }
 
             if (y < 0 || y >= size.Y)
             {
-                throw new IndexOutOfRangeException("Y position falls outside of content.");
+                throw new ArgumentOutOfRangeException(nameof(y));
             }
 
             // Returns blank spaces at the end of lines since content is rectangular

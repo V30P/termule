@@ -9,7 +9,7 @@ namespace Termule.Engine.Components;
 public interface ICameraTarget
 {
     /// <summary>
-    ///     Gets the size of the camera target (in cells).
+    ///     Gets the size of this target (in cells).
     /// </summary>
     public VectorInt Size { get; }
 

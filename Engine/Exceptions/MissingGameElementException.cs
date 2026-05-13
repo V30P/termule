@@ -9,18 +9,18 @@ namespace Termule.Engine.Exceptions;
 public abstract class MissingGameElementException<TMissing> : Exception
     where TMissing : GameElement
 {
-    /// <summary>
-    ///     Gets the <see cref="GameElement" /> that needed the missing element.
-    /// </summary>
-    public readonly GameElement Dependent;
-
-    /// <summary>
-    ///     Gets the <see cref="Type" /> of element that is missing.
-    /// </summary>
-    public readonly Type MissingElementType = typeof(TMissing);
-
     private protected MissingGameElementException(GameElement dependent)
     {
         Dependent = dependent;
     }
+
+    /// <summary>
+    ///     Gets the element that requested the missing element.
+    /// </summary>
+    public GameElement Dependent { get; private init; }
+
+    /// <summary>
+    ///     Gets the <see cref="Type" /> of element that is missing.
+    /// </summary>
+    public Type MissingElementType { get; } = typeof(TMissing);
 }

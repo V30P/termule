@@ -9,10 +9,12 @@ public sealed class Keyboard : Core.System
 {
     private static readonly TaskPoolGlobalHook SharpHook;
 
+    private readonly HashSet<Button> pressedButtons = [];
+
     static Keyboard()
     {
         SharpHook = new TaskPoolGlobalHook(runAsyncOnBackgroundThread: true);
-        SharpHook.RunAsync();
+        _ = SharpHook.RunAsync();
     }
 
     /// <summary>
@@ -28,10 +30,10 @@ public sealed class Keyboard : Core.System
         SharpHook.KeyTyped += (_, e) => CharacterTyped?.Invoke(e.Data.KeyChar);
     }
 
-    private readonly HashSet<Button> pressedButtons = [];
-
     internal event Action<Button> ButtonDown;
+
     internal event Action<Button> ButtonUp;
+
     internal event Action<char> CharacterTyped;
 
     /// <summary>
@@ -49,11 +51,11 @@ public sealed class Keyboard : Core.System
     } = [];
 
     /// <summary>
-    ///     Gets the value of the bind with given <paramref name="name" />.
+    ///     Gets the value of the <see cref="Bind"/> named <paramref name="name" />.
     /// </summary>
     /// <typeparam name="TValue">The type of value to get.</typeparam>
     /// <param name="name">The name of the bind to get the value for.</param>
-    /// <returns> The value of the specified bind. </returns>
+    /// <returns>The value of the specified bind.</returns>
     public TValue Get<TValue>(string name)
     {
         return !Binds.TryGetValue(name, out object value)

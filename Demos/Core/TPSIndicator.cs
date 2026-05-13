@@ -1,12 +1,14 @@
+using System.Globalization;
+using System.Text;
 using Termule.Engine.Components;
 using Termule.Engine.Core;
 using Termule.Engine.Types;
 
 namespace Termule.Demos.Core;
 
-internal class TpsIndicator : Component
+internal sealed class TpsIndicator : Component
 {
-    private const string TextTemplate = " TPS: {0}";
+    private static readonly CompositeFormat TextFormat = CompositeFormat.Parse(" TPS: {0}");
 
     private int ticks;
     private float time;
@@ -23,7 +25,7 @@ internal class TpsIndicator : Component
         }
 
         GameObject.Get<ContentRenderer<Text>>().Content.Value =
-            string.Format(TextTemplate, (int) (ticks / time));
+            string.Format(CultureInfo.CurrentCulture, TextFormat, (int) (ticks / time));
         time = ticks = 0;
     }
 }

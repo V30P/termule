@@ -16,8 +16,8 @@ public class TestImage
     [Fact]
     public void ConstructorWithDimensions_GivenNegativeDimension_Throws()
     {
-        Assert.Throws<ArgumentOutOfRangeException>(() => new Image(-1, 5));
-        Assert.Throws<ArgumentOutOfRangeException>(() => new Image(10, -1));
+        _ = Assert.Throws<ArgumentOutOfRangeException>(() => new Image(-1, 5));
+        _ = Assert.Throws<ArgumentOutOfRangeException>(() => new Image(10, -1));
     }
 
     [Fact]

@@ -4,7 +4,7 @@ using Termule.Engine.Types;
 namespace Termule.Engine.Systems.Rendering;
 
 /// <summary>
-///     Content implementation that <see cref="Renderer" />s draw to during the render process.
+///     Buffer that <see cref="Renderer" />s draw into during rendering.
 /// </summary>
 public sealed class FrameBuffer : Image
 {
@@ -22,7 +22,7 @@ public sealed class FrameBuffer : Image
     ///     The character color to set, or <c>null</c> to leave unchanged.
     /// </param>
     /// <param name="layerBoxDrawingChars">
-    ///     Indicates that drawing unicode box-drawing characters over existing box-drawing
+    ///     Indicates that drawing Unicode box-drawing characters over existing box-drawing
     ///     characters of the same color should combine them.
     /// </param>
     public void Draw(
@@ -42,7 +42,7 @@ public sealed class FrameBuffer : Image
         if (color != null)
         {
             cell.Color = color.Value;
-            cell.Char = '\0';
+            cell.Character = '\0';
             cell.CharColor = default;
         }
 
@@ -50,13 +50,15 @@ public sealed class FrameBuffer : Image
         {
             if (layerBoxDrawingChars && characterColor == this[pos.X, pos.Y].CharColor)
             {
-                Connections connections = Connections.FromChar(character.Value)
-                                          | Connections.FromChar(this[pos.X, pos.Y].Char);
+                Connections connections = ConnectionsExtensions.FromChar(character.Value)
+                                          | ConnectionsExtensions.FromChar(
+                                                this[pos.X, pos.Y].Character
+                                            );
 
                 character = connections.ToChar();
             }
 
-            cell.Char = character.Value;
+            cell.Character = character.Value;
             cell.CharColor = default;
         }
 

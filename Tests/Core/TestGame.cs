@@ -5,51 +5,6 @@ namespace Termule.Tests.Core;
 
 public class TestGame
 {
-    private sealed class CountingSystem : Engine.Core.System
-    {
-        public int StartCount { get; private set; }
-        public int TickCount { get; private set; }
-        public int StopCount { get; private set; }
-
-        protected internal override void Start()
-        {
-            StartCount++;
-        }
-
-        protected internal override void Tick()
-        {
-            TickCount++;
-        }
-
-        protected internal override void Stop()
-        {
-            StopCount++;
-        }
-    }
-
-    private sealed class AutoStopSystem : Engine.Core.System
-    {
-        public int StartCount { get; private set; }
-        public int TickCount { get; private set; }
-        public int StopCount { get; private set; }
-
-        protected internal override void Start()
-        {
-            StartCount++;
-        }
-
-        protected internal override void Tick()
-        {
-            TickCount++;
-            Game.Stop();
-        }
-
-        protected internal override void Stop()
-        {
-            StopCount++;
-        }
-    }
-
     [Fact]
     public void TargetTicksPerSecond_DefaultsToUnlimited()
     {
@@ -67,7 +22,7 @@ public class TestGame
 
         game.RunTick();
 
-        Assert.Equal((float) 1 / 10, game.DeltaTime, 0.001);
+        Assert.Equal(1f / 10, game.DeltaTime, 0.001);
     }
 
     [Fact]
@@ -165,7 +120,6 @@ public class TestGame
         Assert.Equal(element, listener.ReceivedMessage.Element);
     }
 
-
     [Fact]
     public void Unregister_BroadcastsElementUnregisteredMessage()
     {
@@ -193,5 +147,54 @@ public class TestGame
 
         Assert.Null(element.GameInstance);
         Assert.True(element.HasBeenDeactivated);
+    }
+
+    private sealed class CountingSystem : Engine.Core.System
+    {
+        public int StartCount { get; private set; }
+
+        public int TickCount { get; private set; }
+
+        public int StopCount { get; private set; }
+
+        protected internal override void Start()
+        {
+            StartCount++;
+        }
+
+        protected internal override void Tick()
+        {
+            TickCount++;
+        }
+
+        protected internal override void CleanUp()
+        {
+            StopCount++;
+        }
+    }
+
+    private sealed class AutoStopSystem : Engine.Core.System
+    {
+        public int StartCount { get; private set; }
+
+        public int TickCount { get; private set; }
+
+        public int StopCount { get; private set; }
+
+        protected internal override void Start()
+        {
+            StartCount++;
+        }
+
+        protected internal override void Tick()
+        {
+            TickCount++;
+            Game.Stop();
+        }
+
+        protected internal override void CleanUp()
+        {
+            StopCount++;
+        }
     }
 }

@@ -1,7 +1,7 @@
 namespace Termule.Engine.Systems.Input;
 
 /// <summary>
-///     Base class for a <see cref="Keyboard" /> bind.
+///     Base class for <see cref="Keyboard" /> binds.
 /// </summary>
 public abstract class Bind
 {

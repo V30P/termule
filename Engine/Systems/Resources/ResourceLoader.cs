@@ -24,7 +24,7 @@ public sealed class ResourceLoader : Core.System
     ///     The directory to load resources from, defaults to "res".
     /// </param>
     /// <param name="dirIsRelative">
-    ///     If <paramref name="resourceDir" /> should be treated as relative to the assembly
+    ///     Whether <paramref name="resourceDir" /> should be treated as relative to the assembly
     ///     location, defaults to true.
     /// </param>
     public ResourceLoader(

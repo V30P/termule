@@ -7,7 +7,7 @@ namespace Termule.Tests.Components;
 
 public class TestPositionalRenderer
 {
-    public static IEnumerable<object[]> GameSpaceConversionData =
+    public static readonly IEnumerable<object[]> GameSpaceConversionData =
     [
         [(0f, 0f), (0f, 0f), (0, 0), (0f, 0f)],
         [(1f, 1f), (0f, 0f), (1, -1), (0f, 0f)],
@@ -21,7 +21,7 @@ public class TestPositionalRenderer
         [(-3f, -2f), (-0.75f, -0.25f), (-2, 2), (-0.25f, -0.25f)]
     ];
 
-    public static IEnumerable<object[]> TargetSpaceConversionData =
+    public static readonly IEnumerable<object[]> TargetSpaceConversionData =
     [
         [(0f, 0f), (1f, 2f), (0, 0), (0f, 0f)],
         [(1f, 5f), (3f, 4f), (1, 5), (0f, 0f)],
@@ -32,30 +32,6 @@ public class TestPositionalRenderer
     ];
 
     private const float PositionEpsilon = 0.0001f;
-
-    private static void AssertVectorApproximately(Vector expected, Vector? actual, float epsilon)
-    {
-        Assert.NotNull(actual);
-        Assert.InRange(actual.Value.X, expected.X - epsilon, expected.X + epsilon);
-        Assert.InRange(actual.Value.Y, expected.Y - epsilon, expected.Y + epsilon);
-    }
-
-    private sealed class FakePositionalRenderer(Vector offset = default) : PositionalRenderer
-    {
-        public FrameBuffer CapturedFrame { get; private set; }
-        public VectorInt CapturedOrigin { get; private set; }
-        public Vector CapturedOffset { get; private set; }
-        public int RenderCount { get; private set; }
-        protected override Vector Offset { get; } = offset;
-
-        private protected override void RenderAtPosition(PositionalRenderContext context)
-        {
-            RenderCount++;
-            CapturedFrame = context.Frame;
-            CapturedOrigin = context.Origin;
-            CapturedOffset = context.Offset;
-        }
-    }
 
     [Fact]
     public void Render_AppliesOffset()
@@ -114,5 +90,33 @@ public class TestPositionalRenderer
 
         Assert.Equal(expectedOrigin, renderer.CapturedOrigin);
         AssertVectorApproximately(expectedOffset, renderer.CapturedOffset, PositionEpsilon);
+    }
+
+    private static void AssertVectorApproximately(Vector expected, Vector? actual, float epsilon)
+    {
+        _ = Assert.NotNull(actual);
+        Assert.InRange(actual.Value.X, expected.X - epsilon, expected.X + epsilon);
+        Assert.InRange(actual.Value.Y, expected.Y - epsilon, expected.Y + epsilon);
+    }
+
+    private sealed class FakePositionalRenderer(Vector offset = default) : PositionalRenderer
+    {
+        public FrameBuffer CapturedFrame { get; private set; }
+
+        public VectorInt CapturedOrigin { get; private set; }
+
+        public Vector CapturedOffset { get; private set; }
+
+        public int RenderCount { get; private set; }
+
+        protected override Vector Offset { get; } = offset;
+
+        private protected override void RenderAtPosition(PositionalRenderContext context)
+        {
+            RenderCount++;
+            CapturedFrame = context.Frame;
+            CapturedOrigin = context.Origin;
+            CapturedOffset = context.Offset;
+        }
     }
 }

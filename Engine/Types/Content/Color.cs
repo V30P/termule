@@ -5,8 +5,35 @@ namespace Termule.Engine.Types;
 /// <summary>
 ///     Color that can be rendered by terminals.
 /// </summary>
-public readonly record struct Color
+public readonly struct Color
 {
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="Color"/> struct.
+    /// </summary>
+    public Color()
+        : this(BasicColor.Default)
+    {
+    }
+
+    [JsonConstructor]
+#pragma warning disable IDE0051 // Remove unused private members
+    private Color(FullColor? full, BasicColor basic)
+#pragma warning restore IDE0051 // Remove unused private members
+    {
+        Full = full;
+        Basic = basic;
+    }
+
+    private Color(int r, int g, int b)
+    {
+        Full = new FullColor(r, g, b);
+    }
+
+    private Color(BasicColor baseColor)
+    {
+        Basic = baseColor;
+    }
+
     /// <summary>
     ///     Gets the full RGB color if one was set.
     /// </summary>
@@ -36,27 +63,36 @@ public readonly record struct Color
     }
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="Color" /> class.
+    ///     Determines whether two Color instances are equal.
     /// </summary>
-    public Color()
-        : this(BasicColor.Default)
+    /// <param name="c1">The first Color to compare.</param>
+    /// <param name="c2">The second Color to compare.</param>
+    /// <returns>true if the colors are equal; otherwise, false.</returns>
+    public static bool operator ==(Color c1, Color c2)
     {
+        return c1.Basic == c2.Basic && c1.Full == c2.Full;
     }
 
-    [JsonConstructor]
-    private Color(FullColor? full, BasicColor basic)
+    /// <summary>
+    ///     Determines whether two Color instances are not equal.
+    /// </summary>
+    /// <param name="c1">The first Color to compare.</param>
+    /// <param name="c2">The second Color to compare.</param>
+    /// <returns>true if the colors are not equal; otherwise, false.</returns>
+    public static bool operator !=(Color c1, Color c2)
     {
-        Full = full;
-        Basic = basic;
+        return !(c1 == c2);
     }
 
-    private Color(int r, int g, int b)
+    /// <inheritdoc />
+    public override bool Equals(object obj)
     {
-        Full = new FullColor(r, g, b);
+        return obj is Color color && this == color;
     }
 
-    private Color(BasicColor baseColor)
+    /// <inheritdoc />
+    public override int GetHashCode()
     {
-        Basic = baseColor;
+        return HashCode.Combine(Full, Basic);
     }
 }

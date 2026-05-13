@@ -9,10 +9,30 @@ namespace Termule.Engine.Systems.Display;
 /// </summary>
 public abstract class DisplaySystem : Core.System, ICameraTarget
 {
-    private protected FrameBuffer buffer = new(0, 0);
-
     internal DisplaySystem()
     {
+    }
+
+    /// <summary>
+    ///     Gets or sets the size of the display (in cells).
+    /// </summary>
+    public VectorInt Size
+    {
+        get;
+
+        protected set
+        {
+            if (field == value)
+            {
+                return;
+            }
+
+            Buffer = new FrameBuffer(value.X, value.Y);
+            Screen = new FrameBuffer(value.X, value.Y);
+
+            field = value;
+            Game?.Bus.Broadcast(new ResizedMessage(field));
+        }
     }
 
     /// <summary>
@@ -34,40 +54,20 @@ public abstract class DisplaySystem : Core.System, ICameraTarget
         }
     }
 
-    private protected FrameBuffer Screen { get; private set; } = new(0, 0);
-
-    /// <summary>
-    ///     Gets or sets the size of the display (in cells).
-    /// </summary>
-    public VectorInt Size
-    {
-        get;
-
-        protected set
-        {
-            if (field == value)
-            {
-                return;
-            }
-
-            buffer = new FrameBuffer(value.X, value.Y);
-            Screen = new FrameBuffer(value.X, value.Y);
-
-            field = value;
-            Game?.Bus.Broadcast(new ResizedMessage(field));
-        }
-    }
-
     FrameBuffer ICameraTarget.Buffer
     {
-        get => buffer;
-        set => buffer = value;
+        get => Buffer;
+        set => Buffer = value;
     }
+
+    private protected FrameBuffer Buffer { get; set; } = new(0, 0);
+
+    private protected FrameBuffer Screen { get; private set; } = new(0, 0);
 
     void ICameraTarget.Update()
     {
         PrintBuffer();
-        (buffer, Screen) = (Screen, buffer);
+        (Buffer, Screen) = (Screen, Buffer);
     }
 
     private protected abstract void PrintBuffer();
@@ -75,12 +75,24 @@ public abstract class DisplaySystem : Core.System, ICameraTarget
     /// <summary>
     ///     Broadcast when the display's size changes.
     /// </summary>
-    /// <param name="NewSize">The display's size after resizing.</param>
-    public record struct ResizedMessage(VectorInt NewSize);
+    /// <param name="newSize">The display's size after resizing.</param>
+    public readonly struct ResizedMessage(VectorInt newSize)
+    {
+        /// <summary>
+        ///     Gets the updated size of the <see cref="Display"/>.
+        /// </summary>
+        public VectorInt NewSize { get; } = newSize;
+    }
 
     /// <summary>
-    ///     Broadcast when the mouse is moved.
+    ///     Broadcast when the mouse moves.
     /// </summary>
-    /// <param name="NewPosition">The position of the mouse after the movement.</param>
-    public record struct MouseMovedMessage(VectorInt NewPosition);
+    /// <param name="newPosition">The position of the mouse after moving.</param>
+    public readonly struct MouseMovedMessage(VectorInt newPosition)
+    {
+        /// <summary>
+        ///     Gets the updated position of the mouse.
+        /// </summary>
+        public VectorInt NewPosition { get; } = newPosition;
+    }
 }

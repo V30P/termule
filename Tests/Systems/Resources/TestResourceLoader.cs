@@ -6,12 +6,6 @@ namespace Termule.Tests.Systems.Resources;
 
 public class TestResourceLoader
 {
-    private class FakeResource(string text) : IResource
-    {
-        public string Text { get; set; } = text;
-        public static string FileExtension => ".fake";
-    }
-
     [Fact]
     public void Load_CachesValuesAndPullFromCache()
     {
@@ -62,7 +56,7 @@ public class TestResourceLoader
     {
         ResourceLoader resourceLoader = new(new MockFileSystem(), "/");
 
-        Assert.Throws<ResourceLoadException>(() => resourceLoader.Load<FakeResource>("test"));
+        _ = Assert.Throws<ResourceLoadException>(() => resourceLoader.Load<FakeResource>("test"));
     }
 
     [Fact]
@@ -91,5 +85,12 @@ public class TestResourceLoader
         FakeResource loaded = resourceLoader.Load<FakeResource>("dir1/dir2/test");
 
         Assert.Equivalent(new FakeResource("Test"), loaded);
+    }
+
+    private sealed class FakeResource(string text) : IResource
+    {
+        public static string FileExtension => ".fake";
+
+        public string Text { get; set; } = text;
     }
 }

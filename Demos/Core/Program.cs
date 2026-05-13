@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Reflection;
 using Termule.Engine.Components;
 using Termule.Engine.Core;
@@ -8,8 +9,9 @@ namespace Termule.Demos.Core;
 
 internal static class Program
 {
-    private const string ErrorTemplate = "Error: {0}.\n";
     internal static readonly Layer UiLayer = new SimpleLayer();
+
+    private const string ErrorTemplate = "Error: {0}.\n";
 
     private static readonly List<string> DemoNames = [];
     private static readonly Dictionary<string, Demo> Demos = [];
@@ -36,8 +38,18 @@ internal static class Program
         foreach (Type demoType in demoTypes)
         {
             DemoNames.Add(demoType.Name);
-            Demos.Add(demoType.Name.ToLower(), (Demo) Activator.CreateInstance(demoType));
+            Demos.Add(
+                demoType.Name.ToLower(CultureInfo.CurrentCulture),
+                (Demo) Activator.CreateInstance(demoType)
+            );
         }
+    }
+
+    private enum Flag
+    {
+        Help,
+        Interactive,
+        Stats
     }
 
     private static string HelpText => $"""
@@ -84,6 +96,8 @@ internal static class Program
             case > 1:
                 ExitWithError("Too many arguments");
                 return;
+            default:
+                break;
         }
 
         // Run the demo
@@ -109,15 +123,15 @@ internal static class Program
         arguments = [];
         foreach (string arg in args)
         {
-            if (arg.StartsWith("--"))
+            if (arg.StartsWith("--", StringComparison.CurrentCulture))
             {
                 if (FlagLongNames.TryGetValue(arg[2..], out Flag flag))
                 {
-                    flags.Add(flag);
+                    _ = flags.Add(flag);
                 }
                 else
                 {
-                    ExitWithError($"Unknown flag: '{flag}'");
+                    ExitWithError($"Unknown flag: '{arg}'");
                 }
             }
             else if (arg.StartsWith('-'))
@@ -126,11 +140,11 @@ internal static class Program
                 {
                     if (FlagShortNames.TryGetValue(flag, out Flag flagValue))
                     {
-                        flags.Add(flagValue);
+                        _ = flags.Add(flagValue);
                     }
                     else
                     {
-                        ExitWithError($"Unknown flag: '{flag}'");
+                        ExitWithError($"Unknown flag: '{arg}'");
                     }
                 }
             }
@@ -155,7 +169,7 @@ internal static class Program
 
     private static void RunDemo(string name, bool showStats = false)
     {
-        if (!Demos.TryGetValue(name.ToLower(), out Demo demo))
+        if (!Demos.TryGetValue(name.ToLower(CultureInfo.CurrentCulture), out Demo demo))
         {
             ExitWithError($"No demo '{name}' found");
             return;
@@ -178,12 +192,5 @@ internal static class Program
         }
 
         game.Run();
-    }
-
-    private enum Flag
-    {
-        Help,
-        Interactive,
-        Stats
     }
 }

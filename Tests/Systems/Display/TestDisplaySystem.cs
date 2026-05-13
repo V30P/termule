@@ -6,21 +6,6 @@ namespace Termule.Tests.Systems.Display;
 
 public class TestDisplaySystem
 {
-    private class FakeDisplaySystem : DisplaySystem
-    {
-        public int PrintCount { get; private set; }
-
-        public void SetSize(int width, int height)
-        {
-            Size = (width, height);
-        }
-
-        private protected override void PrintBuffer()
-        {
-            PrintCount++;
-        }
-    }
-
     [Fact]
     public void SettingSize_ResizesBuffer()
     {
@@ -44,5 +29,20 @@ public class TestDisplaySystem
         target.Update();
         Assert.Equal(startingBuffer, target.Buffer);
         Assert.Equal(2, displaySystem.PrintCount);
+    }
+
+    private sealed class FakeDisplaySystem : DisplaySystem
+    {
+        public int PrintCount { get; private set; }
+
+        public void SetSize(int width, int height)
+        {
+            Size = (width, height);
+        }
+
+        private protected override void PrintBuffer()
+        {
+            PrintCount++;
+        }
     }
 }

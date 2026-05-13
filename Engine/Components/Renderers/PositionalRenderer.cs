@@ -4,25 +4,25 @@ using Termule.Engine.Types;
 namespace Termule.Engine.Components;
 
 /// <summary>
-///     Base component for renderers that render based on their local transform's position.
+///     Base component for renderers that draw relative to their local <see cref="Transform"/>'s
+///     position.
 /// </summary>
 public abstract class PositionalRenderer : Renderer
 {
+    internal PositionalRenderer()
+    {
+    }
+
     /// <summary>
-    ///     Indicates whether the <see cref="Transform" />'s position should be interpreted as
+    ///     Gets or sets a value indicating whether the <see cref="Transform" />'s position should be treated as
     ///     target-space during rendering.
     /// </summary>
-    public bool TargetSpace;
+    public bool TargetSpace { get; set; }
 
     /// <summary>
     ///     Gets an offset applied to the transform position before rendering.
     /// </summary>
-    // ReSharper disable once UnassignedGetOnlyAutoProperty
     protected virtual Vector Offset { get; }
-
-    internal PositionalRenderer()
-    {
-    }
 
     /// <inheritdoc />
     protected internal sealed override void Render(FrameBuffer frame, Vector viewOrigin)
@@ -51,7 +51,7 @@ public abstract class PositionalRenderer : Renderer
 
     private protected abstract void RenderAtPosition(PositionalRenderContext context);
 
-    private protected class PositionalRenderContext(
+    private protected readonly struct PositionalRenderContext(
         FrameBuffer frame,
         VectorInt origin,
         Vector offset)

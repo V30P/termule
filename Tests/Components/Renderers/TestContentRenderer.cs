@@ -15,22 +15,6 @@ public class TestContentRenderer
         [(2.25f, 1.75f), (1f, 1f), (2, 2)]
     ];
 
-    private class ParameterlessContent() : Image(0, 0)
-    {
-    }
-
-    private class NonParameterlessContent(int width, int height) : Image(width, height)
-    {
-    }
-
-    private class FakeContent : Image
-    {
-        public FakeContent(Cell[,] cells) : base(cells.GetLength(0), cells.GetLength(1))
-        {
-            Cells = cells;
-        }
-    }
-
     [Fact]
     public void Content_WhenTypeHasParameterlessConstructor_ShouldBeInitialized()
     {
@@ -166,11 +150,27 @@ public class TestContentRenderer
 
         baseRenderer.Render(frame, (0, 0));
 
-        ContentRenderer<Image> nullRenderer = new() { TargetSpace = true, Content = null! };
+        ContentRenderer<Image> nullRenderer = new() { TargetSpace = true, Content = null };
         _ = new GameObject(new Transform { Pos = (0, 0) }, nullRenderer);
 
         nullRenderer.Render(frame, (0, 0));
 
         Assert.Equal(baseCell, frame[0, 0]);
+    }
+
+    private sealed class ParameterlessContent() : Image(0, 0)
+    {
+    }
+
+    private sealed class NonParameterlessContent(int width, int height) : Image(width, height)
+    {
+    }
+
+    private sealed class FakeContent : Image
+    {
+        public FakeContent(Cell[,] cells) : base(cells.GetLength(0), cells.GetLength(1))
+        {
+            Cells = cells;
+        }
     }
 }

@@ -4,7 +4,7 @@ using Termule.Engine.Components;
 namespace Termule.Engine.Systems.Rendering;
 
 /// <summary>
-///     Base class for that specifies the rendering order of contained renderers.
+///     Base class that specifies the rendering order of contained renderers.
 /// </summary>
 /// <param name="comparer">The comparer to use for ordering renderers.</param>
 public abstract class Layer(IComparer<Renderer> comparer) : IEnumerable<Renderer>
@@ -12,19 +12,17 @@ public abstract class Layer(IComparer<Renderer> comparer) : IEnumerable<Renderer
     private readonly List<Renderer> renderers = [];
 
     /// <summary>
-    ///     Gets or sets a value indicating whether a change has occurred that requires re-sorting.
-    /// </summary>
-    // ReSharper disable once MemberCanBePrivate.Global
-    protected bool Dirty;
-
-    /// <summary>
     ///     Initializes a new instance of the <see cref="Layer" /> class.
     /// </summary>
     /// <param name="comparison">The comparison used to create the comparer for renderers.</param>
-    protected Layer(Comparison<Renderer> comparison)
-        : this(Comparer<Renderer>.Create(comparison))
+    protected Layer(Comparison<Renderer> comparison) : this(Comparer<Renderer>.Create(comparison))
     {
     }
+
+    /// <summary>
+    ///     Gets or sets a value indicating whether a change has occurred that requires re-sorting.
+    /// </summary>
+    protected bool Dirty { get; set; }
 
     /// <inheritdoc />
     public IEnumerator<Renderer> GetEnumerator()
@@ -51,7 +49,7 @@ public abstract class Layer(IComparer<Renderer> comparer) : IEnumerable<Renderer
 
     internal void Remove(Renderer renderer)
     {
-        renderers.Remove(renderer);
+        _ = renderers.Remove(renderer);
         OnRendererRemoved(renderer);
     }
 

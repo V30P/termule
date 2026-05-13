@@ -8,19 +8,20 @@ namespace Termule.Engine.Components;
 public sealed class LineRenderer : PositionalRenderer
 {
     /// <summary>
-    ///     The points defining the line or polyline relative to this renderer’s transform.
+    ///     Gets or sets the points defining the line or polyline relative to this renderer’s
+    ///     transform.
     /// </summary>
-    public List<Vector> Points = [];
+    public List<Vector> Points { get; set; } = [];
 
     /// <summary>
-    ///     The color used to draw the lines.
+    ///     Gets or sets the color used to draw the lines.
     /// </summary>
-    public Color Color;
+    public Color Color { get; set; }
 
     /// <summary>
-    ///     indicates that lines should be drawn with unicode box-drawing characters.
+    ///     Gets or sets a value indicating whether lines should be drawn with Unicode box-drawing characters.
     /// </summary>
-    public bool UseBoxDrawingCharacters;
+    public bool UseBoxDrawingCharacters { get; set; }
 
     private protected override void RenderAtPosition(PositionalRenderContext context)
     {
@@ -32,13 +33,13 @@ public sealed class LineRenderer : PositionalRenderer
 
     private void DrawLine(VectorInt p1, VectorInt p2, PositionalRenderContext context)
     {
+        // Modified Bresenham's line algorithm
         int dx = Math.Abs(p2.X - p1.X);
         int dy = Math.Abs(p2.Y - p1.Y);
         int sx = p1.X < p2.X ? 1 : -1;
         int sy = p1.Y < p2.Y ? 1 : -1;
         int err = dx - dy;
 
-        // Modified Bresenham's line algorithm
         VectorInt? prev;
         VectorInt? curr = null;
         VectorInt? next = p1;
@@ -52,7 +53,7 @@ public sealed class LineRenderer : PositionalRenderer
             if (curr != p2 && e2 > -dy)
             {
                 err -= dy;
-                next = curr.Value with { X = curr.Value.X + sx };
+                next = new VectorInt(curr.Value.X + sx, curr.Value.Y);
 
                 // When using box-drawing characters, steps must be orthogonal
                 if (UseBoxDrawingCharacters)
@@ -65,7 +66,7 @@ public sealed class LineRenderer : PositionalRenderer
             if (curr != p2 && e2 < dx)
             {
                 err += dx;
-                next = (next ?? curr).Value with { Y = curr.Value.Y + sy };
+                next = new VectorInt((next ?? curr).Value.X, (next ?? curr).Value.Y + sy);
             }
 
             DrawSegment();

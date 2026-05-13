@@ -25,7 +25,7 @@ public class TestGameElement
         FakeGameElement element = new();
         game.Register(element);
 
-        Assert.Throws<MissingSystemException<FakeSystem>>(
+        _ = Assert.Throws<MissingSystemException<FakeSystem>>(
             element.CallGetRequiredSystem<FakeSystem>
         );
     }

@@ -5,16 +5,6 @@ namespace Termule.Tests.Systems.Rendering;
 
 public class TestRenderSystem
 {
-    private class OrderedRenderer(List<OrderedRenderer> renderTracker) : FakeRenderer
-    {
-        protected internal override void Render(FrameBuffer frame, Vector viewOrigin)
-        {
-            base.Render(frame, viewOrigin);
-
-            renderTracker.Add(this);
-        }
-    }
-
     [Fact]
     public void DefaultLayer_IsTheFirstLayer()
     {
@@ -28,8 +18,8 @@ public class TestRenderSystem
     {
         RenderSystem renderSystem = new();
 
-        Assert.Single(renderSystem.Layers);
-        Assert.IsType<SimpleLayer>(renderSystem.Layers[0]);
+        _ = Assert.Single(renderSystem.Layers);
+        _ = Assert.IsType<SimpleLayer>(renderSystem.Layers[0]);
     }
 
     [Fact]
@@ -70,12 +60,22 @@ public class TestRenderSystem
     [Fact]
     public void SettingLayers_ToNullOrEmpty_Throws()
     {
-        Assert.Throws<ArgumentException>(() =>
+        _ = Assert.Throws<ArgumentException>(() =>
             new RenderSystem { Layers = null }
         );
 
-        Assert.Throws<ArgumentException>(() =>
+        _ = Assert.Throws<ArgumentException>(() =>
             new RenderSystem { Layers = [] }
         );
+    }
+
+    private sealed class OrderedRenderer(List<OrderedRenderer> renderTracker) : FakeRenderer
+    {
+        protected internal override void Render(FrameBuffer frame, Vector viewOrigin)
+        {
+            base.Render(frame, viewOrigin);
+
+            renderTracker.Add(this);
+        }
     }
 }
