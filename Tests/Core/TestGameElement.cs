@@ -10,7 +10,7 @@ public class TestGameElement
     {
         Game game = new();
         FakeGameElement element = new();
-        game.Register(element);
+        game.Activate(element);
 
         FakeSystem system = new();
         game.Systems.Install(system);
@@ -23,7 +23,7 @@ public class TestGameElement
     {
         Game game = new();
         FakeGameElement element = new();
-        game.Register(element);
+        game.Activate(element);
 
         _ = Assert.Throws<MissingSystemException<FakeSystem>>(
             element.CallGetRequiredSystem<FakeSystem>

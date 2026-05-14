@@ -90,7 +90,11 @@ public sealed class Transform : Component
         parent = null;
     }
 
-    internal readonly struct MovedMessage(Vector newPosition)
+    /// <summary>
+    ///     Broadcast when the local <see cref="Transform"/> is moved.
+    /// </summary>
+    /// <param name="newPosition">The transform's position after the move is applied.</param>
+    public readonly struct MovedMessage(Vector newPosition)
     {
         internal readonly Vector NewPosition = newPosition;
     }

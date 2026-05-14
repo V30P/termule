@@ -5,7 +5,7 @@ A micro game engine delivering real-time games for the terminal.
 ## Overview
 Termule is written in C# on .NET 10.0 and is built from the ground up to bring a modern experience to terminal game development. The engine is primarily designed for the creation of fluid and vibrant real-time games, as opposed to the static, text-based experiences typical of the terminal. For an overview of the engine's functionality, see the [Contents](#contents) section below or take a look at the [changelog](CHANGELOG.md) to see what's new.
 
-As the sole developer of Termule, my main goal has always been to create something that is pleasant to develop and use. As such, I strive as much as possible to keep the engine low-dependency and easily extensible. Termule can be broadly classified as a component-based engine, but with an additional system type that helps alleviate some of the pains of this model (see the [Architecture](#architecture) section for more details).
+As the sole developer of Termule, my main goal has always been to create something that is pleasant to both develop and use. As such, I strive as much as possible to keep the engine low-dependency and easily extensible. Termule can be broadly classified as a component-based engine, but with an additional system type that helps alleviate some of the pains of this model (see the [Architecture](#architecture) section for more details).
 
 ## Contents
 This repository contains the following projects:
@@ -28,7 +28,7 @@ This repository contains the following projects:
    - Easy-to-use CLI
 
 ## Demos
-This repository includes a collection of self-contained, single-file demo systems bundled into a single CLI. These demos serve both to demonstrate engine functionality and provide examples of using the API. For a demo's source code, look for the `.cs` file of the same name in [`Demos/Demos`](Demos/Demos/).
+This repository includes a collection of self-contained, single-file demo systems bundled into a single CLI. These demos serve both to demonstrate engine functionality and provide examples of using Termule's API. For a demo's source code, look for the `.cs` file of the same name in [`Demos/Demos`](Demos/Demos/).
 
 ![shooter demo](assets/shooter.gif "Shooter Demo")
 
@@ -56,10 +56,10 @@ To solve this, Termule splits runtime behavior into two major types: `System`s a
 - Provide a home for global behavior and data
 - Can only be installed, uninstalled, or swapped before the game runs
 - Consist of a single instance, easily accessed by other systems or components
-- Allow complex behavior to be moved out of the component tree
+- Allow complex behavior to be moved out of the game world
 
 ### Components
-- Live inside the game's root `GameObject`
+- Live inside the game's `World` `GameObject`
 - Provide a home for modular behavior and data
 - Can be created, destroyed, and moved during runtime
 - Grouped by game objects to enable collaboration
@@ -69,18 +69,20 @@ An example `Game` structure:
 
 ```
 Game
- ├── SystemManager
+ ├── Systems
  │    ├── RenderSystem
- │    ├── Display
+ │    ├── DisplaySystem
  │    └── Keyboard
- └── Root GameObject
+ └── World
       ├── Player
       │    ├── Transform
       │    ├── Camera
-      │    └── ContentRenderer
+      │    ├── ContentRenderer
+      │    └── PlayerController
       └── Enemy
            ├── Transform
-           └── ContentRenderer
+           ├── ContentRenderer
+           └── EnemyController
 ```
 
 ## Getting Started
@@ -93,17 +95,17 @@ using Termule.Engine.Core;
 Game game = new();
 
 // Install the default systems for your platform
-game.Systems.UseDefaults();
+game.Systems.InstallDefaults();
 
 // Start the game
 game.Run();
 ```
 
-Before the game is run, systems and components can be added to `Game.Systems` and `Game.Root` respectively:
+Before the game is run, systems and components can be added via `Game.Systems` and `Game.World` respectively:
 
 ```csharp
 game.Systems.Install(new MySystem());
-game.Root.Add(new MyComponent());
+game.World.Add(new MyComponent());
 ```
 
 For information about an individual element of the engine, hover over a Termule type or member to see its documentation.

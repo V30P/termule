@@ -57,7 +57,7 @@ internal sealed class Shooter : Demo, IMessageListener<Shooter.CharacterControll
             { "Fire", new ButtonBind(Button.Mouse1) }
         };
 
-        Root.Add(
+        World.Add(
             new Transform(),
             new Camera(),
             new ContentRenderer<Text> { Centered = true, Layer = Program.UiLayer }
@@ -72,7 +72,7 @@ internal sealed class Shooter : Demo, IMessageListener<Shooter.CharacterControll
     {
         if (gameOverTimeRemaining > 0)
         {
-            Root.Get<ContentRenderer<Text>>().Content.Value =
+            World.Get<ContentRenderer<Text>>().Content.Value =
                 $"""
                      GAME OVER
                  ROUNDS SURVIVED: {roundNumber - 1}
@@ -87,13 +87,13 @@ internal sealed class Shooter : Demo, IMessageListener<Shooter.CharacterControll
         }
         else if (gracePeriodTimeRemaining > 0)
         {
-            Root.Get<ContentRenderer<Text>>().Content.Value = $"ROUND {roundNumber}";
+            World.Get<ContentRenderer<Text>>().Content.Value = $"ROUND {roundNumber}";
 
             // Start next round when grace period is finished
             gracePeriodTimeRemaining -= Game.DeltaTime;
             if (gracePeriodTimeRemaining <= 0)
             {
-                Root.Get<ContentRenderer<Text>>().Content.Value = null;
+                World.Get<ContentRenderer<Text>>().Content.Value = null;
                 for (int i = 0; i < roundNumber; i++)
                 {
                     SpawnCharacter<EnemyController>(PointOnRectangle(
@@ -111,7 +111,7 @@ internal sealed class Shooter : Demo, IMessageListener<Shooter.CharacterControll
     private void SpawnCharacter<TController>(Vector pos)
         where TController : CharacterController, new()
     {
-        Game.Root.Add(new GameObject(
+        Game.World.Add(new GameObject(
             new Transform { Pos = pos },
             new ContentRenderer<Image> { Centered = true },
             new TController()
@@ -169,7 +169,7 @@ internal sealed class Shooter : Demo, IMessageListener<Shooter.CharacterControll
                 return;
             }
 
-            Game.Root.Add(new GameObject(
+            Game.World.Add(new GameObject(
                 new Transform { Pos = GameObject.Get<Transform>().Pos },
                 new ContentRenderer<Image>
                 {
@@ -206,7 +206,7 @@ internal sealed class Shooter : Demo, IMessageListener<Shooter.CharacterControll
             base.Tick();
 
             MovementDir = Systems.Get<Keyboard>().Get<Vector>("Movement");
-            Target = Root.Get<Camera>().TargetToGamePos(Systems.Get<DisplaySystem>().MousePos);
+            Target = World.Get<Camera>().TargetToGamePos(Systems.Get<DisplaySystem>().MousePos);
 
             if (Systems.Get<Keyboard>().Get<bool>("Fire"))
             {
@@ -231,7 +231,7 @@ internal sealed class Shooter : Demo, IMessageListener<Shooter.CharacterControll
         {
             base.Tick();
 
-            if (Game.Root.GetAll<GameObject>()
+            if (Game.World.GetAll<GameObject>()
                     .FirstOrDefault(g => g.Get<PlayerController>() is not null) is { } player)
             {
                 Vector pos = GameObject.Get<Transform>().Pos;
@@ -264,7 +264,7 @@ internal sealed class Shooter : Demo, IMessageListener<Shooter.CharacterControll
             GameObject.Get<Transform>().Pos += ScaleVelocity(direction * Speed) * Game.DeltaTime;
 
             // Detect hits
-            IEnumerable<CharacterController> targets = Root.GetAll<GameObject>()
+            IEnumerable<CharacterController> targets = World.GetAll<GameObject>()
                 .Select(g => g.Get<CharacterController>())
                 .Where(c => c != null && c.GetType() != sourceType);
             foreach (CharacterController target in targets)

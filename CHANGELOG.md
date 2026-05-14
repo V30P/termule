@@ -7,28 +7,34 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [Unreleased]
 
 ### Added
-- Core messaging functionality via `MessageBus`
-- Routed messaging in the component tree via `LocalMessageBus`
-- Messages to existing behavior:
+- Messaging via `MessageBus`
+- Routed messaging in the world via `LocalMessageBus`
+- Updated existing behavior to emit messages:
   - When the game is started/stopped
-  - When a game element is registered/unregistered
+  - When a game element is activated/deactivated
   - When the display's size changes or mouse moves
   - When a transform's position changes
-- `Connections` flags and extension methods for easily creating box-drawing characters
-- `connectBoxDrawingChars` param to frame buffer's `Draw()` for proper box-drawing character layering
-- `UseBoxDrawingCharacters` field to line renderer for extra-thin lines
+- `Connections` flags and extension methods for easily working with box-drawing characters
+- `connectBoxDrawingChars` parameter to frame buffer's `Draw()` for proper box-drawing character layering
+- `UseBoxDrawingCharacters` property to line renderer for extra-thin lines
+- `Activate()` and `Deactivate()` virtual methods for game elements (replacing events)
+- `Tick()` virtual method for components (replaces event)
+- Re-added StyleCop analyzers for stricter static analysis
 
 ### Changed
-- `Ticked` event from components to a virtual method
-- `Registered` and `Unregistered` events from game elements to virtual methods
 - `GameObject` is now sealed
 - "Lightning" demo to use box drawing characters
+- `.editorconfig` for stylecop compatibility
+- Renamed `Game.Root` to `World`
+- Renamed `SystemManager.UseDefaults()` to `InstallDefaults`
 
 ### Removed
 - `IConfigurableGame` and `IConfigurableSystemManager` interfaces to get rid of unnecessary complexity
+- `Registered` and `Unregistered` events from game elements (replaced with virtual methods)
+- `Ticked` event from components (replaced with a virtual method)
 
 ### Fixed
-- Terminal display always using default background when drawing a character without one
+- Terminal display always using default background color when drawing a character without one
 - Rounding errors in "Shooter" demo collision detection
 
 ## [0.2.0] - 2026-04-25

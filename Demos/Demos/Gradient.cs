@@ -9,7 +9,7 @@ internal sealed class Gradient : Demo
 {
     protected override void Start()
     {
-        Root.Add(
+        World.Add(
             new Transform(),
             new Camera(),
             new GradientRenderer()

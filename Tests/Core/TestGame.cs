@@ -59,7 +59,7 @@ public class TestGame
     {
         Game game = new();
         FakeComponent component = new();
-        game.Root.Add(component);
+        game.World.Add(component);
         game.Start();
 
         game.RunTicks(5);
@@ -107,43 +107,43 @@ public class TestGame
     }
 
     [Fact]
-    public void Register_BroadcastsElementRegisteredMessage()
+    public void Activate_BroadcastsElementActivatedMessage()
     {
         Game game = new();
-        FakeListener<Game.ElementRegisteredMessage> listener = new();
+        FakeListener<Game.ElementActivatedMessage> listener = new();
         game.Bus.Subscribe(listener);
         FakeGameElement element = new();
 
-        game.Register(element);
+        game.Activate(element);
 
         Assert.Equal(1, listener.MessageCount);
         Assert.Equal(element, listener.ReceivedMessage.Element);
     }
 
     [Fact]
-    public void Unregister_BroadcastsElementUnregisteredMessage()
+    public void Deactivate_BroadcastsElementDeactivatedMessage()
     {
         Game game = new();
-        FakeListener<Game.ElementUnregisteredMessage> listener = new();
+        FakeListener<Game.ElementDeactivatedMessage> listener = new();
         game.Bus.Subscribe(listener);
 
         FakeGameElement element = new();
-        game.Register(element);
+        game.Activate(element);
 
-        game.Unregister(element);
+        game.Deactivate(element);
 
         Assert.Equal(1, listener.MessageCount);
         Assert.Equal(element, listener.ReceivedMessage.Element);
     }
 
     [Fact]
-    public void Unregister_ClearsElementProperties()
+    public void Deactivate_ClearsElementProperties()
     {
         Game game = new();
         FakeGameElement element = new();
-        game.Register(element);
+        game.Activate(element);
 
-        game.Unregister(element);
+        game.Deactivate(element);
 
         Assert.Null(element.GameInstance);
         Assert.True(element.HasBeenDeactivated);

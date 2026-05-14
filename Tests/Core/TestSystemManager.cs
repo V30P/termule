@@ -89,7 +89,7 @@ public class TestSystemManager
     {
         Game game = new();
 
-        game.Systems.UseDefaults();
+        game.Systems.InstallDefaults();
 
         Assert.NotNull(game.Systems.Get<Keyboard>());
         Assert.NotNull(game.Systems.Get<DisplaySystem>());

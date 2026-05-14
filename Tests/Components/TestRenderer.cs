@@ -8,7 +8,7 @@ namespace Termule.Tests.Components;
 public class TestRenderer
 {
     [Fact]
-    public void Register_WhenLayerIsSet_MovesToProvidedLayer()
+    public void Activate_WhenLayerIsSet_MovesToProvidedLayer()
     {
         Game game = new();
         FakeLayer defaultLayer = new();
@@ -18,16 +18,16 @@ public class TestRenderer
 
         FakeRenderer renderer = new() { Layer = customLayer };
 
-        game.Root.Add(renderer);
+        game.World.Add(renderer);
 
         Assert.Same(customLayer, renderer.Layer);
-        Assert.Equal(1, customLayer.RegisterCount);
-        Assert.Equal(0, customLayer.UnregisterCount);
-        Assert.Equal(0, defaultLayer.RegisterCount);
+        Assert.Equal(1, customLayer.ActivateCount);
+        Assert.Equal(0, customLayer.DeactivateCount);
+        Assert.Equal(0, defaultLayer.ActivateCount);
     }
 
     [Fact]
-    public void Register_WhenNoLayerSet_MovesToDefaultLayer()
+    public void Activate_WhenNoLayerSet_MovesToDefaultLayer()
     {
         Game game = new();
         FakeLayer layer = new();
@@ -36,15 +36,15 @@ public class TestRenderer
 
         FakeRenderer renderer = new();
 
-        game.Root.Add(renderer);
+        game.World.Add(renderer);
 
         Assert.Same(renderSystem.DefaultLayer, renderer.Layer);
-        Assert.Equal(1, layer.RegisterCount);
-        Assert.Equal(0, layer.UnregisterCount);
+        Assert.Equal(1, layer.ActivateCount);
+        Assert.Equal(0, layer.DeactivateCount);
     }
 
     [Fact]
-    public void SettingLayer_ToNullWhenRegistered_MovesRendererToDefaultLayer()
+    public void SettingLayer_ToNullWhenActivated_MovesRendererToDefaultLayer()
     {
         Game game = new();
         FakeLayer defaultLayer = new();
@@ -53,17 +53,17 @@ public class TestRenderer
         game.Systems.Install(renderSystem);
 
         FakeRenderer renderer = new() { Layer = customLayer };
-        game.Root.Add(renderer);
+        game.World.Add(renderer);
 
         renderer.Layer = null;
 
         Assert.Same(defaultLayer, renderer.Layer);
-        Assert.Equal(1, customLayer.UnregisterCount);
-        Assert.Equal(1, defaultLayer.RegisterCount);
+        Assert.Equal(1, customLayer.DeactivateCount);
+        Assert.Equal(1, defaultLayer.ActivateCount);
     }
 
     [Fact]
-    public void SettingLayer_WhenRegistered_MovesRendererBetweenLayers()
+    public void SettingLayer_WhenActivated_MovesRendererBetweenLayers()
     {
         Game game = new();
         FakeLayer defaultLayer = new();
@@ -72,21 +72,21 @@ public class TestRenderer
         game.Systems.Install(renderSystem);
 
         FakeRenderer renderer = new();
-        game.Root.Add(renderer);
+        game.World.Add(renderer);
 
         Assert.Same(defaultLayer, renderer.Layer);
-        Assert.Equal(1, defaultLayer.RegisterCount);
+        Assert.Equal(1, defaultLayer.ActivateCount);
 
         renderer.Layer = customLayer;
 
         Assert.Same(customLayer, renderer.Layer);
-        Assert.Equal(1, defaultLayer.UnregisterCount);
-        Assert.Equal(1, customLayer.RegisterCount);
-        Assert.Equal(0, customLayer.UnregisterCount);
+        Assert.Equal(1, defaultLayer.DeactivateCount);
+        Assert.Equal(1, customLayer.ActivateCount);
+        Assert.Equal(0, customLayer.DeactivateCount);
     }
 
     [Fact]
-    public void Unregister_RemovesFromCurrentLayer()
+    public void Deactivate_RemovesFromCurrentLayer()
     {
         Game game = new();
         FakeLayer defaultLayer = new();
@@ -94,7 +94,7 @@ public class TestRenderer
         game.Systems.Install(renderSystem);
 
         FakeRenderer renderer = new();
-        game.Root.Add(renderer);
+        game.World.Add(renderer);
     }
 
     private sealed class FakeRenderer : Renderer
@@ -106,18 +106,18 @@ public class TestRenderer
 
     private sealed class FakeLayer() : Layer((r1, r2) => r1.ElementId.CompareTo(r2.ElementId))
     {
-        public int RegisterCount { get; private set; }
+        public int ActivateCount { get; private set; }
 
-        public int UnregisterCount { get; private set; }
+        public int DeactivateCount { get; private set; }
 
         protected override void OnRendererAdded(Renderer renderer)
         {
-            RegisterCount++;
+            ActivateCount++;
         }
 
         protected override void OnRendererRemoved(Renderer renderer)
         {
-            UnregisterCount++;
+            DeactivateCount++;
         }
     }
 }

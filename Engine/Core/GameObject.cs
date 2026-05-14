@@ -80,10 +80,10 @@ public sealed class GameObject : Component, IEnumerable<Component>
             }
         }
 
-        // Register all components simultaneously to handle dependencies
+        // Activate all components simultaneously to handle dependencies
         foreach (Component component in componentsToAdd)
         {
-            Game?.Register(component);
+            Game?.Activate(component);
         }
     }
 
@@ -109,7 +109,7 @@ public sealed class GameObject : Component, IEnumerable<Component>
         component.SetGameObject(null);
         tickingDirty = true;
 
-        Game?.Unregister(component);
+        Game?.Deactivate(component);
 
         IEnumerable<List<Component>> typedComponentLists = GetImplementedTypes(component)
             .Select(type => typesToComponents[type]);
@@ -181,10 +181,10 @@ public sealed class GameObject : Component, IEnumerable<Component>
     {
         foreach (Component component in components.ToArray())
         {
-            Game.Register(component);
+            Game.Activate(component);
         }
 
-        Game.Register(Bus);
+        Game.Activate(Bus);
     }
 
     /// <inheritdoc />
@@ -192,10 +192,10 @@ public sealed class GameObject : Component, IEnumerable<Component>
     {
         foreach (Component component in components.ToArray())
         {
-            Game.Unregister(component);
+            Game.Deactivate(component);
         }
 
-        Game.Unregister(Bus);
+        Game.Deactivate(Bus);
     }
 
     private static List<Type> GetImplementedTypes(object o)

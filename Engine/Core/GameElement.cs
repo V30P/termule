@@ -24,9 +24,9 @@ public abstract class GameElement
     protected bool Activated => Game != null;
 
     /// <summary>
-    ///     Gets the root of this element's <see cref="Game"/>.
+    ///     Gets the world <see cref="GameObject"/>  of this element's <see cref="Game"/>.
     /// </summary>
-    protected GameObject Root => Game?.Root;
+    protected GameObject World => Game?.World;
 
     /// <summary>
     ///     Gets the <see cref="SystemManager" /> of this element's <see cref="Game"/>.

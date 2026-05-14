@@ -20,7 +20,7 @@ public class TestLocalMessageBus
         GameObject gameObject = [child];
         GameObject parent = [gameObject];
 
-        game.Root.Add(parent);
+        game.World.Add(parent);
 
         FakeListener<bool> downwardListener = new();
         FakeListener<bool> localListener = new();

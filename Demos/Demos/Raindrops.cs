@@ -17,7 +17,7 @@ internal sealed class Raindrops : Demo
 
     protected override void Start()
     {
-        Root.Add(
+        World.Add(
             new Transform(),
             new Camera { BackgroundCell = new Cell((0, 0, 0)) }
         );
@@ -37,7 +37,7 @@ internal sealed class Raindrops : Demo
 
     private void SpawnRaindrop(float x, float y)
     {
-        Root.Add(
+        World.Add(
             new GameObject(
                 new Transform(),
                 new CircleRenderer { TargetSpace = true, DoubleWide = true },

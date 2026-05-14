@@ -14,7 +14,7 @@ public class TestTransform
         GameObject gameObject = [transform];
         GameObject parentGameObject = [new Transform { Pos = (1, 1) }, gameObject];
 
-        game.Root.Add(parentGameObject);
+        game.World.Add(parentGameObject);
 
         Assert.Equal((2, 2), transform.Pos);
     }
@@ -25,7 +25,7 @@ public class TestTransform
         Game game = new();
         Transform transform = new() { Pos = (1, 1) };
 
-        game.Root.Add(transform);
+        game.World.Add(transform);
 
         Assert.Equal((1, 1), transform.Pos);
     }
@@ -35,10 +35,10 @@ public class TestTransform
     {
         Game game = new();
         Transform transform = new();
-        game.Root.Add(transform);
+        game.World.Add(transform);
 
         FakeListener<Transform.MovedMessage> listener = new();
-        game.Root.Bus.Subscribe(listener);
+        game.World.Bus.Subscribe(listener);
 
         transform.Pos = (1, 1);
 
@@ -55,7 +55,7 @@ public class TestTransform
 
         Transform parent = new();
         GameObject parentGameObject = [parent, gameObject];
-        game.Root.Add(parentGameObject);
+        game.World.Add(parentGameObject);
 
         parent.Pos = (-1, -1);
 
@@ -75,7 +75,7 @@ public class TestTransform
             gameObject = [new Transform { LocalPos = (1, 1) }, gameObject];
         }
 
-        game.Root.Add(gameObject);
+        game.World.Add(gameObject);
 
         Assert.Equal((10, 10), transform.Pos);
     }
@@ -99,7 +99,7 @@ public class TestTransform
         Transform transform = new() { Pos = (1, 1) };
         GameObject gameObject = [transform];
         GameObject parentGameObject = [new Transform { Pos = (1, 1) }, gameObject];
-        game.Root.Add(parentGameObject);
+        game.World.Add(parentGameObject);
 
         transform.LocalPos = (-1, -1);
 
@@ -113,7 +113,7 @@ public class TestTransform
         Transform transform = new() { Pos = (1, 1) };
         GameObject gameObject = [transform];
         GameObject parentGameObject = [new Transform { Pos = (1, 1) }, gameObject];
-        game.Root.Add(parentGameObject);
+        game.World.Add(parentGameObject);
 
         transform.Pos = (0, 0);
 
@@ -125,10 +125,10 @@ public class TestTransform
     {
         Game game = new();
         Transform transform = new();
-        game.Root.Add(transform);
+        game.World.Add(transform);
 
         FakeListener<Transform.MovedMessage> listener = new();
-        game.Root.Bus.Subscribe(listener);
+        game.World.Bus.Subscribe(listener);
 
         transform.Pos = (0, 0);
 

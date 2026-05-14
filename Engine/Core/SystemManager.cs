@@ -32,7 +32,7 @@ public class SystemManager : GameElement
         Uninstall<TSystem>();
 
         systems[GetSystemType<TSystem>()] = system;
-        Game.Register(system);
+        Game.Activate(system);
     }
 
     /// <summary>
@@ -52,14 +52,14 @@ public class SystemManager : GameElement
         Type systemType = GetSystemType<TSystem>();
         if (systems.Remove(systemType, out System system))
         {
-            Game.Unregister(system);
+            Game.Deactivate(system);
         }
     }
 
     /// <summary>
     ///     Installs the operating-system-specific default <see cref="Systems" />s.
     /// </summary>
-    public void UseDefaults()
+    public void InstallDefaults()
     {
         Install(new Keyboard());
 

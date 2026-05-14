@@ -19,11 +19,11 @@ public class TestGameObject
     }
 
     [Fact]
-    public void Add_AddsAndRegistersComponent()
+    public void Add_AddsAndActivatesComponent()
     {
         Game game = new();
         GameObject gameObject = [];
-        game.Root.Add(gameObject);
+        game.World.Add(gameObject);
         FakeComponent component = new();
 
         gameObject.Add(component);
@@ -33,11 +33,11 @@ public class TestGameObject
     }
 
     [Fact]
-    public void Add_AddsThenRegistersComponentsSimultaneously()
+    public void Add_AddsThenActivatesComponentsSimultaneously()
     {
         Game game = new();
         GameObject gameObject = [];
-        game.Root.Add(gameObject);
+        game.World.Add(gameObject);
         DependentComponent dependentComponent = new();
 
         gameObject.Add(dependentComponent, new FakeComponent());
@@ -104,23 +104,23 @@ public class TestGameObject
     }
 
     [Fact]
-    public void Register_RegistersComponents()
+    public void Activate_ActivatesComponents()
     {
         Game game = new();
         FakeComponent component = new();
         GameObject gameObject = [component];
 
-        game.Root.Add(gameObject);
+        game.World.Add(gameObject);
 
         Assert.Equal(1, component.ActivateCount);
     }
 
     [Fact]
-    public void Remove_RemovesAndUnregistersComponent()
+    public void Remove_RemovesAndDeactivatesComponent()
     {
         Game game = new();
         GameObject gameObject = [];
-        game.Root.Add(gameObject);
+        game.World.Add(gameObject);
 
         FakeComponent component = new();
         gameObject.Add(component);
@@ -152,14 +152,14 @@ public class TestGameObject
     }
 
     [Fact]
-    public void Unregister_UnregistersComponents()
+    public void Deactivate_DeactivatesComponents()
     {
         Game game = new();
         FakeComponent component = new();
         GameObject gameObject = [component];
-        game.Root.Add(gameObject);
+        game.World.Add(gameObject);
 
-        game.Root.Remove(gameObject);
+        game.World.Remove(gameObject);
 
         Assert.Equal(1, component.DeactivateCount);
     }

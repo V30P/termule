@@ -176,13 +176,13 @@ internal static class Program
         }
 
         Game game = new();
-        game.Systems.UseDefaults();
+        game.Systems.InstallDefaults();
         game.Systems.Install(new RenderSystem { Layers = [new SimpleLayer(), UiLayer] });
         game.Systems.Install(demo);
 
         if (showStats)
         {
-            game.Root.Add(
+            game.World.Add(
                 new GameObject(
                     new Transform(),
                     new ContentRenderer<Text> { TargetSpace = true, Layer = UiLayer },

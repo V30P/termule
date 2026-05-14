@@ -1,7 +1,7 @@
 namespace Termule.Engine.Core.Messaging;
 
 /// <summary>
-///     A message bus for routing messages through the component tree.
+///     A message bus for routing messages through the world.
 /// </summary>
 /// <param name="gameObject">The GameObject this bus is part of.</param>
 public class LocalMessageBus(GameObject gameObject) : MessageBus

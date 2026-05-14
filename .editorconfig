@@ -1,5 +1,3 @@
-# Full project config
-
 root = true
 
 [*]
@@ -18,7 +16,7 @@ indent_size = 4
 tab_width = 4
 max_line_length = 100
 
-# Analyzers
+# Analyzer Severities
 dotnet_analyzer_diagnostic.severity = warning
 dotnet_analyzer_diagnostic.category-Style.severity = warning
 dotnet_analyzer_diagnostic.category-Performance.severity = warning
@@ -26,14 +24,14 @@ dotnet_analyzer_diagnostic.category-Reliability.severity = warning
 dotnet_analyzer_diagnostic.category-Maintainability.severity = warning
 dotnet_analyzer_diagnostic.category-StyleCop.severity = warning
 
-# Member Qualification
+# No member qualification
 dotnet_style_qualification_for_field = false:none
 dotnet_style_qualification_for_method = false:none
 dotnet_style_qualification_for_property = false:none
 dotnet_style_qualification_for_event = false:none
 dotnet_diagnostic.IDE0003.severity = none
 
-# Stylecop suppression
+# StyleCop suppression
 dotnet_diagnostic.SA1127.severity = none
 dotnet_diagnostic.SA1101.severity = none
 dotnet_diagnostic.SA1200.severity = none

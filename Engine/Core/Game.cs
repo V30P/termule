@@ -13,16 +13,16 @@ public sealed class Game
     private readonly Stopwatch stopwatch = new();
 
     private bool stop;
-    private uint registerCount;
+    private uint activationCount;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="Game" /> class.
     /// </summary>
     public Game()
     {
-        Register(Root);
-        Register(Systems);
-        Register(Bus);
+        Activate(World);
+        Activate(Systems);
+        Activate(Bus);
     }
 
     /// <summary>
@@ -31,9 +31,9 @@ public sealed class Game
     public SystemManager Systems { get; } = new();
 
     /// <summary>
-    ///     Gets the root game object.
+    ///     Gets the world game object.
     /// </summary>
-    public GameObject Root { get; } = [];
+    public GameObject World { get; } = [];
 
     /// <summary>
     ///     Gets the global message bus.
@@ -126,7 +126,7 @@ public sealed class Game
         stopwatch.Restart();
 
         Systems.Tick();
-        Root.Tick();
+        World.Tick();
 
         // Cap tickrate
         int requiredDelay = (int) (1f / TargetTps * 1000)
@@ -158,43 +158,57 @@ public sealed class Game
         Started = false;
     }
 
-    internal void Register(GameElement element)
+    internal void Activate(GameElement element)
     {
         if (elements.Add(element))
         {
-            element.ElementId = registerCount++;
+            element.ElementId = activationCount++;
             element.SetGame(this);
 
-            Bus.Broadcast(new ElementRegisteredMessage(element));
+            Bus.Broadcast(new ElementActivatedMessage(element));
         }
     }
 
-    internal void Unregister(GameElement element)
+    internal void Deactivate(GameElement element)
     {
         if (elements.Remove(element))
         {
             element.ElementId = 0;
             element.SetGame(null);
 
-            Bus.Broadcast(new ElementUnregisteredMessage(element));
+            Bus.Broadcast(new ElementDeactivatedMessage(element));
         }
     }
 
-    internal readonly struct ElementRegisteredMessage(GameElement element)
+    /// <summary>
+    ///     Broadcast when the <see cref="Game"/> is started.
+    /// </summary>
+    public struct StartedMessage
+    {
+    }
+
+    /// <summary>
+    ///     Broadcast when the <see cref="Game"/> is stopped.
+    /// </summary>
+    public struct StoppedMessage
+    {
+    }
+
+    /// <summary>
+    ///     Broadcast when a <see cref="GameElement"/> is activated.
+    /// </summary>
+    /// <param name="element">The element that was activated.</param>
+    public readonly struct ElementActivatedMessage(GameElement element)
     {
         internal readonly GameElement Element = element;
     }
 
-    internal readonly struct ElementUnregisteredMessage(GameElement element)
+    /// <summary>
+    ///     Broadcast when a <see cref="GameElement"/> is deactivated.
+    /// </summary>
+    /// <param name="element">The element that was deactivated.</param>
+    public readonly struct ElementDeactivatedMessage(GameElement element)
     {
         internal readonly GameElement Element = element;
-    }
-
-    internal struct StartedMessage
-    {
-    }
-
-    internal struct StoppedMessage
-    {
     }
 }

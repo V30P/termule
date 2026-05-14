@@ -17,7 +17,7 @@ internal sealed class Lightning : Demo
 
     protected override void Start()
     {
-        Root.Add(
+        World.Add(
             new Transform(),
             new Camera { BackgroundCell = new Cell((0, 0, 0)) }
         );
@@ -37,7 +37,7 @@ internal sealed class Lightning : Demo
 
     private void SpawnBolt()
     {
-        Root.Add(
+        World.Add(
             new GameObject(
                 new Transform(),
                 new BoltController(random)

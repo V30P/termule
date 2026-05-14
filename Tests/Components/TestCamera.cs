@@ -34,7 +34,7 @@ public class TestCamera
         FakeTarget target = new((targetSize[0], targetSize[1]));
         Game game = new();
         Camera camera = new() { Target = target };
-        game.Root.Add(
+        game.World.Add(
             new Transform { Pos = (transformPos[0], transformPos[1]) },
             camera);
 
@@ -54,7 +54,7 @@ public class TestCamera
         FakeTarget target = new((targetSize[0], targetSize[1]));
         Game game = new();
         Camera camera = new() { Target = target };
-        game.Root.Add(
+        game.World.Add(
             new Transform { Pos = (transformPos[0], transformPos[1]) },
             camera);
 
@@ -68,7 +68,7 @@ public class TestCamera
     {
         FakeTarget target = new((0, 0));
         Game game = new();
-        game.Root.Add(new Camera { Target = target });
+        game.World.Add(new Camera { Target = target });
 
         game.Systems.Install(new RenderSystem());
         game.Start();
@@ -84,7 +84,7 @@ public class TestCamera
         Cell background = new(BasicColor.White, 'T', BasicColor.Black);
         FakeTarget target = new((5, 5));
         Game game = new();
-        game.Root.Add(
+        game.World.Add(
             new Camera { Target = target, BackgroundCell = background });
 
         game.Systems.Install(new RenderSystem());

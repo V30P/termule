@@ -11,7 +11,7 @@ internal sealed class Screensaver : Demo
 {
     protected override void Start()
     {
-        Root.Add(
+        World.Add(
             new Transform(),
             new Camera(),
             new GameObject(
