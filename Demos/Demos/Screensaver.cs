@@ -28,13 +28,13 @@ internal sealed class Screensaver : Demo
 
         private readonly Color[] colors =
         [
-            (255, 0, 0),
-            (255, 127, 0),
-            (255, 255, 0),
-            (0, 255, 0),
-            (0, 0, 255),
-            (75, 0, 130),
-            (143, 0, 255)
+            (1, 0, 0),
+            (1, 1, 0),
+            (1, 0, 1),
+            (0, 1, 1),
+            (1, 0, 0),
+            (0, 1, 0),
+            (1, 0.65f, 1)
         ];
 
         private readonly Random random = new();

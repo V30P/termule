@@ -62,7 +62,7 @@ internal sealed class Raindrops : Demo
 
             CircleRenderer circleRenderer = GameObject.Get<CircleRenderer>();
             circleRenderer.Radius = GetRadius(time);
-            circleRenderer.Color = (0, 0, (int) (255 * (1 - (time / Lifespan))));
+            circleRenderer.Color = (0, 0, 1 - (time / Lifespan));
 
             VectorInt displaySize = Systems.Get<DisplaySystem>().Size;
             GameObject.Get<Transform>().Pos = (pos.X * displaySize.X, pos.Y * displaySize.Y);

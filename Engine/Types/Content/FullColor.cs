@@ -8,7 +8,7 @@ namespace Termule.Engine.Types;
 public readonly struct FullColor
 {
     [JsonConstructor]
-    internal FullColor(int r, int g, int b)
+    internal FullColor(float r, float g, float b)
     {
         ThrowIfOutOfRange(r, nameof(r));
         ThrowIfOutOfRange(g, nameof(g));
@@ -22,17 +22,26 @@ public readonly struct FullColor
     /// <summary>
     ///     Gets the blue component.
     /// </summary>
-    public readonly int B { get; }
+    public readonly float B { get; }
 
     /// <summary>
     ///     Gets the green component.
     /// </summary>
-    public readonly int G { get; }
+    public readonly float G { get; }
 
     /// <summary>
     ///     Gets the red component.
     /// </summary>
-    public readonly int R { get; }
+    public readonly float R { get; }
+
+    /// <summary>
+    ///     Creates a <see cref="FullColor"/> from a tuple representing its components.
+    /// </summary>
+    /// <param name="tuple">The RGB tuple to use.</param>
+    public static implicit operator FullColor((float r, float g, float b) tuple)
+    {
+        return new FullColor(tuple.r, tuple.g, tuple.b);
+    }
 
     /// <summary>
     ///     Determines whether two FullColor instances are equal.
@@ -70,14 +79,14 @@ public readonly struct FullColor
         return HashCode.Combine(R, G, B);
     }
 
-    private static void ThrowIfOutOfRange(int value, string name)
+    private static void ThrowIfOutOfRange(float value, string name)
     {
-        if (value is < 0 or > 255)
+        if (value is < 0 or > 1)
         {
             throw new ArgumentOutOfRangeException(
                 name,
                 value,
-                "Color RGB values must be between 0 and 255"
+                "Color RGB values must be between 0 and 1"
             );
         }
     }

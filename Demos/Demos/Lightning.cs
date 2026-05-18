@@ -101,7 +101,7 @@ internal sealed class Lightning : Demo
                     {
                         TargetSpace = true,
                         Points = branch,
-                        Color = (255, 255, 255),
+                        Color = (1, 1, 1),
                         UseBoxDrawingCharacters = true
                     }
                 );

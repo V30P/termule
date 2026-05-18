@@ -3,16 +3,37 @@ using System.Text.Json.Serialization;
 namespace Termule.Engine.Types;
 
 /// <summary>
-///     Color that can be rendered by terminals.
+///     Color that can be rendered by terminals. Wraps a <see cref="FullColor"/> or
+///     <see cref="BasicColor"/>.
 /// </summary>
 public readonly struct Color
 {
     /// <summary>
     ///     Initializes a new instance of the <see cref="Color"/> struct.
     /// </summary>
-    public Color()
-        : this(BasicColor.Default)
+    /// <param name="fullColor">The full color to wrap.</param>
+    public Color(FullColor fullColor)
     {
+        Full = fullColor;
+    }
+
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="Color"/> struct.
+    /// </summary>
+    /// <param name="r">The <see cref="FullColor"/> red component.</param>
+    /// <param name="g">The <see cref="FullColor"/> green component.</param>
+    /// <param name="b">The <see cref="FullColor"/> blue component.</param>
+    public Color(float r, float g, float b) : this((r, g, b))
+    {
+    }
+
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="Color"/> struct.
+    /// </summary>
+    /// <param name="baseColor">The base color to wrap.</param>
+    public Color(BasicColor baseColor)
+    {
+        Basic = baseColor;
     }
 
     [JsonConstructor]
@@ -22,16 +43,6 @@ public readonly struct Color
     {
         Full = full;
         Basic = basic;
-    }
-
-    private Color(int r, int g, int b)
-    {
-        Full = new FullColor(r, g, b);
-    }
-
-    private Color(BasicColor baseColor)
-    {
-        Basic = baseColor;
     }
 
     /// <summary>
@@ -45,12 +56,21 @@ public readonly struct Color
     public BasicColor Basic { get; private init; }
 
     /// <summary>
-    ///     Creates a color from an RGB tuple.
+    ///     Creates a <see cref="Color"/> from a <see cref="FullColor"/>.
     /// </summary>
-    /// <param name="t">The RGB values to use.</param>
-    public static implicit operator Color((int r, int g, int b) t)
+    /// <param name="fullColor">The FullColor to use.</param>
+    public static implicit operator Color(FullColor fullColor)
     {
-        return new Color(t.r, t.g, t.b);
+        return new Color(fullColor);
+    }
+
+    /// <summary>
+    ///     Creates a <see cref="Color"/> from a tuple representing a <see cref="FullColor"/>.
+    /// </summary>
+    /// <param name="tuple">The RGB tuple to use.</param>
+    public static implicit operator Color((float r, float g, float b) tuple)
+    {
+        return new Color((tuple.r, tuple.g, tuple.b));
     }
 
     /// <summary>

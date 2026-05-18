@@ -42,15 +42,14 @@ internal sealed class Gradient : Demo
             int segmentIndex = (int) segmentPosition;
             float segmentProgress = segmentPosition - segmentIndex;
 
-            int intensity = (int) (segmentProgress * 255);
             return segmentIndex switch
             {
-                0 => (255, intensity, 0),
-                1 => (255 - intensity, 255, 0),
-                2 => (0, 255, intensity),
-                3 => (0, 255 - intensity, 255),
-                4 => (intensity, 0, 255),
-                _ => (255, 0, 255 - intensity)
+                0 => (1, segmentProgress, 0),
+                1 => (1 - segmentProgress, 1, 0),
+                2 => (0, 1, segmentProgress),
+                3 => (0, 1 - segmentProgress, 1),
+                4 => (segmentProgress, 0, 1),
+                _ => (1, 0, 1 - segmentProgress)
             };
         }
     }

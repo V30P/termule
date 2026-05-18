@@ -10,20 +10,29 @@ public class TestColor
         Color color = BasicColor.Blue;
 
         Assert.Equal(BasicColor.Blue, color.Basic);
-        Assert.Null(color.Full);
     }
 
     [Fact]
     public void FullColorConstructor_SetsFull()
     {
-        FullColor full = new(100, 150, 200);
-
-        Color color = (full.R, full.G, full.B);
+        FullColor fullColor = new(0.1f, 0.2f, 0.3f);
+        Color color = new(fullColor);
 
         _ = Assert.NotNull(color.Full);
-        Assert.Equal(100, color.Full.Value.R);
-        Assert.Equal(150, color.Full.Value.G);
-        Assert.Equal(200, color.Full.Value.B);
+        Assert.Equal(0.1f, color.Full.Value.R);
+        Assert.Equal(0.2f, color.Full.Value.G);
+        Assert.Equal(0.3f, color.Full.Value.B);
+    }
+
+    [Fact]
+    public void FloatComponentConstructor_SetsFullColor()
+    {
+        Color color = new(0.5f, 0.6f, 0.7f);
+
+        _ = Assert.NotNull(color.Full);
+        Assert.Equal(0.5f, color.Full.Value.R);
+        Assert.Equal(0.6f, color.Full.Value.G);
+        Assert.Equal(0.7f, color.Full.Value.B);
     }
 
     [Fact]
@@ -36,22 +45,25 @@ public class TestColor
     }
 
     [Fact]
-    public void ImplicitOperatorFronTuple_CreatesColor()
+    public void ImplicitOperatorFromFullColor_CreatesColor()
     {
-        Color color = (255, 128, 64);
+        FullColor fullColor = new(0.25f, 0.5f, 0.75f);
+        Color color = fullColor;
 
         _ = Assert.NotNull(color.Full);
-        Assert.Equal(255, color.Full.Value.R);
-        Assert.Equal(128, color.Full.Value.G);
-        Assert.Equal(64, color.Full.Value.B);
+        Assert.Equal(0.25f, color.Full.Value.R);
+        Assert.Equal(0.5f, color.Full.Value.G);
+        Assert.Equal(0.75f, color.Full.Value.B);
     }
 
     [Fact]
-    public void ParameterlessConstructor_CreatesDefaultColor()
+    public void ImplicitOperatorFromTuple_CreatesColor()
     {
-        Color color = new();
+        Color color = (0.1f, 0.5f, 0.9f);
 
-        Assert.Equal(BasicColor.Default, color.Basic);
-        Assert.Null(color.Full);
+        _ = Assert.NotNull(color.Full);
+        Assert.Equal(0.1f, color.Full.Value.R);
+        Assert.Equal(0.5f, color.Full.Value.G);
+        Assert.Equal(0.9f, color.Full.Value.B);
     }
 }

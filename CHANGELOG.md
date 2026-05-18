@@ -20,6 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - `Activate()` and `Deactivate()` virtual methods for game elements (replacing events)
 - `Tick()` virtual method for components (replaces event)
 - Re-added StyleCop analyzers for stricter static analysis
+- Missing constructors and conversions for seamless color types
 
 ### Changed
 - `GameObject` is now sealed
@@ -36,6 +37,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Fixed
 - Terminal display always using default background color when drawing a character without one
 - Rounding errors in "Shooter" demo collision detection
+- `VectorInt`'s scalar division requiring an integer divisor
 
 ## [0.2.0] - 2026-04-25
 

@@ -76,9 +76,9 @@ public readonly struct VectorInt(int x = 0, int y = 0)
     /// <param name="v">The integer vector to divide.</param>
     /// <param name="f">The scalar divisor.</param>
     /// <returns>The resulting vector.</returns>
-    public static Vector operator /(VectorInt v, int f)
+    public static Vector operator /(VectorInt v, float f)
     {
-        return new Vector((float) v.X / f, (float) v.Y / f);
+        return new Vector(v.X / f, v.Y / f);
     }
 
     /// <summary>

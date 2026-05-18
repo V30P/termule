@@ -160,6 +160,11 @@ public abstract class TerminalDisplaySystem : DisplaySystem
         FlushBuilder();
     }
 
+    private static int To256(float value)
+    {
+        return (int) (value * 255);
+    }
+
     private void FlushBuilder()
     {
         foreach (ReadOnlyMemory<char> chunk in builder.GetChunks())
@@ -184,11 +189,11 @@ public abstract class TerminalDisplaySystem : DisplaySystem
         if (color.Full is { } fullColor)
         {
             _ = builder.Append("48;2;");
-            _ = builder.Append(fullColor.R);
+            _ = builder.Append(To256(fullColor.R));
             _ = builder.Append(';');
-            _ = builder.Append(fullColor.G);
+            _ = builder.Append(To256(fullColor.G));
             _ = builder.Append(';');
-            _ = builder.Append(fullColor.B);
+            _ = builder.Append(To256(fullColor.B));
         }
         else
         {
@@ -201,11 +206,11 @@ public abstract class TerminalDisplaySystem : DisplaySystem
         if (color.Full is { } fullColor)
         {
             _ = builder.Append("38;2;");
-            _ = builder.Append(fullColor.R);
+            _ = builder.Append(To256(fullColor.R));
             _ = builder.Append(';');
-            _ = builder.Append(fullColor.G);
+            _ = builder.Append(To256(fullColor.G));
             _ = builder.Append(';');
-            _ = builder.Append(fullColor.B);
+            _ = builder.Append(To256(fullColor.B));
         }
         else
         {
