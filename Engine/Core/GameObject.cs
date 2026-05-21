@@ -51,10 +51,10 @@ public sealed class GameObject : Component, IEnumerable<Component>
     /// <summary>
     ///     Adds the provided components to this game object.
     /// </summary>
-    /// <param name="componentsToAdd">The components to add.</param>
-    public void Add(params Component[] componentsToAdd)
+    /// <param name="components">The components to add.</param>
+    public void Add(params Component[] components)
     {
-        foreach (Component component in componentsToAdd)
+        foreach (Component component in components)
         {
             ArgumentNullException.ThrowIfNull(component);
             if (component.GameObject != null)
@@ -64,7 +64,7 @@ public sealed class GameObject : Component, IEnumerable<Component>
                 );
             }
 
-            components.Add(component);
+            this.components.Add(component);
             tickingDirty = true;
             component.SetGameObject(this);
 
@@ -80,8 +80,8 @@ public sealed class GameObject : Component, IEnumerable<Component>
             }
         }
 
-        // Activate all components simultaneously to handle dependencies
-        foreach (Component component in componentsToAdd)
+        // Activate components simultaneously
+        foreach (Component component in components)
         {
             Game?.Activate(component);
         }
@@ -105,11 +105,11 @@ public sealed class GameObject : Component, IEnumerable<Component>
             );
         }
 
+        Game?.Deactivate(component);
+
         _ = components.Remove(component);
         component.SetGameObject(null);
         tickingDirty = true;
-
-        Game?.Deactivate(component);
 
         IEnumerable<List<Component>> typedComponentLists = GetImplementedTypes(component)
             .Select(type => typesToComponents[type]);

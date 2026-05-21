@@ -121,7 +121,8 @@ public class TestArrayConverterFactory
     {
         Converters = { new Array2DConverterFactory() },
         WriteIndented = true,
-        IndentSize = 4
+        IndentSize = 4,
+        NewLine = "\n"
     };
 
     [Theory]

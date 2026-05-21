@@ -1,5 +1,4 @@
 using Termule.Engine.Core;
-using Termule.Engine.Systems.Display;
 using Termule.Engine.Systems.Input;
 using Termule.Engine.Systems.Rendering;
 using Termule.Engine.Systems.Resources;
@@ -24,6 +23,17 @@ public class TestSystemManager
 
         game.Systems.Install(system);
         Assert.Equal(system, game.Systems.Get<FakeSystem>());
+    }
+
+    [Fact]
+    public void Add_AddsThenActivatesComponentsSimultaneously()
+    {
+        Game game = new();
+        DependentSystem dependentSystem = new();
+
+        game.Systems.Install(dependentSystem, new FakeSystem());
+
+        Assert.True(dependentSystem.HasDependency);
     }
 
     [Fact]
@@ -85,15 +95,24 @@ public class TestSystemManager
     }
 
     [Fact]
-    public void UseDefaultsInstallsCoreSystems()
+    public void InstallDefaultsInstallsCoreSystems()
     {
         Game game = new();
 
         game.Systems.InstallDefaults();
 
         Assert.NotNull(game.Systems.Get<Keyboard>());
-        Assert.NotNull(game.Systems.Get<DisplaySystem>());
         Assert.NotNull(game.Systems.Get<RenderSystem>());
         Assert.NotNull(game.Systems.Get<ResourceLoader>());
+    }
+
+    private sealed class DependentSystem : Engine.Core.System
+    {
+        public bool HasDependency { get; private set; }
+
+        protected override void Activate()
+        {
+            HasDependency = Systems.Get<FakeSystem>() != null;
+        }
     }
 }

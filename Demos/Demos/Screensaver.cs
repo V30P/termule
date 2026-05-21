@@ -37,7 +37,6 @@ internal sealed class Screensaver : Demo
             (1, 0.65f, 1)
         ];
 
-        private readonly Random random = new();
         private readonly Vector unsignedDir = new Vector(1.5f, 1).Normalized;
 
         private Color currentColor;
@@ -94,7 +93,7 @@ internal sealed class Screensaver : Demo
         private void RandomizeColor()
         {
             Color newColor = colors
-                .Where(c => c != currentColor).ElementAt(random.Next(0, colors.Length - 1));
+                .Where(c => c != currentColor).ElementAt(Random.Shared.Next(0, colors.Length - 1));
             ContentRenderer<Image> imageRenderer = GameObject.Get<ContentRenderer<Image>>();
 
             imageRenderer.Content = imageRenderer.Content.WithColorSwapped(currentColor, newColor);

@@ -11,8 +11,6 @@ internal sealed class Lightning : Demo
     private const float MinCooldown = 0.25f;
     private const float MaxCooldown = 1;
 
-    private readonly Random random = new();
-
     private float cooldown;
 
     protected override void Start()
@@ -32,7 +30,7 @@ internal sealed class Lightning : Demo
         }
 
         SpawnBolt();
-        cooldown = ((float) random.NextDouble() * (MaxCooldown - MinCooldown)) + MinCooldown;
+        cooldown = (Random.Shared.NextSingle() * (MaxCooldown - MinCooldown)) + MinCooldown;
     }
 
     private void SpawnBolt()
@@ -40,12 +38,12 @@ internal sealed class Lightning : Demo
         World.Add(
             new GameObject(
                 new Transform(),
-                new BoltController(random)
+                new BoltController()
             )
         );
     }
 
-    private sealed class BoltController(Random random) : Component
+    private sealed class BoltController : Component
     {
         private const float Lifespan = 0.5f;
         private const float BendGenerations = 5;
@@ -56,9 +54,11 @@ internal sealed class Lightning : Demo
 
         protected override void Activate()
         {
-            Vector origin = ((float) random.NextDouble() * Systems.Get<DisplaySystem>().Size.X, -1);
-            Vector target =
-                ((float) Systems.Get<DisplaySystem>().Size.X / 2, Systems.Get<DisplaySystem>().Size.Y);
+            Vector origin = (Random.Shared.NextSingle() * Systems.Get<DisplaySystem>().Size.X, -1);
+            Vector target = (
+                ((float) Systems.Get<DisplaySystem>().Size.X) / 2,
+                Systems.Get<DisplaySystem>().Size.Y
+            );
 
             List<List<Vector>> branches = [[origin, target]];
             float maxOffset = Systems.Get<DisplaySystem>().Size.X * OffsetToDisplayRatio;
@@ -78,14 +78,15 @@ internal sealed class Lightning : Demo
                         line.Insert(pointIndex + 1, GetDisplacedMidpoint());
 
                         // Create a new branch off of the previous point
-                        if (random.NextDouble() > 1 - BranchChance)
+                        if (Random.Shared.NextSingle() > 1 - BranchChance)
                         {
                             branches.Add([prev, GetDisplacedMidpoint()]);
                         }
 
                         Vector GetDisplacedMidpoint()
                         {
-                            float offset = ((float) random.NextDouble() * maxOffset * 2) - maxOffset;
+                            float offset = ((float) Random.Shared.NextSingle() * maxOffset * 2)
+                                - maxOffset;
                             return midpoint + (normal * offset);
                         }
                     }

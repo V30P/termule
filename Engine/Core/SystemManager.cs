@@ -14,25 +14,31 @@ public class SystemManager : GameElement
     private readonly Dictionary<Type, System> systems = [];
 
     /// <summary>
-    ///     Installs the provided <paramref name="system" />, replacing the existing instance of
+    ///     Installs the provided <paramref name="systems" />, replacing the existing instance of
     ///     that system base class (if any).
     /// </summary>
-    /// <typeparam name="TSystem">The type of system being installed.</typeparam>
-    /// <param name="system">The system to install.</param>
+    /// <param name="systems">The systems to install.</param>
     /// <exception cref="InvalidOperationException">
     ///     Thrown when trying to install systems when the <see cref="Game" /> is already started.
     /// </exception>
-    public void Install<TSystem>(TSystem system) where TSystem : System
+    public void Install(params System[] systems)
     {
         if (Game.Started)
         {
             throw new InvalidOperationException("Cannot change systems once the game is started.");
         }
 
-        Uninstall<TSystem>();
+        foreach (System system in systems)
+        {
+            Uninstall(system.GetType());
+            this.systems[GetSystemType(system.GetType())] = system;
+        }
 
-        systems[GetSystemType<TSystem>()] = system;
-        Game.Activate(system);
+        // Activate systems simultaneously
+        foreach (System system in systems)
+        {
+            Game.Activate(system);
+        }
     }
 
     /// <summary>
@@ -44,36 +50,7 @@ public class SystemManager : GameElement
     /// </exception>
     public void Uninstall<TSystem>() where TSystem : System
     {
-        if (Game.Started)
-        {
-            throw new InvalidOperationException("Cannot change systems once the game is started.");
-        }
-
-        Type systemType = GetSystemType<TSystem>();
-        if (systems.Remove(systemType, out System system))
-        {
-            Game.Deactivate(system);
-        }
-    }
-
-    /// <summary>
-    ///     Installs the operating-system-specific default <see cref="Systems" />s.
-    /// </summary>
-    public void InstallDefaults()
-    {
-        Install(new Keyboard());
-
-        if (OperatingSystem.IsWindows())
-        {
-            Install(new WindowsDisplaySystem());
-        }
-        else if (OperatingSystem.IsMacOS() || OperatingSystem.IsLinux())
-        {
-            Install(new UnixDisplaySystem());
-        }
-
-        Install(new RenderSystem());
-        Install(new ResourceLoader());
+        Uninstall(typeof(TSystem));
     }
 
     /// <summary>
@@ -84,7 +61,36 @@ public class SystemManager : GameElement
     /// <returns>The installed system or <c>null</c>.</returns>
     public TSystem Get<TSystem>() where TSystem : System
     {
-        return (TSystem) systems.GetValueOrDefault(GetSystemType<TSystem>());
+        return (TSystem) systems.GetValueOrDefault(GetSystemType(typeof(TSystem)));
+    }
+
+    /// <summary>
+    ///     Installs the operating-system-specific default <see cref="Systems" />s.
+    /// </summary>
+    public void InstallDefaults()
+    {
+        Install(new Keyboard());
+        Install(new RenderSystem());
+        Install(new ResourceLoader());
+
+        // Stop if no console is available
+        try
+        {
+            _ = Console.WindowWidth;
+        }
+        catch (IOException)
+        {
+            return;
+        }
+
+        if (OperatingSystem.IsWindows())
+        {
+            Install(new WindowsDisplaySystem());
+        }
+        else if (OperatingSystem.IsMacOS() || OperatingSystem.IsLinux())
+        {
+            Install(new UnixDisplaySystem());
+        }
     }
 
     internal void Start()
@@ -111,14 +117,27 @@ public class SystemManager : GameElement
         }
     }
 
-    private static Type GetSystemType<TSystem>() where TSystem : System
+    private static Type GetSystemType(Type type)
     {
-        Type type = typeof(TSystem);
         while (type.BaseType != typeof(System))
         {
             type = type.BaseType;
         }
 
         return type;
+    }
+
+    private void Uninstall(Type type)
+    {
+        if (Game.Started)
+        {
+            throw new InvalidOperationException("Cannot change systems once the game is started.");
+        }
+
+        Type systemType = GetSystemType(type);
+        if (systems.Remove(systemType, out System system))
+        {
+            Game.Deactivate(system);
+        }
     }
 }

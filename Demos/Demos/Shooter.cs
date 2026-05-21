@@ -18,8 +18,6 @@ internal sealed class Shooter : Demo, IMessageListener<Shooter.CharacterControll
     private static Image characterSprite;
     private static Image projectileSprite;
 
-    private readonly Random random = new();
-
     private float gameOverTimeRemaining;
     private float gracePeriodTimeRemaining = GracePeriodLength;
 
@@ -96,10 +94,11 @@ internal sealed class Shooter : Demo, IMessageListener<Shooter.CharacterControll
                 World.Get<ContentRenderer<Text>>().Content.Value = null;
                 for (int i = 0; i < roundNumber; i++)
                 {
-                    SpawnCharacter<EnemyController>(PointOnRectangle(
-                        random,
-                        -Systems.Get<DisplaySystem>().Size / 2,
-                        Systems.Get<DisplaySystem>().Size)
+                    SpawnCharacter<EnemyController>(
+                        PointOnRectangle(
+                            -Systems.Get<DisplaySystem>().Size / 2,
+                            Systems.Get<DisplaySystem>().Size * 2
+                        )
                     );
 
                     enemiesRemaining++;

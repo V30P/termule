@@ -28,6 +28,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - `.editorconfig` for stylecop compatibility
 - Renamed `Game.Root` to `World`
 - Renamed `SystemManager.UseDefaults()` to `InstallDefaults`
+- `Install` method for systems now takes `params`
 
 ### Removed
 - `IConfigurableGame` and `IConfigurableSystemManager` interfaces to get rid of unnecessary complexity

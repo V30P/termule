@@ -21,9 +21,9 @@ internal static class Utilities
         return v * factor;
     }
 
-    public static Vector PointOnRectangle(Random random, Vector corner, Vector size)
+    public static Vector PointOnRectangle(Vector corner, Vector size)
     {
-        float dist = (float) random.NextDouble() * ((size.X * 2) + (size.Y * 2));
+        float dist = Random.Shared.NextSingle() * ((size.X * 2) + (size.Y * 2));
 
         if (dist < size.X)
         {
