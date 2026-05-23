@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.3.0] - 2026-05-23
 
 ### Added
 - Messaging via `MessageBus`
@@ -21,11 +21,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - `Tick()` virtual method for components (replaces event)
 - Re-added StyleCop analyzers for stricter static analysis
 - Missing constructors and conversions for color types
+- Missing commutative multiplication operators for vectors
 
 ### Changed
 - `GameObject` is now sealed
 - "Lightning" demo to use box drawing characters
-- `.editorconfig` for stylecop compatibility
+- `.editorconfig` for StyleCop compatibility
 - Renamed `Game.Root` to `World`
 - Renamed `SystemManager.UseDefaults()` to `InstallDefaults`
 - `Install` method for systems now takes params
