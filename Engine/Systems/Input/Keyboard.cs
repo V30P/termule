@@ -20,7 +20,7 @@ public sealed class Keyboard : Core.System
     /// <summary>
     ///     Initializes a new instance of the <see cref="Keyboard" /> class.
     /// </summary>
-    internal Keyboard()
+    public Keyboard()
     {
         SharpHook.MousePressed += (_, e) => OnButtonPressed(e.Data.Button.ToButton());
         SharpHook.MouseReleased += (_, e) => OnButtonReleased(e.Data.Button.ToButton());

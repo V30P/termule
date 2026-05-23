@@ -15,12 +15,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - When the display's size changes or mouse moves
   - When a transform's position changes
 - `Connections` flags and extension methods for easily working with box-drawing characters
-- `connectBoxDrawingChars` parameter to frame buffer's `Draw()` for proper box-drawing character layering
+- `connectBoxDrawingChars` parameter to `Draw()` for proper box-drawing character layering
 - `UseBoxDrawingCharacters` property to line renderer for extra-thin lines
 - `Activate()` and `Deactivate()` virtual methods for game elements (replacing events)
 - `Tick()` virtual method for components (replaces event)
 - Re-added StyleCop analyzers for stricter static analysis
-- Missing constructors and conversions for seamless color types
+- Missing constructors and conversions for color types
 
 ### Changed
 - `GameObject` is now sealed
@@ -28,7 +28,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - `.editorconfig` for stylecop compatibility
 - Renamed `Game.Root` to `World`
 - Renamed `SystemManager.UseDefaults()` to `InstallDefaults`
-- `Install` method for systems now takes `params`
+- `Install` method for systems now takes params
 
 ### Removed
 - `IConfigurableGame` and `IConfigurableSystemManager` interfaces to get rid of unnecessary complexity
@@ -39,6 +39,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Terminal display always using default background color when drawing a character without one
 - Rounding errors in "Shooter" demo collision detection
 - `VectorInt`'s scalar division requiring an integer divisor
+- `Keyboard` constructor not being public
 
 ## [0.2.0] - 2026-04-25
 

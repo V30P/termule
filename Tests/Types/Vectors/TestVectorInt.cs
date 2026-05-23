@@ -76,6 +76,14 @@ public class TestVectorInt
     }
 
     [Fact]
+    public void MultiplyOperator_IsCommutative()
+    {
+        Vector v = new(5, 1);
+
+        Assert.Equal(v * 5, 5 * v);
+    }
+
+    [Fact]
     public void NegateOperator_NegatesComponents()
     {
         VectorInt v = new(3, -5);

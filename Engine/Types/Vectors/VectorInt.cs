@@ -71,6 +71,17 @@ public readonly struct VectorInt(int x = 0, int y = 0)
     }
 
     /// <summary>
+    ///     Multiplies an scalar by an integer vector, returning a <see cref="Vector" />.
+    /// </summary>
+    /// <param name="v">The integer vector to scale.</param>
+    /// <param name="f">The scalar multiplier.</param>
+    /// <returns>The scaled vector.</returns>
+    public static Vector operator *(float f, VectorInt v)
+    {
+        return v * f;
+    }
+
+    /// <summary>
     ///     Divides an integer vector by a scalar, returning a <see cref="Vector" />.
     /// </summary>
     /// <param name="v">The integer vector to divide.</param>

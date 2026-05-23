@@ -79,6 +79,17 @@ public readonly struct Vector(float X = 0, float Y = 0)
     }
 
     /// <summary>
+    ///     Multiplies a scalar by a vector.
+    /// </summary>
+    /// <param name="v">The vector to scale.</param>
+    /// <param name="f">The scalar multiplier.</param>
+    /// <returns>The scaled vector.</returns>
+    public static Vector operator *(float f, Vector v)
+    {
+        return v * f;
+    }
+
+    /// <summary>
     ///     Divides a vector by a scalar.
     /// </summary>
     /// <param name="v">The vector to divide.</param>
