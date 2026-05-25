@@ -97,7 +97,7 @@ internal sealed class Shooter : Demo, IMessageListener<Shooter.CharacterControll
                     SpawnCharacter<EnemyController>(
                         PointOnRectangle(
                             -Systems.Get<DisplaySystem>().Size / 2,
-                            Systems.Get<DisplaySystem>().Size * 2
+                            Systems.Get<DisplaySystem>().Size
                         )
                     );
 
