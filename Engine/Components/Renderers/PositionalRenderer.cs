@@ -14,10 +14,10 @@ public abstract class PositionalRenderer : Renderer
     }
 
     /// <summary>
-    ///     Gets or sets a value indicating whether the <see cref="Transform" />'s position should be treated as
-    ///     target-space during rendering.
+    ///     Gets or sets a value indicating whether the <see cref="Transform"/>'s position should
+    ///     be treated as target-space during rendering.
     /// </summary>
-    public bool TargetSpace { get; set; }
+    public bool RenderInTargetSpace { get; set; }
 
     /// <summary>
     ///     Gets an offset applied to the transform position before rendering.
@@ -25,39 +25,63 @@ public abstract class PositionalRenderer : Renderer
     protected virtual Vector Offset { get; }
 
     /// <inheritdoc />
-    protected internal sealed override void Render(FrameBuffer frame, Vector viewOrigin)
+    protected internal sealed override void Render(IRenderTarget target, Vector viewOrigin)
     {
-        Vector frameSpaceOrigin = GetRequiredComponent<Transform>().Pos;
-        if (!TargetSpace)
-        {
-            // Get integer position relative to viewOrigin
-            frameSpaceOrigin -= viewOrigin;
+        Vector origin = GetRequiredComponent<Transform>().Pos + Offset;
 
-            // Flip y to account for the change from game space to frame space
-            frameSpaceOrigin = (frameSpaceOrigin.X, -frameSpaceOrigin.Y);
+        // Transform to world space
+        if (!RenderInTargetSpace)
+        {
+            origin -= viewOrigin;
+            origin = (origin.X, -origin.Y);
         }
 
-        frameSpaceOrigin += Offset;
-        VectorInt frameSpaceCellOrigin = frameSpaceOrigin.RoundToInt();
-
-        RenderAtPosition(
-            new PositionalRenderContext(
-                frame,
-                frameSpaceCellOrigin,
-                frameSpaceOrigin - frameSpaceCellOrigin
-            )
+        VectorInt originCell = origin.FloorToInt();
+        RenderPositionally(
+            new PositionalRenderTarget(target, originCell, RenderInTargetSpace),
+            origin - originCell
         );
     }
 
-    private protected abstract void RenderAtPosition(PositionalRenderContext context);
+    private protected abstract void RenderPositionally(
+        IRenderTarget target,
+        Vector subPixelOffset
+    );
 
-    private protected readonly struct PositionalRenderContext(
-        FrameBuffer frame,
+    private protected class PositionalRenderTarget(
+        IRenderTarget target,
         VectorInt origin,
-        Vector offset)
+        bool renderInTargetSpace) : IRenderTarget
     {
-        public readonly FrameBuffer Frame = frame;
-        public readonly VectorInt Origin = origin;
-        public readonly Vector Offset = offset;
+        VectorInt IRenderTarget.LowerBound => target.LowerBound - origin;
+
+        VectorInt IRenderTarget.UpperBound => target.UpperBound - origin;
+
+        public void Draw(
+            VectorInt pos,
+            Color? color = null,
+            char? character = null,
+            Color? characterColor = null,
+            bool layerBoxDrawingChars = true)
+        {
+            target.Draw(
+                LocalToTargetPos(pos),
+                color,
+                character,
+                characterColor,
+                layerBoxDrawingChars
+            );
+        }
+
+        ref Cell IRenderTarget.GetCellRef(int x, int y)
+        {
+            VectorInt targetPos = LocalToTargetPos((x, y));
+            return ref target.GetCellRef(targetPos.X, targetPos.Y);
+        }
+
+        private VectorInt LocalToTargetPos(VectorInt pos)
+        {
+            return origin + (renderInTargetSpace ? pos : (pos.X, -pos.Y));
+        }
     }
 }

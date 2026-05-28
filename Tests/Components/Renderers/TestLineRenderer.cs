@@ -17,8 +17,7 @@ public class TestLineRenderer
         { [[0, 0], [1, 3]], [[0, 0], [0, 1], [1, 2], [1, 3]] }
     };
 
-    public static readonly TheoryData<int[], int[], int[][], char[]>
-        BoxDrawingData = new()
+    public static readonly TheoryData<int[], int[], int[][], char[]> BoxDrawingData = new()
     {
         {
             [0, 1],
@@ -46,23 +45,6 @@ public class TestLineRenderer
         }
     };
 
-    [Fact]
-    public void Render_DrawsPolylineSegments()
-    {
-        FrameBuffer frame = new(4, 4);
-        LineRenderer renderer = new()
-        {
-            TargetSpace = true,
-            Color = BasicColor.White,
-            Points = [(0, 0), (2, 0), (2, 2)]
-        };
-        _ = new GameObject(new Transform { Pos = (0, 0) }, renderer);
-
-        renderer.Render(frame, (0, 0));
-
-        AssertDrawnColor(frame, BasicColor.White, [(0, 0), (1, 0), (2, 0), (2, 1), (2, 2)]);
-    }
-
     [Theory]
     [MemberData(nameof(SingleSegmentData))]
     public void Render_DrawsSingleSegment(float[][] points, int[][] expectedCells)
@@ -82,7 +64,7 @@ public class TestLineRenderer
 
         LineRenderer renderer = new()
         {
-            TargetSpace = true,
+            RenderInTargetSpace = true,
             Color = BasicColor.White,
             Points = [.. pointPositions]
         };
@@ -94,22 +76,32 @@ public class TestLineRenderer
     }
 
     [Fact]
-    public void Render_UsesTransformPositionAsLineOrigin()
+    public void Render_DrawsPolylineSegments()
     {
-        FrameBuffer frame = new(6, 4);
-        LineRenderer renderer = new() { TargetSpace = true, Color = BasicColor.White, Points = [(0, 0), (2, 0)] };
-        _ = new GameObject(new Transform { Pos = (2, 1) }, renderer);
+        FrameBuffer frame = new(4, 4);
+        LineRenderer renderer = new()
+        {
+            RenderInTargetSpace = true,
+            Color = BasicColor.White,
+            Points = [(0, 0), (2, 0), (2, 2)]
+        };
+        _ = new GameObject(new Transform { Pos = (0, 0) }, renderer);
 
         renderer.Render(frame, (0, 0));
 
-        AssertDrawnColor(frame, BasicColor.White, [(2, 1), (3, 1), (4, 1)]);
+        AssertDrawnColor(frame, BasicColor.White, [(0, 0), (1, 0), (2, 0), (2, 1), (2, 2)]);
     }
 
     [Fact]
     public void Render_WhenLessThanTwoPoints_DoesNotDraw()
     {
         FrameBuffer frame = new(2, 2);
-        LineRenderer renderer = new() { TargetSpace = true, Color = BasicColor.White, Points = [(1, 1)] };
+        LineRenderer renderer = new()
+        {
+            RenderInTargetSpace = true,
+            Color = BasicColor.White,
+            Points = [(1, 1)]
+        };
         _ = new GameObject(new Transform { Pos = (0, 0) }, renderer);
 
         renderer.Render(frame, (0, 0));
@@ -136,7 +128,7 @@ public class TestLineRenderer
 
         LineRenderer renderer = new()
         {
-            TargetSpace = true,
+            RenderInTargetSpace = true,
             Color = BasicColor.White,
             Points = [(start[0], start[1]), (end[0], end[1])],
             UseBoxDrawingCharacters = true
@@ -146,5 +138,24 @@ public class TestLineRenderer
         renderer.Render(frame, (0, 0));
 
         AssertDrawnChars(frame, expectedChars);
+    }
+
+    [Fact]
+    public void Render_InWorldSpace_UsingBoxDrawingCharacters_FlipsVerticalConnections()
+    {
+        FrameBuffer frame = new(3, 3);
+        LineRenderer renderer = new()
+        {
+            UseBoxDrawingCharacters = true,
+            Color = BasicColor.White,
+            Points = [(0, 0), (1, 1)]
+        };
+        _ = new GameObject(new Transform { Pos = (0, 0) }, renderer);
+
+        renderer.Render(frame, (-1.5f, 1.5f));
+
+        Assert.Equal(frame[1, 1], new Cell(character: '╶', charColor: BasicColor.White));
+        Assert.Equal(frame[2, 1], new Cell(character: '┘', charColor: BasicColor.White));
+        Assert.Equal(frame[2, 0], new Cell(character: '╷', charColor: BasicColor.White));
     }
 }

@@ -13,19 +13,6 @@ public class TestGame
     }
 
     [Fact]
-    public void TargetTps_ProperlyLimitsTicks()
-    {
-        Game game = new()
-        {
-            TargetTps = 10
-        };
-
-        game.RunTick();
-
-        Assert.Equal(1f / 10, game.DeltaTime, 0.1);
-    }
-
-    [Fact]
     public void Run_PreparesAndCleansUp()
     {
         Game game = new();

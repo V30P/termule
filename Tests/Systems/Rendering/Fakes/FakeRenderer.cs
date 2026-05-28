@@ -6,13 +6,13 @@ namespace Termule.Tests.Systems.Rendering;
 
 public class FakeRenderer : Renderer
 {
-    public FrameBuffer CapturedFrame { get; private set; }
+    public IRenderTarget CapturedTarget { get; private set; }
 
     public Vector? CapturedViewOrigin { get; private set; }
 
-    protected internal override void Render(FrameBuffer frame, Vector viewOrigin)
+    protected internal override void Render(IRenderTarget target, Vector viewOrigin)
     {
-        CapturedFrame = frame;
+        CapturedTarget = target;
         CapturedViewOrigin = viewOrigin;
     }
 }

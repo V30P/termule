@@ -61,11 +61,6 @@ public class Image : IContent, IResource
         set => Cells[x, y] = value;
     }
 
-    internal bool EqualsAt(IContent content, VectorInt pos)
-    {
-        return this[pos.X, pos.Y] == content[pos.X, pos.Y];
-    }
-
     /// <summary>
     ///     Resizes this image to the specified dimensions.
     /// </summary>

@@ -1,74 +1,26 @@
-using Termule.Engine.Components;
 using Termule.Engine.Types;
 
 namespace Termule.Engine.Systems.Rendering;
 
 /// <summary>
-///     Buffer that <see cref="Renderer" />s draw into during rendering.
+///     <see cref="Image"/>-based <see cref="IRenderTarget"/> implementation.
 /// </summary>
-public sealed class FrameBuffer : Image
+public sealed class FrameBuffer : Image, IRenderTarget
 {
     internal FrameBuffer(int width, int height) : base(width, height)
     {
     }
 
-    /// <summary>
-    ///     Modifies a cell in this frame buffer.
-    /// </summary>
-    /// <param name="pos">The position of the cell.</param>
-    /// <param name="color">The color to set, or <c>null</c> to leave unchanged.</param>
-    /// <param name="character">The character to set, or <c>null</c> to leave unchanged.</param>
-    /// <param name="characterColor">
-    ///     The character color to set, or <c>null</c> to leave unchanged.
-    /// </param>
-    /// <param name="layerBoxDrawingChars">
-    ///     Indicates that drawing Unicode box-drawing characters over existing box-drawing
-    ///     characters of the same color should combine them.
-    /// </param>
-    public void Draw(
-        VectorInt pos,
-        Color? color = null,
-        char? character = null,
-        Color? characterColor = null,
-        bool layerBoxDrawingChars = true)
+    VectorInt IRenderTarget.LowerBound => (0, 0);
+
+    VectorInt IRenderTarget.UpperBound => Size;
+
+    ref Cell IRenderTarget.GetCellRef(int x, int y)
     {
-        if (pos.X < 0 || pos.X >= Size.X || pos.Y < 0 || pos.Y >= Size.Y)
-        {
-            return;
-        }
-
-        ref Cell cell = ref Cells[pos.X, pos.Y];
-
-        if (color != null)
-        {
-            cell.Color = color.Value;
-            cell.Character = '\0';
-            cell.CharColor = default;
-        }
-
-        if (character != null)
-        {
-            if (layerBoxDrawingChars && characterColor == this[pos.X, pos.Y].CharColor)
-            {
-                Connections connections = ConnectionsExtensions.FromChar(character.Value)
-                                          | ConnectionsExtensions.FromChar(
-                                                this[pos.X, pos.Y].Character
-                                            );
-
-                character = connections.ToChar();
-            }
-
-            cell.Character = character.Value;
-            cell.CharColor = default;
-        }
-
-        if (characterColor != null)
-        {
-            cell.CharColor = characterColor.Value;
-        }
+        return ref Cells[x, y];
     }
 
-    internal void Reset(Cell cell = default)
+    internal void Fill(Cell cell)
     {
         for (int x = 0; x < Size.X; x++)
         {

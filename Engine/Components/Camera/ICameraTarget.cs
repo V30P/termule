@@ -13,7 +13,7 @@ public interface ICameraTarget
     /// </summary>
     public VectorInt Size { get; }
 
-    internal FrameBuffer Buffer { get; private protected set; }
+    internal FrameBuffer Buffer { get; }
 
     internal void Update();
 }

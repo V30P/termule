@@ -99,7 +99,7 @@ public class TestRenderer
 
     private sealed class FakeRenderer : Renderer
     {
-        protected internal override void Render(FrameBuffer frame, Vector viewOrigin)
+        protected internal override void Render(IRenderTarget target, Vector viewOrigin)
         {
         }
     }

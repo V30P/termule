@@ -1,3 +1,4 @@
+using Termule.Engine.Systems.Rendering;
 using Termule.Engine.Types;
 
 namespace Termule.Engine.Components;
@@ -23,15 +24,15 @@ public sealed class LineRenderer : PositionalRenderer
     /// </summary>
     public bool UseBoxDrawingCharacters { get; set; }
 
-    private protected override void RenderAtPosition(PositionalRenderContext context)
+    private protected override void RenderPositionally(IRenderTarget target, Vector _)
     {
         for (int i = 1; i < Points.Count; i++)
         {
-            DrawLine(Points[i - 1].RoundToInt(), Points[i].RoundToInt(), context);
+            DrawLine(Points[i - 1].RoundToInt(), Points[i].RoundToInt(), target);
         }
     }
 
-    private void DrawLine(VectorInt p1, VectorInt p2, PositionalRenderContext context)
+    private void DrawLine(VectorInt p1, VectorInt p2, IRenderTarget target)
     {
         // Modified Bresenham's line algorithm
         int dx = Math.Abs(p2.X - p1.X);
@@ -80,26 +81,28 @@ public sealed class LineRenderer : PositionalRenderer
                     (prev != null ? GetConnection(prev.Value - curr.Value) : Connections.None) |
                     (next != null ? GetConnection(next.Value - curr.Value) : Connections.None);
 
-                context.Frame.Draw(
-                    context.Origin + curr.Value,
+                target.Draw(
+                    curr.Value,
                     character: connections.ToChar(),
                     characterColor: Color
                 );
             }
             else
             {
-                context.Frame.Draw(context.Origin + curr.Value, Color);
+                target.Draw(curr.Value, Color);
             }
         }
 
-        static Connections GetConnection(VectorInt displacement)
+        Connections GetConnection(VectorInt displacement)
         {
             return displacement switch
             {
                 { X: > 0 } => Connections.Right,
                 { X: < 0 } => Connections.Left,
-                { Y: > 0 } => Connections.Down,
-                { Y: < 0 } => Connections.Up,
+
+                // World-space vertical connections must be flipped
+                { Y: > 0 } => RenderInTargetSpace ? Connections.Down : Connections.Up,
+                { Y: < 0 } => RenderInTargetSpace ? Connections.Up : Connections.Down,
                 _ => Connections.None
             };
         }

@@ -12,7 +12,7 @@ public sealed class Camera : Component
 {
     /// <summary>
     ///     Gets or sets a cell that will fill the background of rendered
-    ///     <see cref="FrameBuffer" />s.
+    ///     <see cref="FrameBuffer"/>s.
     /// </summary>
     public Cell BackgroundCell { get; set; }
 
@@ -29,10 +29,10 @@ public sealed class Camera : Component
     private Vector TransformPos => GameObject.Get<Transform>()?.Pos ?? (0, 0);
 
     /// <summary>
-    ///     Converts a position from target-space to game-space relative to this camera.
+    ///     Converts a position from target-space to world-space relative to this camera.
     /// </summary>
-    /// <param name="pos">The position in target-space.</param>
-    /// <returns>The corresponding position in game-space.</returns>
+    /// <param name="pos">The position in target space.</param>
+    /// <returns>The corresponding position in world space.</returns>
     public Vector TargetToGamePos(Vector pos)
     {
         Vector relativeTargetPos = pos - ((Vector) Target.Size / 2f);
@@ -41,10 +41,10 @@ public sealed class Camera : Component
     }
 
     /// <summary>
-    ///     Converts a position from game-space to target-space relative to this camera.
+    ///     Converts a position from world-space to target-space relative to this camera.
     /// </summary>
-    /// <param name="pos">The position in game-space.</param>
-    /// <returns>The corresponding position in target-space.</returns>
+    /// <param name="pos">The position in world space.</param>
+    /// <returns>The corresponding position in target space.</returns>
     public Vector GameToTargetPos(Vector pos)
     {
         Vector relativePos = pos + TransformPos;
@@ -55,9 +55,8 @@ public sealed class Camera : Component
     /// <inheritdoc />
     protected internal override void Tick()
     {
-        Target.Buffer.Reset(BackgroundCell);
-        GetRequiredSystem<RenderSystem>().Render(TargetToGamePos((0, 0)), Target.Buffer);
-
+        Target.Buffer.Fill(BackgroundCell);
+        GetRequiredSystem<RenderSystem>().Render(Target.Buffer, TargetToGamePos((0, 0)));
         Target.Update();
     }
 }

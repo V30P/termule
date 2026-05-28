@@ -58,7 +58,11 @@ internal sealed class Shooter : Demo, IMessageListener<Shooter.CharacterControll
         World.Add(
             new Transform(),
             new Camera(),
-            new ContentRenderer<Text> { Centered = true, Layer = Program.UiLayer }
+            new ContentRenderer<Text>
+            {
+                Centered = true,
+                Layer = Program.UILayer
+            }
         );
 
         Game.Bus.Subscribe(this);

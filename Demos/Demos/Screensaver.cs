@@ -16,7 +16,7 @@ internal sealed class Screensaver : Demo
             new Camera(),
             new GameObject(
                 new Transform(),
-                new ContentRenderer<Image> { TargetSpace = true },
+                new ContentRenderer<Image> { RenderInTargetSpace = true },
                 new LogoController()
             )
         );

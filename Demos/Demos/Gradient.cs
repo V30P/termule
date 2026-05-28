@@ -25,13 +25,13 @@ internal sealed class Gradient : Demo
             time += Game.DeltaTime;
         }
 
-        protected override void Render(FrameBuffer frame, Vector viewOrigin)
+        protected override void Render(IRenderTarget target, Vector viewOrigin)
         {
-            for (int x = 0; x < frame.Size.X; x++)
+            for (int x = target.LowerBound.X; x < target.UpperBound.X; x++)
             {
-                for (int y = 0; y < frame.Size.Y; y++)
+                for (int y = target.LowerBound.Y; y < target.UpperBound.Y; y++)
                 {
-                    frame.Draw((x, y), GetColor(((float) x / frame.Size.X) + time));
+                    target.Draw((x, y), GetColor(((float) x / target.Size.X) + time));
                 }
             }
         }

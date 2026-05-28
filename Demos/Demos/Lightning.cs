@@ -100,7 +100,7 @@ internal sealed class Lightning : Demo
                 GameObject.Add(
                     new LineRenderer
                     {
-                        TargetSpace = true,
+                        RenderInTargetSpace = true,
                         Points = branch,
                         Color = (1, 1, 1),
                         UseBoxDrawingCharacters = true

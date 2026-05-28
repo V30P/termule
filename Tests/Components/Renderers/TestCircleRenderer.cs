@@ -73,7 +73,7 @@ public class TestCircleRenderer
         {
             Radius = radius,
             Color = BasicColor.White,
-            TargetSpace = true
+            RenderInTargetSpace = true
         };
         _ = new GameObject(new Transform { Pos = (3, 3) }, renderer);
 
@@ -86,27 +86,6 @@ public class TestCircleRenderer
         );
     }
 
-    [Theory]
-    [MemberData(nameof(ViewOriginData))]
-    public void Render_RespectsViewOrigin(
-        float[] transformPos,
-        float[] viewOrigin,
-        int[] expectedCenter)
-    {
-        FrameBuffer frame = new(3, 3);
-        CircleRenderer renderer = new() { Color = BasicColor.White, TargetSpace = true };
-        _ = new GameObject(
-            new Transform { Pos = (transformPos[0], transformPos[1]) },
-            renderer);
-
-        renderer.Render(frame, (viewOrigin[0], viewOrigin[1]));
-
-        AssertDrawnColor(
-            frame,
-            BasicColor.White,
-            [(expectedCenter[0], expectedCenter[1])]);
-    }
-
     [Fact]
     public void Render_WhenDoubleWideIsTrue_DuplicatesCellsHorizontally()
     {
@@ -115,7 +94,7 @@ public class TestCircleRenderer
         {
             Radius = 1,
             Color = BasicColor.White,
-            TargetSpace = true,
+            RenderInTargetSpace = true,
             DoubleWide = true
         };
 
@@ -136,7 +115,7 @@ public class TestCircleRenderer
     {
         FrameBuffer frame = new(5, 5);
         CircleRenderer renderer =
-            new() { Radius = radius, Filled = true, Color = BasicColor.White, TargetSpace = true };
+            new() { Radius = radius, Filled = true, Color = BasicColor.White, RenderInTargetSpace = true };
         _ = new GameObject(new Transform { Pos = (2, 2) }, renderer);
 
         renderer.Render(frame, (0, 0));
@@ -151,7 +130,11 @@ public class TestCircleRenderer
     public void Render_WhenRadiusIsZero_DrawsSingleCenterCell()
     {
         FrameBuffer frame = new(1, 1);
-        CircleRenderer renderer = new() { Color = BasicColor.White, TargetSpace = true };
+        CircleRenderer renderer = new()
+        {
+            Color = BasicColor.White,
+            RenderInTargetSpace = true
+        };
         _ = new GameObject(new Transform { Pos = (0, 0) }, renderer);
 
         renderer.Render(frame, (0, 0));

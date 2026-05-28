@@ -9,7 +9,7 @@ namespace Termule.Demos.Core;
 
 internal static class Program
 {
-    internal static readonly Layer UiLayer = new SimpleLayer();
+    internal static readonly Layer UILayer = new SimpleLayer();
 
     private const string ErrorTemplate = "Error: {0}.\n";
 
@@ -177,7 +177,7 @@ internal static class Program
 
         Game game = new();
         game.Systems.InstallDefaults();
-        game.Systems.Install(new RenderSystem { Layers = [new SimpleLayer(), UiLayer] });
+        game.Systems.Install(new RenderSystem { Layers = [new SimpleLayer(), UILayer] });
         game.Systems.Install(demo);
 
         if (showStats)
@@ -185,7 +185,11 @@ internal static class Program
             game.World.Add(
                 new GameObject(
                     new Transform(),
-                    new ContentRenderer<Text> { TargetSpace = true, Layer = UiLayer },
+                    new ContentRenderer<Text>()
+                    {
+                        RenderInTargetSpace = true,
+                        Layer = UILayer
+                    },
                     new TpsIndicator()
                 )
             );

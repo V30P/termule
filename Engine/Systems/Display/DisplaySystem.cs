@@ -5,7 +5,8 @@ using Termule.Engine.Types;
 namespace Termule.Engine.Systems.Display;
 
 /// <summary>
-///     Base system for displaying frames on the screen or another output target.
+///     Base system for outputting rendered <see cref="FrameBuffer"/>s to the screen or another
+///     display.
 /// </summary>
 public abstract class DisplaySystem : Core.System, ICameraTarget
 {
@@ -54,15 +55,11 @@ public abstract class DisplaySystem : Core.System, ICameraTarget
         }
     }
 
-    FrameBuffer ICameraTarget.Buffer
-    {
-        get => Buffer;
-        set => Buffer = value;
-    }
+    FrameBuffer ICameraTarget.Buffer => Buffer;
 
-    private protected FrameBuffer Buffer { get; set; } = new(0, 0);
+    private protected FrameBuffer Buffer { get; set; } = new FrameBuffer(0, 0);
 
-    private protected FrameBuffer Screen { get; private set; } = new(0, 0);
+    private protected FrameBuffer Screen { get; private set; } = new FrameBuffer(0, 0);
 
     void ICameraTarget.Update()
     {

@@ -20,7 +20,7 @@ public class TestDisplaySystem
     {
         FakeDisplaySystem displaySystem = new();
         ICameraTarget target = displaySystem;
-        FrameBuffer startingBuffer = target.Buffer;
+        IRenderTarget startingBuffer = target.Buffer;
 
         target.Update();
         Assert.NotEqual(startingBuffer, target.Buffer);

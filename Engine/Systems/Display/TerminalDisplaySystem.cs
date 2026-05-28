@@ -107,7 +107,7 @@ public abstract class TerminalDisplaySystem : DisplaySystem
         {
             for (int x = 0; x < Size.X; x++)
             {
-                if (!screenCleared && Screen.EqualsAt(Buffer, (x, y)))
+                if (!screenCleared && Screen[x, y] == Buffer[x, y])
                 {
                     skipping = true;
                     continue;

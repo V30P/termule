@@ -2,139 +2,116 @@ using Termule.Engine.Components;
 using Termule.Engine.Core;
 using Termule.Engine.Systems.Rendering;
 using Termule.Engine.Types;
+using static Termule.Tests.Components.Utilities;
 
 namespace Termule.Tests.Components;
 
 public class TestPositionalRenderer
 {
-    public static readonly TheoryData<float[], float[], int[], float[]>
+    public static readonly TheoryData<float[], int[], float[]>
         GameSpaceConversionData = new()
     {
-        { [0f, 0f], [0f, 0f], [0, 0], [0f, 0f] },
-        { [1f, 1f], [0f, 0f], [1, -1], [0f, 0f] },
-        { [-1f, -1f], [0f, 0f], [-1, 1], [0f, 0f] },
-        { [0.25f, 0.25f], [0f, 0f], [0, 0], [0.25f, -0.25f] },
-        { [0.75f, 0.75f], [0f, 0f], [1, -1], [-0.25f, 0.25f] },
-        { [10.25f, 5f], [5f, 5f], [5, 0], [0.25f, 0f] },
-        { [3f, 2f], [0.75f, 0.25f], [2, -2], [0.25f, 0.25f] },
-        { [-3f, -2f], [-0.75f, -0.25f], [-2, 2], [-0.25f, -0.25f] }
+        { [0, 0], [1, 1], [0.5f, 0.5f] },
+        { [0.25f, -0.25f], [1, 1], [0.75f, 0.75f] },
+        { [0.75f, -0.75f], [2, 2], [0.25f, 0.25f] },
+        { [-1, 0], [0, 1], [0.5f, 0.5f] },
+        { [0, -1], [1, 2], [0.5f, 0.5f] }
     };
 
-    public static readonly TheoryData<float[], float[], int[], float[]>
+    public static readonly TheoryData<float[], int[], float[]>
         TargetSpaceConversionData = new()
     {
-        { [0f, 0f], [1f, 2f], [0, 0], [0f, 0f] },
-        { [1f, 5f], [3f, 4f], [1, 5], [0f, 0f] },
-        { [10.25f, 5f], [5f, 5f], [10, 5], [0.25f, 0f] },
-        { [-1.25f, 2.5f], [100f, -50f], [-1, 2], [-0.25f, 0.5f] },
-        { [4.8f, -3.2f], [-9.1f, 12.3f], [5, -3], [-0.2f, -0.2f] }
+        { [0, 0], [0, 0], [0, 0] },
+        { [0.5f, 0.5f], [0, 0], [0.5f, 0.5f] },
+        { [1, 1], [1, 1], [0, 0] },
+        { [1.25f, 2.75f], [1, 2], [0.25f, 0.75f] }
     };
 
-    private const float PositionEpsilon = 0.0001f;
-
     [Fact]
-    public void Render_AppliesOffset()
-    {
-        FakePositionalRenderer renderer = new((0.75f, 0.75f));
-        _ = new GameObject(new Transform { Pos = (0, 0) }, renderer);
-
-        renderer.Render(new FrameBuffer(0, 0), (0, 0));
-
-        Assert.Equal((1, 1), renderer.CapturedOrigin);
-        AssertVectorApproximately((-0.25f, -0.25f), renderer.CapturedOffset, PositionEpsilon);
-    }
-
-    [Fact]
-    public void Render_InvokesDerivedRendererAndPassesFrame()
+    public void Render_InvokesDerivedRendererAndPassesParams()
     {
         FrameBuffer frame = new(0, 0);
         FakePositionalRenderer renderer = new();
         _ = new GameObject(new Transform { Pos = (0, 0) }, renderer);
 
-        renderer.Render(frame, (0, 0));
+        renderer.Render(frame, (-1.5f, 1.5f));
 
         Assert.Equal(1, renderer.RenderCount);
-        Assert.Same(frame, renderer.CapturedFrame);
+        Assert.NotNull(renderer.CapturedTarget);
     }
 
     [Theory]
     [MemberData(nameof(GameSpaceConversionData))]
-    public void Render_WhenInGameSpace_CorrectlyAppliesPosition(
+    public void Render_InGameSpace_CorrectlyAppliesPosition(
         float[] transformPos,
-        float[] viewOrigin,
         int[] expectedOrigin,
-        float[] expectedOffset)
+        float[] expectedError)
     {
         FakePositionalRenderer renderer = new();
         _ = new GameObject(
             new Transform { Pos = (transformPos[0], transformPos[1]) },
-            renderer);
-
-        renderer.Render(new FrameBuffer(0, 0), (viewOrigin[0], viewOrigin[1]));
-
-        Assert.Equal(
-            (expectedOrigin[0], expectedOrigin[1]),
-            renderer.CapturedOrigin
+            renderer
         );
+        FrameBuffer buffer = new(5, 5);
+
+        renderer.Render(buffer, (-1.5f, 1.5f));
+
+        AssertDrawnColor(buffer, BasicColor.White, [(expectedOrigin[0], expectedOrigin[1])]);
         AssertVectorApproximately(
-            (expectedOffset[0], expectedOffset[1]),
-            renderer.CapturedOffset,
-            PositionEpsilon
+            (expectedError[0], expectedError[1]),
+            renderer.CapturedSubPixelOffset
         );
     }
 
     [Theory]
     [MemberData(nameof(TargetSpaceConversionData))]
-    public void Render_WhenInTargetSpace_CorrectlyAppliesPosition(
+    public void Render_InTargetSpace_CorrectlyAppliesPosition(
         float[] transformPos,
-        float[] viewOrigin,
         int[] expectedOrigin,
-        float[] expectedOffset)
+        float[] expectedError)
     {
-        FakePositionalRenderer renderer = new() { TargetSpace = true };
+        FakePositionalRenderer renderer = new() { RenderInTargetSpace = true };
         _ = new GameObject(
             new Transform { Pos = (transformPos[0], transformPos[1]) },
-            renderer);
-
-        renderer.Render(new FrameBuffer(0, 0), (viewOrigin[0], viewOrigin[1]));
-
-        Assert.Equal(
-            (expectedOrigin[0], expectedOrigin[1]),
-            renderer.CapturedOrigin
+            renderer
         );
+        FrameBuffer buffer = new(5, 5);
+
+        renderer.Render(buffer, (-1.5f, 1.5f));
+
+        AssertDrawnColor(buffer, BasicColor.White, [(expectedOrigin[0], expectedOrigin[1])]);
         AssertVectorApproximately(
-            (expectedOffset[0], expectedOffset[1]),
-            renderer.CapturedOffset,
-            PositionEpsilon
+            (expectedError[0], expectedError[1]),
+            renderer.CapturedSubPixelOffset
         );
     }
 
-    private static void AssertVectorApproximately(Vector expected, Vector? actual, float epsilon)
+    private static void AssertVectorApproximately(Vector expected, Vector? actual)
     {
+        const float VectorEpsilon = 0.0001f;
+
         _ = Assert.NotNull(actual);
-        Assert.InRange(actual.Value.X, expected.X - epsilon, expected.X + epsilon);
-        Assert.InRange(actual.Value.Y, expected.Y - epsilon, expected.Y + epsilon);
+        Assert.InRange(actual.Value.X, expected.X - VectorEpsilon, expected.X + VectorEpsilon);
+        Assert.InRange(actual.Value.Y, expected.Y - VectorEpsilon, expected.Y + VectorEpsilon);
     }
 
     private sealed class FakePositionalRenderer(Vector offset = default) : PositionalRenderer
     {
-        public FrameBuffer CapturedFrame { get; private set; }
-
-        public VectorInt CapturedOrigin { get; private set; }
-
-        public Vector CapturedOffset { get; private set; }
-
         public int RenderCount { get; private set; }
+
+        public IRenderTarget CapturedTarget { get; private set; }
+
+        public Vector CapturedSubPixelOffset { get; private set; }
 
         protected override Vector Offset { get; } = offset;
 
-        private protected override void RenderAtPosition(PositionalRenderContext context)
+        private protected override void RenderPositionally(IRenderTarget target, Vector sub)
         {
             RenderCount++;
+            CapturedTarget = target;
+            CapturedSubPixelOffset = sub;
 
-            CapturedFrame = context.Frame;
-            CapturedOrigin = context.Origin;
-            CapturedOffset = context.Offset;
+            target.Draw((0, 0), BasicColor.White);
         }
     }
 }

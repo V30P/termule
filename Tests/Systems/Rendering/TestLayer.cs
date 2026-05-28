@@ -84,7 +84,7 @@ public class TestLayer
     {
         public int Priority { get; } = priority;
 
-        protected internal override void Render(FrameBuffer frame, Vector viewOrigin)
+        protected internal override void Render(IRenderTarget target, Vector viewOrigin)
         {
         }
     }

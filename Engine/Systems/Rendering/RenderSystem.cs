@@ -5,7 +5,7 @@ using Termule.Engine.Types;
 namespace Termule.Engine.Systems.Rendering;
 
 /// <summary>
-///     System responsible for building <see cref="FrameBuffer"/>s from <see cref="Renderer"/>s
+///     System for getting <see cref="Renderer"/>s to contribute to<see cref="IRenderTarget"/>s
 ///     in <see cref="Layer"/> > order.
 /// </summary>
 public sealed class RenderSystem : Core.System
@@ -33,13 +33,13 @@ public sealed class RenderSystem : Core.System
     /// </summary>
     public Layer DefaultLayer => Layers[0];
 
-    internal void Render(Vector viewOrigin, FrameBuffer frame)
+    internal void Render(IRenderTarget target, Vector viewOrigin)
     {
         foreach (Layer layer in Layers)
         {
             foreach (Renderer renderer in layer)
             {
-                renderer.Render(frame, viewOrigin);
+                renderer.Render(target, viewOrigin);
             }
         }
     }

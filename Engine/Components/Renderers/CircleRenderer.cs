@@ -1,3 +1,4 @@
+using Termule.Engine.Systems.Rendering;
 using Termule.Engine.Types;
 
 namespace Termule.Engine.Components;
@@ -48,17 +49,17 @@ public sealed class CircleRenderer : PositionalRenderer
         }
     }
 
-    private protected override void RenderAtPosition(PositionalRenderContext context)
+    private protected override void RenderPositionally(IRenderTarget target, Vector sub)
     {
         // Midpoint circle algorithm
         int y = (int) Radius;
         int p = (int) (1 - Radius);
         for (int x = 0; x <= y; x++)
         {
-            DrawMidpointTransformations((x, y), context);
+            DrawMidpointTransformations((x, y), target, sub);
             if (Filled)
             {
-                FillHorizontals((x, y), context);
+                FillHorizontals((x, y), target, sub);
             }
 
             if (p < 0)
@@ -73,46 +74,45 @@ public sealed class CircleRenderer : PositionalRenderer
         }
     }
 
-    private void DrawMidpointTransformations(VectorInt pos, PositionalRenderContext context)
+    private void DrawMidpointTransformations(VectorInt pos, IRenderTarget target, Vector sub)
     {
-        DrawPoint((pos.X, pos.Y), context);
-        DrawPoint((pos.X, -pos.Y), context);
-        DrawPoint((pos.Y, -pos.X), context);
-        DrawPoint((-pos.Y, -pos.X), context);
-        DrawPoint((-pos.X, -pos.Y), context);
-        DrawPoint((-pos.X, pos.Y), context);
-        DrawPoint((-pos.Y, pos.X), context);
-        DrawPoint((pos.Y, pos.X), context);
+        DrawPoint((pos.X, pos.Y), target, sub);
+        DrawPoint((pos.X, -pos.Y), target, sub);
+        DrawPoint((pos.Y, -pos.X), target, sub);
+        DrawPoint((-pos.Y, -pos.X), target, sub);
+        DrawPoint((-pos.X, -pos.Y), target, sub);
+        DrawPoint((-pos.X, pos.Y), target, sub);
+        DrawPoint((-pos.Y, pos.X), target, sub);
+        DrawPoint((pos.Y, pos.X), target, sub);
     }
 
-    private void FillHorizontals(VectorInt pos, PositionalRenderContext context)
+    private void FillHorizontals(VectorInt pos, IRenderTarget target, Vector sub)
     {
         for (int x = -pos.X + 1; x < pos.X; x++)
         {
-            DrawPoint((x, pos.Y), context);
-            DrawPoint((x, -pos.Y), context);
+            DrawPoint((x, pos.Y), target, sub);
+            DrawPoint((x, -pos.Y), target, sub);
         }
 
         for (int x = -pos.Y + 1; x < pos.Y; x++)
         {
-            DrawPoint((x, pos.X), context);
-            DrawPoint((x, -pos.X), context);
+            DrawPoint((x, pos.X), target, sub);
+            DrawPoint((x, -pos.X), target, sub);
         }
     }
 
-    private void DrawPoint(VectorInt pos, PositionalRenderContext context)
+    private void DrawPoint(VectorInt pos, IRenderTarget target, Vector sub)
     {
         if (!DoubleWide)
         {
-            VectorInt frameSpacePos = pos + context.Origin;
-            context.Frame.Draw(frameSpacePos, Color);
+            target.Draw(pos, Color);
         }
         else
         {
-            VectorInt widenedPos = (pos.X * 2, pos.Y) + context.Origin;
-            context.Frame.Draw(widenedPos, Color);
+            VectorInt widenedPos = (pos.X * 2, pos.Y);
+            target.Draw(widenedPos, Color);
 
-            context.Frame.Draw(widenedPos + (context.Offset.X > 0 ? (1, 0) : (-1, 0)), Color);
+            target.Draw(widenedPos + (sub.X > 0.5f ? (1, 0) : (-1, 0)), Color);
         }
     }
 }

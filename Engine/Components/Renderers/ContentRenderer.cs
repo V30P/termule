@@ -1,3 +1,4 @@
+using Termule.Engine.Systems.Rendering;
 using Termule.Engine.Types;
 
 namespace Termule.Engine.Components;
@@ -37,16 +38,15 @@ public sealed class ContentRenderer<TContent> : PositionalRenderer where TConten
     protected override Vector Offset =>
         Centered && Content != null ? -Content.Size / 2 : (0, 0);
 
-    private protected override void RenderAtPosition(PositionalRenderContext context)
+    private protected override void RenderPositionally(IRenderTarget target, Vector _)
     {
         for (int x = 0; x < Content?.Size.X; x++)
         {
             for (int y = 0; y < Content.Size.Y; y++)
             {
                 Cell cell = Content[x, y];
-                VectorInt cellPos = context.Origin + (x, y);
-                context.Frame.Draw(
-                    cellPos,
+                target.Draw(
+                    (x, RenderInTargetSpace ? y : (Content.Size.Y - y)),
                     cell.Color != BasicColor.Default ? cell.Color : null,
                     cell.Character != '\0' ? cell.Character : null,
                     cell.CharColor != BasicColor.Default ? cell.CharColor : null);

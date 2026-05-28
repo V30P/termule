@@ -24,7 +24,7 @@ public class TestContentRenderer
     }
 
     [Fact]
-    public void Content_WhenTypeLacksParameterlessConstructor_ShouldBeUninitialized()
+    public void Content_WhenTypeLacksParameterlessConstructor_ShouldNotBeInitialized()
     {
         ContentRenderer<NonParameterlessContent> renderer = new();
 
@@ -37,7 +37,7 @@ public class TestContentRenderer
         Cell baseCell = new(BasicColor.White, 'X', BasicColor.White);
         ContentRenderer<Image> baseRenderer = new()
         {
-            TargetSpace = true,
+            RenderInTargetSpace = true,
             Content = new FakeContent(new[,] { { baseCell } })
         };
         _ = new GameObject(new Transform { Pos = (0, 0) }, baseRenderer);
@@ -47,7 +47,7 @@ public class TestContentRenderer
 
         ContentRenderer<Image> defaultRenderer = new()
         {
-            TargetSpace = true,
+            RenderInTargetSpace = true,
             Content = new FakeContent(new Cell[,] { { new() } })
         };
         _ = new GameObject(new Transform { Pos = (0, 0) }, defaultRenderer);
@@ -62,7 +62,7 @@ public class TestContentRenderer
     {
         ContentRenderer<Image> renderer = new()
         {
-            TargetSpace = true,
+            RenderInTargetSpace = true,
             Content = new FakeContent(new Cell[,]
             {
                 { new(BasicColor.White), new(BasicColor.Red) }, { new(BasicColor.Red), new(BasicColor.White) }
@@ -77,45 +77,20 @@ public class TestContentRenderer
         AssertDrawnColor(frame, BasicColor.Red, [(2, 1), (1, 2)]);
     }
 
-    [Theory]
-    [MemberData(nameof(ViewOriginData))]
-    public void Render_RespectsViewOrigin(
-        float[] transformPos,
-        float[] viewOrigin,
-        int[] expectedCellPos)
-    {
-        ContentRenderer<Image> renderer = new()
-        {
-            TargetSpace = true,
-            Content = new FakeContent(new Cell[,] { { new(BasicColor.White) } })
-        };
-        _ = new GameObject(
-            new Transform { Pos = (transformPos[0], transformPos[1]) },
-            renderer);
-        FrameBuffer frame = new(3, 3);
-
-        renderer.Render(frame, (viewOrigin[0], viewOrigin[1]));
-
-        AssertDrawnColor(
-            frame,
-            BasicColor.White,
-            [(expectedCellPos[0], expectedCellPos[1])]);
-    }
-
     [Fact]
     public void Render_WhenCenteredIsTrue_OffsetsCells()
     {
         Cell cell = new(BasicColor.White);
         ContentRenderer<Image> renderer = new()
         {
-            TargetSpace = true,
+            RenderInTargetSpace = true,
             Content = new FakeContent(new[,]
             {
                 { default, cell, default }, { cell, cell, cell }, { default, cell, default }
             }),
             Centered = true
         };
-        _ = new GameObject(new Transform { Pos = (1, 1) }, renderer);
+        _ = new GameObject(new Transform { Pos = (1.5f, 1.5f) }, renderer);
         FrameBuffer frame = new(3, 3);
 
         renderer.Render(frame, (0, 0));
@@ -124,30 +99,12 @@ public class TestContentRenderer
     }
 
     [Fact]
-    public void Render_WhenNotInTargetSpace_AppliesViewOriginAndFlipsY()
-    {
-        ContentRenderer<Image> renderer = new()
-        {
-            TargetSpace = false,
-            Content = new FakeContent(
-                new Cell[,] { { new(BasicColor.White) } }
-            )
-        };
-        _ = new GameObject(new Transform { Pos = (2, 0) }, renderer);
-        FrameBuffer frame = new(3, 3);
-
-        renderer.Render(frame, (1, 1));
-
-        AssertDrawnColor(frame, BasicColor.White, [(1, 1)]);
-    }
-
-    [Fact]
     public void Render_WithNullContent_DoesNotMutateFrame()
     {
         Cell baseCell = new(BasicColor.White, 'X', BasicColor.White);
         ContentRenderer<Image> baseRenderer = new()
         {
-            TargetSpace = true,
+            RenderInTargetSpace = true,
             Content = new FakeContent(new[,] { { baseCell } })
         };
         _ = new GameObject(new Transform { Pos = (0, 0) }, baseRenderer);
@@ -155,7 +112,7 @@ public class TestContentRenderer
 
         baseRenderer.Render(frame, (0, 0));
 
-        ContentRenderer<Image> nullRenderer = new() { TargetSpace = true, Content = null };
+        ContentRenderer<Image> nullRenderer = new() { RenderInTargetSpace = true, Content = null };
         _ = new GameObject(new Transform { Pos = (0, 0) }, nullRenderer);
 
         nullRenderer.Render(frame, (0, 0));

@@ -39,7 +39,7 @@ public class TestRenderSystem
             ]
         };
 
-        renderSystem.Render((0, 0), new FrameBuffer(0, 0));
+        renderSystem.Render(new FrameBuffer(0, 0), (0, 0));
         Assert.Equal([rendererA, rendererB], renderTracker);
     }
 
@@ -53,7 +53,7 @@ public class TestRenderSystem
         FrameBuffer frame = new(0, 0);
         renderer.Render(frame, (10, 5));
 
-        Assert.Same(frame, renderer.CapturedFrame);
+        Assert.Same(frame, renderer.CapturedTarget);
         Assert.Equal((10, 5), renderer.CapturedViewOrigin);
     }
 
@@ -71,9 +71,9 @@ public class TestRenderSystem
 
     private sealed class OrderedRenderer(List<OrderedRenderer> renderTracker) : FakeRenderer
     {
-        protected internal override void Render(FrameBuffer frame, Vector viewOrigin)
+        protected internal override void Render(IRenderTarget target, Vector viewOrigin)
         {
-            base.Render(frame, viewOrigin);
+            base.Render(target, viewOrigin);
 
             renderTracker.Add(this);
         }

@@ -40,7 +40,11 @@ internal sealed class Raindrops : Demo
         World.Add(
             new GameObject(
                 new Transform(),
-                new CircleRenderer { TargetSpace = true, DoubleWide = true },
+                new CircleRenderer
+                {
+                    RenderInTargetSpace = true,
+                    DoubleWide = true
+                },
                 new RaindropController((x, y))
             )
         );

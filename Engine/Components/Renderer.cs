@@ -5,7 +5,8 @@ using Termule.Engine.Types;
 namespace Termule.Engine.Components;
 
 /// <summary>
-///     Base component for rendering into frames produced by the render system.
+///     Base component for rendering into <see cref="IRenderTarget"/>s via the
+///     <see cref="RenderSystem"/>.
 /// </summary>
 public abstract class Renderer : Component
 {
@@ -36,11 +37,11 @@ public abstract class Renderer : Component
     }
 
     /// <summary>
-    ///     Renders to the provided <see cref="FrameBuffer" />.
+    ///     Renders to the provided <see cref="IRenderTarget" />.
     /// </summary>
-    /// <param name="frame">The target frame to contribute to.</param>
-    /// <param name="viewOrigin">The origin of the view in game space.</param>
-    protected internal abstract void Render(FrameBuffer frame, Vector viewOrigin);
+    /// <param name="target">The target to render to.</param>
+    /// <param name="viewOrigin">The origin of the view in world-space.</param>
+    protected internal abstract void Render(IRenderTarget target, Vector viewOrigin);
 
     /// <inheritdoc />
     protected override void Activate()
