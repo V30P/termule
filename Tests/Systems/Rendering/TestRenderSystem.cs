@@ -1,3 +1,4 @@
+using Termule.Engine.Systems.Display;
 using Termule.Engine.Systems.Rendering;
 using Termule.Engine.Types;
 

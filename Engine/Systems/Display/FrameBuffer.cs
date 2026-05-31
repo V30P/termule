@@ -1,6 +1,7 @@
+using Termule.Engine.Systems.Rendering;
 using Termule.Engine.Types;
 
-namespace Termule.Engine.Systems.Rendering;
+namespace Termule.Engine.Systems.Display;
 
 /// <summary>
 ///     <see cref="Image"/>-based <see cref="IRenderTarget"/> implementation.

@@ -20,9 +20,10 @@ public sealed class LineRenderer : PositionalRenderer
     public Color Color { get; set; }
 
     /// <summary>
-    ///     Gets or sets a value indicating whether lines should be drawn with Unicode box-drawing characters.
+    ///     Gets or sets a value indicating whether lines should be drawn with Unicode box-drawing
+    ///     glyphs.
     /// </summary>
-    public bool UseBoxDrawingCharacters { get; set; }
+    public bool UseBoxDrawingGlyphs { get; set; }
 
     private protected override void RenderPositionally(IRenderTarget target, Vector _)
     {
@@ -56,8 +57,8 @@ public sealed class LineRenderer : PositionalRenderer
                 err -= dy;
                 next = new VectorInt(curr.Value.X + sx, curr.Value.Y);
 
-                // When using box-drawing characters, steps must be orthogonal
-                if (UseBoxDrawingCharacters)
+                // When using box-drawing glyphs, steps must be orthogonal
+                if (UseBoxDrawingGlyphs)
                 {
                     DrawSegment();
                     continue;
@@ -75,7 +76,7 @@ public sealed class LineRenderer : PositionalRenderer
 
         void DrawSegment()
         {
-            if (UseBoxDrawingCharacters)
+            if (UseBoxDrawingGlyphs)
             {
                 Connections connections =
                     (prev != null ? GetConnection(prev.Value - curr.Value) : Connections.None) |
@@ -83,8 +84,8 @@ public sealed class LineRenderer : PositionalRenderer
 
                 target.Draw(
                     curr.Value,
-                    character: connections.ToChar(),
-                    characterColor: Color
+                    glyph: connections.ToGlyph(),
+                    glyphColor: Color
                 );
             }
             else

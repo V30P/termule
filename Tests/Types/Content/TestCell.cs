@@ -50,8 +50,8 @@ public class TestCell
         Cell cell = new();
 
         Assert.Equal(default, cell.Color);
-        Assert.Equal('\0', cell.Character);
-        Assert.Equal(default, cell.CharColor);
+        Assert.Equal('\0', cell.Glyph);
+        Assert.Equal(default, cell.GlyphColor);
     }
 
     [Fact]
@@ -62,12 +62,12 @@ public class TestCell
         Color fg = BasicColor.Yellow;
 
         cell.Color = bg;
-        cell.Character = 'B';
-        cell.CharColor = fg;
+        cell.Glyph = 'B';
+        cell.GlyphColor = fg;
 
         Assert.Equal(bg, cell.Color);
-        Assert.Equal('B', cell.Character);
-        Assert.Equal(fg, cell.CharColor);
+        Assert.Equal('B', cell.Glyph);
+        Assert.Equal(fg, cell.GlyphColor);
     }
 
     [Fact]
@@ -79,7 +79,7 @@ public class TestCell
         Cell cell = new(bg, 'A', fg);
 
         Assert.Equal(bg, cell.Color);
-        Assert.Equal('A', cell.Character);
-        Assert.Equal(fg, cell.CharColor);
+        Assert.Equal('A', cell.Glyph);
+        Assert.Equal(fg, cell.GlyphColor);
     }
 }

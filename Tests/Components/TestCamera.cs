@@ -1,5 +1,6 @@
 using Termule.Engine.Components;
 using Termule.Engine.Core;
+using Termule.Engine.Systems.Display;
 using Termule.Engine.Systems.Rendering;
 using Termule.Engine.Types;
 
@@ -78,36 +79,13 @@ public class TestCamera
         Assert.Equal(5, target.PrintCount);
     }
 
-    [Fact]
-    public void Tick_FillsTargetBufferWithBackgroundCell()
-    {
-        Cell background = new(BasicColor.White, 'T', BasicColor.Black);
-        FakeTarget target = new((5, 5));
-        Game game = new();
-        game.World.Add(
-            new Camera { Target = target, BackgroundCell = background });
-
-        game.Systems.Install(new RenderSystem());
-        game.Start();
-
-        game.RunTick();
-
-        for (int x = 0; x < target.Size.X; x++)
-        {
-            for (int y = 0; y < target.Size.Y; y++)
-            {
-                Assert.Equal(background, target.Buffer[x, y]);
-            }
-        }
-    }
-
     private sealed class FakeTarget(VectorInt size) : ICameraTarget
     {
         public int PrintCount { get; private set; }
 
         public VectorInt Size { get; } = size;
 
-        public FrameBuffer Buffer { get; set; } = new(size.X, size.Y);
+        IRenderTarget ICameraTarget.RenderTarget { get; } = new FrameBuffer(size.X, size.Y);
 
         public void Update()
         {

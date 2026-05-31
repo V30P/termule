@@ -1,4 +1,4 @@
-using Termule.Engine.Systems.Rendering;
+using Termule.Engine.Systems.Display;
 using Termule.Engine.Types;
 
 namespace Termule.Tests.Systems.Rendering;

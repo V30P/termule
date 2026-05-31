@@ -7,11 +7,11 @@ namespace Termule.Engine.Types;
 ///     Initializes a new instance of the <see cref="Cell" /> struct.
 /// </remarks>
 /// <param name="color">The background color of the cell.</param>
-/// <param name="character">The character in the cell.</param>
-/// <param name="charColor">The color of the cell's character.</param>
+/// <param name="glyph">The glyph in the cell.</param>
+/// <param name="charColor">The color of the cell's glyph.</param>
 public struct Cell(
     Color color = default,
-    char character = '\0',
+    char glyph = '\0',
     Color charColor = default) : IEquatable<Cell>
 {
     /// <summary>
@@ -20,14 +20,14 @@ public struct Cell(
     public Color Color { get; set; } = color;
 
     /// <summary>
-    ///     Gets or sets the character in the cell.
+    ///     Gets or sets the glyph in the cell.
     /// </summary>
-    public char Character { get; set; } = character;
+    public char Glyph { get; set; } = glyph;
 
     /// <summary>
-    ///     Gets or sets the color of the cell's character.
+    ///     Gets or sets the color of the cell's glyph.
     /// </summary>
-    public Color CharColor { get; set; } = charColor;
+    public Color GlyphColor { get; set; } = charColor;
 
     /// <summary>
     ///     Compares two cells by value and returns whether they match.
@@ -38,8 +38,8 @@ public struct Cell(
     public static bool operator ==(Cell c1, Cell c2)
     {
         return c1.Color == c2.Color
-               && c1.Character == c2.Character
-               && c1.CharColor == c2.CharColor;
+               && c1.Glyph == c2.Glyph
+               && c1.GlyphColor == c2.GlyphColor;
     }
 
     /// <summary>
@@ -62,12 +62,12 @@ public struct Cell(
     /// <inheritdoc />
     public override readonly int GetHashCode()
     {
-        return HashCode.Combine(Color, Character, CharColor);
+        return HashCode.Combine(Color, Glyph, GlyphColor);
     }
 
     /// <inheritdoc />
     public readonly bool Equals(Cell other)
     {
-        return Color.Equals(other.Color) && Character == other.Character && CharColor.Equals(other.CharColor);
+        return Color.Equals(other.Color) && Glyph == other.Glyph && GlyphColor.Equals(other.GlyphColor);
     }
 }

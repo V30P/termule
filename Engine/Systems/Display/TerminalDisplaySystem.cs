@@ -56,7 +56,7 @@ public abstract class TerminalDisplaySystem : DisplaySystem
 
     private readonly StringBuilder builder = new(BuilderLimit);
 
-    private Color currentCharColor;
+    private Color currentGlyphColor;
     private Color currentColor;
 
     internal TerminalDisplaySystem()
@@ -123,7 +123,7 @@ public abstract class TerminalDisplaySystem : DisplaySystem
                 Cell cell = Buffer[x, y];
 
                 // Apply color changes if necessary
-                if (cell.Color != currentColor || cell.CharColor != currentCharColor)
+                if (cell.Color != currentColor || cell.GlyphColor != currentGlyphColor)
                 {
                     _ = builder.Append("\e[");
 
@@ -133,22 +133,22 @@ public abstract class TerminalDisplaySystem : DisplaySystem
                         currentColor = cell.Color;
                     }
 
-                    if (cell.CharColor != currentCharColor)
+                    if (cell.GlyphColor != currentGlyphColor)
                     {
                         if (builder[^1] != '[')
                         {
                             _ = builder.Append(';');
                         }
 
-                        AppendForegroundColorCode(cell.CharColor);
-                        currentCharColor = cell.CharColor;
+                        AppendForegroundColorCode(cell.GlyphColor);
+                        currentGlyphColor = cell.GlyphColor;
                     }
 
                     _ = builder.Append('m');
                 }
 
-                // Write the character
-                _ = builder.Append(cell.Character != '\0' ? cell.Character : ' ');
+                // Write the glyph
+                _ = builder.Append(cell.Glyph != '\0' ? cell.Glyph : ' ');
 
                 if (builder.Length > FlushLimit)
                 {

@@ -9,7 +9,7 @@ public sealed class Text : IContent
     private VectorInt size = (0, 0);
 
     /// <summary>
-    ///     Gets or sets the color of this text's characters.
+    ///     Gets or sets the color of this text's glyphs.
     /// </summary>
     public Color Color
     {
@@ -22,14 +22,14 @@ public sealed class Text : IContent
             {
                 for (int i = 0; i < line.Length; i++)
                 {
-                    line[i].CharColor = field;
+                    line[i].GlyphColor = field;
                 }
             }
         }
     }
 
     /// <summary>
-    ///     Gets or sets the string of characters for this text.
+    ///     Gets or sets the string of glyphs for this text.
     /// </summary>
     public string Value
     {

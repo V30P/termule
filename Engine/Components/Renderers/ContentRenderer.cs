@@ -48,8 +48,8 @@ public sealed class ContentRenderer<TContent> : PositionalRenderer where TConten
                 target.Draw(
                     (x, RenderInTargetSpace ? y : (Content.Size.Y - y)),
                     cell.Color != BasicColor.Default ? cell.Color : null,
-                    cell.Character != '\0' ? cell.Character : null,
-                    cell.CharColor != BasicColor.Default ? cell.CharColor : null);
+                    cell.Glyph != '\0' ? cell.Glyph : null,
+                    cell.GlyphColor != BasicColor.Default ? cell.GlyphColor : null);
             }
         }
     }

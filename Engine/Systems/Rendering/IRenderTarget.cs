@@ -31,19 +31,19 @@ public interface IRenderTarget
     /// </summary>
     /// <param name="pos">The position of the cell.</param>
     /// <param name="color">The color to set, or <c>null</c> to leave unchanged.</param>
-    /// <param name="character">The character to set, or <c>null</c> to leave unchanged.</param>
-    /// <param name="characterColor">
-    ///     The character color to set, or <c>null</c> to leave unchanged.
+    /// <param name="glyph">The glyph to set, or <c>null</c> to leave unchanged.</param>
+    /// <param name="glyphColor">
+    ///     The glyph color to set, or <c>null</c> to leave unchanged.
     /// </param>
     /// <param name="layerBoxDrawingChars">
-    ///     Indicates that drawing Unicode box-drawing characters over existing box-drawing
-    ///     characters of the same color should combine them.
+    ///     Indicates that drawing Unicode box-drawing glyphs over existing box-drawing
+    ///     glyphs of the same color should combine them.
     /// </param>
     public void Draw(
         VectorInt pos,
         Color? color = null,
-        char? character = null,
-        Color? characterColor = null,
+        char? glyph = null,
+        Color? glyphColor = null,
         bool layerBoxDrawingChars = true)
     {
         if (
@@ -60,27 +60,27 @@ public interface IRenderTarget
         if (color != null)
         {
             cell.Color = color.Value;
-            cell.Character = '\0';
-            cell.CharColor = default;
+            cell.Glyph = '\0';
+            cell.GlyphColor = default;
         }
 
-        if (character != null)
+        if (glyph != null)
         {
-            if (layerBoxDrawingChars && characterColor == cell.CharColor)
+            if (layerBoxDrawingChars && glyphColor == cell.GlyphColor)
             {
-                Connections connections = ConnectionsExtensions.FromChar(character.Value)
-                    | ConnectionsExtensions.FromChar(cell.Character);
+                Connections connections = ConnectionsExtensions.FromGlyph(glyph.Value)
+                    | ConnectionsExtensions.FromGlyph(cell.Glyph);
 
-                character = connections.ToChar();
+                glyph = connections.ToGlyph();
             }
 
-            cell.Character = character.Value;
-            cell.CharColor = default;
+            cell.Glyph = glyph.Value;
+            cell.GlyphColor = default;
         }
 
-        if (characterColor != null)
+        if (glyphColor != null)
         {
-            cell.CharColor = characterColor.Value;
+            cell.GlyphColor = glyphColor.Value;
         }
     }
 }

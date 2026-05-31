@@ -1,6 +1,6 @@
 using Termule.Engine.Components;
 using Termule.Engine.Core;
-using Termule.Engine.Systems.Rendering;
+using Termule.Engine.Systems.Display;
 using Termule.Engine.Types;
 using static Termule.Tests.Components.Utilities;
 
@@ -131,7 +131,7 @@ public class TestLineRenderer
             RenderInTargetSpace = true,
             Color = BasicColor.White,
             Points = [(start[0], start[1]), (end[0], end[1])],
-            UseBoxDrawingCharacters = true
+            UseBoxDrawingGlyphs = true
         };
         _ = new GameObject(new Transform { Pos = (0, 0) }, renderer);
 
@@ -141,12 +141,12 @@ public class TestLineRenderer
     }
 
     [Fact]
-    public void Render_InWorldSpace_UsingBoxDrawingCharacters_FlipsVerticalConnections()
+    public void Render_InWorldSpace_UsingBoxDrawingGlyphs_FlipsVerticalConnections()
     {
         FrameBuffer frame = new(3, 3);
         LineRenderer renderer = new()
         {
-            UseBoxDrawingCharacters = true,
+            UseBoxDrawingGlyphs = true,
             Color = BasicColor.White,
             Points = [(0, 0), (1, 1)]
         };
@@ -154,8 +154,8 @@ public class TestLineRenderer
 
         renderer.Render(frame, (-1.5f, 1.5f));
 
-        Assert.Equal(frame[1, 1], new Cell(character: '╶', charColor: BasicColor.White));
-        Assert.Equal(frame[2, 1], new Cell(character: '┘', charColor: BasicColor.White));
-        Assert.Equal(frame[2, 0], new Cell(character: '╷', charColor: BasicColor.White));
+        Assert.Equal(frame[1, 1], new Cell(glyph: '╶', charColor: BasicColor.White));
+        Assert.Equal(frame[2, 1], new Cell(glyph: '┘', charColor: BasicColor.White));
+        Assert.Equal(frame[2, 0], new Cell(glyph: '╷', charColor: BasicColor.White));
     }
 }

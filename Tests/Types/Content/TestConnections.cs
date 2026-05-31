@@ -7,25 +7,25 @@ public class TestConnections
     [Fact]
     public void FromChar_ReturnsCorrectConnections()
     {
-        Assert.Equal(Connections.Up, ConnectionsExtensions.FromChar('╵'));
-        Assert.Equal(Connections.Right, ConnectionsExtensions.FromChar('╶'));
-        Assert.Equal(Connections.Up | Connections.Down, ConnectionsExtensions.FromChar('│'));
+        Assert.Equal(Connections.Up, ConnectionsExtensions.FromGlyph('╵'));
+        Assert.Equal(Connections.Right, ConnectionsExtensions.FromGlyph('╶'));
+        Assert.Equal(Connections.Up | Connections.Down, ConnectionsExtensions.FromGlyph('│'));
     }
 
     [Fact]
     public void FromChar_UnmappedChar_ReturnsNone()
     {
-        Assert.Equal(Connections.None, ConnectionsExtensions.FromChar('a'));
+        Assert.Equal(Connections.None, ConnectionsExtensions.FromGlyph('a'));
     }
 
     [Fact]
     public void ToChar_ReturnsCorrectChars()
     {
-        Assert.Equal('╵', Connections.Up.ToChar());
-        Assert.Equal('╶', Connections.Right.ToChar());
-        Assert.Equal('╷', Connections.Down.ToChar());
-        Assert.Equal('╴', Connections.Left.ToChar());
-        Assert.Equal('│', (Connections.Up | Connections.Down).ToChar());
-        Assert.Equal('─', (Connections.Right | Connections.Left).ToChar());
+        Assert.Equal('╵', Connections.Up.ToGlyph());
+        Assert.Equal('╶', Connections.Right.ToGlyph());
+        Assert.Equal('╷', Connections.Down.ToGlyph());
+        Assert.Equal('╴', Connections.Left.ToGlyph());
+        Assert.Equal('│', (Connections.Up | Connections.Down).ToGlyph());
+        Assert.Equal('─', (Connections.Right | Connections.Left).ToGlyph());
     }
 }

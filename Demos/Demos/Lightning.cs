@@ -15,9 +15,11 @@ internal sealed class Lightning : Demo
 
     protected override void Start()
     {
+        Systems.Get<DisplaySystem>().BackgroundCell = new Cell((0, 0, 0));
+
         World.Add(
             new Transform(),
-            new Camera { BackgroundCell = new Cell((0, 0, 0)) }
+            new Camera()
         );
     }
 
@@ -103,7 +105,7 @@ internal sealed class Lightning : Demo
                         RenderInTargetSpace = true,
                         Points = branch,
                         Color = (1, 1, 1),
-                        UseBoxDrawingCharacters = true
+                        UseBoxDrawingGlyphs = true
                     }
                 );
             }

@@ -55,7 +55,12 @@ public abstract class DisplaySystem : Core.System, ICameraTarget
         }
     }
 
-    FrameBuffer ICameraTarget.Buffer => Buffer;
+    /// <summary>
+    ///     Gets or sets a cell that will fill the background of the display.
+    /// </summary>
+    public Cell BackgroundCell { get; set; }
+
+    IRenderTarget ICameraTarget.RenderTarget => Buffer;
 
     private protected FrameBuffer Buffer { get; set; } = new FrameBuffer(0, 0);
 
@@ -65,6 +70,7 @@ public abstract class DisplaySystem : Core.System, ICameraTarget
     {
         PrintBuffer();
         (Buffer, Screen) = (Screen, Buffer);
+        Buffer.Fill(BackgroundCell);
     }
 
     private protected abstract void PrintBuffer();

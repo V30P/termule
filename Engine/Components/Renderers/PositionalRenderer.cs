@@ -60,15 +60,15 @@ public abstract class PositionalRenderer : Renderer
         public void Draw(
             VectorInt pos,
             Color? color = null,
-            char? character = null,
-            Color? characterColor = null,
+            char? glyph = null,
+            Color? glyphColor = null,
             bool layerBoxDrawingChars = true)
         {
             target.Draw(
                 LocalToTargetPos(pos),
                 color,
-                character,
-                characterColor,
+                glyph,
+                glyphColor,
                 layerBoxDrawingChars
             );
         }

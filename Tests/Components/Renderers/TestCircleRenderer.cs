@@ -1,6 +1,6 @@
 using Termule.Engine.Components;
 using Termule.Engine.Core;
-using Termule.Engine.Systems.Rendering;
+using Termule.Engine.Systems.Display;
 using Termule.Engine.Types;
 using static Termule.Tests.Components.Utilities;
 

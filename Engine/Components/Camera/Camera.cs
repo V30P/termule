@@ -11,12 +11,6 @@ namespace Termule.Engine.Components;
 public sealed class Camera : Component
 {
     /// <summary>
-    ///     Gets or sets a cell that will fill the background of rendered
-    ///     <see cref="FrameBuffer"/>s.
-    /// </summary>
-    public Cell BackgroundCell { get; set; }
-
-    /// <summary>
     ///     Gets or sets the target that this camera should render to.
     /// </summary>
     public ICameraTarget Target
@@ -55,8 +49,7 @@ public sealed class Camera : Component
     /// <inheritdoc />
     protected internal override void Tick()
     {
-        Target.Buffer.Fill(BackgroundCell);
-        GetRequiredSystem<RenderSystem>().Render(Target.Buffer, TargetToGamePos((0, 0)));
+        GetRequiredSystem<RenderSystem>().Render(Target.RenderTarget, TargetToGamePos((0, 0)));
         Target.Update();
     }
 }

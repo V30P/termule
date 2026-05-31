@@ -17,9 +17,11 @@ internal sealed class Raindrops : Demo
 
     protected override void Start()
     {
+        Systems.Get<DisplaySystem>().BackgroundCell = new Cell((0, 0, 0));
+
         World.Add(
             new Transform(),
-            new Camera { BackgroundCell = new Cell((0, 0, 0)) }
+            new Camera()
         );
     }
 
@@ -60,7 +62,7 @@ internal sealed class Raindrops : Demo
             time += Game.DeltaTime;
             if (time > Lifespan)
             {
-                Destroy();
+                GameObject.Destroy();
                 return;
             }
 

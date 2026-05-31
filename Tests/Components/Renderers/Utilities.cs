@@ -1,4 +1,4 @@
-using Termule.Engine.Systems.Rendering;
+using Termule.Engine.Systems.Display;
 using Termule.Engine.Types;
 
 namespace Termule.Tests.Components;
@@ -36,11 +36,11 @@ public static class Utilities
             {
                 if (expectedChars.ContainsKey((x, y)))
                 {
-                    Assert.Equal(expectedChars[(x, y)], frame[x, y].Character);
+                    Assert.Equal(expectedChars[(x, y)], frame[x, y].Glyph);
                 }
                 else
                 {
-                    Assert.Equal(default, frame[x, y].Character);
+                    Assert.Equal(default, frame[x, y].Glyph);
                 }
             }
         }

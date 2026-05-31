@@ -18,16 +18,16 @@ public class TestIRenderTarget
     [MemberData(nameof(DrawData))]
     public void Draw_AppliesProvidedValues(
         BasicColor? color,
-        char? character,
-        BasicColor? characterColor)
+        char? glyph,
+        BasicColor? glyphColor)
     {
         IRenderTarget target = new FakeRenderTarget(1, 1);
         Cell expectedCell = new(
             color ?? default,
-            character ?? '\0',
-            characterColor ?? default);
+            glyph ?? '\0',
+            glyphColor ?? default);
 
-        target.Draw((0, 0), color, character, characterColor);
+        target.Draw((0, 0), color, glyph, glyphColor);
 
         Assert.Equal(expectedCell, target.GetCellRef(0, 0));
     }
@@ -37,10 +37,10 @@ public class TestIRenderTarget
     {
         IRenderTarget target = new FakeRenderTarget(1, 1);
 
-        target.Draw((0, 0), character: '─', characterColor: BasicColor.White);
-        target.Draw((0, 0), character: '│', characterColor: BasicColor.Red);
+        target.Draw((0, 0), glyph: '─', glyphColor: BasicColor.White);
+        target.Draw((0, 0), glyph: '│', glyphColor: BasicColor.Red);
 
-        Assert.Equal('│', target.GetCellRef(0, 0).Character);
+        Assert.Equal('│', target.GetCellRef(0, 0).Glyph);
     }
 
     [Fact]
@@ -66,10 +66,10 @@ public class TestIRenderTarget
     {
         IRenderTarget target = new FakeRenderTarget(1, 1);
 
-        target.Draw((0, 0), character: '─', characterColor: BasicColor.White);
-        target.Draw((0, 0), character: '│', characterColor: BasicColor.White);
+        target.Draw((0, 0), glyph: '─', glyphColor: BasicColor.White);
+        target.Draw((0, 0), glyph: '│', glyphColor: BasicColor.White);
 
-        Assert.Equal('┼', target.GetCellRef(0, 0).Character);
+        Assert.Equal('┼', target.GetCellRef(0, 0).Glyph);
     }
 
     [Fact]
@@ -86,19 +86,19 @@ public class TestIRenderTarget
     }
 
     [Fact]
-    public void Draw_WithLayerBoxDrawingCharactersFalse_DoesNotLayerBoxDrawingChars()
+    public void Draw_WithLayerBoxDrawingGlyphsFalse_DoesNotLayerBoxDrawingGlyphs()
     {
         IRenderTarget target = new FakeRenderTarget(1, 1);
 
-        target.Draw((0, 0), character: '─', characterColor: BasicColor.White);
+        target.Draw((0, 0), glyph: '─', glyphColor: BasicColor.White);
         target.Draw(
             (0, 0),
-            character: '│',
-            characterColor: BasicColor.White,
+            glyph: '│',
+            glyphColor: BasicColor.White,
             layerBoxDrawingChars: false
         );
 
-        Assert.Equal('│', target.GetCellRef(0, 0).Character);
+        Assert.Equal('│', target.GetCellRef(0, 0).Glyph);
     }
 
     private sealed class FakeRenderTarget(int width, int height) : IRenderTarget

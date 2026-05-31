@@ -1,7 +1,7 @@
 namespace Termule.Engine.Types;
 
 /// <summary>
-///     Flags representing the connections of a Unicode box-drawing character.
+///     Flags representing the connections of a Unicode box-drawing glyph.
 /// </summary>
 /// <remarks>
 ///     Use <see cref="ConnectionsExtensions" /> methods to convert between
@@ -24,7 +24,7 @@ public enum Connections
 /// </summary>
 public static class ConnectionsExtensions
 {
-    private static readonly Dictionary<Connections, char> ConnectionsToCharacter = new()
+    private static readonly Dictionary<Connections, char> ConnectionsToGlyph = new()
     {
         [Connections.Up] = '╵',
         [Connections.Right] = '╶',
@@ -43,28 +43,28 @@ public static class ConnectionsExtensions
         [Connections.Up | Connections.Right | Connections.Down | Connections.Left] = '┼'
     };
 
-    private static readonly Dictionary<char, Connections> CharacterToConnections =
-        ConnectionsToCharacter.Select(p => KeyValuePair.Create(p.Value, p.Key)).ToDictionary();
+    private static readonly Dictionary<char, Connections> GlyphToConnections =
+        ConnectionsToGlyph.Select(p => KeyValuePair.Create(p.Value, p.Key)).ToDictionary();
 
     /// <summary>
-    ///     Gets the box-drawing character for this <see cref="Connections" />.
+    ///     Gets the box-drawing glyph for this <see cref="Connections" />.
     /// </summary>
     /// <param name="connections">The connections to convert.</param>
-    /// <returns>The corresponding unicode box character.</returns>
-    public static char ToChar(this Connections connections)
+    /// <returns>The corresponding unicode box glyph.</returns>
+    public static char ToGlyph(this Connections connections)
     {
-        return ConnectionsToCharacter.GetValueOrDefault(connections);
+        return ConnectionsToGlyph.GetValueOrDefault(connections);
     }
 
     /// <summary>
     ///     Finds the box-drawing <see cref="Connections" /> of the given
-    ///     <paramref name="character" />.
+    ///     <paramref name="glyph" />.
     /// </summary>
-    /// <param name="character">The character to determine the connections of.</param>
-    /// <returns>The connections of the character.</returns>
-    /// <remarks>This will be <see cref="Connections.None" /> for most characters.</remarks>
-    public static Connections FromChar(char character)
+    /// <param name="glyph">The glyph to determine the connections of.</param>
+    /// <returns>The connections of the glyph.</returns>
+    /// <remarks>This will be <see cref="Connections.None" /> for most glyphs.</remarks>
+    public static Connections FromGlyph(char glyph)
     {
-        return CharacterToConnections.GetValueOrDefault(character);
+        return GlyphToConnections.GetValueOrDefault(glyph);
     }
 }

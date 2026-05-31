@@ -26,7 +26,7 @@ public class TestText
     {
         Text text = new() { Value = "Hi" };
 
-        Assert.Equal(new Cell { Character = 'H' }, ((IContent) text)[0, 0]);
+        Assert.Equal(new Cell { Glyph = 'H' }, ((IContent) text)[0, 0]);
     }
 
     [Fact]
@@ -43,14 +43,14 @@ public class TestText
     public void SettingColor_AfterValue_RecolorsExistingCells()
     {
         Text text = new() { Value = "Test" };
-        Assert.Equal(default, ((IContent) text)[0, 0].CharColor);
+        Assert.Equal(default, ((IContent) text)[0, 0].GlyphColor);
 
         text.Color = BasicColor.Red;
 
-        Assert.Equal(BasicColor.Red, ((IContent) text)[0, 0].CharColor);
-        Assert.Equal(BasicColor.Red, ((IContent) text)[1, 0].CharColor);
-        Assert.Equal(BasicColor.Red, ((IContent) text)[2, 0].CharColor);
-        Assert.Equal(BasicColor.Red, ((IContent) text)[3, 0].CharColor);
+        Assert.Equal(BasicColor.Red, ((IContent) text)[0, 0].GlyphColor);
+        Assert.Equal(BasicColor.Red, ((IContent) text)[1, 0].GlyphColor);
+        Assert.Equal(BasicColor.Red, ((IContent) text)[2, 0].GlyphColor);
+        Assert.Equal(BasicColor.Red, ((IContent) text)[3, 0].GlyphColor);
     }
 
     [Fact]
@@ -58,10 +58,10 @@ public class TestText
     {
         Text text = new() { Color = BasicColor.Red, Value = "Test" };
 
-        Assert.Equal(BasicColor.Red, ((IContent) text)[0, 0].CharColor);
-        Assert.Equal(BasicColor.Red, ((IContent) text)[1, 0].CharColor);
-        Assert.Equal(BasicColor.Red, ((IContent) text)[2, 0].CharColor);
-        Assert.Equal(BasicColor.Red, ((IContent) text)[3, 0].CharColor);
+        Assert.Equal(BasicColor.Red, ((IContent) text)[0, 0].GlyphColor);
+        Assert.Equal(BasicColor.Red, ((IContent) text)[1, 0].GlyphColor);
+        Assert.Equal(BasicColor.Red, ((IContent) text)[2, 0].GlyphColor);
+        Assert.Equal(BasicColor.Red, ((IContent) text)[3, 0].GlyphColor);
     }
 
     [Fact]
@@ -89,13 +89,13 @@ public class TestText
         Text text = new() { Value = "Hi\nWorld" };
 
         Assert.Equal((5, 2), ((IContent) text).Size);
-        Assert.Equal('H', ((IContent) text)[0, 0].Character);
-        Assert.Equal('i', ((IContent) text)[1, 0].Character);
-        Assert.Equal('W', ((IContent) text)[0, 1].Character);
-        Assert.Equal('o', ((IContent) text)[1, 1].Character);
-        Assert.Equal('r', ((IContent) text)[2, 1].Character);
-        Assert.Equal('l', ((IContent) text)[3, 1].Character);
-        Assert.Equal('d', ((IContent) text)[4, 1].Character);
+        Assert.Equal('H', ((IContent) text)[0, 0].Glyph);
+        Assert.Equal('i', ((IContent) text)[1, 0].Glyph);
+        Assert.Equal('W', ((IContent) text)[0, 1].Glyph);
+        Assert.Equal('o', ((IContent) text)[1, 1].Glyph);
+        Assert.Equal('r', ((IContent) text)[2, 1].Glyph);
+        Assert.Equal('l', ((IContent) text)[3, 1].Glyph);
+        Assert.Equal('d', ((IContent) text)[4, 1].Glyph);
     }
 
     [Fact]
@@ -115,10 +115,10 @@ public class TestText
         Text text = new() { Value = "Hello" };
 
         Assert.Equal((5, 1), ((IContent) text).Size);
-        Assert.Equal('H', ((IContent) text)[0, 0].Character);
-        Assert.Equal('e', ((IContent) text)[1, 0].Character);
-        Assert.Equal('l', ((IContent) text)[2, 0].Character);
-        Assert.Equal('l', ((IContent) text)[3, 0].Character);
-        Assert.Equal('o', ((IContent) text)[4, 0].Character);
+        Assert.Equal('H', ((IContent) text)[0, 0].Glyph);
+        Assert.Equal('e', ((IContent) text)[1, 0].Glyph);
+        Assert.Equal('l', ((IContent) text)[2, 0].Glyph);
+        Assert.Equal('l', ((IContent) text)[3, 0].Glyph);
+        Assert.Equal('o', ((IContent) text)[4, 0].Glyph);
     }
 }
