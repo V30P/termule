@@ -81,13 +81,18 @@ public class TestCamera
 
     private sealed class FakeTarget(VectorInt size) : ICameraTarget
     {
+        private readonly IRenderTarget renderTarget = new FrameBuffer(size.X, size.Y);
+
         public int PrintCount { get; private set; }
 
         public VectorInt Size { get; } = size;
 
-        IRenderTarget ICameraTarget.RenderTarget { get; } = new FrameBuffer(size.X, size.Y);
+        IRenderTarget ICameraTarget.GetRenderTarget()
+        {
+            return renderTarget;
+        }
 
-        public void Update()
+        void ICameraTarget.Update()
         {
             PrintCount++;
         }

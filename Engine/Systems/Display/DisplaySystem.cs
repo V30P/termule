@@ -60,17 +60,20 @@ public abstract class DisplaySystem : Core.System, ICameraTarget
     /// </summary>
     public Cell BackgroundCell { get; set; }
 
-    IRenderTarget ICameraTarget.RenderTarget => Buffer;
-
     private protected FrameBuffer Buffer { get; set; } = new FrameBuffer(0, 0);
 
     private protected FrameBuffer Screen { get; private set; } = new FrameBuffer(0, 0);
+
+    IRenderTarget ICameraTarget.GetRenderTarget()
+    {
+        Buffer.Fill(BackgroundCell);
+        return Buffer;
+    }
 
     void ICameraTarget.Update()
     {
         PrintBuffer();
         (Buffer, Screen) = (Screen, Buffer);
-        Buffer.Fill(BackgroundCell);
     }
 
     private protected abstract void PrintBuffer();

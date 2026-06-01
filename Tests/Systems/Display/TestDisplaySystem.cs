@@ -12,7 +12,7 @@ public class TestDisplaySystem
         FakeDisplaySystem displaySystem = new();
         displaySystem.SetSize(10, 5);
 
-        Assert.Equal((10, 5), ((ICameraTarget) displaySystem).RenderTarget.Size);
+        Assert.Equal((10, 5), ((ICameraTarget) displaySystem).GetRenderTarget().Size);
     }
 
     [Fact]
@@ -20,14 +20,14 @@ public class TestDisplaySystem
     {
         FakeDisplaySystem displaySystem = new();
         ICameraTarget target = displaySystem;
-        IRenderTarget startingBuffer = target.RenderTarget;
+        IRenderTarget startingBuffer = target.GetRenderTarget();
 
         target.Update();
-        Assert.NotEqual(startingBuffer, target.RenderTarget);
+        Assert.NotEqual(startingBuffer, target.GetRenderTarget());
         Assert.Equal(1, displaySystem.PrintCount);
 
         target.Update();
-        Assert.Equal(startingBuffer, target.RenderTarget);
+        Assert.Equal(startingBuffer, target.GetRenderTarget());
         Assert.Equal(2, displaySystem.PrintCount);
     }
 

@@ -49,7 +49,11 @@ public sealed class Camera : Component
     /// <inheritdoc />
     protected internal override void Tick()
     {
-        GetRequiredSystem<RenderSystem>().Render(Target.RenderTarget, TargetToGamePos((0, 0)));
+        GetRequiredSystem<RenderSystem>().Render(
+            Target.GetRenderTarget(),
+            TargetToGamePos((0, 0))
+        );
+
         Target.Update();
     }
 }
