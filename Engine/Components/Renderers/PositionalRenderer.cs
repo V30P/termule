@@ -53,25 +53,19 @@ public abstract class PositionalRenderer : Renderer
         VectorInt origin,
         bool renderInTargetSpace) : IRenderTarget
     {
-        VectorInt IRenderTarget.LowerBound => target.LowerBound - origin;
+        VectorInt IRenderTarget.LowerBound { get; } = (
+            target.LowerBound.X - origin.X,
+            renderInTargetSpace
+                ? target.LowerBound.Y - origin.Y
+                : origin.Y - (target.UpperBound.Y - 1)
+        );
 
-        VectorInt IRenderTarget.UpperBound => target.UpperBound - origin;
-
-        public void Draw(
-            VectorInt pos,
-            Color? color = null,
-            char? glyph = null,
-            Color? glyphColor = null,
-            bool layerBoxDrawingChars = true)
-        {
-            target.Draw(
-                LocalToTargetPos(pos),
-                color,
-                glyph,
-                glyphColor,
-                layerBoxDrawingChars
-            );
-        }
+        VectorInt IRenderTarget.UpperBound { get; } = (
+            target.UpperBound.X - origin.X,
+            renderInTargetSpace
+                ? target.UpperBound.Y - origin.Y
+                : origin.Y - (target.LowerBound.Y - 1)
+        );
 
         ref Cell IRenderTarget.GetCellRef(int x, int y)
         {
