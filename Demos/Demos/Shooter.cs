@@ -173,7 +173,7 @@ internal sealed class Shooter : Demo, IMessageListener<Shooter.CharacterControll
             }
 
             Game.World.Add(new GameObject(
-                new Transform { Pos = GameObject.Get<Transform>().Pos },
+                new Transform { Pos = GameObject.Get<IPositionProvider>().Pos },
                 new ContentRenderer<Image>
                 {
                     Centered = true,
@@ -181,7 +181,7 @@ internal sealed class Shooter : Demo, IMessageListener<Shooter.CharacterControll
                 },
                 new ProjectileController(
                     GetType(),
-                    (Target - GameObject.Get<Transform>().Pos).Normalized
+                    (Target - GameObject.Get<IPositionProvider>().Pos).Normalized
                 )
             ));
 
@@ -234,10 +234,12 @@ internal sealed class Shooter : Demo, IMessageListener<Shooter.CharacterControll
         {
             base.Tick();
 
-            if (Game.World.GetAll<GameObject>()
+            if (
+                Game.World
+                    .GetAll<GameObject>()
                     .FirstOrDefault(g => g.Get<PlayerController>() is not null) is { } player)
             {
-                Vector pos = GameObject.Get<Transform>().Pos;
+                Vector pos = GameObject.Get<IPositionProvider>().Pos;
                 Target = player.Get<Transform>().Pos;
 
                 Vector displacement = pos - Target;
@@ -272,13 +274,13 @@ internal sealed class Shooter : Demo, IMessageListener<Shooter.CharacterControll
                 .Where(c => c != null && c.GetType() != sourceType);
             foreach (CharacterController target in targets)
             {
-                Vector targetPos = target.GameObject.Get<Transform>().Pos;
-                Vector projectilePos = GameObject.Get<Transform>().Pos;
+                Vector targetPos = target.GameObject.Get<IPositionProvider>().Pos;
+                Vector projectilePos = GameObject.Get<IPositionProvider>().Pos;
 
                 bool overlappingHorizontally = MathF.Abs(targetPos.X - projectilePos.X)
-                                               < ((float) characterSprite.Size.X + projectileSprite.Size.X) / 2;
+                    < ((float) characterSprite.Size.X + projectileSprite.Size.X) / 2;
                 bool overlappingVertically = MathF.Abs(targetPos.Y - projectilePos.Y)
-                                             < ((float) characterSprite.Size.Y + projectileSprite.Size.Y) / 2;
+                    < ((float) characterSprite.Size.Y + projectileSprite.Size.Y) / 2;
                 if (overlappingHorizontally && overlappingVertically)
                 {
                     target.Hit();

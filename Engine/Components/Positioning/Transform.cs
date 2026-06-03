@@ -6,7 +6,7 @@ namespace Termule.Engine.Components;
 /// <summary>
 ///     Component that stores a position and handles local positioning relative to its parent.
 /// </summary>
-public sealed class Transform : Component
+public sealed class Transform : Component, IPositionProvider
 {
     private readonly List<Transform> children = [];
     private Vector cachedPosition;
@@ -15,7 +15,7 @@ public sealed class Transform : Component
     private Transform parent;
 
     /// <summary>
-    ///     Gets or sets the position of this transform.
+    ///     Gets or sets the position of this <see cref="Transform"/>.
     /// </summary>
     public Vector Pos
     {
@@ -49,7 +49,7 @@ public sealed class Transform : Component
     }
 
     /// <summary>
-    ///     Gets or sets the position of this transform relative to its parent.
+    ///     Gets or sets the position of this <see cref="Transform"/> relative to its parent.
     /// </summary>
     public Vector LocalPos
     {
@@ -93,7 +93,9 @@ public sealed class Transform : Component
     /// <summary>
     ///     Broadcast when the local <see cref="Transform"/> is moved.
     /// </summary>
-    /// <param name="newPosition">The transform's position after the move is applied.</param>
+    /// <param name="newPosition">
+    ///     The <see cref="Transform"/>'s position after the move is applied.
+    /// </param>
     public readonly struct MovedMessage(Vector newPosition)
     {
         internal readonly Vector NewPosition = newPosition;

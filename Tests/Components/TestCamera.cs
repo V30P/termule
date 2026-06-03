@@ -57,11 +57,13 @@ public class TestCamera
         Camera camera = new() { Target = target };
         game.World.Add(
             new Transform { Pos = (transformPos[0], transformPos[1]) },
-            camera);
+            camera
+        );
 
         Assert.Equal(
             (gamePos[0], gamePos[1]),
-            camera.TargetToGamePos((targetPos[0], targetPos[1])));
+            camera.TargetToGamePos((targetPos[0], targetPos[1]))
+        );
     }
 
     [Fact]
@@ -69,7 +71,10 @@ public class TestCamera
     {
         FakeTarget target = new((0, 0));
         Game game = new();
-        game.World.Add(new Camera { Target = target });
+        game.World.Add(
+            new Camera { Target = target },
+            new Transform()
+        );
 
         game.Systems.Install(new RenderSystem());
         game.Start();

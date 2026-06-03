@@ -4,7 +4,8 @@ using Termule.Engine.Types;
 namespace Termule.Engine.Components;
 
 /// <summary>
-///     Renders a <see cref="IContent" /> instance at the local <see cref="Transform" />'s position.
+///     Renders a <see cref="IContent" /> instance at the local <see cref="IPositionProvider" />'s
+///     position.
 /// </summary>
 /// <typeparam name="TContent">
 ///     The type of content to render.
@@ -29,8 +30,7 @@ public sealed class ContentRenderer<TContent> : PositionalRenderer where TConten
     public TContent Content { get; set; }
 
     /// <summary>
-    ///     Gets or sets a value indicating whether the content should be rendered centered on the transform's
-    ///     position.
+    ///     Gets or sets a value indicating whether the content should be rendered centered.
     /// </summary>
     public bool Centered { get; set; }
 

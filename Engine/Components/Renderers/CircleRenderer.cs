@@ -4,7 +4,7 @@ using Termule.Engine.Types;
 namespace Termule.Engine.Components;
 
 /// <summary>
-///     Renders a circle at the local <see cref="Transform" />'s position.
+///     Renders a circle at the local <see cref="IPositionProvider" />'s position.
 /// </summary>
 public sealed class CircleRenderer : PositionalRenderer
 {

@@ -7,7 +7,6 @@ namespace Termule.Engine.Exceptions;
 /// </summary>
 /// <typeparam name="TMissing">The type of <see cref="Component" /> that is missing.</typeparam>
 public class MissingComponentException<TMissing> : MissingGameElementException<TMissing>
-    where TMissing : Component
 {
     internal MissingComponentException(GameElement dependent) : base(dependent)
     {

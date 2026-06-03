@@ -4,13 +4,14 @@ using Termule.Engine.Types;
 namespace Termule.Engine.Components;
 
 /// <summary>
-///     Renders a line or polyline relative to the local <see cref="Transform" />'s position.
+///     Renders a line or polyline relative to the local <see cref="IPositionProvider" />'s
+///     position.
 /// </summary>
 public sealed class LineRenderer : PositionalRenderer
 {
     /// <summary>
     ///     Gets or sets the points defining the line or polyline relative to this renderer’s
-    ///     transform.
+    ///     <see cref="IPositionProvider" />.
     /// </summary>
     public List<Vector> Points { get; set; } = [];
 

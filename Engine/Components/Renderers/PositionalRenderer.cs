@@ -4,8 +4,8 @@ using Termule.Engine.Types;
 namespace Termule.Engine.Components;
 
 /// <summary>
-///     Base component for renderers that draw relative to their local <see cref="Transform"/>'s
-///     position.
+///     Base component for renderers that draw relative to their local
+///     <see cref="IPositionProvider"/>'s position.
 /// </summary>
 public abstract class PositionalRenderer : Renderer
 {
@@ -14,20 +14,20 @@ public abstract class PositionalRenderer : Renderer
     }
 
     /// <summary>
-    ///     Gets or sets a value indicating whether the <see cref="Transform"/>'s position should
-    ///     be treated as target-space during rendering.
+    ///     Gets or sets a value indicating whether the <see cref="IPositionProvider"/>'s position \
+    ///     should be treated as target-space during rendering.
     /// </summary>
     public bool RenderInTargetSpace { get; set; }
 
     /// <summary>
-    ///     Gets an offset applied to the transform position before rendering.
+    ///     Gets an offset applied to the position before rendering.
     /// </summary>
     protected virtual Vector Offset { get; }
 
     /// <inheritdoc />
     protected internal sealed override void Render(IRenderTarget target, Vector viewOrigin)
     {
-        Vector origin = GetRequiredComponent<Transform>().Pos + Offset;
+        Vector origin = GetRequiredComponent<IPositionProvider>().Pos + Offset;
 
         // Transform to world space
         if (!RenderInTargetSpace)

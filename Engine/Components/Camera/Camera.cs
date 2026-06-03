@@ -20,8 +20,6 @@ public sealed class Camera : Component
         set;
     }
 
-    private Vector TransformPos => GameObject.Get<Transform>()?.Pos ?? (0, 0);
-
     /// <summary>
     ///     Converts a position from target-space to world-space relative to this camera.
     /// </summary>
@@ -31,7 +29,7 @@ public sealed class Camera : Component
     {
         Vector relativeTargetPos = pos - ((Vector) Target.Size / 2f);
         Vector relativePos = (relativeTargetPos.X, -relativeTargetPos.Y);
-        return relativePos - TransformPos;
+        return relativePos - GetRequiredComponent<IPositionProvider>().Pos;
     }
 
     /// <summary>
@@ -41,7 +39,7 @@ public sealed class Camera : Component
     /// <returns>The corresponding position in target space.</returns>
     public Vector GameToTargetPos(Vector pos)
     {
-        Vector relativePos = pos + TransformPos;
+        Vector relativePos = pos + GetRequiredComponent<IPositionProvider>().Pos;
         Vector relativeTargetPos = (relativePos.X, -relativePos.Y);
         return relativeTargetPos + ((Vector) Target.Size / 2f);
     }

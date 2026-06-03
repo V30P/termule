@@ -53,7 +53,7 @@ public abstract class Component : GameElement
     /// <exception cref="MissingComponentException{TComponent}">
     ///     Thrown if no matching component is found.
     /// </exception>
-    protected TComponent GetRequiredComponent<TComponent>() where TComponent : Component
+    protected TComponent GetRequiredComponent<TComponent>()
     {
         return GameObject.Get<TComponent>()
                ?? throw new MissingComponentException<TComponent>(this);
