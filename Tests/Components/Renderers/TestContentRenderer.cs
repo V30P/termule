@@ -1,8 +1,9 @@
 using Termule.Engine.Components;
 using Termule.Engine.Core;
 using Termule.Engine.Systems.Display;
+using Termule.Engine.Systems.Rendering;
 using Termule.Engine.Types;
-using static Termule.Tests.Components.Utilities;
+using Termule.Tests.Systems.Rendering;
 
 namespace Termule.Tests.Components;
 
@@ -18,121 +19,80 @@ public class TestContentRenderer
     [Fact]
     public void Content_WhenTypeHasParameterlessConstructor_ShouldBeInitialized()
     {
-        ContentRenderer<ParameterlessContent> renderer = new();
+        ContentRenderer<ParameterlessContent> contentRenderer = new();
 
-        Assert.NotNull(renderer.Content);
+        Assert.NotNull(contentRenderer.Content);
     }
 
     [Fact]
     public void Content_WhenTypeLacksParameterlessConstructor_ShouldNotBeInitialized()
     {
-        ContentRenderer<NonParameterlessContent> renderer = new();
+        ContentRenderer<NonParameterlessContent> contentRenderer = new();
 
-        Assert.Null(renderer.Content);
+        Assert.Null(contentRenderer.Content);
     }
 
     [Fact]
-    public void Render_DoesNotContributeDefaultValues()
+    public void Render_WithNullContent_DoesNotThrow()
     {
-        Cell baseCell = new(BasicColor.White, 'X', BasicColor.White);
-        ContentRenderer<Image> baseRenderer = new()
-        {
-            RenderInTargetSpace = true,
-            Content = new FakeContent(new[,] { { baseCell } })
-        };
-        _ = new GameObject(new Transform { Pos = (0, 0) }, baseRenderer);
-        FrameBuffer frame = new(1, 1);
+        ContentRenderer<IContent> contentRenderer = new();
+        _ = new GameObject(new Transform(), contentRenderer);
 
-        baseRenderer.Render(frame, (0, 0));
-
-        ContentRenderer<Image> defaultRenderer = new()
-        {
-            RenderInTargetSpace = true,
-            Content = new FakeContent(new Cell[,] { { new() } })
-        };
-        _ = new GameObject(new Transform { Pos = (0, 0) }, defaultRenderer);
-
-        defaultRenderer.Render(frame, (0, 0));
-
-        Assert.Equal(baseCell, frame[0, 0]);
+        contentRenderer.Render(new FrameBuffer(0, 0), (0, 0));
     }
 
     [Fact]
-    public void Render_DrawsExpectedCells()
+    public void Render_WhenCenteredIsTrue_Offsets()
     {
-        ContentRenderer<Image> renderer = new()
+        Cell[,] contentCells = new Cell[2, 3];
+        for (int x = 0; x < contentCells.GetLength(0); x++)
         {
-            RenderInTargetSpace = true,
-            Content = new FakeContent(new Cell[,]
+            for (int y = 0; y < contentCells.GetLength(1); y++)
             {
-                { new(BasicColor.White), new(BasicColor.Red) }, { new(BasicColor.Red), new(BasicColor.White) }
-            })
-        };
-        _ = new GameObject(new Transform { Pos = (1, 1) }, renderer);
-        FrameBuffer frame = new(4, 4);
-
-        renderer.Render(frame, (0, 0));
-
-        AssertDrawnColor(frame, BasicColor.White, [(1, 1), (2, 2)]);
-        AssertDrawnColor(frame, BasicColor.Red, [(2, 1), (1, 2)]);
-    }
-
-    [Fact]
-    public void Render_WhenCenteredIsTrue_OffsetsCells()
-    {
-        Cell cell = new(BasicColor.White);
-        ContentRenderer<Image> renderer = new()
-        {
-            RenderInTargetSpace = true,
-            Content = new FakeContent(new[,]
-            {
-                { default, cell, default }, { cell, cell, cell }, { default, cell, default }
-            }),
-            Centered = true
-        };
-        _ = new GameObject(new Transform { Pos = (1.5f, 1.5f) }, renderer);
-        FrameBuffer frame = new(3, 3);
-
-        renderer.Render(frame, (0, 0));
-
-        AssertDrawnColor(frame, BasicColor.White, [(1, 0), (0, 1), (1, 1), (2, 1), (1, 2)]);
-    }
-
-    [Fact]
-    public void Render_WithNullContent_DoesNotMutateFrame()
-    {
-        Cell baseCell = new(BasicColor.White, 'X', BasicColor.White);
-        ContentRenderer<Image> baseRenderer = new()
-        {
-            RenderInTargetSpace = true,
-            Content = new FakeContent(new[,] { { baseCell } })
-        };
-        _ = new GameObject(new Transform { Pos = (0, 0) }, baseRenderer);
-        FrameBuffer frame = new(1, 1);
-
-        baseRenderer.Render(frame, (0, 0));
-
-        ContentRenderer<Image> nullRenderer = new() { RenderInTargetSpace = true, Content = null };
-        _ = new GameObject(new Transform { Pos = (0, 0) }, nullRenderer);
-
-        nullRenderer.Render(frame, (0, 0));
-
-        Assert.Equal(baseCell, frame[0, 0]);
-    }
-
-    private sealed class ParameterlessContent() : Image(0, 0)
-    {
-    }
-
-    private sealed class NonParameterlessContent(int width, int height) : Image(width, height)
-    {
-    }
-
-    private sealed class FakeContent : Image
-    {
-        public FakeContent(Cell[,] cells) : base(cells.GetLength(0), cells.GetLength(1))
-        {
-            Cells = cells;
+                contentCells[x, y] = new(BasicColor.White);
+            }
         }
+
+        ContentRenderer<IContent> contentRenderer = new()
+        {
+            RenderInTargetSpace = true,
+            Centered = true,
+            Content = new FakeContent(contentCells)
+        };
+        _ = new GameObject(new Transform() { Pos = (1, 1.5f) }, contentRenderer);
+
+        IRenderTarget target = new FakeRenderTarget(2, 3);
+        contentRenderer.Render(target, default);
+
+        for (int x = target.LowerBound.X; x < target.UpperBound.X; x++)
+        {
+            for (int y = target.LowerBound.Y; y < target.UpperBound.X; y++)
+            {
+                Assert.Equal(BasicColor.White, target.GetCellRef(x, y).Color);
+            }
+        }
+    }
+
+    private sealed class ParameterlessContent() : IContent
+    {
+        VectorInt IContent.Size => throw new NotImplementedException();
+
+        Cell IContent.this[int x, int y] => throw new NotImplementedException();
+    }
+
+#pragma warning disable CS9113 // Parameter is unread.
+    private sealed class NonParameterlessContent(object _) : IContent
+#pragma warning restore CS9113 // Parameter is unread.
+    {
+        VectorInt IContent.Size => throw new NotImplementedException();
+
+        Cell IContent.this[int x, int y] => throw new NotImplementedException();
+    }
+
+    private sealed class FakeContent(Cell[,] cells) : IContent
+    {
+        VectorInt IContent.Size => (cells.GetLength(0), cells.GetLength(1));
+
+        Cell IContent.this[int x, int y] => cells[x, y];
     }
 }

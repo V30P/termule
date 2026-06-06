@@ -7,20 +7,22 @@ namespace Termule.Tests.Systems.Rendering;
 public class TestRenderSystem
 {
     [Fact]
-    public void DefaultLayer_IsTheFirstLayer()
-    {
-        Layer layer = new SimpleLayer();
-        RenderSystem renderSystem = new() { Layers = [layer, new SimpleLayer()] };
-        Assert.Same(layer, renderSystem.DefaultLayer);
-    }
-
-    [Fact]
     public void Layers_DefaultsToASimpleLayer()
     {
         RenderSystem renderSystem = new();
 
         _ = Assert.Single(renderSystem.Layers);
         _ = Assert.IsType<SimpleLayer>(renderSystem.Layers[0]);
+    }
+
+    [Fact]
+    public void DefaultLayer_IsTheFirstLayer()
+    {
+        Layer layer = new SimpleLayer();
+
+        RenderSystem renderSystem = new() { Layers = [layer, new SimpleLayer()] };
+
+        Assert.Same(layer, renderSystem.DefaultLayer);
     }
 
     [Fact]
@@ -41,6 +43,7 @@ public class TestRenderSystem
         };
 
         renderSystem.Render(new FrameBuffer(0, 0), (0, 0));
+
         Assert.Equal([rendererA, rendererB], renderTracker);
     }
 
@@ -50,11 +53,11 @@ public class TestRenderSystem
         FakeRenderer renderer = new();
         RenderSystem renderSystem = new();
         renderSystem.DefaultLayer.Add(renderer);
+        IRenderTarget target = new FakeRenderTarget(0, 0);
 
-        FrameBuffer frame = new(0, 0);
-        renderer.Render(frame, (10, 5));
+        renderer.Render(target, (10, 5));
 
-        Assert.Same(frame, renderer.CapturedTarget);
+        Assert.Same(target, renderer.CapturedTarget);
         Assert.Equal((10, 5), renderer.CapturedViewOrigin);
     }
 

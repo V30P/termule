@@ -157,10 +157,14 @@ internal sealed class Shooter : Demo, IMessageListener<Shooter.CharacterControll
             Transform transform = GameObject.Get<Transform>();
             transform.Pos += ScaleVelocity(MovementDir.Normalized * Speed) * Game.DeltaTime;
 
+            ContentRenderer<Image> renderer = GameObject.Get<ContentRenderer<Image>>();
+            renderer.FlipX = Target.X < transform.Pos.X;
+
             hitColorTimeRemaining -= Game.DeltaTime;
-            GameObject.Get<ContentRenderer<Image>>().Content =
-                (Target.X > transform.Pos.X ? characterSprite : characterSprite.Flipped())
-                .WithColorSwapped(BasicColor.White, hitColorTimeRemaining < 0 ? Color : HitColor);
+            renderer.Content = characterSprite.WithColorSwapped(
+                BasicColor.White,
+                hitColorTimeRemaining < 0 ? Color : HitColor
+            );
 
             shotCooldownTimeRemaining -= Game.DeltaTime;
         }

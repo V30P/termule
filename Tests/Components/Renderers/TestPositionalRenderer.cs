@@ -1,9 +1,9 @@
 using Termule.Engine.Components;
 using Termule.Engine.Core;
-using Termule.Engine.Systems.Display;
 using Termule.Engine.Systems.Rendering;
 using Termule.Engine.Types;
-using static Termule.Tests.Components.Utilities;
+using Termule.Tests.Systems.Rendering;
+using static Termule.Tests.Systems.Rendering.Utilities;
 
 namespace Termule.Tests.Components;
 
@@ -31,11 +31,11 @@ public class TestPositionalRenderer
     [Fact]
     public void Render_InvokesDerivedRendererAndPassesParams()
     {
-        FrameBuffer frame = new(0, 0);
+        IRenderTarget target = new FakeRenderTarget(0, 0);
         FakePositionalRenderer renderer = new();
         _ = new GameObject(new Transform { Pos = (0, 0) }, renderer);
 
-        renderer.Render(frame, (-1.5f, 1.5f));
+        renderer.Render(target, (-1.5f, 1.5f));
 
         Assert.Equal(1, renderer.RenderCount);
         Assert.NotNull(renderer.CapturedTarget);
@@ -53,11 +53,11 @@ public class TestPositionalRenderer
             new Transform { Pos = (transformPos[0], transformPos[1]) },
             renderer
         );
-        FrameBuffer buffer = new(5, 5);
+        IRenderTarget target = new FakeRenderTarget(5, 5);
 
-        renderer.Render(buffer, (-1.5f, 1.5f));
+        renderer.Render(target, (-1.5f, 1.5f));
 
-        AssertDrawnColor(buffer, BasicColor.White, [(expectedOrigin[0], expectedOrigin[1])]);
+        AssertDrawnColor(target, BasicColor.White, [(expectedOrigin[0], expectedOrigin[1])]);
         AssertVectorApproximately(
             (expectedError[0], expectedError[1]),
             renderer.CapturedSubPixelOffset
@@ -76,11 +76,11 @@ public class TestPositionalRenderer
             new Transform { Pos = (transformPos[0], transformPos[1]) },
             renderer
         );
-        FrameBuffer buffer = new(5, 5);
+        IRenderTarget target = new FakeRenderTarget(5, 5);
 
-        renderer.Render(buffer, (-1.5f, 1.5f));
+        renderer.Render(target, (-1.5f, 1.5f));
 
-        AssertDrawnColor(buffer, BasicColor.White, [(expectedOrigin[0], expectedOrigin[1])]);
+        AssertDrawnColor(target, BasicColor.White, [(expectedOrigin[0], expectedOrigin[1])]);
         AssertVectorApproximately(
             (expectedError[0], expectedError[1]),
             renderer.CapturedSubPixelOffset

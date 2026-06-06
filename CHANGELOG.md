@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Added
 - `IRenderTarget` interface for rendering to non-frame targets
 - `IPositionProvider` interface for components that provide positioning
+- `Drawing` class to provide extension methods for common draw actions
 
 ### Changed
 - Modified `PositionalRenderer` to provide a custom target transformed to local space

@@ -14,7 +14,7 @@ public abstract class PositionalRenderer : Renderer
     }
 
     /// <summary>
-    ///     Gets or sets a value indicating whether the <see cref="IPositionProvider"/>'s position \
+    ///     Gets or sets a value indicating whether the <see cref="IPositionProvider"/>'s position
     ///     should be treated as target-space during rendering.
     /// </summary>
     public bool RenderInTargetSpace { get; set; }
@@ -24,12 +24,11 @@ public abstract class PositionalRenderer : Renderer
     /// </summary>
     protected virtual Vector Offset { get; }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     protected internal sealed override void Render(IRenderTarget target, Vector viewOrigin)
     {
         Vector origin = GetRequiredComponent<IPositionProvider>().Pos + Offset;
 
-        // Transform to world space
         if (!RenderInTargetSpace)
         {
             origin -= viewOrigin;
@@ -37,6 +36,7 @@ public abstract class PositionalRenderer : Renderer
         }
 
         VectorInt originCell = origin.FloorToInt();
+
         RenderPositionally(
             new PositionalRenderTarget(target, originCell, RenderInTargetSpace),
             origin - originCell
@@ -53,18 +53,20 @@ public abstract class PositionalRenderer : Renderer
         VectorInt origin,
         bool renderInTargetSpace) : IRenderTarget
     {
-        VectorInt IRenderTarget.LowerBound { get; } = (
+        VectorInt IRenderTarget.LowerBound =>
+        (
             target.LowerBound.X - origin.X,
             renderInTargetSpace
                 ? target.LowerBound.Y - origin.Y
-                : origin.Y - (target.UpperBound.Y - 1)
+                : origin.Y - target.UpperBound.Y + 1
         );
 
-        VectorInt IRenderTarget.UpperBound { get; } = (
+        VectorInt IRenderTarget.UpperBound =>
+        (
             target.UpperBound.X - origin.X,
             renderInTargetSpace
                 ? target.UpperBound.Y - origin.Y
-                : origin.Y - (target.LowerBound.Y - 1)
+                : origin.Y - target.LowerBound.Y + 1
         );
 
         ref Cell IRenderTarget.GetCellRef(int x, int y)

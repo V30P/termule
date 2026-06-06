@@ -30,9 +30,21 @@ public sealed class ContentRenderer<TContent> : PositionalRenderer where TConten
     public TContent Content { get; set; }
 
     /// <summary>
-    ///     Gets or sets a value indicating whether the content should be rendered centered.
+    ///     Gets or sets a value indicating whether the content should be drawn centered.
     /// </summary>
     public bool Centered { get; set; }
+
+    /// <summary>
+    ///     Gets or sets a value indicating whether the content should be drawn flipped on the
+    ///     x-axis.
+    /// </summary>
+    public bool FlipX { get; set; }
+
+    /// <summary>
+    ///     Gets or sets a value indicating whether the content should be drawn flipped on the
+    ///     y-axis.
+    /// </summary>
+    public bool FlipY { get; set; }
 
     /// <inheritdoc />
     protected override Vector Offset =>
@@ -40,17 +52,14 @@ public sealed class ContentRenderer<TContent> : PositionalRenderer where TConten
 
     private protected override void RenderPositionally(IRenderTarget target, Vector _)
     {
-        for (int x = 0; x < Content?.Size.X; x++)
+        if (Content != null)
         {
-            for (int y = 0; y < Content.Size.Y; y++)
-            {
-                Cell cell = Content[x, y];
-                target.Draw(
-                    (x, RenderInTargetSpace ? y : (Content.Size.Y - y)),
-                    cell.Color != BasicColor.Default ? cell.Color : null,
-                    cell.Glyph != '\0' ? cell.Glyph : null,
-                    cell.GlyphColor != BasicColor.Default ? cell.GlyphColor : null);
-            }
+            target.DrawContent(
+                (0, 0),
+                Content,
+                flipX: FlipX,
+                flipY: (!RenderInTargetSpace) ^ FlipY
+            );
         }
     }
 }
