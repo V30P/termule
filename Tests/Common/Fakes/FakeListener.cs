@@ -1,6 +1,6 @@
 using Termule.Engine.Core.Messaging;
 
-namespace Termule.Tests.Core.Messaging;
+namespace Termule.Tests.Common;
 
 public class FakeListener<TMessage> : IMessageListener<TMessage>
 {

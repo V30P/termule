@@ -1,4 +1,4 @@
-using Termule.Demos.Core;
+using Termule.Demos.Common;
 using Termule.Engine.Components;
 using Termule.Engine.Systems.Rendering;
 using Termule.Engine.Types;

@@ -9,7 +9,10 @@ namespace Termule.Engine.Components;
 /// </summary>
 public abstract class PositionalRenderer : Renderer
 {
-    internal PositionalRenderer()
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="PositionalRenderer"/> class.
+    /// </summary>
+    public PositionalRenderer()
     {
     }
 
@@ -45,7 +48,7 @@ public abstract class PositionalRenderer : Renderer
 
     private protected abstract void RenderPositionally(
         IRenderTarget target,
-        Vector subPixelOffset
+        Vector subCellOffset
     );
 
     private protected class PositionalRenderTarget(

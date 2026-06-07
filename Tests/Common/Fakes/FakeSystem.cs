@@ -1,4 +1,4 @@
-namespace Termule.Tests.Core;
+namespace Termule.Tests.Common;
 
 public class FakeSystem : Engine.Core.System
 {

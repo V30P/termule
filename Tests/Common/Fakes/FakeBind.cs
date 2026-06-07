@@ -1,6 +1,6 @@
 using Termule.Engine.Systems.Input;
 
-namespace Termule.Tests.Systems.Input;
+namespace Termule.Tests.Common;
 
 public class FakeBind : Bind
 {

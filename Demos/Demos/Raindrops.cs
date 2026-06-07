@@ -1,4 +1,4 @@
-using Termule.Demos.Core;
+using Termule.Demos.Common;
 using Termule.Engine.Components;
 using Termule.Engine.Core;
 using Termule.Engine.Systems.Display;
@@ -17,7 +17,7 @@ internal sealed class Raindrops : Demo
 
     protected override void Start()
     {
-        Systems.Get<DisplaySystem>().BackgroundCell = new Cell((0, 0, 0));
+        GetRequiredSystem<DisplaySystem>().BackgroundCell = new Cell((0, 0, 0));
 
         World.Add(
             new Transform(),
@@ -66,17 +66,18 @@ internal sealed class Raindrops : Demo
                 return;
             }
 
-            CircleRenderer circleRenderer = GameObject.Get<CircleRenderer>();
+            CircleRenderer circleRenderer = GetRequiredComponent<CircleRenderer>();
             circleRenderer.Radius = GetRadius(time);
             circleRenderer.Color = (0, 0, 1 - (time / Lifespan));
 
-            VectorInt displaySize = Systems.Get<DisplaySystem>().Size;
-            GameObject.Get<Transform>().Pos = (pos.X * displaySize.X, pos.Y * displaySize.Y);
+            VectorInt displaySize = GetRequiredSystem<DisplaySystem>().Size;
+            GetRequiredComponent<Transform>().Pos = (pos.X * displaySize.X, pos.Y * displaySize.Y);
         }
 
         private float GetRadius(float t)
         {
-            return (Systems.Get<DisplaySystem>().Size.Magnitude * 0.02f * MathF.Log2(t + 1)) + 1;
+            float displayMagnitude = GetRequiredSystem<DisplaySystem>().Size.Magnitude;
+            return (displayMagnitude * 0.02f * MathF.Log2(t + 1)) + 1;
         }
     }
 }

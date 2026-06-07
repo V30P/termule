@@ -1,3 +1,4 @@
+using Termule.Demos.Common;
 using Termule.Demos.Core;
 using Termule.Engine.Components;
 using Termule.Engine.Core;
@@ -6,7 +7,7 @@ using Termule.Engine.Systems.Display;
 using Termule.Engine.Systems.Input;
 using Termule.Engine.Systems.Resources;
 using Termule.Engine.Types;
-using static Termule.Demos.Core.Utilities;
+using static Termule.Demos.Common.Utilities;
 
 namespace Termule.Demos.Demos;
 
@@ -154,10 +155,10 @@ internal sealed class Shooter : Demo, IMessageListener<Shooter.CharacterControll
 
         protected override void Tick()
         {
-            Transform transform = GameObject.Get<Transform>();
-            transform.Pos += ScaleVelocity(MovementDir.Normalized * Speed) * Game.DeltaTime;
+            Transform transform = GetRequiredComponent<Transform>();
+            transform.Pos += MovementDir.Normalized.ScaleToCells() * Speed * Game.DeltaTime;
 
-            ContentRenderer<Image> renderer = GameObject.Get<ContentRenderer<Image>>();
+            ContentRenderer<Image> renderer = GetRequiredComponent<ContentRenderer<Image>>();
             renderer.FlipX = Target.X < transform.Pos.X;
 
             hitColorTimeRemaining -= Game.DeltaTime;
@@ -177,7 +178,7 @@ internal sealed class Shooter : Demo, IMessageListener<Shooter.CharacterControll
             }
 
             Game.World.Add(new GameObject(
-                new Transform { Pos = GameObject.Get<IPositionProvider>().Pos },
+                new Transform { Pos = GetRequiredComponent<IPositionProvider>().Pos },
                 new ContentRenderer<Image>
                 {
                     Centered = true,
@@ -185,7 +186,7 @@ internal sealed class Shooter : Demo, IMessageListener<Shooter.CharacterControll
                 },
                 new ProjectileController(
                     GetType(),
-                    (Target - GameObject.Get<IPositionProvider>().Pos).Normalized
+                    (Target - GetRequiredComponent<IPositionProvider>().Pos).Normalized
                 )
             ));
 
@@ -243,7 +244,7 @@ internal sealed class Shooter : Demo, IMessageListener<Shooter.CharacterControll
                     .GetAll<GameObject>()
                     .FirstOrDefault(g => g.Get<PlayerController>() is not null) is { } player)
             {
-                Vector pos = GameObject.Get<IPositionProvider>().Pos;
+                Vector pos = GetRequiredComponent<IPositionProvider>().Pos;
                 Target = player.Get<Transform>().Pos;
 
                 Vector displacement = pos - Target;
@@ -270,7 +271,9 @@ internal sealed class Shooter : Demo, IMessageListener<Shooter.CharacterControll
 
         protected override void Tick()
         {
-            GameObject.Get<Transform>().Pos += ScaleVelocity(direction * Speed) * Game.DeltaTime;
+            GetRequiredComponent<Transform>().Pos += direction.Normalized.ScaleToCells()
+                * Speed
+                * Game.DeltaTime;
 
             // Detect hits
             IEnumerable<CharacterController> targets = World.GetAll<GameObject>()
@@ -279,7 +282,7 @@ internal sealed class Shooter : Demo, IMessageListener<Shooter.CharacterControll
             foreach (CharacterController target in targets)
             {
                 Vector targetPos = target.GameObject.Get<IPositionProvider>().Pos;
-                Vector projectilePos = GameObject.Get<IPositionProvider>().Pos;
+                Vector projectilePos = GetRequiredComponent<IPositionProvider>().Pos;
 
                 bool overlappingHorizontally = MathF.Abs(targetPos.X - projectilePos.X)
                     < ((float) characterSprite.Size.X + projectileSprite.Size.X) / 2;

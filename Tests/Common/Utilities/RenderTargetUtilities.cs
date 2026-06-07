@@ -1,12 +1,12 @@
 using Termule.Engine.Systems.Rendering;
 using Termule.Engine.Types;
 
-namespace Termule.Tests.Systems.Rendering;
+namespace Termule.Tests.Common;
 
-public static class Utilities
+public static class RenderTargetUtilities
 {
     public static void AssertDrawnColor(
-        IRenderTarget target,
+        this IRenderTarget target,
         Color expectedColor,
         IEnumerable<VectorInt> expectedCells)
     {
@@ -27,7 +27,7 @@ public static class Utilities
     }
 
     public static void AssertDrawnChars(
-        IRenderTarget target,
+        this IRenderTarget target,
         IReadOnlyDictionary<VectorInt, char> expectedChars)
     {
         for (int x = 0; x < target.Size.X; x++)

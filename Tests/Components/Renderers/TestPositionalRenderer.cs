@@ -2,8 +2,7 @@ using Termule.Engine.Components;
 using Termule.Engine.Core;
 using Termule.Engine.Systems.Rendering;
 using Termule.Engine.Types;
-using Termule.Tests.Systems.Rendering;
-using static Termule.Tests.Systems.Rendering.Utilities;
+using Termule.Tests.Common;
 
 namespace Termule.Tests.Components;
 
@@ -57,7 +56,7 @@ public class TestPositionalRenderer
 
         renderer.Render(target, (-1.5f, 1.5f));
 
-        AssertDrawnColor(target, BasicColor.White, [(expectedOrigin[0], expectedOrigin[1])]);
+        target.AssertDrawnColor(BasicColor.White, [(expectedOrigin[0], expectedOrigin[1])]);
         AssertVectorApproximately(
             (expectedError[0], expectedError[1]),
             renderer.CapturedSubPixelOffset
@@ -80,7 +79,7 @@ public class TestPositionalRenderer
 
         renderer.Render(target, (-1.5f, 1.5f));
 
-        AssertDrawnColor(target, BasicColor.White, [(expectedOrigin[0], expectedOrigin[1])]);
+        target.AssertDrawnColor(BasicColor.White, [(expectedOrigin[0], expectedOrigin[1])]);
         AssertVectorApproximately(
             (expectedError[0], expectedError[1]),
             renderer.CapturedSubPixelOffset

@@ -1,4 +1,4 @@
-using Termule.Demos.Core;
+using Termule.Demos.Common;
 using Termule.Engine.Components;
 using Termule.Engine.Core;
 using Termule.Engine.Systems.Display;
@@ -47,8 +47,8 @@ internal sealed class Screensaver : Demo
 
         protected override void Activate()
         {
-            logo = Systems.Get<ResourceLoader>().Load<Image>("screensaver/logo");
-            GameObject.Get<ContentRenderer<Image>>().Content = logo;
+            logo = GetRequiredSystem<ResourceLoader>().Load<Image>("screensaver/logo");
+            GetRequiredComponent<ContentRenderer<Image>>().Content = logo;
 
             dir = unsignedDir;
             currentColor = BasicColor.White;
@@ -57,8 +57,8 @@ internal sealed class Screensaver : Demo
 
         protected override void Tick()
         {
-            Transform transform = GameObject.Get<Transform>();
-            VectorInt displaySize = Systems.Get<DisplaySystem>().Size;
+            Transform transform = GetRequiredComponent<Transform>();
+            VectorInt displaySize = GetRequiredSystem<DisplaySystem>().Size;
 
             if (transform.Pos.Y < 0 && Math.Abs(dir.Y - unsignedDir.Y) > 0.01f)
             {
@@ -96,7 +96,7 @@ internal sealed class Screensaver : Demo
                 .Where(c => c != currentColor);
             Color newColor = otherColors.ElementAt(Random.Shared.Next(otherColors.Count()));
 
-            ContentRenderer<Image> imageRenderer = GameObject.Get<ContentRenderer<Image>>();
+            ContentRenderer<Image> imageRenderer = GetRequiredComponent<ContentRenderer<Image>>();
             imageRenderer.Content = imageRenderer.Content.WithColorSwapped(currentColor, newColor);
             currentColor = newColor;
         }

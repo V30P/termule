@@ -2,6 +2,7 @@ using Termule.Engine.Core;
 using Termule.Engine.Systems.Input;
 using Termule.Engine.Systems.Rendering;
 using Termule.Engine.Systems.Resources;
+using Termule.Tests.Common;
 
 namespace Termule.Tests.Core;
 

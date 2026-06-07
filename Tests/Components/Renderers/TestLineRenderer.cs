@@ -2,8 +2,7 @@ using Termule.Engine.Components;
 using Termule.Engine.Core;
 using Termule.Engine.Systems.Rendering;
 using Termule.Engine.Types;
-using Termule.Tests.Systems.Rendering;
-using static Termule.Tests.Systems.Rendering.Utilities;
+using Termule.Tests.Common;
 
 namespace Termule.Tests.Components;
 
@@ -23,7 +22,7 @@ public class TestLineRenderer
 
         renderer.Render(target, (0, 0));
 
-        AssertDrawnColor(target, BasicColor.White, [(0, 0), (1, 0), (2, 0), (2, 1), (2, 2)]);
+        target.AssertDrawnColor(BasicColor.White, [(0, 0), (1, 0), (2, 0), (2, 1), (2, 2)]);
     }
 
     [Fact]
@@ -40,7 +39,7 @@ public class TestLineRenderer
 
         renderer.Render(target, (0, 0));
 
-        AssertDrawnColor(target, BasicColor.White, []);
+        target.AssertDrawnColor(BasicColor.White, []);
     }
 
     [Fact]

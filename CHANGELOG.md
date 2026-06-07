@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Renamed `Cell.Char` to `Glyph` (reflected in the rest of the API)
 - Moved `FrameBuffer` to the `Engine.Systems.Display` namespace (was in `Systems.Rendering`)
 - Get-only `ICameraTarget.RenderTarget` property with dedicated `GetRenderTarget()` method
+- Restructured and cleaned up `Demos` and `Tests` projects
 
 ### Fixed
 - `LineRenderer` rendering upside down in world space

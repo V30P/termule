@@ -1,6 +1,6 @@
 using Termule.Engine.Systems.Rendering;
 using Termule.Engine.Types;
-using static Termule.Tests.Systems.Rendering.Utilities;
+using Termule.Tests.Common;
 
 namespace Termule.Tests.Systems.Rendering;
 
@@ -198,15 +198,6 @@ public class TestIRenderTarget
                 }
             }
         }
-
-        private sealed class FakeContent(Cell[,] cells) : IContent
-        {
-            private readonly Cell[,] cells = cells;
-
-            VectorInt IContent.Size => (cells.GetLength(0), cells.GetLength(1));
-
-            Cell IContent.this[int x, int y] => cells[x, y];
-        }
     }
 
     public class TestDrawLine
@@ -266,7 +257,7 @@ public class TestIRenderTarget
                 BasicColor.White
             );
 
-            AssertDrawnColor(target, BasicColor.White, expectedCellPositions);
+            target.AssertDrawnColor(BasicColor.White, expectedCellPositions);
         }
 
         [Theory]
@@ -292,7 +283,7 @@ public class TestIRenderTarget
                 useBoxDrawingGlyphs: true
             );
 
-            AssertDrawnChars(target, expectedChars);
+            target.AssertDrawnChars(expectedChars);
         }
 
         [Fact]
@@ -308,8 +299,7 @@ public class TestIRenderTarget
                 flipVerticalGlyphConnections: true
             );
 
-            AssertDrawnChars(
-                target,
+            target.AssertDrawnChars(
                 new Dictionary<VectorInt, char>
                 {
                     [(0, 0)] = '╵',
@@ -389,8 +379,7 @@ public class TestIRenderTarget
                 BasicColor.White
             );
 
-            AssertDrawnColor(
-                target,
+            target.AssertDrawnColor(
                 BasicColor.White,
                 expectedCellPositions.Select(t => new VectorInt(t[0], t[1]))
             );
@@ -416,8 +405,7 @@ public class TestIRenderTarget
                 doubleWide: true
             );
 
-            AssertDrawnColor(
-                target,
+            target.AssertDrawnColor(
                 BasicColor.White,
                 [(0, 1), (1, 1), (2, 0), (2, 2), (3, 0), (3, 2), (4, 1), (5, 1)]
             );
@@ -434,7 +422,7 @@ public class TestIRenderTarget
                 doubleWide: true,
                 biasRight: false
             );
-            AssertDrawnColor(target, BasicColor.White, [(0, 0), (1, 0)]);
+            target.AssertDrawnColor(BasicColor.White, [(0, 0), (1, 0)]);
 
             target = new FakeRenderTarget(3, 1);
             target.DrawCircle(
@@ -444,7 +432,7 @@ public class TestIRenderTarget
                 doubleWide: true,
                 biasRight: true
             );
-            AssertDrawnColor(target, BasicColor.White, [(1, 0), (2, 0)]);
+            target.AssertDrawnColor(BasicColor.White, [(1, 0), (2, 0)]);
         }
 
         [Theory]
@@ -455,8 +443,7 @@ public class TestIRenderTarget
 
             target.DrawCircle((2, 2), radius, BasicColor.White, filled: true);
 
-            AssertDrawnColor(
-                target,
+            target.AssertDrawnColor(
                 BasicColor.White,
                 expectedCells.Select(t => new VectorInt(t[0], t[1]))
             );

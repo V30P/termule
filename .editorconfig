@@ -6,14 +6,17 @@ end_of_line = lf
 trim_trailing_whitespace = true
 insert_final_newline = true
 
-[*.{yml,yaml,csproj,json}]
+[*.{yml,yaml,json}]
 indent_style = space
 indent_size = 2
+tab_width = 2
 
-[*.cs]
+[*.{cs,csproj}]
 indent_style = space
 indent_size = 4
 tab_width = 4
+
+[*.cs]
 max_line_length = 100
 
 # Analyzer Severities
@@ -114,7 +117,7 @@ dotnet_sort_system_directives_first = true:warning
 dotnet_separate_import_directive_groups = true:warning
 
 # Modifiers
-csharp_preferred_modifier_order = public,private,protected,internal,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,required,volatile,async:warning
+csharp_preferred_modifier_order = public, private, protected, internal, static, extern, new, virtual, abstract, sealed, override, readonly, unsafe, required, volatile, async:warning
 
 # Member order
 dotnet_diagnostic.SA1200.severity = none

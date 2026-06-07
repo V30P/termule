@@ -1,4 +1,4 @@
-using Termule.Demos.Core;
+using Termule.Demos.Common;
 using Termule.Engine.Components;
 using Termule.Engine.Core;
 using Termule.Engine.Systems.Display;
@@ -15,7 +15,7 @@ internal sealed class Lightning : Demo
 
     protected override void Start()
     {
-        Systems.Get<DisplaySystem>().BackgroundCell = new Cell((0, 0, 0));
+        GetRequiredSystem<DisplaySystem>().BackgroundCell = new Cell((0, 0, 0));
 
         World.Add(
             new Transform(),
@@ -56,14 +56,16 @@ internal sealed class Lightning : Demo
 
         protected override void Activate()
         {
-            Vector origin = (Random.Shared.NextSingle() * Systems.Get<DisplaySystem>().Size.X, -1);
+            Vector origin = (Random.Shared.NextSingle()
+                * GetRequiredSystem<DisplaySystem>().Size.X, -1);
+
             Vector target = (
-                ((float) Systems.Get<DisplaySystem>().Size.X) / 2,
-                Systems.Get<DisplaySystem>().Size.Y
+                ((float) GetRequiredSystem<DisplaySystem>().Size.X) / 2,
+                GetRequiredSystem<DisplaySystem>().Size.Y
             );
 
             List<List<Vector>> branches = [[origin, target]];
-            float maxOffset = Systems.Get<DisplaySystem>().Size.X * OffsetToDisplayRatio;
+            float maxOffset = GetRequiredSystem<DisplaySystem>().Size.X * OffsetToDisplayRatio;
             for (int generation = 0; generation < BendGenerations; generation++)
             {
                 int branchCount = branches.Count;

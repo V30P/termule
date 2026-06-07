@@ -1,7 +1,7 @@
 using Termule.Engine.Systems.Rendering;
 using Termule.Engine.Types;
 
-namespace Termule.Tests.Systems.Rendering;
+namespace Termule.Tests.Common;
 
 public sealed class FakeRenderTarget(int width, int height) : IRenderTarget
 {

@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Reflection;
+using Termule.Demos.Common;
 using Termule.Engine.Components;
 using Termule.Engine.Core;
 using Termule.Engine.Systems.Rendering;

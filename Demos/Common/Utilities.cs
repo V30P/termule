@@ -1,6 +1,6 @@
 using Termule.Engine.Types;
 
-namespace Termule.Demos.Core;
+namespace Termule.Demos.Common;
 
 internal static class Utilities
 {
@@ -9,7 +9,7 @@ internal static class Utilities
         return (v.Y, -v.X);
     }
 
-    public static Vector ScaleVelocity(Vector v)
+    public static Vector ScaleToCells(this Vector v)
     {
         if (v.Magnitude == 0)
         {

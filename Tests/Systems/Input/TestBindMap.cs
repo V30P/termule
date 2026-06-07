@@ -1,5 +1,6 @@
 using System.Collections;
 using Termule.Engine.Systems.Input;
+using Termule.Tests.Common;
 
 namespace Termule.Tests.Systems.Input;
 
