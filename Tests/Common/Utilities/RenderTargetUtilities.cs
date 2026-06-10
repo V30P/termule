@@ -3,7 +3,7 @@ using Termule.Engine.Types;
 
 namespace Termule.Tests.Common;
 
-public static class RenderTargetUtilities
+internal static class RenderTargetUtilities
 {
     public static void AssertDrawnColor(
         this IRenderTarget target,
@@ -16,7 +16,7 @@ public static class RenderTargetUtilities
         {
             for (int y = 0; y < target.Size.Y; y++)
             {
-                if (target.GetCellRef(x, y).Color == expectedColor)
+                if (target[x, y].Color == expectedColor)
                 {
                     actualCells.Add((x, y));
                 }
@@ -36,11 +36,11 @@ public static class RenderTargetUtilities
             {
                 if (expectedChars.ContainsKey((x, y)))
                 {
-                    Assert.Equal(expectedChars[(x, y)], target.GetCellRef(x, y).Glyph);
+                    Assert.Equal(expectedChars[(x, y)], target[x, y].Glyph);
                 }
                 else
                 {
-                    Assert.Equal(default, target.GetCellRef(x, y).Glyph);
+                    Assert.Equal(default, target[x, y].Glyph);
                 }
             }
         }

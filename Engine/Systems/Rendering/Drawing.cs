@@ -38,7 +38,7 @@ public static class Drawing
             return;
         }
 
-        ref Cell cell = ref target.GetCellRef(pos.X, pos.Y);
+        ref Cell cell = ref target[pos.X, pos.Y];
 
         if (color.HasValue)
         {
@@ -51,8 +51,8 @@ public static class Drawing
         {
             if (layerBoxDrawingChars && glyphColor == cell.GlyphColor)
             {
-                Connections connections = ConnectionsExtensions.FromGlyph(glyph.Value)
-                    | ConnectionsExtensions.FromGlyph(cell.Glyph);
+                Connections connections = ConnectionsConversions.FromGlyph(glyph.Value)
+                    | ConnectionsConversions.FromGlyph(cell.Glyph);
 
                 glyph = connections.ToGlyph();
             }

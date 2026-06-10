@@ -6,7 +6,7 @@ namespace Termule.Engine.Exceptions;
 ///     Exception that is thrown when a required <see cref="System" /> is missing.
 /// </summary>
 /// <typeparam name="TMissing">The type of <see cref="System" /> that is missing.</typeparam>
-public class MissingSystemException<TMissing> : MissingGameElementException<TMissing>
+public sealed class MissingSystemException<TMissing> : MissingGameElementException<TMissing>
     where TMissing : Core.System
 {
     internal MissingSystemException(GameElement dependent) : base(dependent)

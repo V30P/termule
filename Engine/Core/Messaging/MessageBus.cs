@@ -7,6 +7,10 @@ public class MessageBus : GameElement
 {
     private readonly Dictionary<Type, HashSet<IMessageListenerBase>> subscribers = [];
 
+    internal MessageBus()
+    {
+    }
+
     /// <summary>
     ///     Register the listener to receive messages.
     /// </summary>

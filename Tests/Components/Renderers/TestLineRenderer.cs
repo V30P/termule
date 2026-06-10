@@ -56,8 +56,8 @@ public class TestLineRenderer
 
         renderer.Render(target, (-1.5f, 1.5f));
 
-        Assert.Equal(target.GetCellRef(1, 1), new Cell(glyph: '╶', charColor: BasicColor.White));
-        Assert.Equal(target.GetCellRef(2, 1), new Cell(glyph: '┘', charColor: BasicColor.White));
-        Assert.Equal(target.GetCellRef(2, 0), new Cell(glyph: '╷', charColor: BasicColor.White));
+        Assert.Equal(target[1, 1], new Cell(glyph: '╶', charColor: BasicColor.White));
+        Assert.Equal(target[2, 1], new Cell(glyph: '┘', charColor: BasicColor.White));
+        Assert.Equal(target[2, 0], new Cell(glyph: '╷', charColor: BasicColor.White));
     }
 }

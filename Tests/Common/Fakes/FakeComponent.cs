@@ -2,7 +2,7 @@ using Termule.Engine.Core;
 
 namespace Termule.Tests.Common;
 
-public class FakeComponent : Component
+internal class FakeComponent : Component
 {
     public int TickCount { get; private set; }
 

@@ -3,7 +3,7 @@ namespace Termule.Engine.Exceptions;
 /// <summary>
 ///     Exception that is thrown when a resource fails to load.
 /// </summary>
-public class ResourceLoadException : Exception
+public sealed class ResourceLoadException : Exception
 {
     internal ResourceLoadException(string fullPath, Exception inner = null)
         : base($"Could not load resource \"{Path.GetFileName(fullPath)}\"", inner)

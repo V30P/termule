@@ -22,5 +22,11 @@ public interface IRenderTarget
     /// </summary>
     public VectorInt Size => UpperBound - LowerBound;
 
-    internal abstract ref Cell GetCellRef(int x, int y);
+    /// <summary>
+    ///     Gets a reference to the cell at (<paramref name="x"/>, <paramref name="y"/>).
+    /// </summary>
+    /// <param name="x">The x position of the cell.</param>
+    /// <param name="y">The y position of the cell.</param>
+    /// <returns>A reference to the <see cref="Cell" /> at the given position.</returns>
+    protected internal abstract ref Cell this[int x, int y] { get; }
 }

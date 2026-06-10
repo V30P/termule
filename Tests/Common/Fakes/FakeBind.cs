@@ -2,7 +2,7 @@ using Termule.Engine.Systems.Input;
 
 namespace Termule.Tests.Common;
 
-public class FakeBind : Bind
+internal class FakeBind : Bind
 {
     public bool GetValueInvoked { get; private set; }
 

@@ -2,7 +2,7 @@ using Termule.Engine.Core;
 
 namespace Termule.Tests.Common;
 
-public class FakeGameElement : GameElement
+internal sealed class FakeGameElement : GameElement
 {
     public bool HasBeenActivated { get; private set; }
 

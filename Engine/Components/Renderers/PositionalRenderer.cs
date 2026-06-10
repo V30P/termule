@@ -72,10 +72,13 @@ public abstract class PositionalRenderer : Renderer
                 : origin.Y - target.LowerBound.Y + 1
         );
 
-        ref Cell IRenderTarget.GetCellRef(int x, int y)
+        ref Cell IRenderTarget.this[int x, int y]
         {
-            VectorInt targetPos = LocalToTargetPos((x, y));
-            return ref target.GetCellRef(targetPos.X, targetPos.Y);
+            get
+            {
+                VectorInt targetPos = LocalToTargetPos((x, y));
+                return ref target[targetPos.X, targetPos.Y];
+            }
         }
 
         private VectorInt LocalToTargetPos(VectorInt pos)

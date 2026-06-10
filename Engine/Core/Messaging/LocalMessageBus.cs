@@ -3,9 +3,15 @@ namespace Termule.Engine.Core.Messaging;
 /// <summary>
 ///     A message bus for routing messages through the world.
 /// </summary>
-/// <param name="gameObject">The GameObject this bus is part of.</param>
-public class LocalMessageBus(GameObject gameObject) : MessageBus
+public sealed class LocalMessageBus : MessageBus
 {
+    private readonly GameObject gameObject;
+
+    internal LocalMessageBus(GameObject gameObject)
+    {
+        this.gameObject = gameObject;
+    }
+
     /// <summary>
     ///     Send a message to its subscribed listeners along the provided <paramref name="route" />.
     /// </summary>

@@ -4,7 +4,7 @@ namespace Termule.Engine.Types;
 ///     Flags representing the connections of a Unicode box-drawing glyph.
 /// </summary>
 /// <remarks>
-///     Use <see cref="ConnectionsExtensions" /> methods to convert between
+///     Use <see cref="ConnectionsConversions" /> methods to convert between
 ///     <see cref="Connections" /> values and <see cref="char" />s.
 /// </remarks>
 [Flags]
@@ -20,9 +20,9 @@ public enum Connections
 }
 
 /// <summary>
-///     Extension methods for working with <see cref="Connections" />.
+///     Extension methods for converting to and from <see cref="Connections" />.
 /// </summary>
-public static class ConnectionsExtensions
+public static class ConnectionsConversions
 {
     private static readonly Dictionary<Connections, char> ConnectionsToGlyph = new()
     {

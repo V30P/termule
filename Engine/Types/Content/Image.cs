@@ -50,7 +50,7 @@ public class Image : IContent, IResource
     protected Cell[,] Cells { get; set; }
 
     /// <summary>
-    ///     Gets or sets the cell at (x, y).
+    ///     Gets or sets the cell at (<paramref name="x"/>, <paramref name="y"/>).
     /// </summary>
     /// <param name="x">The x position of the cell.</param>
     /// <param name="y">The y position of the cell.</param>

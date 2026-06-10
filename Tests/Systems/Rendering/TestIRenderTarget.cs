@@ -33,7 +33,7 @@ public class TestIRenderTarget
 
             target.Draw((0, 0), color, glyph, glyphColor);
 
-            Assert.Equal(expectedCell, target.GetCellRef(0, 0));
+            Assert.Equal(expectedCell, target[0, 0]);
         }
 
         [Fact]
@@ -49,7 +49,7 @@ public class TestIRenderTarget
             {
                 for (int y = 0; y < target.Size.Y; y++)
                 {
-                    Assert.Equal(default, target.GetCellRef(x, y));
+                    Assert.Equal(default, target[x, y]);
                 }
             }
         }
@@ -61,10 +61,10 @@ public class TestIRenderTarget
             target.Draw((0, 0), BasicColor.White, 'X', BasicColor.White);
 
             target.Draw((0, 0), null, 'X');
-            Assert.Equal(new Cell(BasicColor.White, 'X'), target.GetCellRef(0, 0));
+            Assert.Equal(new Cell(BasicColor.White, 'X'), target[0, 0]);
 
             target.Draw((0, 0), BasicColor.White);
-            Assert.Equal(new Cell(BasicColor.White), target.GetCellRef(0, 0));
+            Assert.Equal(new Cell(BasicColor.White), target[0, 0]);
         }
 
         [Fact]
@@ -75,7 +75,7 @@ public class TestIRenderTarget
             target.Draw((0, 0), glyph: '─', glyphColor: BasicColor.White);
             target.Draw((0, 0), glyph: '│', glyphColor: BasicColor.White);
 
-            Assert.Equal('┼', target.GetCellRef(0, 0).Glyph);
+            Assert.Equal('┼', target[0, 0].Glyph);
         }
 
         [Fact]
@@ -86,7 +86,7 @@ public class TestIRenderTarget
             target.Draw((0, 0), glyph: '─', glyphColor: BasicColor.White);
             target.Draw((0, 0), glyph: '│', glyphColor: BasicColor.Red);
 
-            Assert.Equal('│', target.GetCellRef(0, 0).Glyph);
+            Assert.Equal('│', target[0, 0].Glyph);
         }
 
         [Fact]
@@ -102,7 +102,7 @@ public class TestIRenderTarget
                 layerBoxDrawingChars: false
             );
 
-            Assert.Equal('│', target.GetCellRef(0, 0).Glyph);
+            Assert.Equal('│', target[0, 0].Glyph);
         }
     }
 
@@ -131,7 +131,7 @@ public class TestIRenderTarget
 
             target.DrawContent((0, 0), new FakeContent(new Cell[,] { { default } }));
 
-            Assert.Equal(baseCell, target.GetCellRef(0, 0));
+            Assert.Equal(baseCell, target[0, 0]);
         }
 
         [Fact]
@@ -145,7 +145,7 @@ public class TestIRenderTarget
             {
                 for (int y = 0; y < TestContent.Size.Y; y++)
                 {
-                    Assert.Equal(TestContent[x, y], target.GetCellRef(x, y));
+                    Assert.Equal(TestContent[x, y], target[x, y]);
                 }
             }
         }
@@ -158,7 +158,7 @@ public class TestIRenderTarget
 
             target.DrawContent((1, 1), new FakeContent(new Cell[,] { { new(BasicColor.White) } }));
 
-            Assert.Equal(content[0, 0], target.GetCellRef(1, 1));
+            Assert.Equal(content[0, 0], target[1, 1]);
         }
 
         [Fact]
@@ -174,7 +174,7 @@ public class TestIRenderTarget
                 {
                     Assert.Equal(
                         TestContent[TestContent.Size.X - x - 1, y],
-                        target.GetCellRef(x, y)
+                        target[x, y]
                     );
                 }
             }
@@ -193,7 +193,7 @@ public class TestIRenderTarget
                 {
                     Assert.Equal(
                         TestContent[x, TestContent.Size.Y - y - 1],
-                        target.GetCellRef(x, y)
+                        target[x, y]
                     );
                 }
             }

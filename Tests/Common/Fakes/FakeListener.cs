@@ -2,7 +2,7 @@ using Termule.Engine.Core.Messaging;
 
 namespace Termule.Tests.Common;
 
-public class FakeListener<TMessage> : IMessageListener<TMessage>
+internal sealed class FakeListener<TMessage> : IMessageListener<TMessage>
 {
     public TMessage ReceivedMessage { get; private set; }
 

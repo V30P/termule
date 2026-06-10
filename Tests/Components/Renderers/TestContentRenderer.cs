@@ -68,7 +68,7 @@ public class TestContentRenderer
         {
             for (int y = target.LowerBound.Y; y < target.UpperBound.X; y++)
             {
-                Assert.Equal(BasicColor.White, target.GetCellRef(x, y).Color);
+                Assert.Equal(BasicColor.White, target[x, y].Color);
             }
         }
     }

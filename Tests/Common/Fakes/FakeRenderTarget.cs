@@ -3,7 +3,7 @@ using Termule.Engine.Types;
 
 namespace Termule.Tests.Common;
 
-public sealed class FakeRenderTarget(int width, int height) : IRenderTarget
+internal sealed class FakeRenderTarget(int width, int height) : IRenderTarget
 {
     private readonly Cell[,] cells = new Cell[width, height];
 
@@ -11,8 +11,5 @@ public sealed class FakeRenderTarget(int width, int height) : IRenderTarget
 
     VectorInt IRenderTarget.UpperBound => (width, height);
 
-    ref Cell IRenderTarget.GetCellRef(int x, int y)
-    {
-        return ref cells[x, y];
-    }
+    ref Cell IRenderTarget.this[int x, int y] => ref cells[x, y];
 }

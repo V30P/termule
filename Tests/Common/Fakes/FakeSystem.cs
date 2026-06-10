@@ -1,6 +1,6 @@
 namespace Termule.Tests.Common;
 
-public class FakeSystem : Engine.Core.System
+internal sealed class FakeSystem : Engine.Core.System
 {
     public bool Started { get; private set; }
 

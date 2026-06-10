@@ -8,7 +8,7 @@ namespace Termule.Demos.Core;
 
 internal sealed class TpsIndicator : Component
 {
-    private static readonly CompositeFormat TextFormat = CompositeFormat.Parse(" TPS: {0}");
+    private static readonly CompositeFormat TextFormat = CompositeFormat.Parse("TPS: {0}");
 
     private int ticks;
     private float time;

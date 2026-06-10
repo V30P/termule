@@ -16,10 +16,7 @@ public sealed class FrameBuffer : Image, IRenderTarget
 
     VectorInt IRenderTarget.UpperBound => Size;
 
-    ref Cell IRenderTarget.GetCellRef(int x, int y)
-    {
-        return ref Cells[x, y];
-    }
+    ref Cell IRenderTarget.this[int x, int y] => ref Cells[x, y];
 
     internal void Fill(Cell cell)
     {

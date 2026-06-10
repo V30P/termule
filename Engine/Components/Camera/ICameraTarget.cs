@@ -13,7 +13,11 @@ public interface ICameraTarget
     /// </summary>
     public VectorInt Size { get; }
 
-    internal IRenderTarget GetRenderTarget();
+    /// <summary>
+    ///     Gets a <see cref="IRenderTarget"/> that is ready to be rendered to.
+    /// </summary>
+    /// <returns>The target.</returns>
+    protected internal IRenderTarget GetRenderTarget();
 
     internal void Update();
 }

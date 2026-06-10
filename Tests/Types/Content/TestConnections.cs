@@ -7,15 +7,15 @@ public class TestConnections
     [Fact]
     public void FromChar_ReturnsCorrectConnections()
     {
-        Assert.Equal(Connections.Up, ConnectionsExtensions.FromGlyph('╵'));
-        Assert.Equal(Connections.Right, ConnectionsExtensions.FromGlyph('╶'));
-        Assert.Equal(Connections.Up | Connections.Down, ConnectionsExtensions.FromGlyph('│'));
+        Assert.Equal(Connections.Up, ConnectionsConversions.FromGlyph('╵'));
+        Assert.Equal(Connections.Right, ConnectionsConversions.FromGlyph('╶'));
+        Assert.Equal(Connections.Up | Connections.Down, ConnectionsConversions.FromGlyph('│'));
     }
 
     [Fact]
     public void FromChar_UnmappedChar_ReturnsNone()
     {
-        Assert.Equal(Connections.None, ConnectionsExtensions.FromGlyph('a'));
+        Assert.Equal(Connections.None, ConnectionsConversions.FromGlyph('a'));
     }
 
     [Fact]

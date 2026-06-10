@@ -4,7 +4,7 @@ using Termule.Engine.Types;
 
 namespace Termule.Tests.Common;
 
-public class FakeRenderer : Renderer
+internal class FakeRenderer : Renderer
 {
     public IRenderTarget CapturedTarget { get; private set; }
 

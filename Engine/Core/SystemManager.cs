@@ -9,9 +9,13 @@ namespace Termule.Engine.Core;
 ///     Manages systems and provides an interface to install, uninstall, and retrieve systems
 ///     during <see cref="Game" /> configuration.
 /// </summary>
-public class SystemManager : GameElement
+public sealed class SystemManager : GameElement
 {
     private readonly Dictionary<Type, System> systems = [];
+
+    internal SystemManager()
+    {
+    }
 
     /// <summary>
     ///     Installs the provided <paramref name="systems" />, replacing the existing instance of
