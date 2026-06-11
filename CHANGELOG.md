@@ -7,7 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [Unreleased]
 
 ### Added
-- `IRenderTarget` interface for rendering to non-frame targets
+- `IRenderTarget` interface for types that can be rendered to
 - `IPositionProvider` interface for components that provide positioning
 - `Drawing` class to provide extension methods for common draw actions
 
@@ -22,6 +22,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Fixed
 - `LineRenderer` rendering upside down in world space
 - "Raindrops" demo not fully destroying raindrop objects
+- A miscalculation in offset when using `ContentRenderer.Centered`
+- Several types have inconsistent accessibility
 
 ## [0.3.1] - 2026-05-25
 

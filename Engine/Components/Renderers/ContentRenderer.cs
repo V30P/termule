@@ -48,7 +48,7 @@ public sealed class ContentRenderer<TContent> : PositionalRenderer where TConten
 
     /// <inheritdoc />
     protected override Vector Offset =>
-        Centered && Content != null ? -Content.Size / 2 : (0, 0);
+        Centered && Content != null ? (-Content.Size / 2) + (0.5f, 0.5f) : (0, 0);
 
     private protected override void RenderPositionally(IRenderTarget target, Vector _)
     {

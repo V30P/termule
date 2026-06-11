@@ -151,8 +151,16 @@ public readonly struct Vector(float X = 0, float Y = 0)
     }
 
     /// <summary>
-    ///     Rounds this vector to a <see cref="VectorInt" /> by rounding each component to the
-    ///     nearest integer.
+    ///     Applies floor to this vector's components, returning a <see cref="VectorInt" />.
+    /// </summary>
+    /// <returns>The resulting <see cref="VectorInt" />.</returns>
+    public VectorInt FloorToInt()
+    {
+        return new VectorInt((int) MathF.Floor(X), (int) MathF.Floor(Y));
+    }
+
+    /// <summary>
+    /// Rounds this vector's components, returning a <see cref="VectorInt" />.
     /// </summary>
     /// <returns>The rounded <see cref="VectorInt" />.</returns>
     public VectorInt RoundToInt()
@@ -161,12 +169,11 @@ public readonly struct Vector(float X = 0, float Y = 0)
     }
 
     /// <summary>
-    ///     Floors this vector to a <see cref="VectorInt" /> by applying <see cref="MathF.Floor" />
-    ///     to each component.
+    ///     Applies ceiling to this vector's components, returning a <see cref="VectorInt" />.
     /// </summary>
-    /// <returns>The floored <see cref="VectorInt" />.</returns>
-    public VectorInt FloorToInt()
+    /// <returns>The resulting <see cref="VectorInt" />.</returns>
+    public VectorInt CeilToInt()
     {
-        return new VectorInt((int) MathF.Floor(X), (int) MathF.Floor(Y));
+        return new VectorInt((int) MathF.Ceiling(X), (int) MathF.Ceiling(Y));
     }
 }
