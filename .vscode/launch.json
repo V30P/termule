@@ -1,0 +1,33 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Demos",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "buildDemos",
+      "program": "${workspaceRoot}/Demos/bin/Debug/net10.0/Termule.Demos.dll",
+      "args": [
+        "--stats",
+        "${input:pickDemo}"
+      ],
+      "cwd": "${workspaceFolder}",
+      "console": "externalTerminal",
+      "stopAtEntry": false
+    }
+  ],
+  "inputs": [
+    {
+      "id": "pickDemo",
+      "description": "Select demo",
+      "type": "pickString",
+      "options": [
+        "Gradient",
+        "Lightning",
+        "Raindrops",
+        "Screensaver",
+        "Shooter"
+      ],
+    }
+  ]
+}

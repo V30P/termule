@@ -4,6 +4,9 @@
 
 # Hidden files
 .*
+
 !.editorconfig
-!.gitattributes
 !.gitignore
+
+!.vscode/launch.json
+!.vscode/config.json
