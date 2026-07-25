@@ -1,5 +1,6 @@
 <Solution>
-    <Project Path="Engine/Engine.csproj"/>
-    <Project Path="Tests/Tests.csproj"/>
     <Project Path="Demos/Demos.csproj"/>
+    <Project Path="Engine/Engine.csproj"/>
+    <Project Path="Playground/Playground.csproj"/>
+    <Project Path="Tests/Tests.csproj"/>
 </Solution>

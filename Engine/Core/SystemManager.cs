@@ -94,7 +94,6 @@ public sealed class SystemManager : GameElement
         {
             Install(new UnixTerminal());
         }
-
         Install(new TerminalController());
     }
 

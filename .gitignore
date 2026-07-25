@@ -1,7 +1,3 @@
-# Build artifacts
-*/bin
-*/obj
-
 # Hidden files
 .*
 

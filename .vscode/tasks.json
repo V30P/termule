@@ -3,10 +3,20 @@
   "tasks": [
     {
       "label": "buildDemos",
-      "command": "dotnet",
       "type": "process",
+      "command": "dotnet",
       "args": [
-        "build"
+        "build",
+        "${workspaceFolder}/Demos/Demos.csproj"
+      ]
+    },
+    {
+      "label": "buildPlayground",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "build",
+        "${workspaceFolder}/Playground/Playground.csproj"
       ]
     }
   ]

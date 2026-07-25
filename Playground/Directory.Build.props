@@ -1,0 +1,3 @@
+<Project>
+    <!-- Excludes the playground from the main Directory.Build.props. -->
+</Project>
