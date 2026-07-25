@@ -73,7 +73,6 @@ public sealed class SystemManager : GameElement
     /// </summary>
     public void InstallDefaults()
     {
-        Install(new Keyboard());
         Install(new RenderSystem());
         Install(new ResourceLoader());
 
@@ -89,12 +88,14 @@ public sealed class SystemManager : GameElement
 
         if (OperatingSystem.IsWindows())
         {
-            Install(new WindowsDisplaySystem());
+            Install(new WindowsTerminal());
         }
         else if (OperatingSystem.IsMacOS() || OperatingSystem.IsLinux())
         {
-            Install(new UnixDisplaySystem());
+            Install(new UnixTerminal());
         }
+
+        Install(new TerminalController());
     }
 
     internal void Start()

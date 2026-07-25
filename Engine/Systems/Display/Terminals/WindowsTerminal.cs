@@ -5,12 +5,17 @@ namespace Termule.Engine.Systems.Display;
 /// <summary>
 ///     Display system implementation for Windows.
 /// </summary>
-public sealed partial class WindowsDisplaySystem : TerminalDisplaySystem
+public sealed partial class WindowsTerminal : Terminal
 {
     private readonly IntPtr handle = GetStdHandle(-10);
     private readonly INPUT_RECORD[] eventBuffer = new INPUT_RECORD[64];
 
     private uint initialMode;
+
+    internal override string CollectInput()
+    {
+        throw new NotImplementedException();
+    }
 
     /// <inheritdoc />
     protected internal override void Start()
@@ -35,31 +40,6 @@ public sealed partial class WindowsDisplaySystem : TerminalDisplaySystem
         _ = SetConsoleMode(handle, initialMode);
     }
 
-    /// <inheritdoc />
-    protected internal override void Tick()
-    {
-        if (!GetNumberOfConsoleInputEvents(handle, out uint numEvents) || numEvents == 0)
-        {
-            return;
-        }
-
-        _ = ReadConsoleInput(handle, eventBuffer, (uint) eventBuffer.Length, out uint eventsCount);
-        for (int i = (int) eventsCount - 1; i >= 0; i--)
-        {
-            const uint MOUSE_EVENT = 0x0002;
-            const uint MOUSE_MOVED = 0x0001;
-
-            if (eventBuffer[i].EventType == MOUSE_EVENT &&
-                (eventBuffer[i].Event.MouseEvent.dwEventFlags & MOUSE_MOVED) != 0)
-            {
-                MOUSE_EVENT_RECORD mouseEvent = eventBuffer[i].Event.MouseEvent;
-                MousePos = (mouseEvent.dwMousePosition.X, mouseEvent.dwMousePosition.Y);
-
-                return;
-            }
-        }
-    }
-
     [LibraryImport("kernel32.dll", SetLastError = true)]
     private static partial IntPtr GetStdHandle(int nStdHandle);
 
@@ -70,20 +50,6 @@ public sealed partial class WindowsDisplaySystem : TerminalDisplaySystem
     [LibraryImport("kernel32.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
     private static partial bool SetConsoleMode(IntPtr hConsoleHandle, uint dwMode);
-
-    [LibraryImport("kernel32.dll", SetLastError = true)]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    private static partial bool GetNumberOfConsoleInputEvents(
-        IntPtr hConsoleHandle,
-        out uint lpcNumberOfEvents);
-
-    [LibraryImport("kernel32.dll", EntryPoint = "ReadConsoleInputW", SetLastError = true)]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    private static partial bool ReadConsoleInput(
-        IntPtr hConsoleInput,
-        [Out] INPUT_RECORD[] lpBuffer,
-        uint nLength,
-        out uint lpNumberOfEventsRead);
 
     [StructLayout(LayoutKind.Sequential)]
     private readonly struct INPUT_RECORD

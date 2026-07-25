@@ -37,25 +37,6 @@ public abstract class DisplaySystem : Core.System, ICameraTarget
     }
 
     /// <summary>
-    ///     Gets the display-space position of the mouse (in cells).
-    /// </summary>
-    public VectorInt MousePos
-    {
-        get;
-
-        private protected set
-        {
-            if (field == value)
-            {
-                return;
-            }
-
-            field = value;
-            Game?.Bus.Broadcast(new MouseMovedMessage(field));
-        }
-    }
-
-    /// <summary>
     ///     Gets or sets a cell that will fill the background of the display.
     /// </summary>
     public Cell BackgroundCell { get; set; }

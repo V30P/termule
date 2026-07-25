@@ -6,7 +6,7 @@ namespace Termule.Engine.Systems.Display;
 /// <summary>
 ///     Display system for terminal-based output.
 /// </summary>
-public abstract class TerminalDisplaySystem : DisplaySystem
+public abstract class Terminal : DisplaySystem
 {
     // Stop built strings from going to the LOH
     private const int BuilderLimit = 42_500;
@@ -59,10 +59,12 @@ public abstract class TerminalDisplaySystem : DisplaySystem
     private Color currentGlyphColor;
     private Color currentColor;
 
-    internal TerminalDisplaySystem()
+    internal Terminal()
     {
         Size = (Console.WindowWidth, Console.WindowHeight);
     }
+
+    internal abstract string CollectInput();
 
     /// <inheritdoc/>
     protected internal override void Start()
@@ -80,8 +82,8 @@ public abstract class TerminalDisplaySystem : DisplaySystem
     /// <inheritdoc/>
     protected internal override void CleanUp()
     {
-        Console.Write("\e[?1049l"); // Disable alternate buffer
         Console.CursorVisible = true;
+        Console.Write("\e[?1049l"); // Disable alternate buffer
     }
 
     private protected sealed override void PrintBuffer()

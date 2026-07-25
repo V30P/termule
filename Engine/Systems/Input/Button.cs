@@ -1,19 +1,31 @@
-using SharpHook.Data;
-
 namespace Termule.Engine.Systems.Input;
 
 /// <summary>
-///     Represents a button on a keyboard or mouse.
+///     A physical button on a keyboard or mouse.
 /// </summary>
 public enum Button
 {
+    // Control characters
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
-    Mouse1,
-    Mouse2,
-    Mouse3,
-    Mouse4,
-    Mouse5,
+    Backspace,   // \b (8) / sometimes DEL (127)
+    Tab,         // \t
+    Enter,       // \r or \n
+    Escape,      // 27
+    Space,
 
+    // Digits
+    D0,
+    D1,
+    D2,
+    D3,
+    D4,
+    D5,
+    D6,
+    D7,
+    D8,
+    D9,
+
+    // Letters
     A,
     B,
     C,
@@ -41,268 +53,188 @@ public enum Button
     Y,
     Z,
 
-#pragma warning disable CA1707 // Identifiers should not contain underscores
-    _0,
-    _1,
-    _2,
-    _3,
-    _4,
-    _5,
-    _6,
-    _7,
-    _8,
-    _9,
-#pragma warning restore CA1707 // Identifiers should not contain underscores
+    // Symbols
+    Exclamation,     // !
+    DoubleQuote,     // "
+    Hash,            // #
+    Dollar,          // $
+    Percent,         // %
+    Ampersand,       // &
+    Apostrophe,      // '
+    LeftParen,       // (
+    RightParen,      // )
+    Asterisk,        // *
+    Plus,            // +
+    Comma,           // ,
+    Minus,           // -
+    Period,          // .
+    Slash,           // /
 
-    F1,
-    F2,
-    F3,
-    F4,
-    F5,
-    F6,
-    F7,
-    F8,
-    F9,
-    F10,
-    F11,
-    F12,
-    F13,
-    F14,
-    F15,
-    F16,
-    F17,
-    F18,
-    F19,
-    F20,
-    F21,
-    F22,
-    F23,
-    F24,
+    Colon,           // :
+    Semicolon,       // ;
+    LessThan,        // <
+    Equals,          // =
+    GreaterThan,     // >
+    Question,        // ?
+    At,              // @
 
-    LeftShift,
-    RightShift,
-    LeftControl,
-    RightControl,
-    LeftAlt,
-    RightAlt,
-    LeftMeta,
-    RightMeta,
+    LeftBracket,     // [
+    Backslash,       // \
+    RightBracket,    // ]
+    Caret,           // ^
+    Underscore,      // _
+    Grave,           // `
 
-    CapsLock,
-    NumLock,
-    ScrollLock,
+    LeftBrace,       // {
+    Pipe,            // |
+    RightBrace,      // }
+    Tilde,           // ~
 
-    Backspace,
-    Tab,
-    Enter,
-    Escape,
-    Insert,
-    Delete,
-    Home,
-    End,
-    PageUp,
-    PageDown,
-    Clear,
-    PrintScreen,
-    Pause,
-    ContextMenu,
-
-    UpArrow,
-    DownArrow,
-    LeftArrow,
-    RightArrow,
-
-    Space,
-    Minus,
-    Equals,
-    OpenBracket,
-    CloseBracket,
-    Backslash,
-    Semicolon,
-    Quote,
-    Comma,
-    Period,
-    Slash,
-    BackQuote,
-
-    Np0,
-    Np1,
-    Np2,
-    Np3,
-    Np4,
-    Np5,
-    Np6,
-    Np7,
-    Np8,
-    Np9,
-    NpAdd,
-    NpSubtract,
-    NpMultiply,
-    NpDivide,
-    NpDecimal,
-    NpEnter,
-    NpEquals,
-
-    VolumeMute,
-    VolumeUp,
-    VolumeDown,
-    MediaPlay,
-    MediaPause,
-    MediaPlayPause,
-    MediaStop,
-    MediaNext,
-    MediaPrevious,
-    MediaSelect,
+    LeftMouse,
+    MiddleMouse,
+    RightMouse,
+    MouseWheelUp,
+    MouseWheelDown,
+    MouseWheelLeft,
+    MouseWheelRight
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 }
 
 internal static class ButtonConversions
 {
-    private static readonly Dictionary<MouseButton, Button> MouseButtonToButton = new()
+    private static readonly Dictionary<char, Button> CharToButton = new()
     {
-        { MouseButton.Button1, Button.Mouse1 },
-        { MouseButton.Button2, Button.Mouse2 },
-        { MouseButton.Button3, Button.Mouse3 },
-        { MouseButton.Button4, Button.Mouse4 },
-        { MouseButton.Button5, Button.Mouse5 }
+        ['\b'] = Button.Backspace,
+        ['\t'] = Button.Tab,
+        ['\r'] = Button.Enter,
+        ['\n'] = Button.Enter,
+        [(char) 27] = Button.Escape,
+        [' '] = Button.Space,
+
+        ['0'] = Button.D0,
+        ['1'] = Button.D1,
+        ['2'] = Button.D2,
+        ['3'] = Button.D3,
+        ['4'] = Button.D4,
+        ['5'] = Button.D5,
+        ['6'] = Button.D6,
+        ['7'] = Button.D7,
+        ['8'] = Button.D8,
+        ['9'] = Button.D9,
+
+        ['a'] = Button.A,
+        ['b'] = Button.B,
+        ['c'] = Button.C,
+        ['d'] = Button.D,
+        ['e'] = Button.E,
+        ['f'] = Button.F,
+        ['g'] = Button.G,
+        ['h'] = Button.H,
+        ['i'] = Button.I,
+        ['j'] = Button.J,
+        ['k'] = Button.K,
+        ['l'] = Button.L,
+        ['m'] = Button.M,
+        ['n'] = Button.N,
+        ['o'] = Button.O,
+        ['p'] = Button.P,
+        ['q'] = Button.Q,
+        ['r'] = Button.R,
+        ['s'] = Button.S,
+        ['t'] = Button.T,
+        ['u'] = Button.U,
+        ['v'] = Button.V,
+        ['w'] = Button.W,
+        ['x'] = Button.X,
+        ['y'] = Button.Y,
+        ['z'] = Button.Z,
+
+        ['A'] = Button.A,
+        ['B'] = Button.B,
+        ['C'] = Button.C,
+        ['D'] = Button.D,
+        ['E'] = Button.E,
+        ['F'] = Button.F,
+        ['G'] = Button.G,
+        ['H'] = Button.H,
+        ['I'] = Button.I,
+        ['J'] = Button.J,
+        ['K'] = Button.K,
+        ['L'] = Button.L,
+        ['M'] = Button.M,
+        ['N'] = Button.N,
+        ['O'] = Button.O,
+        ['P'] = Button.P,
+        ['Q'] = Button.Q,
+        ['R'] = Button.R,
+        ['S'] = Button.S,
+        ['T'] = Button.T,
+        ['U'] = Button.U,
+        ['V'] = Button.V,
+        ['W'] = Button.W,
+        ['X'] = Button.X,
+        ['Y'] = Button.Y,
+        ['Z'] = Button.Z,
+
+        ['!'] = Button.Exclamation,
+        ['"'] = Button.DoubleQuote,
+        ['#'] = Button.Hash,
+        ['$'] = Button.Dollar,
+        ['%'] = Button.Percent,
+        ['&'] = Button.Ampersand,
+        ['\''] = Button.Apostrophe,
+        ['('] = Button.LeftParen,
+        [')'] = Button.RightParen,
+        ['*'] = Button.Asterisk,
+        ['+'] = Button.Plus,
+        [','] = Button.Comma,
+        ['-'] = Button.Minus,
+        ['.'] = Button.Period,
+        ['/'] = Button.Slash,
+        [':'] = Button.Colon,
+        [';'] = Button.Semicolon,
+        ['<'] = Button.LessThan,
+        ['='] = Button.Equals,
+        ['>'] = Button.GreaterThan,
+        ['?'] = Button.Question,
+        ['@'] = Button.At,
+        ['['] = Button.LeftBracket,
+        ['\\'] = Button.Backslash,
+        [']'] = Button.RightBracket,
+        ['^'] = Button.Caret,
+        ['_'] = Button.Underscore,
+        ['`'] = Button.Grave,
+        ['{'] = Button.LeftBrace,
+        ['|'] = Button.Pipe,
+        ['}'] = Button.RightBrace,
+        ['~'] = Button.Tilde,
     };
 
-    private static readonly Dictionary<KeyCode, Button> KeyCodeToButton = new()
+    internal static bool TryConvertCharToButton(char character, out Button button)
     {
-        { KeyCode.VcA, Button.A },
-        { KeyCode.VcB, Button.B },
-        { KeyCode.VcC, Button.C },
-        { KeyCode.VcD, Button.D },
-        { KeyCode.VcE, Button.E },
-        { KeyCode.VcF, Button.F },
-        { KeyCode.VcG, Button.G },
-        { KeyCode.VcH, Button.H },
-        { KeyCode.VcI, Button.I },
-        { KeyCode.VcJ, Button.J },
-        { KeyCode.VcK, Button.K },
-        { KeyCode.VcL, Button.L },
-        { KeyCode.VcM, Button.M },
-        { KeyCode.VcN, Button.N },
-        { KeyCode.VcO, Button.O },
-        { KeyCode.VcP, Button.P },
-        { KeyCode.VcQ, Button.Q },
-        { KeyCode.VcR, Button.R },
-        { KeyCode.VcS, Button.S },
-        { KeyCode.VcT, Button.T },
-        { KeyCode.VcU, Button.U },
-        { KeyCode.VcV, Button.V },
-        { KeyCode.VcW, Button.W },
-        { KeyCode.VcX, Button.X },
-        { KeyCode.VcY, Button.Y },
-        { KeyCode.VcZ, Button.Z },
-        { KeyCode.Vc0, Button._0 },
-        { KeyCode.Vc1, Button._1 },
-        { KeyCode.Vc2, Button._2 },
-        { KeyCode.Vc3, Button._3 },
-        { KeyCode.Vc4, Button._4 },
-        { KeyCode.Vc5, Button._5 },
-        { KeyCode.Vc6, Button._6 },
-        { KeyCode.Vc7, Button._7 },
-        { KeyCode.Vc8, Button._8 },
-        { KeyCode.Vc9, Button._9 },
-        { KeyCode.VcF1, Button.F1 },
-        { KeyCode.VcF2, Button.F2 },
-        { KeyCode.VcF3, Button.F3 },
-        { KeyCode.VcF4, Button.F4 },
-        { KeyCode.VcF5, Button.F5 },
-        { KeyCode.VcF6, Button.F6 },
-        { KeyCode.VcF7, Button.F7 },
-        { KeyCode.VcF8, Button.F8 },
-        { KeyCode.VcF9, Button.F9 },
-        { KeyCode.VcF10, Button.F10 },
-        { KeyCode.VcF11, Button.F11 },
-        { KeyCode.VcF12, Button.F12 },
-        { KeyCode.VcF13, Button.F13 },
-        { KeyCode.VcF14, Button.F14 },
-        { KeyCode.VcF15, Button.F15 },
-        { KeyCode.VcF16, Button.F16 },
-        { KeyCode.VcF17, Button.F17 },
-        { KeyCode.VcF18, Button.F18 },
-        { KeyCode.VcF19, Button.F19 },
-        { KeyCode.VcF20, Button.F20 },
-        { KeyCode.VcF21, Button.F21 },
-        { KeyCode.VcF22, Button.F22 },
-        { KeyCode.VcF23, Button.F23 },
-        { KeyCode.VcF24, Button.F24 },
-        { KeyCode.VcLeftShift, Button.LeftShift },
-        { KeyCode.VcRightShift, Button.RightShift },
-        { KeyCode.VcLeftControl, Button.LeftControl },
-        { KeyCode.VcRightControl, Button.RightControl },
-        { KeyCode.VcLeftAlt, Button.LeftAlt },
-        { KeyCode.VcRightAlt, Button.RightAlt },
-        { KeyCode.VcLeftMeta, Button.LeftMeta },
-        { KeyCode.VcRightMeta, Button.RightMeta },
-        { KeyCode.VcCapsLock, Button.CapsLock },
-        { KeyCode.VcNumLock, Button.NumLock },
-        { KeyCode.VcScrollLock, Button.ScrollLock },
-        { KeyCode.VcBackspace, Button.Backspace },
-        { KeyCode.VcTab, Button.Tab },
-        { KeyCode.VcEnter, Button.Enter },
-        { KeyCode.VcEscape, Button.Escape },
-        { KeyCode.VcInsert, Button.Insert },
-        { KeyCode.VcDelete, Button.Delete },
-        { KeyCode.VcHome, Button.Home },
-        { KeyCode.VcEnd, Button.End },
-        { KeyCode.VcPageUp, Button.PageUp },
-        { KeyCode.VcPageDown, Button.PageDown },
-        { KeyCode.VcPrintScreen, Button.PrintScreen },
-        { KeyCode.VcPause, Button.Pause },
-        { KeyCode.VcContextMenu, Button.ContextMenu },
-        { KeyCode.VcLeft, Button.LeftArrow },
-        { KeyCode.VcRight, Button.RightArrow },
-        { KeyCode.VcUp, Button.UpArrow },
-        { KeyCode.VcDown, Button.DownArrow },
-        { KeyCode.VcSpace, Button.Space },
-        { KeyCode.VcMinus, Button.Minus },
-        { KeyCode.VcEquals, Button.Equals },
-        { KeyCode.VcOpenBracket, Button.OpenBracket },
-        { KeyCode.VcCloseBracket, Button.CloseBracket },
-        { KeyCode.VcBackslash, Button.Backslash },
-        { KeyCode.VcSemicolon, Button.Semicolon },
-        { KeyCode.VcQuote, Button.Quote },
-        { KeyCode.VcComma, Button.Comma },
-        { KeyCode.VcPeriod, Button.Period },
-        { KeyCode.VcSlash, Button.Slash },
-        { KeyCode.VcBackQuote, Button.BackQuote },
-        { KeyCode.VcNumPad0, Button.Np0 },
-        { KeyCode.VcNumPad1, Button.Np1 },
-        { KeyCode.VcNumPad2, Button.Np2 },
-        { KeyCode.VcNumPad3, Button.Np3 },
-        { KeyCode.VcNumPad4, Button.Np4 },
-        { KeyCode.VcNumPad5, Button.Np5 },
-        { KeyCode.VcNumPad6, Button.Np6 },
-        { KeyCode.VcNumPad7, Button.Np7 },
-        { KeyCode.VcNumPad8, Button.Np8 },
-        { KeyCode.VcNumPad9, Button.Np9 },
-        { KeyCode.VcNumPadEnter, Button.NpEnter },
-        { KeyCode.VcNumPadAdd, Button.NpAdd },
-        { KeyCode.VcNumPadSubtract, Button.NpSubtract },
-        { KeyCode.VcNumPadMultiply, Button.NpMultiply },
-        { KeyCode.VcNumPadDivide, Button.NpDivide },
-        { KeyCode.VcNumPadDecimal, Button.NpDecimal },
-        { KeyCode.VcNumPadEquals, Button.NpEquals },
-        { KeyCode.VcVolumeMute, Button.VolumeMute },
-        { KeyCode.VcVolumeUp, Button.VolumeUp },
-        { KeyCode.VcVolumeDown, Button.VolumeDown },
-        { KeyCode.VcMediaPlay, Button.MediaPlay },
-        { KeyCode.VcMediaStop, Button.MediaStop },
-        { KeyCode.VcMediaNext, Button.MediaNext },
-        { KeyCode.VcMediaPrevious, Button.MediaPrevious },
-        { KeyCode.VcMediaSelect, Button.MediaSelect }
-    };
-
-    internal static Button? ToButton(this MouseButton mouseButton)
-    {
-        return MouseButtonToButton.TryGetValue(mouseButton, out Button button) ? button : null;
+        return CharToButton.TryGetValue(character, out button);
     }
 
-    internal static Button? ToButton(this KeyCode keyCode)
+    internal static Button MouseButtonIndexToButton(int index)
     {
-        return KeyCodeToButton.TryGetValue(keyCode, out Button button) ? button : null;
+        return index switch
+        {
+            0 => Button.LeftMouse,
+            1 => Button.MiddleMouse,
+            2 => Button.RightMouse,
+            _ => throw new ArgumentOutOfRangeException(nameof(index))
+        };
+    }
+
+    internal static Button MouseWheelIndexToButton(int index)
+    {
+        return index switch
+        {
+            0 => Button.MouseWheelUp,
+            1 => Button.MouseWheelDown,
+            2 => Button.MouseWheelLeft,
+            3 => Button.MouseWheelRight,
+            _ => throw new ArgumentOutOfRangeException(nameof(index))
+        };
     }
 }

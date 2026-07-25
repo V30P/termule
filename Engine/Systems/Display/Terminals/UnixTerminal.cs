@@ -1,17 +1,15 @@
 // ReSharper disable InconsistentNaming
 
 using System.Diagnostics;
-using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace Termule.Engine.Systems.Display;
 
 /// <summary>
 ///     Display system implementation for Unix-like operating systems.
 /// </summary>
-public sealed partial class UnixDisplaySystem : TerminalDisplaySystem
+public sealed partial class UnixTerminal : Terminal
 {
 #pragma warning disable SA1310 // Field names should not contain underscore
     private const int F_GETFL = 3;
@@ -34,13 +32,27 @@ public sealed partial class UnixDisplaySystem : TerminalDisplaySystem
 
     private string initialSttyConfig;
 
+    internal override string CollectInput()
+    {
+        _ = inputBuilder.Clear();
+        while (true)
+        {
+            int bytes = read(STDIN_FILENO, inputBuffer, inputBuffer.Length);
+            if (bytes <= 0)
+            {
+                break;
+            }
+
+            _ = inputBuilder.Append(Encoding.UTF8.GetChars(inputBuffer, 0, bytes));
+        }
+
+        return inputBuilder.ToString();
+    }
+
     /// <inheritdoc />
     protected internal override void Start()
     {
         base.Start();
-
-        Console.Write("\e[?1003h"); // Enable any-motion mouse tracking
-        Console.Write("\e[?1006h"); // Enable SGR coordinates for mouse tracking
 
         // Configure stdin
         int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
@@ -62,43 +74,9 @@ public sealed partial class UnixDisplaySystem : TerminalDisplaySystem
     {
         base.CleanUp();
 
-        Console.Write("\e[?1003l"); // Disable any-motion mouse tracking
-        Console.Write("\e[?1006l"); // Disable SGR coordinates for mouse tracking
-
         // Reset stty config
         SttyStartInfo.Arguments = initialSttyConfig;
         Process.Start(SttyStartInfo)?.WaitForExit();
-    }
-
-    /// <inheritdoc />
-    protected internal override void Tick()
-    {
-        // Get everything in STDIN
-        _ = inputBuilder.Clear();
-        while (true)
-        {
-            int bytes = read(STDIN_FILENO, inputBuffer, inputBuffer.Length);
-            if (bytes <= 0)
-            {
-                break;
-            }
-
-            _ = inputBuilder.Append(Encoding.UTF8.GetChars(inputBuffer, 0, bytes));
-        }
-
-        // Parse out SGR events
-        MatchCollection sgrEvents = sgrRegex().Matches(inputBuilder.ToString());
-        if (sgrEvents.Count <= 0)
-        {
-            return;
-        }
-
-        Match lastSGREvent = sgrEvents[^1];
-        MousePos =
-        (
-            int.Parse(lastSGREvent.Groups[1].Value, CultureInfo.CurrentCulture) - 1,
-            int.Parse(lastSGREvent.Groups[2].Value, CultureInfo.CurrentCulture) - 1
-        );
     }
 
     [LibraryImport("libc", SetLastError = true)]
@@ -106,7 +84,4 @@ public sealed partial class UnixDisplaySystem : TerminalDisplaySystem
 
     [LibraryImport("libc", SetLastError = true)]
     private static partial int read(int fd, [Out] byte[] buf, int count);
-
-    [GeneratedRegex(@"\x1b\[<\d+;(\d+);(\d+)[Mm]")]
-    private static partial Regex sgrRegex();
 }

@@ -50,12 +50,6 @@ internal sealed class Shooter : Demo, IMessageListener<Shooter.CharacterControll
         characterSprite = Systems.Get<ResourceLoader>().Load<Image>("shooter/character");
         projectileSprite = Systems.Get<ResourceLoader>().Load<Image>("shooter/projectile");
 
-        Systems.Get<Keyboard>().Binds = new BindMap
-        {
-            { "Movement", new VectorBind(Button.W, Button.A, Button.S, Button.D) },
-            { "Fire", new ButtonBind(Button.Mouse1) }
-        };
-
         World.Add(
             new Transform(),
             new Camera(),
@@ -130,9 +124,9 @@ internal sealed class Shooter : Demo, IMessageListener<Shooter.CharacterControll
         private float shotCooldownTimeRemaining;
         private float hitColorTimeRemaining;
 
-        protected Vector MovementDir { get; set; }
+        protected Vector MovementTarget { get; set; }
 
-        protected Vector Target { get; set; }
+        protected Vector FireTarget { get; set; }
 
         protected abstract Color Color { get; }
 
@@ -156,10 +150,18 @@ internal sealed class Shooter : Demo, IMessageListener<Shooter.CharacterControll
         protected override void Tick()
         {
             Transform transform = GetRequiredComponent<Transform>();
-            transform.Pos += MovementDir.Normalized.ScaleToCells() * Speed * Game.DeltaTime;
+
+            Vector movementTargetDisplacement = MovementTarget - transform.Pos;
+
+            if (movementTargetDisplacement.Magnitude > 1)
+            {
+                transform.Pos += movementTargetDisplacement.Normalized.ScaleToCells()
+                    * Speed
+                    * Game.DeltaTime;
+            }
 
             ContentRenderer<Image> renderer = GetRequiredComponent<ContentRenderer<Image>>();
-            renderer.FlipX = Target.X < transform.Pos.X;
+            renderer.FlipX = FireTarget.X < transform.Pos.X;
 
             hitColorTimeRemaining -= Game.DeltaTime;
             renderer.Content = characterSprite.WithColorSwapped(
@@ -186,7 +188,7 @@ internal sealed class Shooter : Demo, IMessageListener<Shooter.CharacterControll
                 },
                 new ProjectileController(
                     GetType(),
-                    (Target - GetRequiredComponent<IPositionProvider>().Pos).Normalized
+                    (FireTarget - GetRequiredComponent<IPositionProvider>().Pos).Normalized
                 )
             ));
 
@@ -201,6 +203,10 @@ internal sealed class Shooter : Demo, IMessageListener<Shooter.CharacterControll
 
     private sealed class PlayerController : CharacterController
     {
+        private readonly MouseControl mouseControl = new();
+        private readonly HoldControl moveControl = new(Button.RightMouse);
+        private readonly HoldControl fireControl = new(Button.LeftMouse);
+
         protected override Color Color => BasicColor.Blue;
 
         protected override Color HitColor => BasicColor.BrightBlue;
@@ -209,14 +215,28 @@ internal sealed class Shooter : Demo, IMessageListener<Shooter.CharacterControll
 
         protected override float ShotCooldownLength => 0.5f;
 
+        protected override void Activate()
+        {
+            GameObject.Add(
+                moveControl,
+                mouseControl,
+                fireControl
+            );
+        }
+
         protected override void Tick()
         {
             base.Tick();
 
-            MovementDir = Systems.Get<Keyboard>().Get<Vector>("Movement");
-            Target = World.Get<Camera>().TargetToGamePos(Systems.Get<DisplaySystem>().MousePos);
+            Vector mousePos = World.Get<Camera>().TargetToGamePos(mouseControl.Value);
+            FireTarget = mousePos;
 
-            if (Systems.Get<Keyboard>().Get<bool>("Fire"))
+            if (moveControl.Value)
+            {
+                MovementTarget = mousePos;
+            }
+
+            if (fireControl.Value)
             {
                 ShootAtTarget();
             }
@@ -245,22 +265,22 @@ internal sealed class Shooter : Demo, IMessageListener<Shooter.CharacterControll
                     .FirstOrDefault(g => g.Get<PlayerController>() is not null) is { } player)
             {
                 Vector pos = GetRequiredComponent<IPositionProvider>().Pos;
-                Target = player.Get<Transform>().Pos;
+                MovementTarget = FireTarget = player.Get<Transform>().Pos;
 
-                Vector displacement = pos - Target;
+                Vector displacement = pos - FireTarget;
                 if (displacement.Magnitude > Range)
                 {
-                    MovementDir = Target - pos;
+                    MovementTarget = FireTarget - pos;
                 }
                 else
                 {
-                    MovementDir = (0, 0);
+                    MovementTarget = (0, 0);
                     ShootAtTarget();
                 }
             }
             else
             {
-                MovementDir = (0, 0);
+                MovementTarget = (0, 0);
             }
         }
     }

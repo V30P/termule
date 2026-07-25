@@ -1,5 +1,4 @@
 using Termule.Engine.Core;
-using Termule.Engine.Systems.Input;
 using Termule.Engine.Systems.Rendering;
 using Termule.Engine.Systems.Resources;
 using Termule.Tests.Common;
@@ -102,7 +101,6 @@ public class TestSystemManager
 
         game.Systems.InstallDefaults();
 
-        Assert.NotNull(game.Systems.Get<Keyboard>());
         Assert.NotNull(game.Systems.Get<RenderSystem>());
         Assert.NotNull(game.Systems.Get<ResourceLoader>());
     }
