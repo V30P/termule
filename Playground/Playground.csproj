@@ -16,5 +16,4 @@
     <PropertyGroup>
         <NoWarn>$(NoWarn);SA0001</NoWarn>
     </PropertyGroup>
-
 </Project>
