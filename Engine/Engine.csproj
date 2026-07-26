@@ -12,7 +12,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="SharpHook" Version="6.2.0" />
         <PackageReference Include="System.IO.Abstractions" Version="22.1.1" />
     </ItemGroup>
 
