@@ -4,5 +4,8 @@
 !.editorconfig
 !.gitignore
 
+# Only track launch.json and tasks.json
+!.vscode
+.vscode/*
 !.vscode/launch.json
-!.vscode/config.json
+!.vscode/tasks.json

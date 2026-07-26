@@ -18,6 +18,7 @@
 
     <ItemGroup>
         <InternalsVisibleTo Include="Termule.Tests" />
+        <InternalsVisibleTo Include="Termule.Playground" />
     </ItemGroup>
 
 </Project>

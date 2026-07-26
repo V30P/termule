@@ -4,3 +4,4 @@ obj
 
 # Source files
 *.cs
+!Program.cs
