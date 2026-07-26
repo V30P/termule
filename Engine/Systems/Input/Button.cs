@@ -5,15 +5,13 @@ namespace Termule.Engine.Systems.Input;
 /// </summary>
 public enum Button
 {
-    // Control characters
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+#pragma warning disable CS1591
     Backspace,
     Tab,
     Enter,
     Escape,
     Space,
 
-    // Digits
     D0,
     D1,
     D2,
@@ -25,7 +23,6 @@ public enum Button
     D8,
     D9,
 
-    // Letters
     A,
     B,
     C,
@@ -53,7 +50,6 @@ public enum Button
     Y,
     Z,
 
-    // Symbols
     Exclamation,
     DoubleQuote,
     Hash,
@@ -114,6 +110,96 @@ public enum Button
     F10,
     F11,
     F12,
+    F13,
+    F14,
+    F15,
+    F16,
+    F17,
+    F18,
+    F19,
+    F20,
+    F21,
+    F22,
+    F23,
+    F24,
+    F25,
+    F26,
+    F27,
+    F28,
+    F29,
+    F30,
+    F31,
+    F32,
+    F33,
+    F34,
+    F35,
+
+    Keypad0,
+    Keypad1,
+    Keypad2,
+    Keypad3,
+    Keypad4,
+    Keypad5,
+    Keypad6,
+    Keypad7,
+    Keypad8,
+    Keypad9,
+    KeypadDecimal,
+    KeypadDivide,
+    KeypadMultiply,
+    KeypadSubtract,
+    KeypadAdd,
+    KeypadEnter,
+    KeypadEqual,
+    KeypadSeparator,
+    KeypadLeft,
+    KeypadRight,
+    KeypadUp,
+    KeypadDown,
+    KeypadPageUp,
+    KeypadPageDown,
+    KeypadHome,
+    KeypadEnd,
+    KeypadInsert,
+    KeypadDelete,
+    KeypadBegin,
+
+    MediaPlay,
+    MediaPause,
+    MediaPlayPause,
+    MediaReverse,
+    MediaStop,
+    MediaFastForward,
+    MediaRewind,
+    MediaTrackNext,
+    MediaTrackPrevious,
+    MediaRecord,
+    LowerVolume,
+    RaiseVolume,
+    MuteVolume,
+
+    LeftShift,
+    RightShift,
+    LeftControl,
+    RightControl,
+    LeftAlt,
+    RightAlt,
+    LeftSuper,
+    RightSuper,
+    LeftHyper,
+    RightHyper,
+    LeftMeta,
+    RightMeta,
+    ISOLevel3Shift,
+    ISOLevel5Shift,
+
+    CapsLock,
+    NumLock,
+    ScrollLock,
+
+    PrintScreen,
+    Pause,
+    Menu,
 
     LeftMouse,
     MiddleMouse,
@@ -122,5 +208,5 @@ public enum Button
     MouseWheelDown,
     MouseWheelLeft,
     MouseWheelRight
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
+#pragma warning restore CS1591
 }
