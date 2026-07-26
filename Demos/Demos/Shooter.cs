@@ -259,12 +259,13 @@ internal sealed class Shooter : Demo, IMessageListener<Shooter.CharacterControll
         {
             base.Tick();
 
+            Vector pos = GetRequiredComponent<IPositionProvider>().Pos;
+            MovementTarget = pos;
             if (
                 Game.World
                     .GetAll<GameObject>()
                     .FirstOrDefault(g => g.Get<PlayerController>() is not null) is { } player)
             {
-                Vector pos = GetRequiredComponent<IPositionProvider>().Pos;
                 MovementTarget = FireTarget = player.Get<Transform>().Pos;
 
                 Vector displacement = pos - FireTarget;
@@ -274,13 +275,8 @@ internal sealed class Shooter : Demo, IMessageListener<Shooter.CharacterControll
                 }
                 else
                 {
-                    MovementTarget = (0, 0);
                     ShootAtTarget();
                 }
-            }
-            else
-            {
-                MovementTarget = (0, 0);
             }
         }
     }
