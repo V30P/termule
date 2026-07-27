@@ -1,8 +1,8 @@
 namespace Termule.Engine.Systems.Input;
 
-internal sealed partial class CharacterParser : InputParser
+internal abstract class ASCIIParser : InputParser
 {
-    private static readonly Dictionary<char, Button> CharToButton = new()
+    private static readonly Dictionary<int, Button> BaseCharToButton = new()
     {
         ['\b'] = Button.Backspace,
         ['\x7F'] = Button.Backspace,
@@ -50,6 +50,32 @@ internal sealed partial class CharacterParser : InputParser
         ['y'] = Button.Y,
         ['z'] = Button.Z,
 
+        ['`'] = Button.Grave,
+        ['-'] = Button.Minus,
+        ['='] = Button.Equals,
+        ['['] = Button.LeftBracket,
+        [']'] = Button.RightBracket,
+        ['\\'] = Button.Backslash,
+        [';'] = Button.Semicolon,
+        ['\''] = Button.Apostrophe,
+        [','] = Button.Comma,
+        ['.'] = Button.Period,
+        ['/'] = Button.Slash,
+    };
+
+    private static readonly Dictionary<int, Button> ShiftedCharToButton = new()
+    {
+        ['!'] = Button.D1,
+        ['@'] = Button.D2,
+        ['#'] = Button.D3,
+        ['$'] = Button.D4,
+        ['%'] = Button.D5,
+        ['^'] = Button.D6,
+        ['&'] = Button.D7,
+        ['*'] = Button.D8,
+        ['('] = Button.D9,
+        [')'] = Button.D0,
+
         ['A'] = Button.A,
         ['B'] = Button.B,
         ['C'] = Button.C,
@@ -77,52 +103,22 @@ internal sealed partial class CharacterParser : InputParser
         ['Y'] = Button.Y,
         ['Z'] = Button.Z,
 
-        ['!'] = Button.Exclamation,
-        ['"'] = Button.DoubleQuote,
-        ['#'] = Button.Hash,
-        ['$'] = Button.Dollar,
-        ['%'] = Button.Percent,
-        ['&'] = Button.Ampersand,
-        ['\''] = Button.Apostrophe,
-        ['('] = Button.LeftParen,
-        [')'] = Button.RightParen,
-        ['*'] = Button.Asterisk,
-        ['+'] = Button.Plus,
-        [','] = Button.Comma,
-        ['-'] = Button.Minus,
-        ['.'] = Button.Period,
-        ['/'] = Button.Slash,
-        [':'] = Button.Colon,
-        [';'] = Button.Semicolon,
-        ['<'] = Button.LessThan,
-        ['='] = Button.Equals,
-        ['>'] = Button.GreaterThan,
-        ['?'] = Button.Question,
-        ['@'] = Button.At,
-        ['['] = Button.LeftBracket,
-        ['\\'] = Button.Backslash,
-        [']'] = Button.RightBracket,
-        ['^'] = Button.Caret,
-        ['_'] = Button.Underscore,
-        ['`'] = Button.Grave,
-        ['{'] = Button.LeftBrace,
-        ['|'] = Button.Pipe,
-        ['}'] = Button.RightBrace,
-        ['~'] = Button.Tilde,
+        ['~'] = Button.Grave,
+        ['_'] = Button.Minus,
+        ['+'] = Button.Equals,
+        ['{'] = Button.LeftBracket,
+        ['}'] = Button.RightBracket,
+        ['|'] = Button.Backslash,
+        [':'] = Button.Semicolon,
+        ['"'] = Button.Apostrophe,
+        ['<'] = Button.Comma,
+        ['>'] = Button.Period,
+        ['?'] = Button.Slash
     };
 
-    internal override IEnumerable<InputMessage> Parse(string input)
+    protected static bool TryConvertASCIIToButton(int codepoint, out Button button)
     {
-        foreach (char character in input)
-        {
-            yield return new CharTyped(character);
-
-            if (CharToButton.TryGetValue(character, out Button key))
-            {
-                yield return new ButtonPressed(key);
-            }
-        }
-
-        Remainder = string.Empty;
+        return BaseCharToButton.TryGetValue(codepoint, out button)
+            || ShiftedCharToButton.TryGetValue(codepoint, out button);
     }
 }

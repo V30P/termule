@@ -4,6 +4,8 @@ using Termule.Engine.Systems.Display;
 
 namespace Termule.Engine.Systems.Input;
 
+// ? Should this all be on a background thread so that we can timestamp characters?
+
 /// <summary>
 ///     System that converts keyboard and mouse input from a <see cref="Terminal"/> to messages
 ///     on the <see cref="Game"/>'s c<see cref="MessageBus"/>.
@@ -13,9 +15,8 @@ public sealed partial class TerminalController : Core.System
     private readonly InputParser[] parsers = [
         new SGRParser(),
         new SS3Parser(),
-        new KittyParser(),
         new CSIParser(),
-        new CharacterParser()
+        new CharParser()
     ];
 
     private Terminal terminal;
