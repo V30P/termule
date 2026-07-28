@@ -3,8 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace Termule.Engine.Systems.Input;
 
-// TODO: Add parsing modifier information from sequences if Kitty isn't available
-internal sealed partial class CSIParser : ASCIIParser
+internal sealed partial class CSIParser(bool useKittyProtocol) : ASCIIParser
 {
     private static readonly Dictionary<int, Button> CSITildeCodepointToButton = new()
     {
@@ -164,16 +163,25 @@ internal sealed partial class CSIParser : ASCIIParser
         [57454] = Button.ISOLevel5Shift,
     };
 
+    // This will only be used when the kitty protocol is active
+    private readonly Dictionary<Button, bool> buttonIsDown = [];
+
     internal override IEnumerable<InputMessage> Parse(string input)
     {
         foreach (Match match in CSIRegex().Matches(input))
         {
             if (TryExtractKey(match, out Button key))
             {
+                // If Kitty isn't available, fall back to just press messages
+                if (!useKittyProtocol)
+                {
+                    yield return new ButtonPressed(key);
+                }
+
                 string[] parameters = [.. match.Groups["params"].Value.Split(';')];
 
                 // Parse the action itself
-                // If no specific kitty action is provided, default to press
+                // If no specific kitty action is provided, default IS press
                 int action = 1;
                 if (parameters.Length >= 2 && parameters[1] != string.Empty)
                 {
@@ -184,23 +192,28 @@ internal sealed partial class CSIParser : ASCIIParser
                     }
                 }
 
-                if (action < 3)
+                // Emit messages based on button state
+                /*
+                * Technically, there is an action value of 2 that indicates repeating due to
+                * holding, but it seems like often times 1 is sent instead so we can't
+                * rely on that distinction, that's why we track state manually
+                */
+                _ = buttonIsDown.TryAdd(key, false);
+                if (action == 1 && !buttonIsDown[key])
                 {
                     yield return new ButtonPressed(key);
+                    yield return new HoldStarted(key);
 
-                    // Only indicate a hold when the press is actually from the user, not the
-                    // terminal repeating a held key
-                    if (action == 1)
-                    {
-                        yield return new HoldStarted(key);
-                    }
+                    buttonIsDown[key] = true;
                 }
-                else
+                else if (action == 3 && buttonIsDown[key])
                 {
                     yield return new HoldStopped(key);
+
+                    buttonIsDown[key] = false;
                 }
 
-                // Parse the resulting character (if any)
+                // Parse the resulting character if one is available
                 if (parameters.Length >= 3 && parameters[2] != string.Empty)
                 {
                     string textString = parameters[2].Split(':').First();

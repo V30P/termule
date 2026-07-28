@@ -9,12 +9,7 @@ namespace Termule.Engine.Components;
 ///     Component that provides a value based on messages from a <see cref="TerminalController"/>.
 /// </summary>
 /// <typeparam name="TValue">The type of value this control produces.</typeparam>
-public class Control<TValue> : Component,
-    IMessageListener<ButtonPressed>,
-    IMessageListener<HoldStarted>,
-    IMessageListener<HoldStopped>,
-    IMessageListener<CharTyped>,
-    IMessageListener<MouseMoved>
+public class Control<TValue> : Component, IMessageListener<InputMessage>
 {
     internal Control()
     {
@@ -25,39 +20,34 @@ public class Control<TValue> : Component,
     /// </summary>
     public TValue Value { get; private protected set; }
 
-    void IMessageListener<ButtonPressed>.OnMessage(ButtonPressed message)
+    void IMessageListener<InputMessage>.OnMessage(InputMessage message)
     {
-        OnButtonPressed(message.Button);
-    }
-
-    void IMessageListener<HoldStarted>.OnMessage(HoldStarted message)
-    {
-        OnHoldStarted(message.Button);
-    }
-
-    void IMessageListener<HoldStopped>.OnMessage(HoldStopped message)
-    {
-        OnHoldStopped(message.Button);
-    }
-
-    void IMessageListener<CharTyped>.OnMessage(CharTyped message)
-    {
-        OnCharTyped(message.Char);
-    }
-
-    void IMessageListener<MouseMoved>.OnMessage(MouseMoved message)
-    {
-        OnMouseMoved(message.Pos);
+        switch (message)
+        {
+            case ButtonPressed pressed:
+                OnButtonPressed(pressed.Button);
+                break;
+            case HoldStarted holdStarted:
+                OnHoldStarted(holdStarted.Button);
+                break;
+            case HoldStopped holdStopped:
+                OnHoldStopped(holdStopped.Button);
+                break;
+            case CharTyped charTyped:
+                OnCharTyped(charTyped.Char);
+                break;
+            case MouseMoved mouseMoved:
+                OnMouseMoved(mouseMoved.Pos);
+                break;
+            default:
+                break;
+        }
     }
 
     /// <inheritdoc/>
     protected override void Activate()
     {
-        Game.Bus.Subscribe<ButtonPressed>(this);
-        Game.Bus.Subscribe<HoldStarted>(this);
-        Game.Bus.Subscribe<HoldStopped>(this);
-        Game.Bus.Subscribe<CharTyped>(this);
-        Game.Bus.Subscribe<MouseMoved>(this);
+        Game.Bus.Subscribe(this);
     }
 
     private protected virtual void OnButtonPressed(Button button)
