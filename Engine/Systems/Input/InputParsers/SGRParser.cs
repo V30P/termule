@@ -6,20 +6,18 @@ namespace Termule.Engine.Systems.Input;
 
 internal sealed partial class SGRParser : InputParser
 {
-    private static readonly Dictionary<int, Button> SGRMouseButtonIndexToButton = new()
-    {
-        [0] = Button.LeftMouse,
-        [1] = Button.MiddleMouse,
-        [2] = Button.RightMouse
-    };
+    private static readonly Button[] SGRMouseButtonIndexToButton = [
+        Button.LeftMouse,
+        Button.MiddleMouse,
+        Button.RightMouse
+    ];
 
-    private static readonly Dictionary<int, Button> SGRMouseWheelIndexToButton = new()
-    {
-        [0] = Button.MouseWheelUp,
-        [1] = Button.MouseWheelDown,
-        [2] = Button.MouseWheelLeft,
-        [3] = Button.MouseWheelRight
-    };
+    private static readonly Button[] SGRMouseWheelIndexToButton = [
+        Button.MouseWheelUp,
+        Button.MouseWheelDown,
+        Button.MouseWheelLeft,
+        Button.MouseWheelRight
+    ];
 
     internal override IEnumerable<InputMessage> Parse(string input)
     {
@@ -28,7 +26,7 @@ internal sealed partial class SGRParser : InputParser
         {
             int eventCode = int.Parse(match.Groups["event"].Value, CultureInfo.CurrentCulture);
 
-            // Decode movement
+            // Parse movement
             if ((eventCode & 32) != 0)
             {
                 VectorInt mousePos = (
@@ -39,7 +37,7 @@ internal sealed partial class SGRParser : InputParser
                 yield return new MouseMoved(mousePos);
             }
 
-            // Decode buttons
+            // Parse buttons
             if ((eventCode & 64) == 0)
             {
                 int buttonIndex = eventCode & 3;
@@ -54,11 +52,11 @@ internal sealed partial class SGRParser : InputParser
                 if (match.Groups["action"].Value == "M")
                 {
                     yield return new ButtonPressed(button);
-                    yield return new HoldStarted(button);
+                    yield return new ButtonDown(button);
                 }
                 else
                 {
-                    yield return new HoldStopped(button);
+                    yield return new ButtonUp(button);
                 }
             }
             else
@@ -71,6 +69,6 @@ internal sealed partial class SGRParser : InputParser
         Remainder = SGRRegex().Replace(input, string.Empty);
     }
 
-    [GeneratedRegex(@"\x1b\[<(?<event>\d+);(?<x>\d+);(?<y>\d+)(?<action>[Mm])")]
+    [GeneratedRegex(@"\e\[<(?<event>\d+);(?<x>\d+);(?<y>\d+)(?<action>[Mm])")]
     private static partial Regex SGRRegex();
 }

@@ -4,7 +4,7 @@ using Termule.Engine.Types;
 namespace Termule.Engine.Components;
 
 /// <summary>
-///     Control whose value is a <see cref="Vector" /> based on the provided buttons.
+///     Control whose value is a <see cref="Vector" /> derived from the state of four buttons.
 /// </summary>
 /// <param name="posY">The button for the positive Y direction.</param>
 /// <param name="negX">The button for the negative X direction.</param>
@@ -18,27 +18,27 @@ public sealed class VectorControl(Button posY, Button negX, Button negY, Button 
     private readonly bool[] directionStates = new bool[4];
 
     /// <inheritdoc />
-    private protected override void OnHoldStarted(Button button)
+    private protected override void OnButtonDown(Button button)
     {
-        OnHold(button, true);
+        OnButtonStateChange(button, true);
     }
 
     /// <inheritdoc />
-    private protected override void OnHoldStopped(Button button)
+    private protected override void OnButtonUp(Button button)
     {
-        OnHold(button, false);
+        OnButtonStateChange(button, false);
     }
 
-    private void OnHold(Button button, bool isStarted)
+    private void OnButtonStateChange(Button button, bool isDown)
     {
         for (int i = 0; i < 4; i++)
         {
-            // We need to keep track of direction state because HoldStarted and HoldStopped
+            // We need to keep track of direction state because ButtonDown and ButtonUp
             // messages are not guaranteed to be 1-to-1
-            if (buttons[i] == button && directionStates[i] != isStarted)
+            if (buttons[i] == button && directionStates[i] != isDown)
             {
-                Value += isStarted ? DirectionVectors[i] : -DirectionVectors[i];
-                directionStates[i] = isStarted;
+                Value += isDown ? DirectionVectors[i] : -DirectionVectors[i];
+                directionStates[i] = isDown;
             }
         }
     }

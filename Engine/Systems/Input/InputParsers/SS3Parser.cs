@@ -25,17 +25,17 @@ internal sealed partial class SS3Parser : InputParser
         foreach (Match match in SS3Regex().Matches(input))
         {
             char command = match.Groups["command"].Value[0];
-            if (!SS3CommandToButton.TryGetValue(command, out Button key))
+            if (!SS3CommandToButton.TryGetValue(command, out Button button))
             {
                 continue;
             }
 
-            yield return new ButtonPressed(key);
+            yield return new ButtonPressed(button);
         }
 
         Remainder = SS3Regex().Replace(input, string.Empty);
     }
 
-    [GeneratedRegex(@"\x1bO(?<command>[@-~])")]
+    [GeneratedRegex(@"\eO(?<command>[@-~])")]
     private static partial Regex SS3Regex();
 }

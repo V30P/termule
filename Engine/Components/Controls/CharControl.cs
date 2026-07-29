@@ -1,9 +1,9 @@
 namespace Termule.Engine.Components;
 
 /// <summary>
-///     Control whose value is all the characters typed in the last tick.
+///     Control whose value is all of the characters typed in the last tick.
 /// </summary>
-public sealed class TypingControl : Control<string>
+public sealed class CharControl : Control<string>
 {
     private string textSinceLastTick = string.Empty;
 

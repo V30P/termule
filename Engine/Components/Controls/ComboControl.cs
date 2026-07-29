@@ -3,7 +3,7 @@ using Termule.Engine.Systems.Input;
 namespace Termule.Engine.Components;
 
 /// <summary>
-///     Control whose value is true for the first tick where all provided buttons are pressed.
+///     Control whose value is true for the first tick where several buttons are down.
 /// </summary>
 /// <param name="buttons">The buttons to target.</param>
 public sealed class ComboControl(HashSet<Button> buttons) : Control<bool>
@@ -20,7 +20,7 @@ public sealed class ComboControl(HashSet<Button> buttons) : Control<bool>
     }
 
     /// <inheritdoc />
-    private protected override void OnHoldStarted(Button button)
+    private protected override void OnButtonDown(Button button)
     {
         if (!buttons.Contains(button))
         {
@@ -35,7 +35,7 @@ public sealed class ComboControl(HashSet<Button> buttons) : Control<bool>
     }
 
     /// <inheritdoc />
-    private protected override void OnHoldStopped(Button button)
+    private protected override void OnButtonUp(Button button)
     {
         _ = heldButtons.Remove(button);
     }

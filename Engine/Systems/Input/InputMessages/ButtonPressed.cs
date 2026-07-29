@@ -1,6 +1,5 @@
 namespace Termule.Engine.Systems.Input;
 
-internal sealed class ButtonPressed(Button Button) : InputMessage
+internal sealed class ButtonPressed(Button button) : ButtonMessage(button)
 {
-    internal Button Button { get; init; } = Button;
 }

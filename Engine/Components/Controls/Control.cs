@@ -24,14 +24,14 @@ public class Control<TValue> : Component, IMessageListener<InputMessage>
     {
         switch (message)
         {
-            case ButtonPressed pressed:
-                OnButtonPressed(pressed.Button);
+            case ButtonPressed buttonPressed:
+                OnButtonPressed(buttonPressed.Button);
                 break;
-            case HoldStarted holdStarted:
-                OnHoldStarted(holdStarted.Button);
+            case ButtonDown buttonDown:
+                OnButtonDown(buttonDown.Button);
                 break;
-            case HoldStopped holdStopped:
-                OnHoldStopped(holdStopped.Button);
+            case ButtonUp buttonUp:
+                OnButtonUp(buttonUp.Button);
                 break;
             case CharTyped charTyped:
                 OnCharTyped(charTyped.Char);
@@ -54,11 +54,11 @@ public class Control<TValue> : Component, IMessageListener<InputMessage>
     {
     }
 
-    private protected virtual void OnHoldStarted(Button button)
+    private protected virtual void OnButtonDown(Button button)
     {
     }
 
-    private protected virtual void OnHoldStopped(Button button)
+    private protected virtual void OnButtonUp(Button button)
     {
     }
 

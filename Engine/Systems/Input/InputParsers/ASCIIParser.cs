@@ -1,8 +1,8 @@
 namespace Termule.Engine.Systems.Input;
 
-internal abstract class ASCIIParser : InputParser
+internal partial class ASCIIParser : InputParser
 {
-    private static readonly Dictionary<int, Button> BaseCharToButton = new()
+    protected static readonly Dictionary<int, Button> ASCIIToButton = new()
     {
         ['\b'] = Button.Backspace,
         ['\x7F'] = Button.Backspace,
@@ -61,10 +61,7 @@ internal abstract class ASCIIParser : InputParser
         [','] = Button.Comma,
         ['.'] = Button.Period,
         ['/'] = Button.Slash,
-    };
 
-    private static readonly Dictionary<int, Button> ShiftedCharToButton = new()
-    {
         ['!'] = Button.D1,
         ['@'] = Button.D2,
         ['#'] = Button.D3,
@@ -116,9 +113,18 @@ internal abstract class ASCIIParser : InputParser
         ['?'] = Button.Slash
     };
 
-    protected static bool TryConvertASCIIToButton(int codepoint, out Button button)
+    internal override IEnumerable<InputMessage> Parse(string input)
     {
-        return BaseCharToButton.TryGetValue(codepoint, out button)
-            || ShiftedCharToButton.TryGetValue(codepoint, out button);
+        foreach (char character in input)
+        {
+            yield return new CharTyped(character);
+
+            if (ASCIIToButton.TryGetValue(character, out Button button))
+            {
+                yield return new ButtonPressed(button);
+            }
+        }
+
+        Remainder = string.Empty;
     }
 }

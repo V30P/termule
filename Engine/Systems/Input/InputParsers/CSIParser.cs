@@ -163,25 +163,25 @@ internal sealed partial class CSIParser(bool useKittyProtocol) : ASCIIParser
         [57454] = Button.ISOLevel5Shift,
     };
 
-    // This will only be used when the kitty protocol is active
+    // This will only be used when the Kitty protocol is active
     private readonly Dictionary<Button, bool> buttonIsDown = [];
 
     internal override IEnumerable<InputMessage> Parse(string input)
     {
         foreach (Match match in CSIRegex().Matches(input))
         {
-            if (TryExtractKey(match, out Button key))
+            if (TryExtractButton(match, out Button button))
             {
                 // If Kitty isn't available, fall back to just press messages
                 if (!useKittyProtocol)
                 {
-                    yield return new ButtonPressed(key);
+                    yield return new ButtonPressed(button);
                 }
 
                 string[] parameters = [.. match.Groups["params"].Value.Split(';')];
 
                 // Parse the action itself
-                // If no specific kitty action is provided, default IS press
+                // If no specific Kitty action is provided, default is press
                 int action = 1;
                 if (parameters.Length >= 2 && parameters[1] != string.Empty)
                 {
@@ -198,22 +198,22 @@ internal sealed partial class CSIParser(bool useKittyProtocol) : ASCIIParser
                 * holding, but it seems like often times 1 is sent instead so we can't
                 * rely on that distinction, that's why we track state manually
                 */
-                _ = buttonIsDown.TryAdd(key, false);
-                if (action == 1 && !buttonIsDown[key])
+                _ = buttonIsDown.TryAdd(button, false);
+                if (action == 1 && !buttonIsDown[button])
                 {
-                    yield return new ButtonPressed(key);
-                    yield return new HoldStarted(key);
+                    yield return new ButtonPressed(button);
+                    yield return new ButtonDown(button);
 
-                    buttonIsDown[key] = true;
+                    buttonIsDown[button] = true;
                 }
-                else if (action == 3 && buttonIsDown[key])
+                else if (action == 3 && buttonIsDown[button])
                 {
-                    yield return new HoldStopped(key);
+                    yield return new ButtonUp(button);
 
-                    buttonIsDown[key] = false;
+                    buttonIsDown[button] = false;
                 }
 
-                // Parse the resulting character if one is available
+                // Parse the resulting text character if one is provided
                 if (parameters.Length >= 3 && parameters[2] != string.Empty)
                 {
                     string textString = parameters[2].Split(':').First();
@@ -229,18 +229,18 @@ internal sealed partial class CSIParser(bool useKittyProtocol) : ASCIIParser
         Remainder = CSIRegex().Replace(input, string.Empty);
     }
 
-    private static bool TryExtractKey(Match match, out Button key)
+    private static bool TryExtractButton(Match match, out Button button)
     {
-        key = default;
+        button = default;
 
         char command = match.Groups["command"].Value[0];
         int codepoint = GetCodepoint(match);
         return command switch
         {
-            '~' => CSITildeCodepointToButton.TryGetValue(codepoint, out key),
-            'u' => TryConvertASCIIToButton(codepoint, out key)
-                || KittyCodepointToButton.TryGetValue(codepoint, out key),
-            _ => CSICommandToButton.TryGetValue(command, out key)
+            '~' => CSITildeCodepointToButton.TryGetValue(codepoint, out button),
+            'u' => ASCIIToButton.TryGetValue(codepoint, out button)
+                || KittyCodepointToButton.TryGetValue(codepoint, out button),
+            _ => CSICommandToButton.TryGetValue(command, out button)
         };
 
         static int GetCodepoint(Match match)
@@ -252,6 +252,6 @@ internal sealed partial class CSIParser(bool useKittyProtocol) : ASCIIParser
         }
     }
 
-    [GeneratedRegex(@"\x1b\[(?<params>[0-9;:?]*)(?<command>[@-~])")]
+    [GeneratedRegex(@"\e\[(?<params>[0-9;:?]*)(?<command>[@-~])")]
     private static partial Regex CSIRegex();
 }
