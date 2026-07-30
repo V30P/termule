@@ -180,9 +180,9 @@ public enum Button
     Pause,
     Menu,
 
-    LeftMouse,
-    MiddleMouse,
-    RightMouse,
+    MouseLeft,
+    MouseMiddle,
+    MouseRight,
     MouseWheelUp,
     MouseWheelDown,
     MouseWheelLeft,

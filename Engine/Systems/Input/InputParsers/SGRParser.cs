@@ -7,9 +7,9 @@ namespace Termule.Engine.Systems.Input;
 internal sealed partial class SGRParser : InputParser
 {
     private static readonly Button[] SGRMouseButtonIndexToButton = [
-        Button.LeftMouse,
-        Button.MiddleMouse,
-        Button.RightMouse
+        Button.MouseLeft,
+        Button.MouseMiddle,
+        Button.MouseRight
     ];
 
     private static readonly Button[] SGRMouseWheelIndexToButton = [
@@ -18,6 +18,13 @@ internal sealed partial class SGRParser : InputParser
         Button.MouseWheelLeft,
         Button.MouseWheelRight
     ];
+
+    private readonly Dictionary<Button, bool> buttonIsDown = new()
+    {
+        [Button.MouseLeft] = false,
+        [Button.MouseMiddle] = false,
+        [Button.MouseRight] = false
+    };
 
     internal override IEnumerable<InputMessage> Parse(string input)
     {
@@ -49,14 +56,15 @@ internal sealed partial class SGRParser : InputParser
                 }
 
                 Button button = SGRMouseButtonIndexToButton[buttonIndex];
-                if (match.Groups["action"].Value == "M")
+                if (match.Groups["action"].Value == "M" && !buttonIsDown[button])
                 {
-                    yield return new ButtonPressed(button);
                     yield return new ButtonDown(button);
+                    buttonIsDown[button] = true;
                 }
-                else
+                else if (match.Groups["action"].Value == "m" && buttonIsDown[button])
                 {
                     yield return new ButtonUp(button);
+                    buttonIsDown[button] = false;
                 }
             }
             else

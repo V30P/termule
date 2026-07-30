@@ -196,7 +196,7 @@ internal sealed class Shooter : Demo, IMessageListener<Shooter.CharacterControll
     private sealed class PlayerController : CharacterController
     {
         private readonly VectorControl movementControl = new(Button.W, Button.A, Button.S, Button.D);
-        private readonly HoldControl fireControl = new(Button.LeftMouse);
+        private readonly HoldControl fireControl = new(Button.MouseLeft);
         private readonly MouseControl targetControl = new();
 
         protected override Color Color => BasicColor.Blue;
