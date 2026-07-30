@@ -40,7 +40,7 @@ public class TestDisplaySystem
             Size = (width, height);
         }
 
-        private protected override void PrintBuffer()
+        private protected override void DisplayBuffer()
         {
             PrintCount++;
         }

@@ -172,10 +172,11 @@ internal sealed partial class CSIParser(bool useKittyProtocol) : ASCIIParser
         {
             if (TryExtractButton(match, out Button button))
             {
-                // If Kitty isn't available, fall back to just press messages
+                // If Kitty isn't available, fall back to an instantaneous press
                 if (!useKittyProtocol)
                 {
-                    yield return new ButtonPressed(button);
+                    yield return new ButtonDown(button);
+                    yield return new ButtonUp(button);
                 }
 
                 string[] parameters = [.. match.Groups["params"].Value.Split(';')];
@@ -201,7 +202,6 @@ internal sealed partial class CSIParser(bool useKittyProtocol) : ASCIIParser
                 _ = buttonIsDown.TryAdd(button, false);
                 if (action == 1 && !buttonIsDown[button])
                 {
-                    yield return new ButtonPressed(button);
                     yield return new ButtonDown(button);
 
                     buttonIsDown[button] = true;

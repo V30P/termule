@@ -24,9 +24,6 @@ public class Control<TValue> : Component, IMessageListener<InputMessage>
     {
         switch (message)
         {
-            case ButtonPressed buttonPressed:
-                OnButtonPressed(buttonPressed.Button);
-                break;
             case ButtonDown buttonDown:
                 OnButtonDown(buttonDown.Button);
                 break;
@@ -48,10 +45,6 @@ public class Control<TValue> : Component, IMessageListener<InputMessage>
     protected override void Activate()
     {
         Game.Bus.Subscribe(this);
-    }
-
-    private protected virtual void OnButtonPressed(Button button)
-    {
     }
 
     private protected virtual void OnButtonDown(Button button)

@@ -3,10 +3,10 @@ using Termule.Engine.Systems.Input;
 namespace Termule.Engine.Components;
 
 /// <summary>
-///     Control whose value is true when a button is first pressed.
+///     Control whose value is true for the first tick where a button is down.
 /// </summary>
 /// <param name="button">The target button.</param>
-public sealed class PressControl(Button button) : Control<bool>
+public sealed class TriggerControl(Button button) : Control<bool>
 {
     private bool valueForTick;
 
@@ -18,9 +18,9 @@ public sealed class PressControl(Button button) : Control<bool>
     }
 
     /// <inheritdoc />
-    private protected override void OnButtonPressed(Button pressedButton)
+    private protected override void OnButtonDown(Button downButton)
     {
-        if (pressedButton == button)
+        if (downButton == button)
         {
             valueForTick = true;
         }

@@ -117,12 +117,13 @@ internal partial class ASCIIParser : InputParser
     {
         foreach (char character in input)
         {
-            yield return new CharTyped(character);
-
             if (ASCIIToButton.TryGetValue(character, out Button button))
             {
-                yield return new ButtonPressed(button);
+                yield return new ButtonDown(button);
+                yield return new ButtonUp(button);
             }
+
+            yield return new CharTyped(character);
         }
 
         Remainder = string.Empty;

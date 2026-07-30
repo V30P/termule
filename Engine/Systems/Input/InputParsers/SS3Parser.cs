@@ -30,7 +30,8 @@ internal sealed partial class SS3Parser : InputParser
                 continue;
             }
 
-            yield return new ButtonPressed(button);
+            yield return new ButtonDown(button);
+            yield return new ButtonUp(button);
         }
 
         Remainder = SS3Regex().Replace(input, string.Empty);

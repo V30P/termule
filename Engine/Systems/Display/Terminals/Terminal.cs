@@ -64,7 +64,7 @@ public abstract class Terminal : DisplaySystem
         Size = (Console.WindowWidth, Console.WindowHeight);
     }
 
-    internal abstract string CollectInput();
+    internal string Input { get; private set; }
 
     /// <inheritdoc/>
     protected internal override void Start()
@@ -80,13 +80,21 @@ public abstract class Terminal : DisplaySystem
     }
 
     /// <inheritdoc/>
+    protected internal override void Tick()
+    {
+        Input = CollectInput();
+    }
+
+    /// <inheritdoc/>
     protected internal override void CleanUp()
     {
         Console.CursorVisible = true;
         Console.Write("\e[?1049l"); // Disable alternate buffer
     }
 
-    private protected sealed override void PrintBuffer()
+    private protected abstract string CollectInput();
+
+    private protected sealed override void DisplayBuffer()
     {
         // Handle window resizing
         bool screenCleared = false;

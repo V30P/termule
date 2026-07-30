@@ -70,7 +70,9 @@ internal sealed partial class SGRParser : InputParser
             else
             {
                 Button button = SGRMouseWheelIndexToButton[eventCode & 3];
-                yield return new ButtonPressed(button);
+
+                yield return new ButtonDown(button);
+                yield return new ButtonUp(button);
             }
         }
 

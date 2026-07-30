@@ -1,5 +1,3 @@
-// ReSharper disable InconsistentNaming
-
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -7,7 +5,7 @@ using System.Text;
 namespace Termule.Engine.Systems.Display;
 
 /// <summary>
-///     Display system implementation for Unix-like operating systems.
+///     Terminal implementation for Unix-like operating systems.
 /// </summary>
 public sealed partial class UnixTerminal : Terminal
 {
@@ -31,23 +29,6 @@ public sealed partial class UnixTerminal : Terminal
     private readonly StringBuilder inputBuilder = new();
 
     private string initialSttyConfig;
-
-    internal override string CollectInput()
-    {
-        _ = inputBuilder.Clear();
-        while (true)
-        {
-            int bytes = read(STDIN_FILENO, inputBuffer, inputBuffer.Length);
-            if (bytes <= 0)
-            {
-                break;
-            }
-
-            _ = inputBuilder.Append(Encoding.UTF8.GetChars(inputBuffer, 0, bytes));
-        }
-
-        return inputBuilder.ToString();
-    }
 
     /// <inheritdoc />
     protected internal override void Start()
@@ -77,6 +58,23 @@ public sealed partial class UnixTerminal : Terminal
         // Reset stty config
         SttyStartInfo.Arguments = initialSttyConfig;
         Process.Start(SttyStartInfo)?.WaitForExit();
+    }
+
+    private protected override string CollectInput()
+    {
+        _ = inputBuilder.Clear();
+        while (true)
+        {
+            int bytes = read(STDIN_FILENO, inputBuffer, inputBuffer.Length);
+            if (bytes <= 0)
+            {
+                break;
+            }
+
+            _ = inputBuilder.Append(Encoding.UTF8.GetChars(inputBuffer, 0, bytes));
+        }
+
+        return inputBuilder.ToString();
     }
 
     [LibraryImport("libc", SetLastError = true)]

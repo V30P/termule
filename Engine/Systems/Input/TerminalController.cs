@@ -17,6 +17,8 @@ public sealed partial class TerminalController : Core.System
 {
     private Terminal terminal;
 
+    private bool kittyResponseChecked;
+
     private InputParser[] parsers;
 
     /// <inheritdoc/>
@@ -28,27 +30,32 @@ public sealed partial class TerminalController : Core.System
         Console.Write("\e[?1006h"); // Enable SGR coordinates for mouse tracking
         Console.Write("\e[>31u"); // Enable full Kitty protocol (if available)
 
-        // Check that the Kitty protocol was available and the config got applied
+        // Query the Kitty protocol state
         Console.Write("\e[?u");
-        Thread.Sleep(25);
-
-        string response = terminal.CollectInput();
-        Match match = KittyStateRegex().Match(response);
-        bool useKittyProtocol = match.Success
-            && int.Parse(match.Groups["flags"].Value, CultureInfo.CurrentCulture) == 31;
-
-        parsers = [
-            new SGRParser(),
-            new SS3Parser(),
-            new CSIParser(useKittyProtocol),
-            new ASCIIParser()
-        ];
     }
 
     /// <inheritdoc/>
     protected internal override void Tick()
     {
-        string input = terminal.CollectInput();
+        // Check the results of the query from Start() to see if the Kitty protocol was available
+        // and the config got applied
+        string input = new(terminal.Input);
+        if (!kittyResponseChecked)
+        {
+            Match match = KittyStateRegex().Match(input);
+            bool useKittyProtocol = match.Success
+                && int.Parse(match.Groups["flags"].Value, CultureInfo.CurrentCulture) == 31;
+            input = KittyStateRegex().Replace(input, string.Empty);
+
+            parsers = [
+                new SGRParser(),
+                new SS3Parser(),
+                new CSIParser(useKittyProtocol),
+                new ASCIIParser()
+            ];
+
+            kittyResponseChecked = true;
+        }
 
         foreach (InputParser parser in parsers)
         {

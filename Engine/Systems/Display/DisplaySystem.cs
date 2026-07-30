@@ -53,33 +53,25 @@ public abstract class DisplaySystem : Core.System, ICameraTarget
 
     void ICameraTarget.Update()
     {
-        PrintBuffer();
+        DisplayBuffer();
         (Buffer, Screen) = (Screen, Buffer);
     }
 
-    private protected abstract void PrintBuffer();
+    private protected abstract void DisplayBuffer();
 
     /// <summary>
     ///     Broadcast when the display's size changes.
     /// </summary>
-    /// <param name="newSize">The display's size after resizing.</param>
-    public readonly struct ResizedMessage(VectorInt newSize)
+    public class ResizedMessage
     {
-        /// <summary>
-        ///     Gets the updated size of the <see cref="Display"/>.
-        /// </summary>
-        public VectorInt NewSize { get; } = newSize;
-    }
+        internal ResizedMessage(VectorInt newSize)
+        {
+            NewSize = newSize;
+        }
 
-    /// <summary>
-    ///     Broadcast when the mouse moves.
-    /// </summary>
-    /// <param name="newPosition">The position of the mouse after moving.</param>
-    public readonly struct MouseMovedMessage(VectorInt newPosition)
-    {
         /// <summary>
-        ///     Gets the updated position of the mouse.
+        ///     Gets the updated size of the display.
         /// </summary>
-        public VectorInt NewPosition { get; } = newPosition;
+        public VectorInt NewSize { get; init; }
     }
 }
