@@ -2,6 +2,7 @@
 .*
 
 !.editorconfig
+!.gitattributes
 !.gitignore
 
 # Only track launch.json and tasks.json

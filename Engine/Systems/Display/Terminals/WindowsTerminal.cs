@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace Termule.Engine.Systems.Display;
 
@@ -8,6 +9,8 @@ namespace Termule.Engine.Systems.Display;
 public sealed partial class WindowsTerminal : Terminal
 {
     private readonly IntPtr handle = GetStdHandle(-10);
+    private readonly byte[] buffer = new byte[4096];
+    private readonly StringBuilder inputBuilder = new();
 
     private uint initialMode;
 
@@ -19,8 +22,14 @@ public sealed partial class WindowsTerminal : Terminal
         _ = GetConsoleMode(handle, out initialMode);
 
         uint mode = initialMode;
-        mode |= 0x0080; // Enable extended flags
-        mode &= ~0x0040u; // Disable quick edit mode
+        mode |= 0x0080u // Enable extended flags (needed for some of the other flags)
+            | 0x0200u; // Enable virtual terminal input (sending input as escape sequences)
+        mode &= ~(
+            0x0001u // Disable processed input
+            | 0x0002u // Disable line input
+            | 0x0004u // Disable echo input
+            | 0x0040u // Disable quick edit mode (mouse selection)
+        );
 
         _ = SetConsoleMode(handle, mode);
     }
@@ -35,8 +44,20 @@ public sealed partial class WindowsTerminal : Terminal
 
     private protected override string CollectInput()
     {
-        // TODO: Implement
-        throw new NotImplementedException();
+        _ = inputBuilder.Clear();
+
+        // We have to use ReadFile() here because the normal Console.Read() does some internal
+        // buffering/parsing that can break up escape sequences
+        if (WaitForSingleObject(handle, 0) == 0
+            && ReadFile(handle, buffer, (uint) buffer.Length, out uint count, IntPtr.Zero))
+        {
+            for (int i = 0; i < count; i++)
+            {
+                _ = inputBuilder.Append((char) buffer[i]);
+            }
+        }
+
+        return inputBuilder.ToString();
     }
 
     [LibraryImport("kernel32.dll", SetLastError = true)]
@@ -49,4 +70,17 @@ public sealed partial class WindowsTerminal : Terminal
     [LibraryImport("kernel32.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
     private static partial bool SetConsoleMode(IntPtr hConsoleHandle, uint dwMode);
+
+    [LibraryImport("kernel32.dll", SetLastError = true)]
+    private static partial uint WaitForSingleObject(IntPtr hHandle, uint dwMilliseconds);
+
+    [LibraryImport("kernel32.dll", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static partial bool ReadFile(
+        IntPtr hFile,
+        [Out] byte[] lpBuffer,
+        uint nNumberOfBytesToRead,
+        out uint lpNumberOfBytesRead,
+        IntPtr lpOverlapped
+    );
 }
