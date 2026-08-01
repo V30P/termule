@@ -2,14 +2,6 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Debug Playground",
-      "type": "coreclr",
-      "request": "launch",
-      "preLaunchTask": "buildPlayground",
-      "program": "${workspaceRoot}/Playground/bin/Debug/net10.0/Termule.Playground.dll",
-      "console": "externalTerminal"
-    },
-    {
       "name": "Debug Demos",
       "type": "coreclr",
       "request": "launch",
