@@ -1,6 +1,0 @@
-# Build artifacts
-bin
-obj
-
-# Source files
-*.cs
