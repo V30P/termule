@@ -15,11 +15,15 @@ namespace Termule.Engine.Systems.Input;
 /// </summary>
 public sealed partial class TerminalController : Core.System
 {
+    private readonly InputParser[] parsers = [
+        new SGRParser(),
+        new SS3Parser(),
+        new CSIParser(),
+        new ASCIIParser()
+    ];
+
     private Terminal terminal;
-
-    private bool kittyResponseChecked;
-
-    private InputParser[] parsers;
+    private bool kittyResponseReceived;
 
     /// <inheritdoc/>
     protected internal override void Start()
@@ -32,33 +36,37 @@ public sealed partial class TerminalController : Core.System
 
         // Query the Kitty protocol state
         Console.Write("\e[?u");
-
-        // Todo: Revert back to waiting and checking kitty response here
     }
 
     /// <inheritdoc/>
     protected internal override void Tick()
     {
-        // Check the results of the query from Start() to see if the Kitty protocol was available
-        // and the config got applied
+        // If we haven't received a response yet, look for Kitty reporting back about its state.
+        // When we do hear back, update the parsers about Kitty availability.
         string input = new(terminal.Input);
-        if (!kittyResponseChecked)
+        if (!kittyResponseReceived)
         {
             Match match = KittyStateRegex().Match(input);
-            bool useKittyProtocol = match.Success
-                && int.Parse(match.Groups["flags"].Value, CultureInfo.CurrentCulture) == 31;
-            input = KittyStateRegex().Replace(input, string.Empty);
+            if (match.Success)
+            {
+                kittyResponseReceived = true;
 
-            parsers = [
-                new SGRParser(),
-                new SS3Parser(),
-                new CSIParser(useKittyProtocol),
-                new ASCIIParser()
-            ];
+                bool useKittyProtocol = match.Success
+                    && int.Parse(match.Groups["flags"].Value, CultureInfo.CurrentCulture) == 31;
 
-            kittyResponseChecked = true;
+                for (int i = 0; i < parsers.Length; i++)
+                {
+                    if (parsers[i] is CSIParser parser)
+                    {
+                        parser.UseKittyProtocol = useKittyProtocol;
+                    }
+                }
+
+                input = KittyStateRegex().Replace(input, string.Empty);
+            }
         }
 
+        // Run the input through each parser sequentially
         foreach (InputParser parser in parsers)
         {
             foreach (InputMessage message in parser.Parse(input))

@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace Termule.Engine.Systems.Input;
 
-internal sealed partial class CSIParser(bool useKittyProtocol) : ASCIIParser
+internal sealed partial class CSIParser() : ASCIIParser
 {
     private static readonly Dictionary<int, Button> CSITildeCodepointToButton = new()
     {
@@ -166,6 +166,8 @@ internal sealed partial class CSIParser(bool useKittyProtocol) : ASCIIParser
     // This will only be used when the Kitty protocol is active
     private readonly Dictionary<Button, bool> buttonIsDown = [];
 
+    internal bool UseKittyProtocol { private get; set; }
+
     internal override IEnumerable<InputMessage> Parse(string input)
     {
         foreach (Match match in CSIRegex().Matches(input))
@@ -173,10 +175,12 @@ internal sealed partial class CSIParser(bool useKittyProtocol) : ASCIIParser
             if (TryExtractButton(match, out Button button))
             {
                 // If Kitty isn't available, fall back to an instantaneous press
-                if (!useKittyProtocol)
+                if (!UseKittyProtocol)
                 {
                     yield return new ButtonDown(button);
                     yield return new ButtonUp(button);
+
+                    continue;
                 }
 
                 string[] parameters = [.. match.Groups["params"].Value.Split(';')];
