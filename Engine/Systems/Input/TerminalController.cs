@@ -32,6 +32,8 @@ public sealed partial class TerminalController : Core.System
 
         // Query the Kitty protocol state
         Console.Write("\e[?u");
+
+        // Todo: Revert back to waiting and checking kitty response here
     }
 
     /// <inheritdoc/>
