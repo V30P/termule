@@ -59,20 +59,12 @@ public abstract class Terminal : DisplaySystem
     private Color currentGlyphColor;
     private Color currentColor;
 
-    private bool hasTicked;
-
     internal Terminal()
     {
         Size = (Console.WindowWidth, Console.WindowHeight);
     }
 
-    internal string Input
-    {
-        // Before the game loop starts just collect whatever is in the input buffer
-        get => hasTicked ? field : CollectInput();
-
-        private set;
-    }
+    internal string Input { get; private set; }
 
     /// <inheritdoc/>
     protected internal override void Start()
@@ -90,7 +82,6 @@ public abstract class Terminal : DisplaySystem
     /// <inheritdoc/>
     protected internal override void Tick()
     {
-        hasTicked = true;
         Input = CollectInput();
     }
 
