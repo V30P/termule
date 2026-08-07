@@ -207,14 +207,18 @@ internal sealed partial class CSIParser() : ASCIIParser
                 if (action == 1 && !buttonIsDown[button])
                 {
                     yield return new ButtonDown(button);
-
                     buttonIsDown[button] = true;
                 }
                 else if (action == 3 && buttonIsDown[button])
                 {
                     yield return new ButtonUp(button);
-
                     buttonIsDown[button] = false;
+
+                    continue;
+                }
+                else
+                {
+                    continue;
                 }
 
                 // Parse the resulting text character if one is provided
@@ -249,7 +253,9 @@ internal sealed partial class CSIParser() : ASCIIParser
 
         static int GetCodepoint(Match match)
         {
-            return int.Parse(
+            return match.Groups["params"].Value == string.Empty
+                ? -1
+                : int.Parse(
                 match.Groups["params"].Value.Split(';').First().Split(':').First(),
                 CultureInfo.CurrentCulture
             );
