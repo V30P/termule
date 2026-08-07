@@ -1,10 +1,8 @@
 using System.Globalization;
 using System.Reflection;
 using Termule.Demos.Common;
-using Termule.Engine.Components;
 using Termule.Engine.Core;
 using Termule.Engine.Systems.Rendering;
-using Termule.Engine.Types;
 
 namespace Termule.Demos.Core;
 
@@ -181,19 +179,10 @@ internal static class Program
         game.Systems.Install(new RenderSystem { Layers = [new SimpleLayer(), UILayer] });
         game.Systems.Install(demo);
 
+        game.World.Add(Exiter.CreateGameObject());
         if (showStats)
         {
-            game.World.Add(
-                new GameObject(
-                    new Transform(),
-                    new ContentRenderer<Text>()
-                    {
-                        RenderInTargetSpace = true,
-                        Layer = UILayer
-                    },
-                    new TpsIndicator()
-                )
-            );
+            game.World.Add(TPSIndicator.CreateGameObject());
         }
 
         game.Run();

@@ -6,12 +6,29 @@ using Termule.Engine.Types;
 
 namespace Termule.Demos.Core;
 
-internal sealed class TpsIndicator : Component
+internal sealed class TPSIndicator : Component
 {
     private static readonly CompositeFormat TextFormat = CompositeFormat.Parse("TPS: {0}");
 
     private int ticks;
     private float time;
+
+    private TPSIndicator()
+    {
+    }
+
+    internal static GameObject CreateGameObject()
+    {
+        return [
+            new TPSIndicator(),
+            new Transform(),
+            new ContentRenderer<Text>()
+            {
+                RenderInTargetSpace = true,
+                Layer = Program.UILayer
+            }
+        ];
+    }
 
     protected override void Tick()
     {
