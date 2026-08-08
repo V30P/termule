@@ -74,7 +74,7 @@ Termule's `Demos` project provides a few sample programs which serve to demonstr
 To run the demos yourself, first clone the full repository, then navigate to the [`Demos/`](Demos/) directory. The demo project can be run without installation via the .NET CLI:
 
 ```bash
-# To learn how to use the Demos project
+# To learn how to use the demo project
 dotnet run -- --help
 
 # To run a specific demo by name
