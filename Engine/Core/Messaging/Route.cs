@@ -1,4 +1,4 @@
-namespace Termule.Engine.Core.Messaging;
+namespace Termule.Engine.Core;
 
 /// <summary>
 ///     Represents a path for a message to be sent along.

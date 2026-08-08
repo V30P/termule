@@ -104,7 +104,7 @@ public class TestGame
         game.Activate(element);
 
         Assert.Equal(1, listener.MessageCount);
-        Assert.Equal(element, listener.ReceivedMessage.Element);
+        Assert.Equal(element, listener.Message.Element);
     }
 
     [Fact]
@@ -120,7 +120,7 @@ public class TestGame
         game.Deactivate(element);
 
         Assert.Equal(1, listener.MessageCount);
-        Assert.Equal(element, listener.ReceivedMessage.Element);
+        Assert.Equal(element, listener.Message.Element);
     }
 
     [Fact]

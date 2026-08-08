@@ -1,5 +1,4 @@
 using Termule.Engine.Core;
-using Termule.Engine.Core.Messaging;
 using Termule.Tests.Common;
 
 namespace Termule.Tests.Core.Messaging;
@@ -33,9 +32,9 @@ public class TestLocalMessageBus
 
         gameObject.Bus.Broadcast(true, route);
 
-        Assert.Equal(values[0], downwardListener.ReceivedMessage);
-        Assert.Equal(values[1], localListener.ReceivedMessage);
-        Assert.Equal(values[2], upwardListener.ReceivedMessage);
+        Assert.Equal(values[0], downwardListener.Message);
+        Assert.Equal(values[1], localListener.Message);
+        Assert.Equal(values[2], upwardListener.Message);
     }
 
     [Fact]

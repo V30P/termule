@@ -1,5 +1,5 @@
 using System.Collections;
-using Termule.Engine.Core.Messaging;
+using static Termule.Engine.Core.Utilities;
 
 namespace Termule.Engine.Core;
 
@@ -68,7 +68,7 @@ public sealed class GameObject : Component, IEnumerable<Component>
             tickingDirty = true;
             component.SetGameObject(this);
 
-            foreach (Type type in GetImplementedTypes(component))
+            foreach (Type type in GetTypeHierarchy(component))
             {
                 if (!typesToComponents.TryGetValue(type, out List<Component> componentList))
                 {
@@ -111,7 +111,7 @@ public sealed class GameObject : Component, IEnumerable<Component>
         component.SetGameObject(null);
         tickingDirty = true;
 
-        IEnumerable<List<Component>> typedComponentLists = GetImplementedTypes(component)
+        IEnumerable<List<Component>> typedComponentLists = GetTypeHierarchy(component)
             .Select(type => typesToComponents[type]);
         foreach (List<Component> componentList in typedComponentLists)
         {
@@ -196,18 +196,5 @@ public sealed class GameObject : Component, IEnumerable<Component>
         }
 
         Game.Deactivate(Bus);
-    }
-
-    private static List<Type> GetImplementedTypes(object o)
-    {
-        Type type = o.GetType();
-        List<Type> implementedTypes = [type, .. o.GetType().GetInterfaces()];
-
-        for (Type ancestor = type.BaseType; ancestor != null; ancestor = ancestor.BaseType)
-        {
-            implementedTypes.Add(ancestor);
-        }
-
-        return implementedTypes;
     }
 }

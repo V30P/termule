@@ -2,7 +2,6 @@ using Termule.Demos.Common;
 using Termule.Demos.Core;
 using Termule.Engine.Components;
 using Termule.Engine.Core;
-using Termule.Engine.Core.Messaging;
 using Termule.Engine.Systems.Display;
 using Termule.Engine.Systems.Input;
 using Termule.Engine.Systems.Resources;

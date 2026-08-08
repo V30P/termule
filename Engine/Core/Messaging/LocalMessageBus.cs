@@ -1,4 +1,4 @@
-namespace Termule.Engine.Core.Messaging;
+namespace Termule.Engine.Core;
 
 /// <summary>
 ///     A message bus for routing messages through the world.

@@ -1,10 +1,22 @@
-using Termule.Engine.Core.Messaging;
+using Termule.Engine.Core;
 using Termule.Tests.Common;
 
 namespace Termule.Tests.Core.Messaging;
 
 public class TestMessageBus
 {
+    [Fact]
+    public void Broadcast_NotifiesSubscriber()
+    {
+        MessageBus bus = new();
+        FakeListener<bool> listener = new();
+        bus.Subscribe(listener);
+
+        bus.Broadcast(true);
+
+        Assert.True(listener.Message);
+    }
+
     [Fact]
     public void Broadcast_NotifiesMultipleSubscribers()
     {
@@ -16,20 +28,20 @@ public class TestMessageBus
 
         bus.Broadcast(true);
 
-        Assert.True(listener1.ReceivedMessage);
-        Assert.True(listener2.ReceivedMessage);
+        Assert.True(listener1.Message);
+        Assert.True(listener2.Message);
     }
 
     [Fact]
-    public void Broadcast_NotifiesSubscriber()
+    public void Broadcast_NotifiesListenersOfAncestorTypes()
     {
         MessageBus bus = new();
-        FakeListener<bool> listener = new();
+        FakeListener<object> listener = new();
         bus.Subscribe(listener);
 
         bus.Broadcast(true);
 
-        Assert.True(listener.ReceivedMessage);
+        Assert.Equal(true, listener.Message);
     }
 
     [Fact]
@@ -63,8 +75,22 @@ public class TestMessageBus
 
         bus.Broadcast(true);
 
-        Assert.True(listener.ReceivedMessage);
+        Assert.True(listener.Message);
         Assert.Equal(1, listener.MessageCount);
+    }
+
+    [Fact]
+    public void SubscribeAll_SubscribesForAllTypes()
+    {
+        MessageBus bus = new();
+        MultiTypeListener listener = new();
+
+        bus.SubscribeAll(listener);
+
+        bus.Broadcast(true);
+        bus.Broadcast(5);
+
+        Assert.Equal(2, listener.MessagesCount);
     }
 
     [Fact]
@@ -79,7 +105,7 @@ public class TestMessageBus
 
         bus.Broadcast(true);
 
-        Assert.False(listener.ReceivedMessage);
+        Assert.False(listener.Message);
     }
 
     [Fact]
@@ -92,6 +118,36 @@ public class TestMessageBus
         bus.Unsubscribe(listener);
 
         bus.Broadcast(true);
-        Assert.False(listener.ReceivedMessage);
+        Assert.False(listener.Message);
+    }
+
+    [Fact]
+    public void UnsubscribeAll_UnsubscribesForAllTypes()
+    {
+        MessageBus bus = new();
+        MultiTypeListener listener = new();
+
+        bus.SubscribeAll(listener);
+        bus.UnsusbcribeAll(listener);
+
+        bus.Broadcast(true);
+        bus.Broadcast(5);
+
+        Assert.Equal(0, listener.MessagesCount);
+    }
+
+    private sealed class MultiTypeListener : IMessageListener<bool>, IMessageListener<int>
+    {
+        public int MessagesCount { get; private set; }
+
+        void IMessageListener<bool>.OnMessage(bool message)
+        {
+            MessagesCount++;
+        }
+
+        void IMessageListener<int>.OnMessage(int message)
+        {
+            MessagesCount++;
+        }
     }
 }

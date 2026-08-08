@@ -1,4 +1,4 @@
-namespace Termule.Engine.Core.Messaging;
+namespace Termule.Engine.Core;
 
 /// <summary>
 ///     Base interface for types that can subscribe to <see cref="MessageBus" />ses.

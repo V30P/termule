@@ -1,5 +1,4 @@
 using Termule.Engine.Core;
-using Termule.Engine.Core.Messaging;
 using Termule.Engine.Systems.Input;
 using Termule.Engine.Types;
 
@@ -9,7 +8,11 @@ namespace Termule.Engine.Components;
 ///     Component that provides a value based on messages from a <see cref="TerminalController"/>.
 /// </summary>
 /// <typeparam name="TValue">The type of value this control produces.</typeparam>
-public class Control<TValue> : Component, IMessageListener<InputMessage>
+public class Control<TValue> : Component,
+    IMessageListener<ButtonDown>,
+    IMessageListener<ButtonUp>,
+    IMessageListener<CharTyped>,
+    IMessageListener<MouseMoved>
 {
     internal Control()
     {
@@ -20,31 +23,30 @@ public class Control<TValue> : Component, IMessageListener<InputMessage>
     /// </summary>
     public TValue Value { get; private protected set; }
 
-    void IMessageListener<InputMessage>.OnMessage(InputMessage message)
+    void IMessageListener<ButtonDown>.OnMessage(ButtonDown message)
     {
-        switch (message)
-        {
-            case ButtonDown buttonDown:
-                OnButtonDown(buttonDown.Button);
-                break;
-            case ButtonUp buttonUp:
-                OnButtonUp(buttonUp.Button);
-                break;
-            case CharTyped charTyped:
-                OnCharTyped(charTyped.Char);
-                break;
-            case MouseMoved mouseMoved:
-                OnMouseMoved(mouseMoved.Pos);
-                break;
-            default:
-                break;
-        }
+        OnButtonDown(message.Button);
+    }
+
+    void IMessageListener<ButtonUp>.OnMessage(ButtonUp message)
+    {
+        OnButtonUp(message.Button);
+    }
+
+    void IMessageListener<CharTyped>.OnMessage(CharTyped message)
+    {
+        OnCharTyped(message.Char);
+    }
+
+    void IMessageListener<MouseMoved>.OnMessage(MouseMoved message)
+    {
+        OnMouseMoved(message.Pos);
     }
 
     /// <inheritdoc/>
     protected override void Activate()
     {
-        Game.Bus.Subscribe(this);
+        Game.Bus.SubscribeAll(this);
     }
 
     private protected virtual void OnButtonDown(Button button)

@@ -43,7 +43,7 @@ public class TestTransform
         transform.Pos = (1, 1);
 
         Assert.Equal(1, listener.MessageCount);
-        Assert.Equal((1, 1), listener.ReceivedMessage.NewPosition);
+        Assert.Equal((1, 1), listener.Message.NewPosition);
     }
 
     [Fact]

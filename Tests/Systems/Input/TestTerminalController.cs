@@ -1,5 +1,4 @@
 using Termule.Engine.Core;
-using Termule.Engine.Core.Messaging;
 using Termule.Engine.Systems.Input;
 using Termule.Tests.Common;
 
