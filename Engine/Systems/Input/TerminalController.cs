@@ -17,8 +17,8 @@ public sealed partial class TerminalController : Core.System
 {
     private readonly InputParser[] parsers = [
         new SGRParser(),
-        new SS3Parser(),
         new CSIParser(),
+        new SS3Parser(),
         new ASCIIParser()
     ];
 

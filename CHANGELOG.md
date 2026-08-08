@@ -4,6 +4,34 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0] - 2026-08-08
+
+### Added
+- `TerminalController` system for getting keyboard and mouse input through the terminal. Parses:
+  - SGR mouse sequences
+  - CSI key sequences (with support for the Kitty protocol)
+  - SS3 key sequences
+  - ASCII characters
+- `Control` components for accessing input from the `TerminalController`, includes:
+  - `TriggerControl` (replaces `TriggerBind`)
+  - `HoldControl` (replaces `ButtonBind`)
+  - `ComboControl` (replaces `ComboBind`)
+  - `VectorControl` (replaces `VectorBind`)
+  - `CharControl` (replaces `TypingBind`)
+  - `MouseControl` (replaces `Display.MousePos`)
+- `SubscribeAll()` and `UnsubscribeAll()` methods to `MessageBus`
+- Ability to exit demos with Ctrl+C
+
+### Changed
+- `MessageBus.Broadcast()` to also broadcast to listeners of any type in the message's type hierarchy
+
+### Removed
+- SharpHook dependency, all input is now handled through the terminal
+- `MousePos` property from `Display`
+- `Bind` (replaced by `Control`)
+- `Keyboard` (replaced by `TerminalController`)
+- `BindMap`
+
 ## [0.4.0] - 2026-06-17
 
 ### Added
