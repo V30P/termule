@@ -47,7 +47,7 @@ internal sealed class Screensaver : Demo
 
         protected override void Activate()
         {
-            logo = GetRequiredSystem<ResourceLoader>().Load<Image>("screensaver/logo");
+            logo = GetRequiredSystem<ResourceLoader>().Load<Image>("screensaver/logo.tmc");
             GetRequiredComponent<ContentRenderer<Image>>().Content = logo;
 
             dir = unsignedDir;

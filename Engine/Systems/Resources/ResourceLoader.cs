@@ -1,90 +1,49 @@
-using System.IO.Abstractions;
-using System.Reflection;
 using Termule.Engine.Exceptions;
 
 namespace Termule.Engine.Systems.Resources;
 
 /// <summary>
-///     System responsible for loading resources from disk.
+///     System responsible for loading resources from a <see cref="IResourceProvider"/> .
 /// </summary>
-public sealed class ResourceLoader : Core.System
+public sealed class ResourceLoader(IResourceProvider provider = null) : Core.System
 {
-    private readonly Dictionary<string, IResourceBase> cache = [];
+    private readonly Dictionary<string, IResource> cache = [];
 
-    private readonly IFileSystem fileSystem;
-    private readonly string resourceDir;
-
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="ResourceLoader" /> class.
-    /// </summary>
-    /// <param name="fileSystem">
-    ///     The file system to load from, defaults to the actual file system.
-    /// </param>
-    /// <param name="resourceDir">
-    ///     The directory to load resources from, defaults to "res".
-    /// </param>
-    /// <param name="dirIsRelative">
-    ///     Whether <paramref name="resourceDir" /> should be treated as relative to the assembly
-    ///     location, defaults to true.
-    /// </param>
-    public ResourceLoader(
-        IFileSystem fileSystem = null,
-        string resourceDir = "res",
-        bool dirIsRelative = true)
-    {
-        this.fileSystem = fileSystem ?? new FileSystem();
-
-        string resourceDirBase = dirIsRelative
-            ? Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
-            : string.Empty;
-        this.resourceDir = Path.Combine(resourceDirBase, resourceDir);
-    }
+    private readonly IResourceProvider provider = provider ?? new EmbeddedResourceProvider();
 
     /// <summary>
-    ///     Loads the resource of provided type <typeparamref name="TResource" /> at
-    ///     <paramref name="path" />.
+    ///     Loads a resource from the provider or gets a copy of a cached version.
     /// </summary>
     /// <typeparam name="TResource">The type of resource to load.</typeparam>
-    /// <param name="path">The path to look for the resource at.</param>
-    /// <returns>The loaded resource.</returns>
-    /// <exception cref="FileNotFoundException">
-    ///     Thrown if the resource does not exist at the provided path.
-    /// </exception>
-    /// <exception cref="ResourceLoadException">
-    ///     Thrown if the resource is found but fails to load.
-    /// </exception>
-    /// <remarks>
-    ///     If no extension is provided in the path, the default extension set by the resource will
-    ///     be used.
-    /// </remarks>
-    public TResource Load<TResource>(string path) where TResource : IResource
+    /// <param name="name">The name of the resource.</param>
+    /// <returns>The resulting resource object.</returns>
+    /// <exception cref="ResourceLoadException">Thrown when the resource cannot be loaded.</exception>
+    public TResource Load<TResource>(string name) where TResource : IResource
     {
-        string extendedPath = fileSystem.Path.GetExtension(path) == TResource.FileExtension
-            ? path
-            : path + TResource.FileExtension;
-        if (cache.TryGetValue(extendedPath, out IResourceBase cachedResource))
+        if (cache.TryGetValue(name, out IResource cachedResource))
         {
             return Serializer.Deserialize<TResource>(Serializer.Serialize(cachedResource));
         }
 
-        string fullPath = Path.Combine(resourceDir, extendedPath);
-        if (!fileSystem.Path.Exists(fullPath))
+        if (!provider.ResourceExists(name))
         {
-            throw new ResourceLoadException(fullPath, new FileNotFoundException());
+            throw new ResourceLoadException(name, "Resource could not be found.");
         }
 
-        string text;
+        Stream stream = provider.GetResourceStream(name);
+        string text = new StreamReader(stream).ReadToEnd();
+
+        TResource resource;
         try
         {
-            text = fileSystem.File.ReadAllText(fullPath);
+            resource = Serializer.Deserialize<TResource>(text);
         }
-        catch (Exception e) when (e is IOException or UnauthorizedAccessException)
+        catch (Exception e)
         {
-            throw new ResourceLoadException(fullPath, e);
+            throw new ResourceLoadException(name, e);
         }
 
-        TResource resource = Serializer.Deserialize<TResource>(text);
-        cache.Add(extendedPath, resource);
-        return Serializer.Deserialize<TResource>(text);
+        cache.Add(name, resource);
+        return resource;
     }
 }

@@ -6,17 +6,19 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <AssemblyName>Termule.Demos</AssemblyName>
         <RootNamespace>Termule.Demos</RootNamespace>
+        <PublishSingleFile>true</PublishSingleFile>
     </PropertyGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\Engine\Engine.csproj"/>
+        <PackageReference Include="System.IO.Abstractions" Version="22.1.1" />
     </ItemGroup>
 
     <ItemGroup>
-        <Content Include="res\**\*">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-        </Content>
+        <EmbeddedResource Include="res\**\*">
+            <!-- Makes sure resource paths are the same on all systems -->
+            <LogicalName>res/$([System.String]::Copy('%(RecursiveDir)%(Filename)%(Extension)').Replace('\', '/'))</LogicalName>
+        </EmbeddedResource>
     </ItemGroup>
 
     <!-- Stop StyleCop from requiring documentation -->

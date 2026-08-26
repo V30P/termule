@@ -46,8 +46,8 @@ internal sealed class Shooter : Demo, IMessageListener<Shooter.CharacterControll
 
     protected override void Start()
     {
-        characterSprite = Systems.Get<ResourceLoader>().Load<Image>("shooter/character");
-        projectileSprite = Systems.Get<ResourceLoader>().Load<Image>("shooter/projectile");
+        characterSprite = Systems.Get<ResourceLoader>().Load<Image>("shooter/character.tmc");
+        projectileSprite = Systems.Get<ResourceLoader>().Load<Image>("shooter/projectile.tmc");
 
         World.Add(
             new Transform(),

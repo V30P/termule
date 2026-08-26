@@ -5,14 +5,25 @@ namespace Termule.Engine.Exceptions;
 /// </summary>
 public sealed class ResourceLoadException : Exception
 {
-    internal ResourceLoadException(string fullPath, Exception inner = null)
-        : base($"Could not load resource \"{Path.GetFileName(fullPath)}\"", inner)
+    internal ResourceLoadException(string name, string reason)
+        : base($"{GetMessage(name)} {reason}")
     {
-        FullPath = fullPath;
+        Name = name;
+    }
+
+    internal ResourceLoadException(string name, Exception inner)
+        : base(GetMessage(name), inner)
+    {
+        Name = name;
     }
 
     /// <summary>
-    ///     Gets the full path of the resource that failed to load.
+    ///     Gets the name of the resource that failed to load.
     /// </summary>
-    public string FullPath { get; }
+    public string Name { get; }
+
+    private static string GetMessage(string name)
+    {
+        return $"Could not load resource \"{name}\".";
+    }
 }

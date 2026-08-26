@@ -35,8 +35,6 @@ public class Image : IContent, IResource
         Cells = cells;
     }
 
-    static string IResource.FileExtension => ".tmc";
-
     /// <summary>
     ///     Gets the size of this content.
     /// </summary>
