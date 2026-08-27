@@ -26,6 +26,7 @@ This repository contains the following projects:
 3. [Demos](Demos)
    - Five single-file, sample Termule programs
    - Easy-to-use CLI (to run locally, see the [Demos](#demos) section below)
+   - Compiles to a single, self-contained file
 
 ## Architecture
 Like many object-oriented game engines, Termule features game objects made up of components. This model is great because it favors composition over inheritance while still allowing for many of the usual object-oriented patterns. However, it has a few issues:
