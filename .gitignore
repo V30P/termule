@@ -5,6 +5,8 @@
 !.gitattributes
 !.gitignore
 
+!.github
+
 # Only track launch.json and tasks.json
 !.vscode
 .vscode/*

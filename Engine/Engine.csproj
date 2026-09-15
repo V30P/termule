@@ -6,9 +6,17 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <LangVersion>preview</LangVersion>
         <AssemblyName>Termule.Engine</AssemblyName>
         <RootNamespace>Termule.Engine</RootNamespace>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <Authors>Veop</Authors>
+        <PackageId>Termule.Engine</PackageId>
+        <Description>A micro game engine for developing real-time terminal games.</Description>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <RepositoryUrl>https://github.com/V30P/termule</RepositoryUrl>
+        <PackageTags>terminal;console;game-engine;ascii</PackageTags>
     </PropertyGroup>
 
     <ItemGroup>

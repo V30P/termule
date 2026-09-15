@@ -25,8 +25,8 @@
         in
         {
           default = pkgs.mkShell {
-            packages = [
-              pkgs.dotnet-sdk_10
+            packages = with pkgs; [
+              dotnet-sdk_10
             ];
           };
         }
