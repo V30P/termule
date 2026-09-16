@@ -14,10 +14,16 @@
         <Authors>Veop</Authors>
         <PackageId>Termule.Engine</PackageId>
         <Description>A micro game engine for developing real-time terminal games.</Description>
+        <PackageReadmeFile>README.md</PackageReadmeFile>        
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <RepositoryUrl>https://github.com/V30P/termule</RepositoryUrl>
         <PackageTags>terminal;console;game-engine;ascii</PackageTags>
     </PropertyGroup>
+
+    <!-- This is needed so Nuget can access the README when packing -->
+    <ItemGroup>
+        <None Include="../README.md" Pack="true" PackagePath="\" />
+    </ItemGroup>
 
     <ItemGroup>
         <InternalsVisibleTo Include="Termule.Tests" />
