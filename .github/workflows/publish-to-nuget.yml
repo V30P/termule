@@ -6,7 +6,7 @@ on:
       - "v[0-9]+.[0-9]+.[0-9]+"
 
 permissions:
-  id-token: write   # required for OIDC
+  id-token: write 
   contents: read
 
 jobs:
@@ -22,7 +22,7 @@ jobs:
         run: |
           git fetch origin main
           if ! git merge-base --is-ancestor ${{ github.sha }} origin/main; then
-            echo "Tag commit is not on main — aborting publish."
+            echo "Tag commit is not on main."
             exit 1
           fi
 
@@ -45,9 +45,9 @@ jobs:
         run: dotnet test --no-build --configuration Release --verbosity normal
 
       - name: Pack
-        run: dotnet pack ./Engine/Engine.csproj --no-build --configuration Release -p:PackageVersion=${{ steps.get_version.outputs.VERSION }} --output ./nupkgs
+        run: dotnet pack --no-build --configuration Release -p:PackageVersion=${{ steps.get_version.outputs.VERSION }} --output ./nupkgs
 
-      - name: NuGet login (OIDC → temp API key)
+      - name: NuGet login
         uses: NuGet/login@v1
         id: login
         with:
