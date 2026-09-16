@@ -15,6 +15,7 @@ namespace Termule.Engine.Systems.Input;
 /// </summary>
 public sealed partial class TerminalController : Core.System
 {
+    // ! Don't forget to add new parsers to the README
     private readonly InputParser[] parsers = [
         new SGRParser(),
         new CSIParser(),

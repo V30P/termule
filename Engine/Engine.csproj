@@ -20,11 +20,6 @@
         <PackageTags>terminal;console;game-engine;ascii</PackageTags>
     </PropertyGroup>
 
-    <!-- This is needed so Nuget can access the README when packing -->
-    <ItemGroup>
-        <None Include="../README.md" Pack="true" PackagePath="\" />
-    </ItemGroup>
-
     <ItemGroup>
         <InternalsVisibleTo Include="Termule.Tests" />
     </ItemGroup>

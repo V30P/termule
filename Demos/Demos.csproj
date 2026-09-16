@@ -13,7 +13,7 @@
         <Authors>Veop</Authors>
         <PackageId>Termule.Demos</PackageId>
         <Description>The demo collection for the Termule game engine.</Description>
-        <!-- <PackageReadmeFile>README.md</PackageReadmeFile>         -->
+        <PackageReadmeFile>README.md</PackageReadmeFile>        
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <RepositoryUrl>https://github.com/V30P/termule</RepositoryUrl>
         <PackageTags>terminal;console;game-engine;ascii</PackageTags>
@@ -27,7 +27,7 @@
 
     <ItemGroup>
         <EmbeddedResource Include="res\**\*">
-            <!-- Makes sure resource paths are the same on all systems -->
+            <!-- Make sure resource paths are the same on all systems -->
             <LogicalName>res/$([System.String]::Copy('%(RecursiveDir)%(Filename)%(Extension)').Replace('\', '/'))</LogicalName>
         </EmbeddedResource>
     </ItemGroup>
