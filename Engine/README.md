@@ -3,7 +3,6 @@
 A micro game engine for developing real-time terminal games. See the full SDK repository [here](https://github.com/V30P/termule).
 
 ## Access
-
 This library is available on NuGet as `Termule.Engine`. To add it to your project use:
 
 ```
@@ -11,7 +10,6 @@ dotnet package add Termule.Engine
 ``` 
 
 ## Structure
-
 Termule splits its runtime behavior into two types: `Core.System` and `Core.Component`.
 
 ### Systems
@@ -49,7 +47,6 @@ Game
 ```
 
 ## Features
-
 ### Rendering
 The most notable characteristic of the Termule engine is its ability to render the game world so that it can be displayed by terminals. This is achieved through a software renderer that works not on pixels, but terminal cells containing a glyph and two RGB colors (one for the background and one for the glyph itself).
 

@@ -6,19 +6,6 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <AssemblyName>Termule.Demos</AssemblyName>
         <RootNamespace>Termule.Demos</RootNamespace>
-        <PublishSingleFile>true</PublishSingleFile>
-    </PropertyGroup>
-
-    <PropertyGroup>
-        <Authors>Veop</Authors>
-        <PackageId>Termule.Demos</PackageId>
-        <Description>The demo collection for the Termule game engine.</Description>
-        <PackageReadmeFile>README.md</PackageReadmeFile>        
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <RepositoryUrl>https://github.com/V30P/termule</RepositoryUrl>
-        <PackageTags>terminal;console;game-engine;ascii</PackageTags>
-        <PackAsTool>true</PackAsTool>
-        <ToolCommandName>termule-demos</ToolCommandName>
     </PropertyGroup>
 
     <ItemGroup>
@@ -36,5 +23,21 @@
     <PropertyGroup>
         <NoWarn>$(NoWarn);SA0001</NoWarn>
     </PropertyGroup>
+
+    <PropertyGroup>
+        <Authors>Veop</Authors>
+        <PackageId>Termule.Demos</PackageId>
+        <Description>The demo collection for the Termule SDK.</Description>
+        <PackageReadmeFile>README.md</PackageReadmeFile>        
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <RepositoryUrl>https://github.com/V30P/termule</RepositoryUrl>
+        <PackageTags>terminal;console;games;demo</PackageTags>
+        <PackAsTool>true</PackAsTool>
+        <ToolCommandName>termule-demos</ToolCommandName>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="README.md" Pack="true" PackagePath="" />
+    </ItemGroup>
 
 </Project>

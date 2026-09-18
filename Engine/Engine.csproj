@@ -10,6 +10,10 @@
         <RootNamespace>Termule.Engine</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+        <InternalsVisibleTo Include="Termule.Tests" />
+    </ItemGroup>
+
     <PropertyGroup>
         <Authors>Veop</Authors>
         <PackageId>Termule.Engine</PackageId>
@@ -17,11 +21,11 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>        
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <RepositoryUrl>https://github.com/V30P/termule</RepositoryUrl>
-        <PackageTags>terminal;console;game-engine;ascii</PackageTags>
+        <PackageTags>terminal;console;games;game-engine</PackageTags>
     </PropertyGroup>
 
     <ItemGroup>
-        <InternalsVisibleTo Include="Termule.Tests" />
+        <None Include="README.md" Pack="true" PackagePath="" />
     </ItemGroup>
 
 </Project>

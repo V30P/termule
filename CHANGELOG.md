@@ -14,7 +14,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - `ResourceLoader` now takes an `IResourceProvider` rather than an `IFileSystem`
 - Demos project now builds to a single file
 
-
 ## [0.5.0] - 2026-08-08
 
 ### Added

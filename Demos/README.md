@@ -1,9 +1,8 @@
 # Termule.Demos
 
-A demo collection for the Termule SDK. See the full SDK repository [here](https://github.com/V30P/termule).
+The demo collection for the Termule SDK. See the full SDK repository [here](https://github.com/V30P/termule).
 
 ## Access
-
 This tool is available on NuGet as `Termule.Demos`. To install use:
 
 ```
@@ -11,7 +10,6 @@ dotnet tool install Termule.Demos
 ``` 
 
 ## Usage
-
 To run this demo collection, first install the project as shown above. From there, use:
 
 ```bash

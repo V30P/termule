@@ -44,6 +44,12 @@ jobs:
       - name: Test
         run: dotnet test --no-build --configuration Release --verbosity normal
 
+      # Makes sure templates use matching engine version
+      - name: Stamp version in templates
+        run: |
+          find Templates/content -name '*.csproj' -exec \
+          sed -i "s/VERSION/${{ steps.get_version.outputs.VERSION }}/g" {} +
+
       - name: Pack
         run: dotnet pack --no-build --configuration Release -p:PackageVersion=${{ steps.get_version.outputs.VERSION }} --output ./nupkgs
 

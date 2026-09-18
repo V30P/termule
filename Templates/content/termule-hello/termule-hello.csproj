@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>termule_blank</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <PublishSingleFile>true</PublishSingleFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Termule.Engine" Version="VERSION"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="res\**\*">
+        <!-- Make sure resource paths are the same on all systems -->
+        <LogicalName>res/$([System.String]::Copy('%(RecursiveDir)%(Filename)%(Extension)').Replace('\', '/'))</LogicalName>
+      </EmbeddedResource>
+  </ItemGroup>
+
+</Project>
