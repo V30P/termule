@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Veop",
+  "classifications": [ "Console" ],
+  "identity": "Termule.Templates.Blank",
+  "name": "Termule Blank Project",
+  "shortName": "termule-blank",
+  "sourceName":"termule-blank",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  }
+}

@@ -1,0 +1,9 @@
+# Build artifacts
+bin
+obj
+
+# Template build artifacts
+content/*/bin
+content/*/obj
+
+!content/*/.template.config

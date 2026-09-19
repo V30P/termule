@@ -1,0 +1,29 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "src": "../Engine",
+          "files": ["*.csproj"]
+        }
+      ],
+      "dest": "engine"
+    }
+  ],
+  "build": {
+    "content": [
+      { "files": ["engine/**.yml"] }
+    ],
+    "resource": [
+      { "files": ["index.html"] }
+    ],
+    "output": "_site",
+    "template": ["default", "modern"],
+    "globalMetadata": {
+      "_appName": "Termule.Engine",
+      "_appTitle": "Termule.Engine",
+      "_appFooter": "Termule.Engine",
+      "_enableSearch": true
+    }
+  }
+}

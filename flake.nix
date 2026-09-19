@@ -27,6 +27,8 @@
           default = pkgs.mkShell {
             packages = with pkgs; [
               dotnet-sdk_10
+              docfx
+              nodejs # This is needed for DocFX
             ];
           };
         }

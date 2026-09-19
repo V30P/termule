@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Veop",
+  "classifications": [ "Console" ],
+  "identity": "Termule.Templates.Hello",
+  "name": "Termule Hello Terminal Project",
+  "shortName": "termule-hello",
+  "sourceName":"termule-hello",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  }
+}

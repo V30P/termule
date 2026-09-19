@@ -6,7 +6,6 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <AssemblyName>Termule.Demos</AssemblyName>
         <RootNamespace>Termule.Demos</RootNamespace>
-        <PublishSingleFile>true</PublishSingleFile>
     </PropertyGroup>
 
     <ItemGroup>
@@ -15,7 +14,7 @@
 
     <ItemGroup>
         <EmbeddedResource Include="res\**\*">
-            <!-- Makes sure resource paths are the same on all systems -->
+            <!-- Make sure resource paths are the same on all systems -->
             <LogicalName>res/$([System.String]::Copy('%(RecursiveDir)%(Filename)%(Extension)').Replace('\', '/'))</LogicalName>
         </EmbeddedResource>
     </ItemGroup>
@@ -24,5 +23,21 @@
     <PropertyGroup>
         <NoWarn>$(NoWarn);SA0001</NoWarn>
     </PropertyGroup>
+
+    <PropertyGroup>
+        <Authors>Veop</Authors>
+        <PackageId>Termule.Demos</PackageId>
+        <Description>The demo collection for the Termule SDK.</Description>
+        <PackageReadmeFile>README.md</PackageReadmeFile>        
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <RepositoryUrl>https://github.com/V30P/termule</RepositoryUrl>
+        <PackageTags>terminal;console;games;demo</PackageTags>
+        <PackAsTool>true</PackAsTool>
+        <ToolCommandName>termule-demos</ToolCommandName>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="README.md" Pack="true" PackagePath="" />
+    </ItemGroup>
 
 </Project>
