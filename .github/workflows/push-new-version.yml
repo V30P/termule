@@ -1,4 +1,4 @@
-name: publish-to-nuget
+name: push-new-version
 
 on:
   push:
@@ -6,12 +6,14 @@ on:
       - "v[0-9]+.[0-9]+.[0-9]+"
 
 permissions:
-  id-token: write 
   contents: read
 
 jobs:
   publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # Needed for NuGet trusted publishing
 
     steps:
       - uses: actions/checkout@v4
@@ -61,3 +63,37 @@ jobs:
 
       - name: Push to NuGet
         run: dotnet nuget push ./nupkgs/*.nupkg --api-key ${{ steps.login.outputs.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+
+  docs:
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Build docs
+        run: |
+          dotnet tool update -g docfx
+          docfx docs/docfx.json
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/_site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
