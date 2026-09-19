@@ -55,7 +55,7 @@ game.Systems.Install(new MySystem());
 game.World.Add(new MyComponent());
 ```
 
-For information about an element of the engine, hover over a Termule type or member to see its documentation.
+For information about an element of the engine, hover over a Termule type or member to see its documentation or go to [https://v30p.github.io/termule](https://v30p.github.io/termule).
 
 ## Contributing
 This repository is open to contributions. See the the contributing guidelines [here](CONTRIBUTING.md).

@@ -7,7 +7,7 @@ This library is available on NuGet as `Termule.Engine`. To add it to your projec
 
 ```
 dotnet package add Termule.Engine
-``` 
+```
 
 ## Structure
 Termule splits its runtime behavior into two types: `Core.System` and `Core.Component`.
@@ -87,5 +87,5 @@ Resources are sourced as streams by an `IResourceProvider`. The default resource
 
 ## Documentation
 
-Termule.Engine is fully documented through XML doc comments. To learn about a type or member from the engine, hover over it in your IDE. 
+Documentation for the engine's API is available at [https://v30p.github.io/termule](https://v30p.github.io/termule). This documentation is also viewable by hovering over a Termule type or member in most IDEs.
 
