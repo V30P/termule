@@ -57,5 +57,8 @@ game.World.Add(new MyComponent());
 
 For information about an element of the engine, hover over a Termule type or member to see its documentation.
 
+## Contributing
+This repository is open to contributions. See the the contributing guidelines [here](CONTRIBUTING.md).
+
 ## License
-This project is licensed under the MIT License. See the LICENSE file for details.
+This project is licensed under the MIT License. See the [LICENSE file](LICENSE) for details.
