@@ -20,11 +20,11 @@ This repository contains the following projects:
 2. [Demos](Demos) | [README](Demos/README.md)
    - Five single-file, sample programs built with Termule
    - Easy-to-use CLI, packaged as a .NET tool
-   - Compiles to a single, self-contained file
 
-3. [Tests](Tests)
-   - Comprehensive xUnit test suite for the engine
-   - Includes 300+ tests
+3. [Templates](Templates) | [README](Templates/README.md)
+   - Collection of Termule template projects
+   - Packaged as a .NET template pack, usable via `dotnet new`
+   - Includes templates for resource embedding + single-file publish
 
 ## Quickstart
 The termule engine is published on NuGet as `Termule.Engine`. To add it to your C# project use:
