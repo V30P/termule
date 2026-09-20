@@ -1,6 +1,6 @@
 # Termule.Engine
 
-A micro game engine for developing real-time terminal games. See the full SDK repository [here](https://github.com/V30P/termule).
+A micro game engine for developing real-time terminal games. See the full toolkit [here](https://github.com/V30P/termule).
 
 ## Access
 This library is available on NuGet as `Termule.Engine`. To add it to your project use:

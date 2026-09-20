@@ -1,6 +1,6 @@
 # Termule.Templates
 
-The template pack for the Termule SDK. See the full SDK repository [here](https://github.com/V30P/termule).
+The template pack for the Termule toolkit. See the full toolkit repository [here](https://github.com/V30P/termule).
 
 ## Access
 This extension pack is available on NuGet as `Termule.Templates`. To install use:
