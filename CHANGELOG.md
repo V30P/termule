@@ -4,13 +4,19 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.5.1] - 2026-08-27
+## [0.5.2] - 2026-09-19
+### Added
+- Github actions for handling pushing new versions and validating PRs
+- DocFX for the engine, docs hosted at: [https://v30p.github.io/termule](https://v30p.github.io/termule)
 
+### Changed
+- Updated existing projects for packaging via NuGet
+- Demos project no longer builds to a single file
+
+## [0.5.1] - 2026-08-27
 ### Added
 - `IResourceProvider` for types that source resources
 - `EmbeddedResourceProvider` for getting resources from embedded files
-- Github actions for handling pushing new versions and validating PRs
-- DocFX for the engine, docs hosted at: [https://v30p.github.io/termule](https://v30p.github.io/termule)
 
 ### Changed
 - `ResourceLoader` now takes an `IResourceProvider` rather than an `IFileSystem`
