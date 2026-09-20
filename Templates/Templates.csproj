@@ -6,7 +6,7 @@
   <PropertyGroup>
     <Authors>Veop</Authors>
     <PackageId>Termule.Templates</PackageId>
-    <Description>The template pack for the Termule SDK.</Description>
+    <Description>The template pack for the Termule toolkit.</Description>
     <PackageReadmeFile>README.md</PackageReadmeFile>        
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/V30P/termule</RepositoryUrl>

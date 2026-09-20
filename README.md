@@ -1,11 +1,11 @@
 # Termule
 
-An SDK for developing real-time terminal games.
+A toolkit for developing real-time terminal games.
 
 ![shooter demo](assets/shooter.gif "Shooter Demo")
 
 ## Overview
-The Termule SDK is written in C# on .NET 10.0 with the goal of making terminal game development easy and enjoyable. With Termule, it is possible to build fluid and vibrant real-time games, rather than the turn-based or textual experiences typical of the terminal. As the sole developer of Termule, my goal is to create something that is pleasant to both develop and use. As such, I strive as much as possible to keep the SDK simple, low-dependency, and accessible. I have many plans for Termule and it's unlikely the project will ever be truly complete, so it's worth checking the [changelog](CHANGELOG.md) to see what's new.
+The Termule toolkit is written in C# on .NET 10.0 with the goal of making terminal game development easy and enjoyable. With Termule, it is possible to build fluid and vibrant real-time games, rather than the turn-based or textual experiences typical of the terminal. As the sole developer of Termule, my goal is to create something that is pleasant to both develop and use. As such, I strive as much as possible to keep the toolkit simple, low-dependency, and accessible. I have many plans for Termule and it's unlikely the project will ever be truly complete, so it's worth checking the [changelog](CHANGELOG.md) to see what's new.
 
 ## Contents
 This repository contains the following projects:

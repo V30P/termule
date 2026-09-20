@@ -4,7 +4,7 @@ Thank you for your interest in contributing to Termule!
 
 ## Guidelines
 
-Termule is built on keeping things simple and low dependency. I am incredibly appreciative of anybody who wants to help the project grow, but at the same time it is important to make sure that growth doesn't creep out of control. For this reason, I request that contributions respect the scope and structure of the project. I have personally considered deeply every dependency that I add to the SDK, and would appreciate if others did the same.
+The Termule toolkit is built on keeping things simple and low dependency. I am incredibly appreciative of anybody who wants to help the project grow, but at the same time it is important to make sure that growth doesn't creep out of control. For this reason, I request that contributions respect the scope and structure of the project. I have personally considered deeply every dependency that I add to the toolkit, and would appreciate if others did the same.
 
 Hopefully you find this mindset reasonable. If you have any questions about contributing, please feel free to reach out!
 
@@ -25,7 +25,7 @@ For suggestions:
 
 ## Pull Requests
 
-If you have made a change or addition to Termule that you think belongs in this repo, you can open a pull request. Assuming that I agree it is worthwhile addition to the SDK, I will merge it *as long as*:
+If you have made a change or addition to Termule that you think belongs in this repo, you can open a pull request. Assuming that I agree it is worthwhile addition to the toolkit, I will merge it *as long as*:
 
 - It builds without errors *or* warnings
 - All tests pass
