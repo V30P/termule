@@ -69,8 +69,9 @@ public abstract class Terminal : DisplaySystem
     /// <inheritdoc/>
     protected internal override void Start()
     {
-        Console.CursorVisible = false;
         Console.Write("\e[?1049h"); // Enable alternate buffer
+        Console.Write("\e[0m"); // Reset colors
+        Console.CursorVisible = false;
 
         Console.CancelKeyPress += (_, e) =>
         {
@@ -89,6 +90,7 @@ public abstract class Terminal : DisplaySystem
     protected internal override void CleanUp()
     {
         Console.CursorVisible = true;
+        Console.Write("\e[0m"); // Reset colors
         Console.Write("\e[?1049l"); // Disable alternate buffer
     }
 

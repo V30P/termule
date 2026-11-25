@@ -6,7 +6,7 @@ namespace Termule.Engine.Systems.Rendering;
 
 /// <summary>
 ///     System for getting <see cref="Renderer"/>s to contribute to<see cref="IRenderTarget"/>s
-///     in <see cref="Layer"/> > order.
+///     in <see cref="Layer"/> order.
 /// </summary>
 public sealed class RenderSystem : Core.System
 {
