@@ -9,6 +9,28 @@
         "build",
         "${workspaceFolder}/Demos/Demos.csproj"
       ]
+    },
+    {
+      "label": "serveDocs",
+      "type": "shell",
+      "command": "docfx docs/docfx.json --serve",
+      "isBackground": true,
+      "problemMatcher": {
+        "pattern": {
+          "regexp": "^$"
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "docfx",
+          "endsPattern": "Serving"
+        }
+      }
+    },
+    {
+      "label": "stopDocs",
+      "type": "shell",
+      "command": "pkill -f 'docfx.*--serve' || true",
+      "problemMatcher": []
     }
   ]
 }

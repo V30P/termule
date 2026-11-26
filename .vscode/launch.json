@@ -1,6 +1,7 @@
 {
   "version": "0.2.0",
   "configurations": [
+
     {
       "name": "Debug Demos",
       "type": "coreclr",
@@ -12,7 +13,16 @@
         "${input:pickDemo}"
       ],
       "console": "externalTerminal"
-    }
+    },
+    {
+      "name": "Debug Docs",
+      "type": "editor-browser",
+      "request": "launch",
+      "preLaunchTask": "serveDocs",
+      "postDebugTask": "stopDocs",
+      "url": "http://localhost:8080",
+      "webRoot": "${workspaceFolder}"
+    },
   ],
   "inputs": [
     {
